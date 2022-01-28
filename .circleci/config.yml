@@ -1,0 +1,59 @@
+########################################################################################
+# This file is part of the FallenVaders distribution (https://github.com/FallenVaders).
+# Copyright © 2021 Loïc DUBOIS-TERMOZ.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, version 3.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+########################################################################################
+version: 2.1
+
+environment:
+  PIPENV_VENV_IN_PROJECT: true
+
+jobs:
+  build-and-test:
+    docker:
+      - image: cimg/openjdk:17.0
+    steps:
+      - checkout
+      - run:
+          name: Build
+          command: mvn compile
+      - run:
+          name: Test
+          command: mvn test
+  deploy-doc:
+    docker:
+      - image: circleci/python:3.9.7
+    steps:
+      - checkout
+      - run:
+          name: Install Python and Pip
+          command: |
+            sudo apt update
+            sudo apt install python3 python3-pip
+      - run:
+          name: Install MkDocs
+          command: sudo pip install mkdocs-material
+      - run:
+          name: Deploy doc
+          command: mkdocs gh-deploy --force
+
+workflows:
+  main:
+    jobs:
+      - build-and-test:
+          context: SonarCloud
+      - deploy-doc:
+          filters:
+            branches:
+              only: main
