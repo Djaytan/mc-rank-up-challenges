@@ -32,6 +32,7 @@
         <minecraft.api.version>1.18</minecraft.api.version>
         <papermc.version>1.18.1-R0.1-SNAPSHOT</papermc.version>
         <acf.version>0.5.1-SNAPSHOT</acf.version>
+        <triumphgui.version>3.1.1</triumphgui.version>
         <guice.version>5.1.0</guice.version>
         <hybernate.version>5.6.5.Final</hybernate.version>
         <logback.version>1.2.10</logback.version>
@@ -50,6 +51,10 @@
             <id>aikar</id>
             <url>https://repo.aikar.co/content/groups/aikar/</url>
         </repository>
+        <repository>
+            <id>repo</id>
+            <url>https://repo.mattstudios.me/artifactory/public/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -64,6 +69,11 @@
             <groupId>co.aikar</groupId>
             <artifactId>acf-bukkit</artifactId>
             <version>${acf.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>dev.triumphteam</groupId>
+            <artifactId>triumph-gui</artifactId>
+            <version>${triumphgui.version}</version>
         </dependency>
 
         <!-- Java dependencies -->
