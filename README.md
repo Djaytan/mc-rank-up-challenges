@@ -1,2 +1,2 @@
-# diagonia-rankup
-Diagonia's ranlup system plugin
+# diagonia-playershops
+Diagonia's playershops system plugin
