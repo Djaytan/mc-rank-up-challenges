@@ -31,6 +31,9 @@ jobs:
       - run:
           name: Test
           command: mvn test
+      - run:
+          name: Analyze on SonarCloud
+          command: mvn verify sonar:sonar -Dsonar.projectKey=Voltariuss_diagonia-playershops
 
 workflows:
   main:
