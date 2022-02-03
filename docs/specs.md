@@ -1,4 +1,4 @@
-# Spécification fonctionnelles
+# Spécification fonctionnelles et non-fonctionnelles
 
 Auteur : Voltariuss (chef de projet et développeur)
 
