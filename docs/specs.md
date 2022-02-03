@@ -131,6 +131,8 @@ téléporté (nord, nord-est, est, sud-est, sud, sud-ouest, ouest, nord-ouest, n
 * La location d'un emplacement premium pour shop doit durer 3 jours exactement, passé ce délai l'emplacement premium
 redevient disponible
 * Seuls les shops activés doivent pouvoir être visibles dans la liste
+* Si la quantité de shops excède les capacités d'affichage de l'interface graphique, alors il faudra pouvoir naviguer
+à travers des pages
 
 #### Se téléporter à un shop
 
@@ -154,6 +156,8 @@ Certaines valeurs du programme doivent pouvoir être paramétrables :
 * L'item de représentation du shop par défaut
 * Le nombre maximum de caractères dans la description d'un shop
 * Le délai d'inactivité d'un joueur avant la désactivation de son shop
+* La durée de location d'un emplacement premium de shop
+* Le coût de location d'un emplacement premium de shop
 * Tous les messages envoyés par le plugin
 
 ### Interfaces externes
