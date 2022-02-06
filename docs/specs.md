@@ -121,8 +121,8 @@ téléporté (nord, nord-est, est, sud-est, sud, sud-ouest, ouest, nord-ouest, n
 * Le joueur doit pouvoir consulter la liste de tous les shops
 * Le joueur doit pouvoir filtrer la liste en fonction des métiers exercés (mineur, bûcheron, forgeron, ...)
 * La liste doit pouvoir être triée par :
-  * Nom du propriétaire par ordre croissant
-  * Nom du propriétaire par ordre décroissant
+  * Nom du propriétaire par ordre alphabétique croissant
+  * Nom du propriétaire par ordre alphabétique décroissant
   * Niveau total des métiers exercés par les propriétaires par ordre croissant
   * Niveau total des métiers exercés par les propriétaires par ordre décroissant
 * Jusqu'à trois shops au maximum peuvent être mis en évidence
