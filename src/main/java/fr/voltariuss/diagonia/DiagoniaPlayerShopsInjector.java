@@ -5,12 +5,20 @@ import com.google.inject.Injector;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
+/** Guice injector for Bukkit plugin. */
 public final class DiagoniaPlayerShopsInjector {
 
+  /** Private constructor. */
   private DiagoniaPlayerShopsInjector() {}
 
-  public static void inject(@NotNull JavaPlugin plugin) {
-    Injector injector = Guice.createInjector(new GuiceBukkitModule(plugin));
+  /**
+   * Inject already instantiated stuff into Guice (e.g. {@link JavaPlugin}).
+   *
+   * @param plugin The plugin to inject into Guice.
+   * @param debugMode "true" if the debug mode for the plugin is enabled, "false" otherwise.
+   */
+  public static void inject(@NotNull JavaPlugin plugin, boolean debugMode) {
+    Injector injector = Guice.createInjector(new GuiceBukkitModule(plugin, debugMode));
     injector.injectMembers(plugin);
   }
 }

@@ -12,17 +12,38 @@ import org.bukkit.scoreboard.ScoreboardManager;
 import org.bukkit.structure.StructureManager;
 import org.slf4j.Logger;
 
+import javax.inject.Named;
+
+/** Guice module for Bukkit plugin. */
 public class GuiceBukkitModule extends AbstractModule {
 
   private final JavaPlugin plugin;
+  private final Logger logger;
+  private final boolean debugMode;
 
-  public GuiceBukkitModule(JavaPlugin plugin) {
+  /**
+   * Constructor.
+   *
+   * @param plugin The Bukkit plugin.
+   * @param debugMode "true" if debug mode is enabled, "false" otherwise.
+   */
+  public GuiceBukkitModule(JavaPlugin plugin, boolean debugMode) {
     this.plugin = plugin;
+    this.logger = plugin.getSLF4JLogger();
+    this.debugMode = debugMode;
   }
 
   @Provides
+  @Named("debugMode")
+  public boolean provideDebugMode() {
+    logger.info("§bDebug mode: {}", debugMode ? "§aenabled" : "§7disabled");
+    return debugMode;
+  }
+
+  @Provides
+  @Singleton
   public Logger provideLogger() {
-    return plugin.getSLF4JLogger();
+    return logger;
   }
 
   @Provides
