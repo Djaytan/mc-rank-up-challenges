@@ -10,12 +10,11 @@
         <property name="connection.username">test</property>
         <property name="connection.password">test</property>
 
+        <!-- TODO: what about isolation level? -->
+
         <!-- HikariCP connection pool configuration -->
-        <property name="hikari.initialSize">5</property>
-        <property name="hikari.maximumPoolSize">20</property>
-        <property name="hikari.maxIdle">10</property>
+        <property name="hikari.maximumPoolSize">10</property>
         <property name="hikari.minimumIdle">5</property>
-        <property name="hikari.maxWaitMillis">-1</property>
 
         <!-- TODO: cache properties definition -->
 

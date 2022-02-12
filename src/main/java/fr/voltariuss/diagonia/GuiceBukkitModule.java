@@ -29,9 +29,9 @@ public class GuiceBukkitModule extends AbstractModule {
    * @param plugin The Bukkit plugin.
    * @param debugMode "true" if debug mode is enabled, "false" otherwise.
    */
-  public GuiceBukkitModule(JavaPlugin plugin, boolean debugMode) {
+  public GuiceBukkitModule(JavaPlugin plugin, Logger logger, boolean debugMode) {
     this.plugin = plugin;
-    this.logger = plugin.getSLF4JLogger();
+    this.logger = logger;
     this.debugMode = debugMode;
   }
 

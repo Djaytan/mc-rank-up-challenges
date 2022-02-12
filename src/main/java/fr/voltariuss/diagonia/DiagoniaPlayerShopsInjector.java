@@ -19,7 +19,9 @@ public final class DiagoniaPlayerShopsInjector {
    */
   public static void inject(@NotNull JavaPlugin plugin, boolean debugMode) {
     Injector injector =
-        Guice.createInjector(new GuiceGeneralModule(), new GuiceBukkitModule(plugin, debugMode));
+        Guice.createInjector(
+            new GuiceGeneralModule(plugin.getSLF4JLogger()),
+            new GuiceBukkitModule(plugin, plugin.getSLF4JLogger(), debugMode));
     injector.injectMembers(plugin);
   }
 }
