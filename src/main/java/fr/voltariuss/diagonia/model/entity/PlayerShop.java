@@ -21,30 +21,32 @@ public class PlayerShop {
 
   @Id
   @GeneratedValue
-  @Column(nullable = false, updatable = false)
+  @Column(name = "ps_id", nullable = false, updatable = false)
   private long id;
 
-  @Column(nullable = false, unique = true, updatable = false)
+  @Column(name = "ps_owner_uuid", nullable = false, unique = true, updatable = false)
   @Setter
   @NotNull
-  private UUID owner;
+  private UUID ownerUuid;
 
-  @Column(length = 150)
+  @Column(name = "ps_description", length = 150)
   @Setter
   @Nullable
   private String description;
 
+  @Column(name = "ps_item_icon")
   @Enumerated(EnumType.ORDINAL)
   @Setter
   @Nullable
-  private Material itemRepresentation;
+  private Material itemIcon;
 
+  @Column(name = "ps_tp_location")
   @Convert(converter = LocationConverter.class)
   @Setter
   @Nullable
   private Location tpLocation;
 
-  @Column(nullable = false)
+  @Column(name = "ps_is_active", nullable = false)
   @Setter
   private boolean isActive;
 }
