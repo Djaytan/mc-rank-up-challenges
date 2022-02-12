@@ -82,6 +82,7 @@ Ci-dessous le diagramme des cas d'utilisation :
 * Le joueur doit pouvoir modifier l'item représentatif du shop :
   * En le remplaçant par sa tête
   * En spécifiant l'ID d'un item
+  * En demandant l'utilisation de l'item de sa main
 * Par défaut, l'item de représentation d'un shop doit correspondre à la tête du propriétaire
 * Le joueur doit pouvoir modifier la description du shop
 * La description d'un shop ne doit pas exercer 150 caractères
@@ -101,6 +102,7 @@ téléporté (nord, nord-est, est, sud-est, sud, sud-ouest, ouest, nord-ouest, n
   avancée)
 * Le point de téléportation de shop ne peut être placée uniquement dans la ville dont fait partie le propriétaire du
   shop
+  * Si le joueur quitte sa ville, son shop se désactive et le point de téléportation se supprime
 * Il doit être possible de définir un point de téléportation pour le shop d'un joueur habitant d'une
   ville non-officielle
 
