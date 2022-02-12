@@ -18,7 +18,8 @@ public final class DiagoniaPlayerShopsInjector {
    * @param debugMode "true" if the debug mode for the plugin is enabled, "false" otherwise.
    */
   public static void inject(@NotNull JavaPlugin plugin, boolean debugMode) {
-    Injector injector = Guice.createInjector(new GuiceBukkitModule(plugin, debugMode));
+    Injector injector =
+        Guice.createInjector(new GuiceGeneralModule(), new GuiceBukkitModule(plugin, debugMode));
     injector.injectMembers(plugin);
   }
 }
