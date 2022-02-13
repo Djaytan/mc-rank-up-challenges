@@ -18,7 +18,6 @@ public class PlayerShopService {
 
   @Inject
   public PlayerShopService(@NotNull Debugger debugger, @NotNull PlayerShopDao playerShopDao) {
-    this.logger = logger;
     this.debugger = debugger;
     this.playerShopDao = playerShopDao;
   }
