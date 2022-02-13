@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import fr.voltariuss.diagonia.model.AbstractJpaDao;
 import fr.voltariuss.diagonia.model.entity.PlayerShop;
 import java.util.List;
+import java.util.Optional;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.hibernate.SessionFactory;
@@ -31,9 +32,9 @@ public class PlayerShopDao extends AbstractJpaDao<PlayerShop, Long> {
   }
 
   @Override
-  public @NotNull PlayerShop findById(@NotNull Long id) {
+  public @NotNull Optional<PlayerShop> findById(@NotNull Long id) {
     Preconditions.checkNotNull(id);
-    return getCurrentSession().get(PlayerShop.class, id);
+    return Optional.ofNullable(getCurrentSession().get(PlayerShop.class, id));
   }
 
   @Override
