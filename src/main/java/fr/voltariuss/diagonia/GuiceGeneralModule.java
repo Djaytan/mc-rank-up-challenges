@@ -19,7 +19,7 @@ public class GuiceGeneralModule extends AbstractModule {
 
   @Provides
   @Singleton
-  public SessionFactory provideSessionFactory() {
+  public @NotNull SessionFactory provideSessionFactory() {
     // The SessionFactory must be built only once for application lifecycle
     SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
     logger.info("Database connexion established.");

@@ -4,6 +4,7 @@ import co.aikar.commands.PaperCommandManager;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
+import javax.inject.Named;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.inventory.ItemFactory;
 import org.bukkit.plugin.PluginManager;
@@ -13,8 +14,6 @@ import org.bukkit.scoreboard.ScoreboardManager;
 import org.bukkit.structure.StructureManager;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
-
-import javax.inject.Named;
 
 /** Guice module for Bukkit plugin. */
 public class GuiceBukkitModule extends AbstractModule {
@@ -44,57 +43,49 @@ public class GuiceBukkitModule extends AbstractModule {
 
   @Provides
   @Singleton
-  @NotNull
-  public Logger provideLogger() {
+  public @NotNull Logger provideLogger() {
     return logger;
   }
 
   @Provides
   @Singleton
-  @NotNull
-  public PluginManager providePluginManager() {
+  public @NotNull PluginManager providePluginManager() {
     return plugin.getServer().getPluginManager();
   }
 
   @Provides
   @Singleton
-  @NotNull
-  public ItemFactory provideItemFactory() {
+  public @NotNull ItemFactory provideItemFactory() {
     return plugin.getServer().getItemFactory();
   }
 
   @Provides
   @Singleton
-  @NotNull
-  public ConsoleCommandSender provideConsoleCommandSender() {
+  public @NotNull ConsoleCommandSender provideConsoleCommandSender() {
     return plugin.getServer().getConsoleSender();
   }
 
   @Provides
   @Singleton
-  @NotNull
-  public BukkitScheduler provideBukkitScheduler() {
+  public @NotNull BukkitScheduler provideBukkitScheduler() {
     return plugin.getServer().getScheduler();
   }
 
   @Provides
   @Singleton
-  @NotNull
-  public ScoreboardManager provideScoreboardManager() {
+  public @NotNull ScoreboardManager provideScoreboardManager() {
     return plugin.getServer().getScoreboardManager();
   }
 
   @Provides
   @Singleton
-  @NotNull
-  public StructureManager provideStructureManager() {
+  public @NotNull StructureManager provideStructureManager() {
     return plugin.getServer().getStructureManager();
   }
 
   @Provides
   @Singleton
-  @NotNull
-  public PaperCommandManager providePaperCommandManager() {
+  public @NotNull PaperCommandManager providePaperCommandManager() {
     return new PaperCommandManager(plugin);
   }
 }
