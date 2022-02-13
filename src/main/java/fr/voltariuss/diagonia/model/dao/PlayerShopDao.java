@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.hibernate.SessionFactory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /** DAO class of {@link PlayerShop} entity. */
 @Singleton
@@ -32,7 +33,7 @@ public class PlayerShopDao extends AbstractJpaDao<PlayerShop, Long> {
   }
 
   @Override
-  public @NotNull Optional<PlayerShop> findById(@NotNull Long id) {
+  public @NotNull Optional<PlayerShop> findById(@Nullable Long id) {
     Preconditions.checkNotNull(id);
     return Optional.ofNullable(getCurrentSession().get(PlayerShop.class, id));
   }
