@@ -2,7 +2,9 @@ package fr.voltariuss.diagonia.model;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public interface JpaDaoInterface<T, I extends Serializable> {
 
@@ -10,7 +12,8 @@ public interface JpaDaoInterface<T, I extends Serializable> {
 
   void update(@NotNull T entity);
 
-  T findById(@NotNull I id);
+  @NotNull
+  Optional<T> findById(@Nullable I id);
 
   void delete(@NotNull T entity);
 

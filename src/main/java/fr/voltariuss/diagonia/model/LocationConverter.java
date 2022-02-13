@@ -1,9 +1,8 @@
 package fr.voltariuss.diagonia.model;
 
+import com.google.gson.Gson;
 import javax.annotation.Nullable;
 import javax.persistence.AttributeConverter;
-
-import com.google.gson.Gson;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 
