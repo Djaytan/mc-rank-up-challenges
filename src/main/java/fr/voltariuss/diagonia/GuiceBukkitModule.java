@@ -4,7 +4,6 @@ import co.aikar.commands.PaperCommandManager;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
-import javax.inject.Named;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.inventory.ItemFactory;
 import org.bukkit.plugin.PluginManager;

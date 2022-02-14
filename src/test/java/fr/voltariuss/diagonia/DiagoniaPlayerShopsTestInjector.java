@@ -9,9 +9,7 @@ public class DiagoniaPlayerShopsTestInjector {
   private DiagoniaPlayerShopsTestInjector() {}
 
   public static void inject(Object target) {
-    Injector injector =
-      Guice.createInjector(
-        new GuiceGeneralTestModule());
+    Injector injector = Guice.createInjector(new GuiceGeneralTestModule());
     injector.injectMembers(target);
   }
 }

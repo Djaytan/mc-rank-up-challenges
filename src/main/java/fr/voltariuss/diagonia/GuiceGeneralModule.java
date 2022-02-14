@@ -3,12 +3,11 @@ package fr.voltariuss.diagonia;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
+import javax.inject.Named;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
-
-import javax.inject.Named;
 
 /** General Guice module. */
 public class GuiceGeneralModule extends AbstractModule {

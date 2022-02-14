@@ -2,14 +2,13 @@ package fr.voltariuss.diagonia;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
+import javax.inject.Named;
+import javax.inject.Singleton;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.inject.Named;
-import javax.inject.Singleton;
 
 public class GuiceGeneralTestModule extends AbstractModule {
 
