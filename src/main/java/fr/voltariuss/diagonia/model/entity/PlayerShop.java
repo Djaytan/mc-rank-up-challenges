@@ -10,7 +10,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.bukkit.Material;
+import org.hibernate.annotations.NaturalId;
 import org.jetbrains.annotations.NotNull;
 
 @Entity
@@ -21,10 +23,11 @@ import org.jetbrains.annotations.NotNull;
 public class PlayerShop {
 
   @Id
-  @GeneratedValue
+  @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "ps_id", nullable = false, updatable = false)
   private long id;
 
+  @NaturalId
   @Column(name = "ps_owner_uuid", nullable = false, unique = true, updatable = false)
   @Setter
   @NotNull
@@ -50,4 +53,21 @@ public class PlayerShop {
   @Column(name = "ps_is_active", nullable = false)
   @Setter
   private boolean isActive;
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    PlayerShop that = (PlayerShop) o;
+    return new EqualsBuilder().append(ownerUuid, that.ownerUuid).isEquals();
+  }
+
+  @Override
+  public int hashCode() {
+    return new HashCodeBuilder(17, 37).append(ownerUuid).toHashCode();
+  }
 }
