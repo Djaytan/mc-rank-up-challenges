@@ -8,13 +8,30 @@ import org.hibernate.cfg.Configuration;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
+import javax.inject.Named;
+
 /** General Guice module. */
 public class GuiceGeneralModule extends AbstractModule {
 
   private final Logger logger;
+  private final boolean debugMode;
 
-  public GuiceGeneralModule(@NotNull Logger logger) {
+  /**
+   * Constructor.
+   *
+   * @param logger The logger.
+   * @param debugMode "true" if debug mode is enabled, "false" otherwise.
+   */
+  public GuiceGeneralModule(@NotNull Logger logger, boolean debugMode) {
     this.logger = logger;
+    this.debugMode = debugMode;
+  }
+
+  @Provides
+  @Named("debugMode")
+  public boolean provideDebugMode() {
+    logger.info("§bDebug mode: {}", debugMode ? "§aenabled" : "§7disabled");
+    return debugMode;
   }
 
   @Provides

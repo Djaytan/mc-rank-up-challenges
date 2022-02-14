@@ -20,25 +20,15 @@ public class GuiceBukkitModule extends AbstractModule {
 
   private final JavaPlugin plugin;
   private final Logger logger;
-  private final boolean debugMode;
 
   /**
    * Constructor.
    *
    * @param plugin The Bukkit plugin.
-   * @param debugMode "true" if debug mode is enabled, "false" otherwise.
    */
-  public GuiceBukkitModule(JavaPlugin plugin, Logger logger, boolean debugMode) {
+  public GuiceBukkitModule(@NotNull JavaPlugin plugin, @NotNull Logger logger) {
     this.plugin = plugin;
     this.logger = logger;
-    this.debugMode = debugMode;
-  }
-
-  @Provides
-  @Named("debugMode")
-  public boolean provideDebugMode() {
-    logger.info("§bDebug mode: {}", debugMode ? "§aenabled" : "§7disabled");
-    return debugMode;
   }
 
   @Provides
