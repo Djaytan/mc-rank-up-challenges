@@ -1,6 +1,7 @@
 package fr.voltariuss.diagonia.model.entity;
 
-import fr.voltariuss.diagonia.model.LocationConverter;
+import fr.voltariuss.diagonia.model.LocationDtoConverter;
+import fr.voltariuss.diagonia.model.dto.LocationDto;
 import java.util.UUID;
 import javax.annotation.Nullable;
 import javax.persistence.*;
@@ -8,7 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.bukkit.Location;
+import org.apache.commons.lang.builder.EqualsBuilder;
 import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 
@@ -41,10 +42,10 @@ public class PlayerShop {
   private Material itemIcon;
 
   @Column(name = "ps_tp_location")
-  @Convert(converter = LocationConverter.class)
+  @Convert(converter = LocationDtoConverter.class)
   @Setter
   @Nullable
-  private Location tpLocation;
+  private LocationDto tpLocation;
 
   @Column(name = "ps_is_active", nullable = false)
   @Setter
