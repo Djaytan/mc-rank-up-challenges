@@ -23,8 +23,7 @@ class PlayerShopServiceTest {
 
   @Test
   void givenNewPlayerShop_WhenPersisted_ThenShouldBeRegisteredIntoDatabase() {
-    PlayerShop ps = new PlayerShop();
-    ps.setOwnerUuid(UUID.randomUUID());
+    PlayerShop ps = new PlayerShop(UUID.randomUUID());
     ps.setDescription("Test description");
     ps.setItemIcon(Material.NAME_TAG);
     ps.setTpLocation(null);
