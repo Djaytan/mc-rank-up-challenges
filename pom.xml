@@ -5,13 +5,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>fr.voltariuss.diagonia</groupId>
-    <artifactId>diagonia-playershops</artifactId>
+    <artifactId>diagonia-plugin</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>Diagonia-PlayerShops</name>
-    <description>Player shops plugin for Diagonia server</description>
-    <url>https://diagonia.fr/</url>
+    <description>Bukkit plugin for Diagonia, a Minecraft server</description>
+    <url>https://www.diagonia.fr/</url>
 
     <licenses>
         <license>
