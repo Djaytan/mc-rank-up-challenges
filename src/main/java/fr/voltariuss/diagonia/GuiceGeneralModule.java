@@ -3,6 +3,8 @@ package fr.voltariuss.diagonia;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
+import fr.voltariuss.diagonia.model.dao.PlayerShopDao;
+import fr.voltariuss.diagonia.model.dao.PlayerShopDaoImpl;
 import javax.inject.Named;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -24,6 +26,11 @@ public class GuiceGeneralModule extends AbstractModule {
   public GuiceGeneralModule(@NotNull Logger logger, boolean debugMode) {
     this.logger = logger;
     this.debugMode = debugMode;
+  }
+
+  @Override
+  public void configure() {
+    bind(PlayerShopDao.class).to(PlayerShopDaoImpl.class);
   }
 
   @Provides

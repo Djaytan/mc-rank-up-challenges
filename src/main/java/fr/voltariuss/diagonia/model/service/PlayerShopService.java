@@ -2,6 +2,7 @@ package fr.voltariuss.diagonia.model.service;
 
 import fr.voltariuss.diagonia.Debugger;
 import fr.voltariuss.diagonia.model.dao.PlayerShopDao;
+import fr.voltariuss.diagonia.model.dao.PlayerShopDaoImpl;
 import fr.voltariuss.diagonia.model.entity.PlayerShop;
 import java.util.List;
 import java.util.Optional;
@@ -17,7 +18,7 @@ public class PlayerShopService {
   private final PlayerShopDao playerShopDao;
 
   @Inject
-  public PlayerShopService(@NotNull Debugger debugger, @NotNull PlayerShopDao playerShopDao) {
+  public PlayerShopService(@NotNull Debugger debugger, @NotNull PlayerShopDaoImpl playerShopDao) {
     this.debugger = debugger;
     this.playerShopDao = playerShopDao;
   }
