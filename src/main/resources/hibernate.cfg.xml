@@ -4,11 +4,14 @@
     "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
     <session-factory>
-        <!-- Connection configuration -->
+        <!-- Global configuration -->
         <property name="connection.driver_class">org.mariadb.jdbc.Driver</property>
-        <property name="connection.url">jdbc:mariadb://localhost/test</property>
-        <property name="connection.username">test</property>
-        <property name="connection.password">test</property>
+        <property name="dialect">org.hibernate.dialect.MariaDB103Dialect</property>
+        <property name="current_session_context_class">thread</property>
+        <property name="show_sql">true</property> <!-- TODO: maybe disable it for prod? -->
+        <property name="format_sql">true</property>
+        <property name="hbm2ddl.auto">create-drop</property> <!-- TODO: change it to "validate" for prod!!! -->
+        <property name="hbm2ddl.charset_name">UTF-8</property>
 
         <!-- TODO: what about isolation level? -->
 
@@ -18,12 +21,5 @@
 
         <!-- TODO: cache properties definition -->
 
-        <!-- Additional configuration -->
-        <property name="dialect">org.hibernate.dialect.MariaDB103Dialect</property>
-        <property name="current_session_context_class">thread</property>
-        <property name="show_sql">true</property> <!-- TODO: maybe disable it for prod? -->
-        <property name="format_sql">true</property>
-        <property name="hbm2ddl.auto">create-drop</property> <!-- TODO: change it to "validate" for prod!!! -->
-        <property name="hbm2ddl.charset_name">UTF-8</property>
     </session-factory>
 </hibernate-configuration>

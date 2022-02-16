@@ -16,8 +16,15 @@ public class DiagoniaPlayerShopsPlugin extends JavaPlugin {
   public void onEnable() {
     getSLF4JLogger().info("This plugin has been developed by Voltariuss");
 
+    // Configuration initialization
+    ConfigurationManager.init(getConfig());
+    getConfig().options().copyDefaults(true);
+    saveConfig();
+    PluginConfig pluginConfig = ConfigurationManager.loadConfig(getConfig());
+    getSLF4JLogger().info("Configuration loaded");
+
     // Guice setup
-    DiagoniaPlayerShopsInjector.inject(this, IS_DEBUG_MODE);
+    DiagoniaPlayerShopsInjector.inject(this, IS_DEBUG_MODE, pluginConfig);
     getSLF4JLogger().info("Plugin successfully enabled");
   }
 
