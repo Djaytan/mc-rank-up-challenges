@@ -5,6 +5,7 @@
 <hibernate-configuration>
     <session-factory>
         <!-- Global configuration -->
+        <property name="connection.connection.provider_class">org.hibernate.hikaricp.internal.HikariCPConnectionProvider</property>
         <property name="connection.driver_class">org.mariadb.jdbc.Driver</property>
         <property name="dialect">org.hibernate.dialect.MariaDB103Dialect</property>
         <property name="current_session_context_class">thread</property>

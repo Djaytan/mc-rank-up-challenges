@@ -35,7 +35,9 @@ public class DiagoniaPlayerShopsPlugin extends JavaPlugin {
 
   @Override
   public void onDisable() {
-    sessionFactory.close();
+    if (sessionFactory != null) {
+      sessionFactory.close();
+    }
     getSLF4JLogger().info("Database connection closed");
     getSLF4JLogger().info("Plugin successfully disabled");
   }
