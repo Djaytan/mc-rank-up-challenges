@@ -11,6 +11,7 @@ public class DiagoniaPlayerShopsPlugin extends JavaPlugin {
   public static final boolean IS_DEBUG_MODE = true;
 
   @Inject private SessionFactory sessionFactory;
+  @Inject private CommandRegister commandRegister;
 
   @Override
   public void onEnable() {
@@ -25,6 +26,10 @@ public class DiagoniaPlayerShopsPlugin extends JavaPlugin {
 
     // Guice setup
     DiagoniaPlayerShopsInjector.inject(this, IS_DEBUG_MODE, pluginConfig);
+
+    // Commands registration
+    commandRegister.registerCommands();
+
     getSLF4JLogger().info("Plugin successfully enabled");
   }
 
