@@ -14,7 +14,7 @@ import org.junit.jupiter.api.*;
 @DisplayName("PlayerShop DAO Test")
 class PlayerShopDaoTest extends AbstractBaseTest {
 
-  @Inject private PlayerShopDao playerShopDao;
+  @Inject private PlayerShopDaoImpl playerShopDao;
 
   @BeforeEach
   void setUp() {
