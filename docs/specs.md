@@ -155,7 +155,6 @@ de son shop
 
 Certaines valeurs du programme doivent pouvoir être paramétrables :
 * Le coût d'achat d'un shop par un joueur
-* L'item de représentation du shop par défaut
 * Le nombre maximum de caractères dans la description d'un shop
 * Le délai d'inactivité d'un joueur avant la désactivation de son shop
 * La durée de location d'un emplacement premium de shop
