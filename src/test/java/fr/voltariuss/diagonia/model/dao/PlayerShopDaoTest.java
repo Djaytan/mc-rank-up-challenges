@@ -3,16 +3,13 @@ package fr.voltariuss.diagonia.model.dao;
 import fr.voltariuss.diagonia.AbstractBaseTest;
 import fr.voltariuss.diagonia.model.dto.LocationDto;
 import fr.voltariuss.diagonia.model.entity.PlayerShop;
-
 import java.util.List;
 import java.util.UUID;
-
+import javax.inject.Inject;
 import junit.framework.Assert;
 import org.bukkit.Material;
 import org.hibernate.Transaction;
 import org.junit.jupiter.api.*;
-
-import javax.inject.Inject;
 
 @DisplayName("PlayerShop DAO Test")
 class PlayerShopDaoTest extends AbstractBaseTest {

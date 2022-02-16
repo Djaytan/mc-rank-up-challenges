@@ -2,6 +2,8 @@ package fr.voltariuss.diagonia;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
+import fr.voltariuss.diagonia.model.dao.PlayerShopDao;
+import fr.voltariuss.diagonia.model.dao.PlayerShopDaoMock;
 import javax.inject.Named;
 import javax.inject.Singleton;
 import org.hibernate.SessionFactory;
@@ -11,6 +13,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class GuiceGeneralTestModule extends AbstractModule {
+
+  @Override
+  public void configure() {
+    bind(PlayerShopDao.class).to(PlayerShopDaoMock.class);
+  }
 
   @Provides
   @Singleton
