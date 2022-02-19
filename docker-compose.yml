@@ -8,8 +8,8 @@ services:
       MARIADB_PASSWORD: user
     restart: always
     volumes:
-      - ./mariadb/conf:/etc/mysql/conf.d:ro
-      - ./mariadb/scripts:/docker-entrypoint-initdb.d
+      - ./docker/conf:/etc/mysql/conf.d:ro
+      - ./docker/init:/docker-entrypoint-initdb.d
       - mariadb_data:/var/lib/mysql
     ports:
       - "3306:3306"
