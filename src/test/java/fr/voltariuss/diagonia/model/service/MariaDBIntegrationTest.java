@@ -31,8 +31,8 @@ class MariaDBIntegrationTest {
   private @NotNull SessionFactory setupHibernate() {
     Configuration configuration = new Configuration().configure();
     configuration.setProperty(AvailableSettings.URL, "jdbc:mariadb://localhost:3306/test");
-    configuration.setProperty(AvailableSettings.USER, "test");
-    configuration.setProperty(AvailableSettings.PASS, "test");
+    configuration.setProperty(AvailableSettings.USER, "user");
+    configuration.setProperty(AvailableSettings.PASS, "user");
     configuration.setProperty(AvailableSettings.DRIVER, "org.mariadb.jdbc.Driver");
     configuration.setProperty(AvailableSettings.DIALECT, "org.hibernate.dialect.MariaDBDialect");
     configuration.setProperty(AvailableSettings.DATASOURCE, "org.mariadb.jdbc.MariaDbDataSource");
