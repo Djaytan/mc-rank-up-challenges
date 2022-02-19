@@ -9,4 +9,8 @@ public class JpaDaoException extends RuntimeException {
     super(message);
     Preconditions.checkNotNull(message);
   }
+
+  public JpaDaoException(@NotNull String message, @NotNull Throwable cause) {
+    super(message, cause);
+  }
 }
