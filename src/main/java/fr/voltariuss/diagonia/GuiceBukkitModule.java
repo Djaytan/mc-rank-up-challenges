@@ -4,6 +4,7 @@ import co.aikar.commands.PaperCommandManager;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
+import org.bukkit.Server;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.inventory.ItemFactory;
 import org.bukkit.plugin.PluginManager;
@@ -40,6 +41,12 @@ public class GuiceBukkitModule extends AbstractModule {
   @Singleton
   public @NotNull PluginManager providePluginManager() {
     return plugin.getServer().getPluginManager();
+  }
+
+  @Provides
+  @Singleton
+  public @NotNull Server provideServer() {
+    return plugin.getServer();
   }
 
   @Provides

@@ -83,7 +83,15 @@ class PlayerShopDaoTest extends AbstractBaseTest {
       PlayerShop ps = new PlayerShop(UUID.randomUUID());
       ps.setDescription("one");
       ps.setItemIcon(Material.NAME_TAG);
-      ps.setTpLocation(new LocationDto("two", 0.5D, 0.5D, 0.5D, 0.5f, 0.5f));
+      ps.setTpLocation(
+          LocationDto.builder()
+              .worldName("two")
+              .x(0.5D)
+              .y(0.5D)
+              .z(0.5D)
+              .pitch(0.5f)
+              .yaw(0.5f)
+              .build());
       ps.setActive(true);
 
       Transaction ts = playerShopDao.beginTransaction();
