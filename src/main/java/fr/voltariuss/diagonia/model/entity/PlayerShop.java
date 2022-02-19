@@ -1,6 +1,7 @@
 package fr.voltariuss.diagonia.model.entity;
 
 import fr.voltariuss.diagonia.model.LocationDtoConverter;
+import fr.voltariuss.diagonia.model.UUIDConverter;
 import fr.voltariuss.diagonia.model.dto.LocationDto;
 import java.util.UUID;
 import javax.persistence.*;
@@ -25,6 +26,7 @@ public class PlayerShop {
 
   @NaturalId
   @Column(name = "ps_owner_uuid", nullable = false, unique = true, updatable = false)
+  @Convert(converter = UUIDConverter.class)
   @Setter
   @NonNull
   private UUID ownerUuid;
