@@ -31,24 +31,6 @@ public class Debugger {
     return debugMode;
   }
 
-  public void debug(@NotNull String logMessage) {
-    if (debugMode) {
-      logger.info("{}{}", DEBUG_MODE_PREFIX, logMessage);
-    }
-  }
-
-  public void debug(String logMessage, Object arg) {
-    if (debugMode) {
-      logger.info("{}{} {}", DEBUG_MODE_PREFIX, logMessage, arg);
-    }
-  }
-
-  public void debug(String logMessage, Object arg1, Object arg2) {
-    if (debugMode) {
-      logger.info("{}{} {} {}", DEBUG_MODE_PREFIX, logMessage, arg1, arg2);
-    }
-  }
-
   @SuppressWarnings({"java:S2629", "java:S3457"})
   public void debug(String logMessage, Object... args) {
     if (debugMode) {
