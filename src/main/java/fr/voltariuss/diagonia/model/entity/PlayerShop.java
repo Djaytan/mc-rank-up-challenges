@@ -62,4 +62,8 @@ public class PlayerShop {
   public int hashCode() {
     return new HashCodeBuilder(17, 37).append(ownerUuid).toHashCode();
   }
+
+  public boolean hasItemIcon() {
+    return itemIcon != null;
+  }
 }
