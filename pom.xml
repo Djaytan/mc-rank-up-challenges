@@ -44,7 +44,7 @@
         <log4j.version>2.17.1</log4j.version>
         <jetbrains.annotations.version>22.0.0</jetbrains.annotations.version>
         <junit.version>5.8.2</junit.version>
-        <mockito.version>4.2.0</mockito.version>
+        <mockito.version>4.3.1</mockito.version>
         <jacoco.version>0.8.7</jacoco.version>
         <h2.version>2.1.210</h2.version>
     </properties>
