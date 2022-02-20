@@ -62,6 +62,10 @@
             <id>repo</id>
             <url>https://repo.mattstudios.me/artifactory/public/</url>
         </repository>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
     </repositories>
 
     <build>
@@ -158,6 +162,12 @@
             <artifactId>triumph-gui</artifactId>
             <version>${triumphgui.version}</version>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.MilkBowl</groupId>
+            <artifactId>VaultAPI</artifactId>
+            <version>1.7</version>
+            <scope>provided</scope>
         </dependency>
 
         <!-- Java dependencies -->
