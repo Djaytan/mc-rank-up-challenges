@@ -86,6 +86,7 @@ public class BuyPlayerShopItem {
             economy.withdrawPlayer(player, player.getWorld().getName(), buyCost);
         if (economyResponse.transactionSuccess()) {
           playerShopController.buyPlayerShop(player);
+          playerShopController.openPlayerShop(player);
         } else {
           logger.error(
               "Failed to withdraw {} money from the player's balance {}: {} (ResponseType={})",
