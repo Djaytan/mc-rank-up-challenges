@@ -4,6 +4,9 @@ import co.aikar.commands.PaperCommandManager;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
+import java.util.Objects;
+
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Server;
 import org.bukkit.command.ConsoleCommandSender;
@@ -17,8 +20,6 @@ import org.bukkit.scoreboard.ScoreboardManager;
 import org.bukkit.structure.StructureManager;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
-
-import java.util.Objects;
 
 /** Guice module for Bukkit plugin. */
 public class GuiceBukkitModule extends AbstractModule {
@@ -105,11 +106,20 @@ public class GuiceBukkitModule extends AbstractModule {
   @Provides
   @Singleton
   public @NotNull Economy provideVaultEconomy() {
-    RegisteredServiceProvider<Economy> rsp = plugin.getServer().getServicesManager().getRegistration(Economy.class);
+    RegisteredServiceProvider<Economy> rsp =
+        plugin.getServer().getServicesManager().getRegistration(Economy.class);
     if (rsp == null) {
-      CriticalErrorHandler criticalErrorHandler = new CriticalErrorHandler(logger, plugin.getServer().getPluginManager(), plugin);
-      criticalErrorHandler.raiseCriticalError("Failed to found Economy service of Vault dependency.");
+      CriticalErrorHandler criticalErrorHandler =
+          new CriticalErrorHandler(logger, plugin.getServer().getPluginManager(), plugin);
+      criticalErrorHandler.raiseCriticalError(
+          "Failed to found Economy service of Vault dependency.");
     }
     return Objects.requireNonNull(rsp).getProvider();
+  }
+
+  @Provides
+  @Singleton
+  public @NotNull MiniMessage provideMiniMessage() {
+    return MiniMessage.miniMessage();
   }
 }

@@ -5,13 +5,14 @@ import dev.triumphteam.gui.components.GuiAction;
 import dev.triumphteam.gui.guis.GuiItem;
 import fr.voltariuss.diagonia.PluginConfig;
 import fr.voltariuss.diagonia.controller.PlayerShopController;
-import fr.voltariuss.diagonia.view.ItemUtils;
-import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Material;
@@ -26,8 +27,8 @@ public class BuyPlayerShopItem {
   private static final Material BUY_ITEM_MATERIAL = Material.EMERALD;
 
   private final Economy economy;
-  private final ItemUtils itemUtils;
   private final Logger logger;
+  private final MiniMessage miniMessage;
   private final PlayerShopController playerShopController;
   private final PluginConfig pluginConfig;
   private final ResourceBundle resourceBundle;
@@ -35,14 +36,14 @@ public class BuyPlayerShopItem {
   @Inject
   public BuyPlayerShopItem(
       @NotNull Economy economy,
-      @NotNull ItemUtils itemUtils,
       @NotNull Logger logger,
+      @NotNull MiniMessage miniMessage,
       @NotNull PlayerShopController playerShopController,
       @NotNull PluginConfig pluginConfig,
       @NotNull ResourceBundle resourceBundle) {
     this.economy = economy;
-    this.itemUtils = itemUtils;
     this.logger = logger;
+    this.miniMessage = miniMessage;
     this.playerShopController = playerShopController;
     this.pluginConfig = pluginConfig;
     this.resourceBundle = resourceBundle;
@@ -50,14 +51,22 @@ public class BuyPlayerShopItem {
 
   public @NotNull GuiItem createItem() {
     String name = resourceBundle.getString("diagonia.playershop.buy.name");
-    String description =
-        MessageFormat.format(
-            resourceBundle.getString("diagonia.playershop.buy.description"),
-            economy.format(pluginConfig.getPlayerShopConfig().getBuyCost()),
-            economy.currencyNamePlural());
-    List<Component> lore = itemUtils.asLore(description);
+    List<Component> lore = new ArrayList<>(2);
+    lore.add(
+        miniMessage
+            .deserialize(
+                String.format(
+                    resourceBundle.getString("diagonia.playershop.buy.description.1"),
+                    economy.format(pluginConfig.getPlayerShopConfig().getBuyCost()),
+                    economy.currencyNamePlural()))
+            .decoration(TextDecoration.ITALIC, false));
+    lore.add(Component.empty());
+    lore.add(
+        miniMessage
+            .deserialize(resourceBundle.getString("diagonia.playershop.buy.description.2"))
+            .decoration(TextDecoration.ITALIC, false));
     return ItemBuilder.from(BUY_ITEM_MATERIAL)
-        .name(Component.text(name))
+        .name(MiniMessage.miniMessage().deserialize(name).decoration(TextDecoration.ITALIC, false))
         .lore(lore)
         .asGuiItem(onClick());
   }
