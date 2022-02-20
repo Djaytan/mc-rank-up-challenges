@@ -7,6 +7,7 @@ import fr.voltariuss.diagonia.model.dao.PlayerShopDao;
 import fr.voltariuss.diagonia.model.dao.PlayerShopDaoImpl;
 import fr.voltariuss.diagonia.model.entity.PlayerShop;
 import java.util.Objects;
+import java.util.ResourceBundle;
 import javax.inject.Named;
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
@@ -100,5 +101,11 @@ public class GuiceGeneralModule extends AbstractModule {
           String.format("Database connection failed: %s", connectionUrl), e);
     }
     return Objects.requireNonNull(sessionFactory);
+  }
+
+  @Provides
+  @Singleton
+  public @NotNull ResourceBundle provideResourceBundle() {
+    return ResourceBundle.getBundle("language");
   }
 }
