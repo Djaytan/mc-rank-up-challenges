@@ -21,14 +21,14 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @Singleton
-public class PlayerShopItem {
+public class ConsultPlayerShopItem {
 
   private final LocationMapper locationMapper;
   private final ResourceBundle resourceBundle;
   private final Server server;
 
   @Inject
-  public PlayerShopItem(
+  public ConsultPlayerShopItem(
       @NotNull LocationMapper locationMapper,
       @NotNull ResourceBundle resourceBundle,
       @NotNull Server server) {
