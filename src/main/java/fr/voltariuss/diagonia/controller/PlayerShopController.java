@@ -5,6 +5,7 @@ import fr.voltariuss.diagonia.model.service.PlayerShopService;
 import fr.voltariuss.diagonia.view.gui.PlayerShopGui;
 import java.util.List;
 import javax.inject.Inject;
+import javax.inject.Provider;
 import javax.inject.Singleton;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -14,13 +15,13 @@ import org.slf4j.Logger;
 public class PlayerShopController {
 
   private final Logger logger;
-  private final PlayerShopGui playerShopGui;
+  private final Provider<PlayerShopGui> playerShopGui;
   private final PlayerShopService playerShopService;
 
   @Inject
   public PlayerShopController(
       @NotNull Logger logger,
-      @NotNull PlayerShopGui playerShopGui,
+      @NotNull Provider<PlayerShopGui> playerShopGui,
       @NotNull PlayerShopService playerShopService) {
     this.logger = logger;
     this.playerShopGui = playerShopGui;
@@ -30,7 +31,7 @@ public class PlayerShopController {
   public void openPlayerShop(@NotNull Player player) {
     logger.info("Open playershop for player {}", player.getName());
     List<PlayerShop> playerShopList = playerShopService.findAll();
-    playerShopGui.open(player, playerShopList);
+    playerShopGui.get().open(player, playerShopList);
   }
 
   public void buyPlayerShop(@NotNull Player player) {

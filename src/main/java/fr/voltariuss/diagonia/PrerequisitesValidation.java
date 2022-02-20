@@ -1,9 +1,12 @@
 package fr.voltariuss.diagonia;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import org.bukkit.Server;
 import org.jetbrains.annotations.NotNull;
 
+@Singleton
 public class PrerequisitesValidation {
 
   private final CriticalErrorHandler criticalErrorHandler;
