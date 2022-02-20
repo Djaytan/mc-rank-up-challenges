@@ -5,13 +5,14 @@ import dev.triumphteam.gui.components.GuiAction;
 import dev.triumphteam.gui.guis.GuiItem;
 import fr.voltariuss.diagonia.model.LocationMapper;
 import fr.voltariuss.diagonia.model.entity.PlayerShop;
-import java.util.ArrayList;
+import fr.voltariuss.diagonia.view.ItemUtils;
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.Objects;
+import java.util.ResourceBundle;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.kyori.adventure.text.Component;
-import org.apache.commons.lang.WordUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -25,13 +26,21 @@ import org.jetbrains.annotations.Nullable;
 @Singleton
 public class PlayerShopItem {
 
-  private final Server server;
+  private final ItemUtils itemUtils;
   private final LocationMapper locationMapper;
+  private final ResourceBundle resourceBundle;
+  private final Server server;
 
   @Inject
-  public PlayerShopItem(@NotNull Server server, @NotNull LocationMapper locationMapper) {
-    this.server = server;
+  public PlayerShopItem(
+      @NotNull ItemUtils itemUtils,
+      @NotNull LocationMapper locationMapper,
+      @NotNull ResourceBundle resourceBundle,
+      @NotNull Server server) {
+    this.itemUtils = itemUtils;
     this.locationMapper = locationMapper;
+    this.resourceBundle = resourceBundle;
+    this.server = server;
   }
 
   public @NotNull GuiItem createItem(@NotNull PlayerShop playerShop) {
@@ -44,29 +53,20 @@ public class PlayerShopItem {
       // TODO
     } else {
       Component playerShopName = getNameComponent(ownerName);
-      Component descriptionComponent = getDescriptionComponent(playerShop.getDescription());
-      List<Component> lore = new ArrayList<>();
-      lore.add(descriptionComponent);
+      List<Component> descLore = itemUtils.asLore(playerShop.getDescription());
       Location tpLocation = locationMapper.fromDto(playerShop.getTpLocation());
       return ItemBuilder.skull()
           .owner(ownerPlayer)
           .name(playerShopName)
-          .lore(lore)
+          .lore(descLore)
           .asGuiItem(getClickEvent(tpLocation));
     }
   }
 
   public @NotNull Component getNameComponent(@NotNull String ownerName) {
-    return Component.text(String.format("Shop de %s", ownerName));
-  }
-
-  public @NotNull Component getDescriptionComponent(@Nullable String playerShopDescription) {
-    Component descriptionComponent = Component.empty();
-    if (playerShopDescription != null) {
-      String splitDescription = WordUtils.wrap(playerShopDescription, 30);
-      descriptionComponent = Component.text(splitDescription);
-    }
-    return descriptionComponent;
+    return Component.text(
+        MessageFormat.format(
+            resourceBundle.getString("diagonia.playershop.consult.name"), ownerName));
   }
 
   public @NotNull GuiAction<InventoryClickEvent> getClickEvent(@Nullable Location tpLocation) {
