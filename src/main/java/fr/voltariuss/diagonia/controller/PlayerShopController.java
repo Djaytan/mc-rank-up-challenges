@@ -66,8 +66,7 @@ public class PlayerShopController {
         Component.text(
             String.format(
                 resourceBundle.getString("diagonia.playershop.buy.successfully_bought"),
-                economy.format(pluginConfig.getPlayerShopConfig().getBuyCost()),
-                economy.currencyNamePlural())));
+                economy.format(pluginConfig.getPlayerShopConfig().getBuyCost()))));
   }
 
   public boolean hasPlayerShop(@NotNull Player player) {

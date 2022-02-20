@@ -57,8 +57,7 @@ public class BuyPlayerShopItem {
             .deserialize(
                 String.format(
                     resourceBundle.getString("diagonia.playershop.buy.description.1"),
-                    economy.format(pluginConfig.getPlayerShopConfig().getBuyCost()),
-                    economy.currencyNamePlural()))
+                    economy.format(pluginConfig.getPlayerShopConfig().getBuyCost())))
             .decoration(TextDecoration.ITALIC, false));
     lore.add(Component.empty());
     lore.add(
