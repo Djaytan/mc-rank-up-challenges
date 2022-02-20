@@ -51,26 +51,34 @@ public class ConsultPlayerShopItem {
     if (playerShop.isActive()) {
       if (ownerName != null) {
         Component psName =
-          miniMessage.deserialize(
-            String.format(
-              resourceBundle.getString("diagonia.playershop.consult.name"), ownerName));
+            miniMessage.deserialize(
+                String.format(
+                    resourceBundle.getString("diagonia.playershop.consult.name"), ownerName));
         List<Component> psDescLore =
-          Collections.singletonList(Component.text(playerShop.getDescription()));
+            Collections.singletonList(
+                Component.text(
+                    playerShop.getDescription() != null
+                        ? playerShop.getDescription()
+                        : resourceBundle.getString(
+                            "diagonia.playershop.consult.description.no_description_set")));
 
         if (playerShop.hasItemIcon()) {
-          return ItemBuilder.from(playerShop.getItemIcon()).name(psName).lore(psDescLore).asGuiItem();
-        } else {
-          item =
-            ItemBuilder.skull()
-              .owner(ownerPlayer)
+          return ItemBuilder.from(playerShop.getItemIcon())
               .name(psName)
               .lore(psDescLore)
-              .asGuiItem(getClickEvent(playerShop));
+              .asGuiItem();
+        } else {
+          item =
+              ItemBuilder.skull()
+                  .owner(ownerPlayer)
+                  .name(psName)
+                  .lore(psDescLore)
+                  .asGuiItem(getClickEvent(playerShop));
         }
       } else {
         logger.error(
-          "The UUID {} isn't associated to any existing user on the server.",
-          playerShop.getOwnerUuid());
+            "The UUID {} isn't associated to any existing user on the server.",
+            playerShop.getOwnerUuid());
       }
     }
     return item;
@@ -83,7 +91,9 @@ public class ConsultPlayerShopItem {
       if (tpLocation != null) {
         player.teleport(tpLocation, PlayerTeleportEvent.TeleportCause.PLUGIN);
       } else {
-        player.sendMessage(Component.text(resourceBundle.getString("diagonia.playershop.teleport.no_tp_defined_error")));
+        player.sendMessage(
+            Component.text(
+                resourceBundle.getString("diagonia.playershop.teleport.no_tp_defined_error")));
       }
     };
   }
