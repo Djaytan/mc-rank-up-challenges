@@ -105,4 +105,19 @@ public class PlayerShopController {
   public Optional<PlayerShop> getFromUuid(@NotNull UUID uuid) {
     return playerShopService.findByUuid(uuid);
   }
+
+  public void togglePlayerShop(@NotNull CommandSender sender, @NotNull PlayerShop playerShop) {
+    logger.info("Toggle playershop: {}", playerShop);
+    playerShop.setActive(!playerShop.isActive());
+    playerShopService.update(playerShop);
+    sender.sendMessage(
+        miniMessage.deserialize(
+            String.format(
+                resourceBundle.getString("diagonia.playershop.config.activation.toggled"),
+                playerShop.isActive()
+                    ? resourceBundle.getString(
+                        "diagonia.playershop.config.activation.toggled.enabled")
+                    : resourceBundle.getString(
+                        "diagonia.playershop.config.activation.toggled.disabled"))));
+  }
 }
