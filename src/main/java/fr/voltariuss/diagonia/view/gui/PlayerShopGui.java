@@ -6,6 +6,7 @@ import fr.voltariuss.diagonia.model.entity.PlayerShop;
 import fr.voltariuss.diagonia.view.item.BuyPlayerShopItem;
 import fr.voltariuss.diagonia.view.item.ConsultPlayerShopItem;
 import java.util.List;
+import java.util.Objects;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.kyori.adventure.text.Component;
@@ -30,7 +31,11 @@ public class PlayerShopGui {
     Gui gui = Gui.gui().title(Component.text("PlayerShop")).rows(6).create();
 
     gui.addItem(
-        playerShopList.stream().map(consultPlayerShopItem::createItem).toArray(GuiItem[]::new));
+        playerShopList.stream()
+            .map(consultPlayerShopItem::createItem)
+            .filter(Objects::nonNull)
+            .toArray(GuiItem[]::new));
+
     gui.setItem(6, 5, buyPlayerShopItem.createItem());
 
     gui.setDefaultClickAction(event -> event.setCancelled(true));
