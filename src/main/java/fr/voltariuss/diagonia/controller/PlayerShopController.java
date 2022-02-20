@@ -1,17 +1,24 @@
 package fr.voltariuss.diagonia.controller;
 
 import fr.voltariuss.diagonia.PluginConfig;
+import fr.voltariuss.diagonia.model.LocationMapper;
+import fr.voltariuss.diagonia.model.dto.LocationDto;
 import fr.voltariuss.diagonia.model.entity.PlayerShop;
 import fr.voltariuss.diagonia.model.service.PlayerShopService;
 import fr.voltariuss.diagonia.view.gui.ConfigPlayerShopGui;
 import fr.voltariuss.diagonia.view.gui.PlayerShopGui;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.UUID;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.inject.Singleton;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.milkbowl.vault.economy.Economy;
+import org.bukkit.Location;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -20,7 +27,9 @@ import org.slf4j.Logger;
 public class PlayerShopController {
 
   private final Economy economy;
+  private final LocationMapper locationMapper;
   private final Logger logger;
+  private final MiniMessage miniMessage;
   private final PlayerShopService playerShopService;
   private final PluginConfig pluginConfig;
   private final ResourceBundle resourceBundle;
@@ -31,14 +40,18 @@ public class PlayerShopController {
   @Inject
   public PlayerShopController(
       @NotNull Economy economy,
+      @NotNull LocationMapper locationMapper,
       @NotNull Logger logger,
+      @NotNull MiniMessage miniMessage,
       @NotNull PlayerShopService playerShopService,
       @NotNull PluginConfig pluginConfig,
       @NotNull ResourceBundle resourceBundle,
       @NotNull Provider<ConfigPlayerShopGui> configPlayerShopGui,
       @NotNull Provider<PlayerShopGui> playerShopGui) {
     this.economy = economy;
+    this.locationMapper = locationMapper;
     this.logger = logger;
+    this.miniMessage = miniMessage;
     this.playerShopService = playerShopService;
     this.pluginConfig = pluginConfig;
     this.resourceBundle = resourceBundle;
@@ -46,16 +59,16 @@ public class PlayerShopController {
     this.playerShopGui = playerShopGui;
   }
 
-  public void openPlayerShop(@NotNull Player player) {
-    logger.info("Open playershop for player {}", player.getName());
+  public void openPlayerShop(@NotNull Player whoOpen) {
+    logger.info("Open playershop for player {}", whoOpen.getName());
     List<PlayerShop> playerShopList = playerShopService.findAll();
-    playerShopGui.get().open(player, playerShopList);
+    playerShopGui.get().open(whoOpen, playerShopList);
   }
 
-  public void openConfigPlayerShop(@NotNull Player player) {
-    logger.info("Open ConfigPlayerShop for player {}", player.getName());
-    PlayerShop playerShop = playerShopService.findByUuid(player.getUniqueId()).orElseThrow();
-    configPlayerShopGui.get().open(player, playerShop);
+  public void openConfigPlayerShop(@NotNull Player whoOpen, @NotNull PlayerShop playerShop) {
+    logger.info(
+        "Open ConfigPlayerShop of playershop for player {}: {}", whoOpen.getName(), playerShop);
+    configPlayerShopGui.get().open(whoOpen, playerShop);
   }
 
   public void buyPlayerShop(@NotNull Player player) {
@@ -71,5 +84,25 @@ public class PlayerShopController {
 
   public boolean hasPlayerShop(@NotNull Player player) {
     return playerShopService.findByUuid(player.getUniqueId()).isPresent();
+  }
+
+  public void defineTeleportPoint(
+      @NotNull CommandSender sender, @NotNull PlayerShop playerShop, @NotNull Location location) {
+    LocationDto locationDto = locationMapper.toDto(location);
+    logger.info(
+        "Update teleport point for the following playershop with the location {}: {}",
+        locationDto,
+        playerShop);
+    playerShop.setTpLocation(locationDto);
+    playerShopService.update(playerShop);
+    sender.sendMessage(
+        miniMessage.deserialize(
+            String.format(
+                resourceBundle.getString("diagonia.playershop.config.define_teleport.defined"),
+                locationDto)));
+  }
+
+  public Optional<PlayerShop> getFromUuid(@NotNull UUID uuid) {
+    return playerShopService.findByUuid(uuid);
   }
 }

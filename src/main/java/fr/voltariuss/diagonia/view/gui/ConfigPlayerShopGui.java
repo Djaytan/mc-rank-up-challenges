@@ -1,11 +1,11 @@
 package fr.voltariuss.diagonia.view.gui;
 
 import dev.triumphteam.gui.guis.Gui;
+import fr.voltariuss.diagonia.model.entity.PlayerShop;
+import fr.voltariuss.diagonia.view.item.DefineTpPlayerShopItem;
 import java.util.ResourceBundle;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
-import fr.voltariuss.diagonia.model.entity.PlayerShop;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -13,12 +13,16 @@ import org.jetbrains.annotations.NotNull;
 @Singleton
 public class ConfigPlayerShopGui {
 
+  private final DefineTpPlayerShopItem defineTpPlayerShopItem;
   private final MiniMessage miniMessage;
   private final ResourceBundle resourceBundle;
 
   @Inject
   public ConfigPlayerShopGui(
-      @NotNull MiniMessage miniMessage, @NotNull ResourceBundle resourceBundle) {
+      @NotNull DefineTpPlayerShopItem defineTpPlayerShopItem,
+      @NotNull MiniMessage miniMessage,
+      @NotNull ResourceBundle resourceBundle) {
+    this.defineTpPlayerShopItem = defineTpPlayerShopItem;
     this.miniMessage = miniMessage;
     this.resourceBundle = resourceBundle;
   }
@@ -33,6 +37,8 @@ public class ConfigPlayerShopGui {
             .create();
 
     // TODO
+
+    gui.setItem(1, 7, defineTpPlayerShopItem.createItem(playerShop));
 
     gui.setDefaultClickAction(event -> event.setCancelled(true));
     gui.open(whoOpen);

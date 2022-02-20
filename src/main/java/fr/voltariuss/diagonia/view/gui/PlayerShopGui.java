@@ -18,18 +18,17 @@ import org.jetbrains.annotations.NotNull;
 @Singleton
 public class PlayerShopGui {
 
-  private final PlayerShopController playerShopController;
-
   private final BuyPlayerShopItem buyPlayerShopItem;
   private final ConfigPlayerShopItem configPlayerShopItem;
   private final ConsultPlayerShopItem consultPlayerShopItem;
+  private final PlayerShopController playerShopController;
 
   @Inject
   public PlayerShopGui(
-      @NotNull PlayerShopController playerShopController,
       @NotNull BuyPlayerShopItem buyPlayerShopItem,
       @NotNull ConfigPlayerShopItem configPlayerShopItem,
-      @NotNull ConsultPlayerShopItem consultPlayerShopItem) {
+      @NotNull ConsultPlayerShopItem consultPlayerShopItem,
+      @NotNull PlayerShopController playerShopController) {
     this.buyPlayerShopItem = buyPlayerShopItem;
     this.configPlayerShopItem = configPlayerShopItem;
     this.consultPlayerShopItem = consultPlayerShopItem;
@@ -45,13 +44,13 @@ public class PlayerShopGui {
             .filter(Objects::nonNull)
             .toArray(GuiItem[]::new));
 
-    GuiItem configPsItem;
-    if (playerShopController.hasPlayerShop(whoOpen)) {
-      configPsItem = configPlayerShopItem.createItem();
-    } else {
-      configPsItem = buyPlayerShopItem.createItem();
-    }
-    gui.setItem(6, 5, configPsItem);
+    gui.setItem(
+        6,
+        5,
+        playerShopController
+            .getFromUuid(whoOpen.getUniqueId())
+            .map(configPlayerShopItem::createItem)
+            .orElseGet(buyPlayerShopItem::createItem));
 
     gui.setDefaultClickAction(event -> event.setCancelled(true));
 
