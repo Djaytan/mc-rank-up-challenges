@@ -84,4 +84,15 @@ public class GuiceBukkitModule extends AbstractModule {
   public @NotNull PaperCommandManager providePaperCommandManager() {
     return new PaperCommandManager(plugin);
   }
+
+  @Provides
+  @Singleton
+  public @NotNull Economy provideVaultEconomy() {
+    RegisteredServiceProvider<Economy> rsp = plugin.getServer().getServicesManager().getRegistration(Economy.class);
+    if (rsp == null) {
+      CriticalErrorHandler criticalErrorHandler = new CriticalErrorHandler(logger, plugin.getServer().getPluginManager(), plugin);
+      criticalErrorHandler.raiseCriticalError("Failed to found Economy service of Vault dependency.");
+    }
+    return Objects.requireNonNull(rsp).getProvider();
+  }
 }

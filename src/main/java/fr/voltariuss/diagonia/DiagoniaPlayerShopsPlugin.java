@@ -12,6 +12,7 @@ public class DiagoniaPlayerShopsPlugin extends JavaPlugin {
 
   @Inject private SessionFactory sessionFactory;
   @Inject private CommandRegister commandRegister;
+  @Inject private PrerequisitesValidation prerequisitesValidation;
 
   @Override
   public void onEnable() {
@@ -27,7 +28,8 @@ public class DiagoniaPlayerShopsPlugin extends JavaPlugin {
     // Guice setup
     DiagoniaPlayerShopsInjector.inject(this, IS_DEBUG_MODE, pluginConfig);
 
-    // Commands registration
+    // Additional setup
+    prerequisitesValidation.validate();
     commandRegister.registerCommands();
 
     getSLF4JLogger().info("Plugin successfully enabled");
