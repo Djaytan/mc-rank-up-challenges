@@ -4,16 +4,21 @@ import co.aikar.commands.PaperCommandManager;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
+import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Server;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.inventory.ItemFactory;
 import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.RegisteredServiceProvider;
+import org.bukkit.plugin.ServicesManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scoreboard.ScoreboardManager;
 import org.bukkit.structure.StructureManager;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
+
+import java.util.Objects;
 
 /** Guice module for Bukkit plugin. */
 public class GuiceBukkitModule extends AbstractModule {
@@ -33,6 +38,12 @@ public class GuiceBukkitModule extends AbstractModule {
 
   @Provides
   @Singleton
+  public @NotNull JavaPlugin providePlugin() {
+    return plugin;
+  }
+
+  @Provides
+  @Singleton
   public @NotNull Logger provideLogger() {
     return logger;
   }
@@ -41,6 +52,12 @@ public class GuiceBukkitModule extends AbstractModule {
   @Singleton
   public @NotNull PluginManager providePluginManager() {
     return plugin.getServer().getPluginManager();
+  }
+
+  @Provides
+  @Singleton
+  public @NotNull ServicesManager provideServicesManager() {
+    return plugin.getServer().getServicesManager();
   }
 
   @Provides

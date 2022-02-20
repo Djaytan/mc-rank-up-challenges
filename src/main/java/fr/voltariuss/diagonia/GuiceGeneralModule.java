@@ -9,6 +9,7 @@ import fr.voltariuss.diagonia.model.entity.PlayerShop;
 import java.util.Objects;
 import java.util.ResourceBundle;
 import javax.inject.Named;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AvailableSettings;
@@ -21,6 +22,7 @@ public class GuiceGeneralModule extends AbstractModule {
 
   private final Logger logger;
   private final boolean debugMode;
+  private final JavaPlugin javaPlugin;
   private final PluginConfig pluginConfig;
 
   /**
@@ -28,12 +30,17 @@ public class GuiceGeneralModule extends AbstractModule {
    *
    * @param logger The logger.
    * @param debugMode "true" if debug mode is enabled, "false" otherwise.
+   * @param javaPlugin The Java Plugin.
    * @param pluginConfig The plugin configuration.
    */
   public GuiceGeneralModule(
-      @NotNull Logger logger, boolean debugMode, @NotNull PluginConfig pluginConfig) {
+      @NotNull Logger logger,
+      boolean debugMode,
+      @NotNull JavaPlugin javaPlugin,
+      @NotNull PluginConfig pluginConfig) {
     this.logger = logger;
     this.debugMode = debugMode;
+    this.javaPlugin = javaPlugin;
     this.pluginConfig = pluginConfig;
   }
 
@@ -96,7 +103,8 @@ public class GuiceGeneralModule extends AbstractModule {
       sessionFactory = configuration.buildSessionFactory();
       logger.info("Database connexion established.");
     } catch (HibernateException e) {
-      CriticalErrorHandler criticalErrorHandler = new CriticalErrorHandler(logger);
+      CriticalErrorHandler criticalErrorHandler =
+          new CriticalErrorHandler(logger, javaPlugin.getServer().getPluginManager(), javaPlugin);
       criticalErrorHandler.raiseCriticalError(
           String.format("Database connection failed: %s", connectionUrl), e);
     }
