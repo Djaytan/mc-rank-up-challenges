@@ -3,3 +3,5 @@ version: ${version}
 author: Voltariuss
 api-version: ${minecraft.api.version}
 main: fr.voltariuss.diagonia.DiagoniaPlayerShopsPlugin
+depend:
+  - Vault
