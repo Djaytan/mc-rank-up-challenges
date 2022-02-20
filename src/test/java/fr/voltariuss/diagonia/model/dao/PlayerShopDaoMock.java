@@ -5,6 +5,8 @@ import fr.voltariuss.diagonia.model.entity.PlayerShop;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
+
 import org.hibernate.Transaction;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -50,5 +52,10 @@ public class PlayerShopDaoMock implements PlayerShopDao {
   @Override
   public @NotNull List<PlayerShop> findAll() {
     return new ArrayList<>();
+  }
+
+  @Override
+  public Optional<PlayerShop> findByUuid(@NotNull UUID uuid) {
+    return Optional.of(Mockito.mock(PlayerShop.class));
   }
 }

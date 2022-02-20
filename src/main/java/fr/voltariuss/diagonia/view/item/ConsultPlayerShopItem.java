@@ -9,6 +9,8 @@ import java.util.*;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
@@ -51,16 +53,20 @@ public class ConsultPlayerShopItem {
     if (playerShop.isActive()) {
       if (ownerName != null) {
         Component psName =
-            miniMessage.deserialize(
-                String.format(
-                    resourceBundle.getString("diagonia.playershop.consult.name"), ownerName));
+            miniMessage
+                .deserialize(
+                    String.format(
+                        resourceBundle.getString("diagonia.playershop.consult.name"), ownerName))
+                .decoration(TextDecoration.ITALIC, false);
         List<Component> psDescLore =
             Collections.singletonList(
-                Component.text(
-                    playerShop.getDescription() != null
-                        ? playerShop.getDescription()
-                        : resourceBundle.getString(
-                            "diagonia.playershop.consult.description.no_description_set")));
+                (playerShop.getDescription() != null
+                        ? Component.text(playerShop.getDescription())
+                            .color(TextColor.fromCSSHexString("gray"))
+                        : miniMessage.deserialize(
+                            resourceBundle.getString(
+                                "diagonia.playershop.consult.description.no_description_set")))
+                    .decoration(TextDecoration.ITALIC, false));
 
         if (playerShop.hasItemIcon()) {
           return ItemBuilder.from(playerShop.getItemIcon())

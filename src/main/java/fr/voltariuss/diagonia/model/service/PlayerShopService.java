@@ -6,6 +6,7 @@ import fr.voltariuss.diagonia.model.dao.PlayerShopDao;
 import fr.voltariuss.diagonia.model.entity.PlayerShop;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.hibernate.HibernateException;
@@ -68,7 +69,18 @@ public class PlayerShopService {
     playerShopDao.openSession();
     try {
       Optional<PlayerShop> playerShop = playerShopDao.findById(id);
-      debugger.debug("PlayerShop found by ID: {}", playerShop);
+      debugger.debug("PlayerShop found for ID {}: {}", id, playerShop);
+      return playerShop;
+    } finally {
+      playerShopDao.destroySession();
+    }
+  }
+
+  public @NotNull Optional<PlayerShop> findByUuid(@NotNull UUID uuid) {
+    playerShopDao.openSession();
+    try {
+      Optional<PlayerShop> playerShop = playerShopDao.findByUuid(uuid);
+      debugger.debug("PlayerShop found for UUID {}: {}", uuid, playerShop);
       return playerShop;
     } finally {
       playerShopDao.destroySession();

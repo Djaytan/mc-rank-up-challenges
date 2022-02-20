@@ -5,6 +5,7 @@ import fr.voltariuss.diagonia.model.AbstractJpaDao;
 import fr.voltariuss.diagonia.model.entity.PlayerShop;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.hibernate.SessionFactory;
@@ -34,6 +35,7 @@ public class PlayerShopDaoImpl extends AbstractJpaDao<PlayerShop, Long> implemen
 
   @Override
   public @NotNull Optional<PlayerShop> findById(@Nullable Long id) {
+    // TODO: why nullable???
     Preconditions.checkNotNull(id);
     return Optional.ofNullable(getCurrentSession().get(PlayerShop.class, id));
   }
@@ -47,5 +49,14 @@ public class PlayerShopDaoImpl extends AbstractJpaDao<PlayerShop, Long> implemen
   @Override
   public @NotNull List<PlayerShop> findAll() {
     return getCurrentSession().createQuery("FROM PlayerShop", PlayerShop.class).list();
+  }
+
+  @Override
+  public @NotNull Optional<PlayerShop> findByUuid(@NotNull UUID uuid) {
+    Preconditions.checkNotNull(uuid);
+    return getCurrentSession()
+        .createQuery("FROM PlayerShop WHERE ownerUuid = :uuid", PlayerShop.class)
+        .setParameter("uuid", uuid)
+        .uniqueResultOptional();
   }
 }
