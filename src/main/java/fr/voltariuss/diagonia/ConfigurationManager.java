@@ -24,11 +24,11 @@ public final class ConfigurationManager {
     config.addDefault(DATABASE_USERNAME, "username");
     config.addDefault(DATABASE_PASSWORD, "password");
 
-    config.addDefault(PLAYERSHOP_BUY_COST, 20000L);
+    config.addDefault(PLAYERSHOP_BUY_COST, 20000D);
     config.addDefault(PLAYERSHOP_DESCRIPTION_MAX_SIZE, 150);
     config.addDefault(PLAYERSHOP_INACTIVITY_DELAY, 30);
     config.addDefault(PLAYERSHOP_PREMIUM_SLOT_DURATION, 72);
-    config.addDefault(PLAYERSHOP_PREMIUM_SLOT_BUY_COST, 10000L);
+    config.addDefault(PLAYERSHOP_PREMIUM_SLOT_BUY_COST, 10000D);
   }
 
   public static @NotNull PluginConfig loadConfig(@NotNull FileConfiguration config) {

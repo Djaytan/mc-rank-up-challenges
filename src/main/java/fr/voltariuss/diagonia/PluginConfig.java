@@ -23,10 +23,10 @@ public class PluginConfig {
   @Data
   @Builder
   public static class PlayerShopConfig {
-    private final long buyCost;
+    private final double buyCost;
     private final int descriptionMaxSize;
     private final int inactivityDelay;
     private final int premiumSlotDuration;
-    private final long premiumSlotBuyCost;
+    private final double premiumSlotBuyCost;
   }
 }
