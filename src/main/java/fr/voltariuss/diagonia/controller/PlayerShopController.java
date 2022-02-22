@@ -14,7 +14,6 @@ import java.util.UUID;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.inject.Singleton;
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Location;
@@ -76,7 +75,7 @@ public class PlayerShopController {
     PlayerShop ps = new PlayerShop(player.getUniqueId());
     playerShopService.persist(ps);
     player.sendMessage(
-        Component.text(
+        miniMessage.deserialize(
             String.format(
                 resourceBundle.getString("diagonia.playershop.buy.successfully_bought"),
                 economy.format(pluginConfig.getPlayerShopConfig().getBuyCost()))));

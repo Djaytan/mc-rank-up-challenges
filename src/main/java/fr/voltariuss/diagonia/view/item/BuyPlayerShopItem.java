@@ -78,7 +78,7 @@ public class BuyPlayerShopItem {
 
       if (balance < buyCost) {
         player.sendMessage(
-            Component.text(resourceBundle.getString("diagonia.playershop.buy.insufficient_funds")));
+            miniMessage.deserialize(resourceBundle.getString("diagonia.playershop.buy.insufficient_funds")));
       } else {
         // TODO: fix breaking of MVC rules by managing economy in controllers
         EconomyResponse economyResponse =
@@ -94,7 +94,7 @@ public class BuyPlayerShopItem {
               economyResponse.errorMessage,
               economyResponse.type);
           player.sendMessage(
-              Component.text(
+              miniMessage.deserialize(
                   resourceBundle.getString("diagonia.playershop.buy.transaction_failed")));
         }
       }

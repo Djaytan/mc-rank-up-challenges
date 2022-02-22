@@ -12,6 +12,7 @@ import fr.voltariuss.diagonia.view.item.ConsultPlayerShopItem;
 import fr.voltariuss.diagonia.view.item.PaginatedItem;
 import java.util.List;
 import java.util.Objects;
+import java.util.ResourceBundle;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.kyori.adventure.text.Component;
@@ -31,6 +32,7 @@ public class MainPlayerShopGui {
   private final ConsultPlayerShopItem consultPlayerShopItem;
   private final PaginatedItem paginatedItem;
   private final PlayerShopController playerShopController;
+  private final ResourceBundle resourceBundle;
 
   @Inject
   public MainPlayerShopGui(
@@ -38,18 +40,25 @@ public class MainPlayerShopGui {
       @NotNull ConfigPlayerShopItem configPlayerShopItem,
       @NotNull ConsultPlayerShopItem consultPlayerShopItem,
       @NotNull PaginatedItem paginatedItem,
-      @NotNull PlayerShopController playerShopController) {
+      @NotNull PlayerShopController playerShopController,
+      @NotNull ResourceBundle resourceBundle) {
     this.buyPlayerShopItem = buyPlayerShopItem;
     this.configPlayerShopItem = configPlayerShopItem;
     this.consultPlayerShopItem = consultPlayerShopItem;
     this.paginatedItem = paginatedItem;
     this.playerShopController = playerShopController;
+    this.resourceBundle = resourceBundle;
   }
 
   public void open(@NotNull Player whoOpen, List<PlayerShop> playerShopList) {
     int pageSize = NB_ROW_PER_PAGE * NB_COLUMNS_PER_LINE;
     PaginatedGui gui =
-        Gui.paginated().title(Component.text("PlayerShop")).rows(6).pageSize(pageSize).create();
+        Gui.paginated()
+            .title(
+                Component.text(resourceBundle.getString("diagonia.playershop.consult.gui.title")))
+            .rows(6)
+            .pageSize(pageSize)
+            .create();
 
     GuiItem decorationItem =
         ItemBuilder.from(DECORATION_MATERIAL).name(Component.empty()).asGuiItem();

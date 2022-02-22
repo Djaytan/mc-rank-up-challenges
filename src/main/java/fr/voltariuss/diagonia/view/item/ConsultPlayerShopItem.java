@@ -98,7 +98,7 @@ public class ConsultPlayerShopItem {
         player.teleport(tpLocation, PlayerTeleportEvent.TeleportCause.PLUGIN);
       } else {
         player.sendMessage(
-            Component.text(
+            miniMessage.deserialize(
                 resourceBundle.getString("diagonia.playershop.teleport.no_tp_defined_error")));
       }
     };
