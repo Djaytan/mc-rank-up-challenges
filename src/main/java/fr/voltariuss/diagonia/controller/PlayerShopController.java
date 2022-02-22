@@ -1,7 +1,7 @@
 package fr.voltariuss.diagonia.controller;
 
 import fr.voltariuss.diagonia.Debugger;
-import fr.voltariuss.diagonia.PluginConfig;
+import fr.voltariuss.diagonia.model.config.PluginConfig;
 import fr.voltariuss.diagonia.model.LocationMapper;
 import fr.voltariuss.diagonia.model.dto.LocationDto;
 import fr.voltariuss.diagonia.model.entity.PlayerShop;

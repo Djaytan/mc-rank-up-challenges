@@ -1,4 +1,4 @@
-package fr.voltariuss.diagonia;
+package fr.voltariuss.diagonia.model.config;
 
 import lombok.Builder;
 import lombok.Data;

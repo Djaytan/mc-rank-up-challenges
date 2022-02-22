@@ -1,6 +1,9 @@
 package fr.voltariuss.diagonia;
 
 import javax.inject.Inject;
+
+import fr.voltariuss.diagonia.model.ConfigurationManager;
+import fr.voltariuss.diagonia.model.config.PluginConfig;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.hibernate.SessionFactory;
 

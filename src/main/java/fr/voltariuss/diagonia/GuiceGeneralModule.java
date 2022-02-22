@@ -3,6 +3,7 @@ package fr.voltariuss.diagonia;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
+import fr.voltariuss.diagonia.model.config.PluginConfig;
 import fr.voltariuss.diagonia.model.dao.PlayerShopDao;
 import fr.voltariuss.diagonia.model.dao.PlayerShopDaoImpl;
 import fr.voltariuss.diagonia.model.entity.PlayerShop;

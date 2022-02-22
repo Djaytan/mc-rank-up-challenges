@@ -1,5 +1,6 @@
-package fr.voltariuss.diagonia;
+package fr.voltariuss.diagonia.model;
 
+import fr.voltariuss.diagonia.model.config.PluginConfig;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.jetbrains.annotations.NotNull;
 

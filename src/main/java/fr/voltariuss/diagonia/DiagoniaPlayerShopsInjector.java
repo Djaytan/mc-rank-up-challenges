@@ -2,6 +2,7 @@ package fr.voltariuss.diagonia;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import fr.voltariuss.diagonia.model.config.PluginConfig;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 

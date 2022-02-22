@@ -3,7 +3,7 @@ package fr.voltariuss.diagonia.view.item;
 import dev.triumphteam.gui.builder.item.ItemBuilder;
 import dev.triumphteam.gui.components.GuiAction;
 import dev.triumphteam.gui.guis.GuiItem;
-import fr.voltariuss.diagonia.PluginConfig;
+import fr.voltariuss.diagonia.model.config.PluginConfig;
 import fr.voltariuss.diagonia.controller.PlayerShopController;
 import java.util.ArrayList;
 import java.util.List;
