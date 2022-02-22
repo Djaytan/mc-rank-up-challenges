@@ -1,5 +1,6 @@
 package fr.voltariuss.diagonia.controller;
 
+import fr.voltariuss.diagonia.Debugger;
 import fr.voltariuss.diagonia.PluginConfig;
 import fr.voltariuss.diagonia.model.LocationMapper;
 import fr.voltariuss.diagonia.model.dto.LocationDto;
@@ -17,14 +18,18 @@ import javax.inject.Singleton;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
 @Singleton
 public class PlayerShopController {
 
+  private final Debugger debugger;
   private final Economy economy;
   private final LocationMapper locationMapper;
   private final Logger logger;
@@ -32,12 +37,14 @@ public class PlayerShopController {
   private final PlayerShopService playerShopService;
   private final PluginConfig pluginConfig;
   private final ResourceBundle resourceBundle;
+  private final Server server;
 
   private final Provider<ConfigPlayerShopGui> configPlayerShopGui;
   private final Provider<MainPlayerShopGui> mainPlayerShopGui;
 
   @Inject
   public PlayerShopController(
+      @NotNull Debugger debugger,
       @NotNull Economy economy,
       @NotNull LocationMapper locationMapper,
       @NotNull Logger logger,
@@ -45,8 +52,10 @@ public class PlayerShopController {
       @NotNull PlayerShopService playerShopService,
       @NotNull PluginConfig pluginConfig,
       @NotNull ResourceBundle resourceBundle,
+      @NotNull Server server,
       @NotNull Provider<ConfigPlayerShopGui> configPlayerShopGui,
       @NotNull Provider<MainPlayerShopGui> mainPlayerShopGui) {
+    this.debugger = debugger;
     this.economy = economy;
     this.locationMapper = locationMapper;
     this.logger = logger;
@@ -54,6 +63,7 @@ public class PlayerShopController {
     this.playerShopService = playerShopService;
     this.pluginConfig = pluginConfig;
     this.resourceBundle = resourceBundle;
+    this.server = server;
     this.configPlayerShopGui = configPlayerShopGui;
     this.mainPlayerShopGui = mainPlayerShopGui;
   }
@@ -65,8 +75,12 @@ public class PlayerShopController {
   }
 
   public void openConfigPlayerShop(@NotNull Player whoOpen, @NotNull PlayerShop playerShop) {
-    logger.info(
-        "Open ConfigPlayerShop of playershop for player {}: {}", whoOpen.getName(), playerShop);
+    if (pluginConfig.isDebugMode()) {
+      debugger.debug(
+        "Open config playershop for player {} ({})", whoOpen.getName(), playerShop);
+    } else {
+      logger.info("Open config playershop gui for player {}", whoOpen.getName());
+    }
     configPlayerShopGui.get().open(whoOpen, playerShop);
   }
 
@@ -87,11 +101,16 @@ public class PlayerShopController {
 
   public void defineTeleportPoint(
       @NotNull CommandSender sender, @NotNull PlayerShop playerShop, @NotNull Location location) {
+    @Nullable OfflinePlayer owner = server.getOfflinePlayer(playerShop.getOwnerUuid());
     LocationDto locationDto = locationMapper.toDto(location);
-    logger.info(
-        "Update teleport point for the following playershop with the location {}: {}",
-        locationDto,
-        playerShop);
+    if (pluginConfig.isDebugMode()) {
+      debugger.debug(
+          "Update teleport point for the playershop of {} (playershop: {}, new location: {})",
+          playerShop,
+          locationDto);
+    } else {
+      logger.info("Update teleport point for the playershop of {}", owner.getName());
+    }
     playerShop.setTpLocation(locationDto);
     playerShopService.update(playerShop);
     sender.sendMessage(
@@ -106,7 +125,12 @@ public class PlayerShopController {
   }
 
   public void togglePlayerShop(@NotNull CommandSender sender, @NotNull PlayerShop playerShop) {
-    logger.info("Toggle playershop: {}", playerShop);
+    @Nullable OfflinePlayer owner = server.getOfflinePlayer(playerShop.getOwnerUuid());
+    if (pluginConfig.isDebugMode()) {
+      debugger.debug("Toggle playershop of {}: {}", owner, playerShop);
+    } else {
+      logger.info("Toggle playershop of {}", owner.getName());
+    }
     if (playerShop.isActive() || playerShop.getTpLocation() != null) {
       playerShop.setActive(!playerShop.isActive());
       playerShopService.update(playerShop);

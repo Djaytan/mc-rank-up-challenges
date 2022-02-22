@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 
 public final class ConfigurationManager {
 
+  public static final String DEBUG_MODE = "debug";
   public static final String DATABASE_HOST = "database.host";
   public static final String DATABASE_PORT = "database.port";
   public static final String DATABASE_DATABASE = "database.database";
@@ -18,6 +19,8 @@ public final class ConfigurationManager {
 
   public static void init(@NotNull FileConfiguration config) {
     // Database information
+    config.addDefault(DEBUG_MODE, false);
+
     config.addDefault(DATABASE_HOST, "localhost");
     config.addDefault(DATABASE_PORT, 3306);
     config.addDefault(DATABASE_DATABASE, "database");
@@ -49,6 +52,7 @@ public final class ConfigurationManager {
                 .premiumSlotDuration(config.getInt(PLAYERSHOP_PREMIUM_SLOT_DURATION))
                 .premiumSlotBuyCost(config.getLong(PLAYERSHOP_PREMIUM_SLOT_BUY_COST))
                 .build())
+        .debugMode(config.getBoolean(DEBUG_MODE))
         .build();
   }
 

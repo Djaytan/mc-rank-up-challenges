@@ -21,7 +21,6 @@ import org.slf4j.Logger;
 public class GuiceGeneralModule extends AbstractModule {
 
   private final Logger logger;
-  private final boolean debugMode;
   private final JavaPlugin javaPlugin;
   private final PluginConfig pluginConfig;
 
@@ -29,17 +28,14 @@ public class GuiceGeneralModule extends AbstractModule {
    * Constructor.
    *
    * @param logger The logger.
-   * @param debugMode "true" if debug mode is enabled, "false" otherwise.
    * @param javaPlugin The Java Plugin.
    * @param pluginConfig The plugin configuration.
    */
   public GuiceGeneralModule(
       @NotNull Logger logger,
-      boolean debugMode,
       @NotNull JavaPlugin javaPlugin,
       @NotNull PluginConfig pluginConfig) {
     this.logger = logger;
-    this.debugMode = debugMode;
     this.javaPlugin = javaPlugin;
     this.pluginConfig = pluginConfig;
   }
@@ -52,8 +48,8 @@ public class GuiceGeneralModule extends AbstractModule {
   @Provides
   @Named("debugMode")
   public boolean provideDebugMode() {
-    logger.info("§bDebug mode: {}", debugMode ? "§aenabled" : "§7disabled");
-    return debugMode;
+    logger.info("§bDebug mode: {}", pluginConfig.isDebugMode() ? "§aenabled" : "§7disabled");
+    return pluginConfig.isDebugMode();
   }
 
   @Provides

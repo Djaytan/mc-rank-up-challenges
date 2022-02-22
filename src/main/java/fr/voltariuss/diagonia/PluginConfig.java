@@ -9,6 +9,7 @@ public class PluginConfig {
 
   private final DatabaseConfig databaseConfig;
   private final PlayerShopConfig playerShopConfig;
+  private final boolean debugMode;
 
   @Data
   @Builder

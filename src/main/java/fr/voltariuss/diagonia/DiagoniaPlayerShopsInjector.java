@@ -15,13 +15,12 @@ public final class DiagoniaPlayerShopsInjector {
    * Inject already instantiated stuff into Guice (e.g. {@link JavaPlugin}).
    *
    * @param plugin The plugin to inject into Guice.
-   * @param debugMode "true" if the debug mode for the plugin is enabled, "false" otherwise.
    * @param pluginConfig The plugin configuration.
    */
-  public static void inject(@NotNull JavaPlugin plugin, boolean debugMode, @NotNull PluginConfig pluginConfig) {
+  public static void inject(@NotNull JavaPlugin plugin, @NotNull PluginConfig pluginConfig) {
     Injector injector =
         Guice.createInjector(
-            new GuiceGeneralModule(plugin.getSLF4JLogger(), debugMode, plugin, pluginConfig),
+            new GuiceGeneralModule(plugin.getSLF4JLogger(), plugin, pluginConfig),
             new GuiceBukkitModule(plugin, plugin.getSLF4JLogger()));
     injector.injectMembers(plugin);
   }

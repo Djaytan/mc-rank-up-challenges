@@ -7,9 +7,6 @@ import org.hibernate.SessionFactory;
 /** Diagonia-PlayerShops plugin */
 public class DiagoniaPlayerShopsPlugin extends JavaPlugin {
 
-  // TODO: tmp, use config file instead
-  public static final boolean IS_DEBUG_MODE = true;
-
   @Inject private SessionFactory sessionFactory;
   @Inject private CommandRegister commandRegister;
   @Inject private PrerequisitesValidation prerequisitesValidation;
@@ -26,7 +23,7 @@ public class DiagoniaPlayerShopsPlugin extends JavaPlugin {
     getSLF4JLogger().info("Configuration loaded");
 
     // Guice setup
-    DiagoniaPlayerShopsInjector.inject(this, IS_DEBUG_MODE, pluginConfig);
+    DiagoniaPlayerShopsInjector.inject(this, pluginConfig);
 
     // Additional setup
     prerequisitesValidation.validate();
