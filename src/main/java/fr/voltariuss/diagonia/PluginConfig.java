@@ -14,6 +14,7 @@ public class PluginConfig {
   @Data
   @Builder
   public static class DatabaseConfig {
+    private final boolean isEnabled;
     private final String host;
     private final int port;
     private final String database;

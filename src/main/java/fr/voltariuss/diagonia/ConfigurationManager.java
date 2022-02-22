@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 public final class ConfigurationManager {
 
   public static final String DEBUG_MODE = "debug";
+  public static final String DATABASE_IS_ENABLED = "database.is_enabled";
   public static final String DATABASE_HOST = "database.host";
   public static final String DATABASE_PORT = "database.port";
   public static final String DATABASE_DATABASE = "database.database";
@@ -21,6 +22,7 @@ public final class ConfigurationManager {
     // Database information
     config.addDefault(DEBUG_MODE, false);
 
+    config.addDefault(DATABASE_IS_ENABLED, false);
     config.addDefault(DATABASE_HOST, "localhost");
     config.addDefault(DATABASE_PORT, 3306);
     config.addDefault(DATABASE_DATABASE, "database");
@@ -38,6 +40,7 @@ public final class ConfigurationManager {
     return PluginConfig.builder()
         .databaseConfig(
             PluginConfig.DatabaseConfig.builder()
+                .isEnabled(config.getBoolean(DATABASE_IS_ENABLED))
                 .host(config.getString(DATABASE_HOST))
                 .port(config.getInt(DATABASE_PORT))
                 .database(config.getString(DATABASE_DATABASE))

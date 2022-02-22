@@ -22,14 +22,20 @@ public class DiagoniaPlayerShopsPlugin extends JavaPlugin {
     PluginConfig pluginConfig = ConfigurationManager.loadConfig(getConfig());
     getSLF4JLogger().info("Configuration loaded");
 
-    // Guice setup
-    DiagoniaPlayerShopsInjector.inject(this, pluginConfig);
+    if (pluginConfig.getDatabaseConfig().isEnabled()) {
+      // Guice setup
+      DiagoniaPlayerShopsInjector.inject(this, pluginConfig);
 
-    // Additional setup
-    prerequisitesValidation.validate();
-    commandRegister.registerCommands();
+      // Additional setup
+      prerequisitesValidation.validate();
+      commandRegister.registerCommands();
 
-    getSLF4JLogger().info("Plugin successfully enabled");
+      getSLF4JLogger().info("Plugin successfully enabled");
+    } else {
+      getSLF4JLogger()
+          .error("Database disabled. Please configure and activate it through config.yml file");
+      getServer().getPluginManager().disablePlugin(this);
+    }
   }
 
   @Override
