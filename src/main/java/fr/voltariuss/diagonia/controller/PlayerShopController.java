@@ -108,16 +108,23 @@ public class PlayerShopController {
 
   public void togglePlayerShop(@NotNull CommandSender sender, @NotNull PlayerShop playerShop) {
     logger.info("Toggle playershop: {}", playerShop);
-    playerShop.setActive(!playerShop.isActive());
-    playerShopService.update(playerShop);
-    sender.sendMessage(
-        miniMessage.deserialize(
-            String.format(
-                resourceBundle.getString("diagonia.playershop.config.activation.toggled"),
-                playerShop.isActive()
-                    ? resourceBundle.getString(
-                        "diagonia.playershop.config.activation.toggled.enabled")
-                    : resourceBundle.getString(
-                        "diagonia.playershop.config.activation.toggled.disabled"))));
+    if (playerShop.isActive() || playerShop.getTpLocation() != null) {
+      playerShop.setActive(!playerShop.isActive());
+      playerShopService.update(playerShop);
+      sender.sendMessage(
+          miniMessage.deserialize(
+              String.format(
+                  resourceBundle.getString("diagonia.playershop.config.activation.toggled"),
+                  playerShop.isActive()
+                      ? resourceBundle.getString(
+                          "diagonia.playershop.config.activation.toggled.enabled")
+                      : resourceBundle.getString(
+                          "diagonia.playershop.config.activation.toggled.disabled"))));
+    } else {
+      sender.sendMessage(
+          miniMessage.deserialize(
+              resourceBundle.getString(
+                  "diagonia.playershop.config.activation.enabling.teleport_point_definition_required")));
+    }
   }
 }
