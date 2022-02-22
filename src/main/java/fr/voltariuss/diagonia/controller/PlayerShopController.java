@@ -6,7 +6,7 @@ import fr.voltariuss.diagonia.model.dto.LocationDto;
 import fr.voltariuss.diagonia.model.entity.PlayerShop;
 import fr.voltariuss.diagonia.model.service.PlayerShopService;
 import fr.voltariuss.diagonia.view.gui.ConfigPlayerShopGui;
-import fr.voltariuss.diagonia.view.gui.PlayerShopGui;
+import fr.voltariuss.diagonia.view.gui.MainPlayerShopGui;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -35,7 +35,7 @@ public class PlayerShopController {
   private final ResourceBundle resourceBundle;
 
   private final Provider<ConfigPlayerShopGui> configPlayerShopGui;
-  private final Provider<PlayerShopGui> playerShopGui;
+  private final Provider<MainPlayerShopGui> mainPlayerShopGui;
 
   @Inject
   public PlayerShopController(
@@ -47,7 +47,7 @@ public class PlayerShopController {
       @NotNull PluginConfig pluginConfig,
       @NotNull ResourceBundle resourceBundle,
       @NotNull Provider<ConfigPlayerShopGui> configPlayerShopGui,
-      @NotNull Provider<PlayerShopGui> playerShopGui) {
+      @NotNull Provider<MainPlayerShopGui> mainPlayerShopGui) {
     this.economy = economy;
     this.locationMapper = locationMapper;
     this.logger = logger;
@@ -56,13 +56,13 @@ public class PlayerShopController {
     this.pluginConfig = pluginConfig;
     this.resourceBundle = resourceBundle;
     this.configPlayerShopGui = configPlayerShopGui;
-    this.playerShopGui = playerShopGui;
+    this.mainPlayerShopGui = mainPlayerShopGui;
   }
 
   public void openPlayerShop(@NotNull Player whoOpen) {
     logger.info("Open playershop for player {}", whoOpen.getName());
     List<PlayerShop> playerShopList = playerShopService.findAll();
-    playerShopGui.get().open(whoOpen, playerShopList);
+    mainPlayerShopGui.get().open(whoOpen, playerShopList);
   }
 
   public void openConfigPlayerShop(@NotNull Player whoOpen, @NotNull PlayerShop playerShop) {

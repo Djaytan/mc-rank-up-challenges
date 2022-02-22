@@ -16,7 +16,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 @Singleton
-public class PlayerShopGui {
+public class MainPlayerShopGui {
 
   private final BuyPlayerShopItem buyPlayerShopItem;
   private final ConfigPlayerShopItem configPlayerShopItem;
@@ -24,7 +24,7 @@ public class PlayerShopGui {
   private final PlayerShopController playerShopController;
 
   @Inject
-  public PlayerShopGui(
+  public MainPlayerShopGui(
       @NotNull BuyPlayerShopItem buyPlayerShopItem,
       @NotNull ConfigPlayerShopItem configPlayerShopItem,
       @NotNull ConsultPlayerShopItem consultPlayerShopItem,
@@ -37,7 +37,7 @@ public class PlayerShopGui {
 
   public void open(@NotNull Player whoOpen, List<PlayerShop> playerShopList) {
     Gui gui = Gui.gui().title(Component.text("PlayerShop")).rows(6).create();
-
+    
     gui.addItem(
         playerShopList.stream()
             .map(consultPlayerShopItem::createItem)
