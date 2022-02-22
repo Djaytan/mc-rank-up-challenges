@@ -42,8 +42,8 @@ public class ConfigPlayerShopGui {
 
     // TODO
 
-    gui.setItem(2, 5, activationPlayerShopItem.createItem(playerShop));
-    gui.setItem(2, 7, defineTpPlayerShopItem.createItem(playerShop));
+    gui.setItem(2, 4, activationPlayerShopItem.createItem(playerShop));
+    gui.setItem(2, 6, defineTpPlayerShopItem.createItem(playerShop));
 
     gui.setDefaultClickAction(event -> event.setCancelled(true));
     gui.open(whoOpen);
