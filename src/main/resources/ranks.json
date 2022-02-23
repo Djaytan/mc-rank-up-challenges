@@ -1,0 +1,376 @@
+{
+  "ranks": [
+    {
+      "id": "aventurier",
+      "rankName": "Aventurier",
+      "rankDesc": [
+        "Devient un aventurier, et débute ton aventure !"
+      ],
+      "rankColor": "#474F52",
+      "rankProfits": [
+        "Kit du nouveau",
+        "1 Home"
+      ],
+      "rankUpActivated": true,
+      "rankUpChallenges": [
+        {
+          "challengeType": "give-item",
+          "challengeItemMaterial": "minecraft:dirt",
+          "challengeItemAmount": 3600
+        }
+      ],
+      "rankUpPrerequisites": {
+        "moneyPrice": 0,
+        "totalMcExpLevels": 0,
+        "totalJobLevel": 0
+      },
+      "rankUpTarget": "villageois"
+    },
+    {
+      "id": "villageois",
+      "rankName": "Villageois",
+      "rankDesc": [
+        "Tu commences à te faire un nom ! Continue ainsi."
+      ],
+      "rankColor": "#9D9D97",
+      "rankProfits": [
+        "2 Homes",
+        "1er métier"
+      ],
+      "rankUpActivated": true,
+      "rankUpChallenges": [
+        {
+          "challengeType": "give-item",
+          "challengeItemMaterial": "minecraft:coal",
+          "challengeItemAmount": 64
+        },
+        {
+          "challengeType": "give-item",
+          "challengeItemMaterial": "minecraft:cobblestone",
+          "challengeItemAmount": 128
+        },
+        {
+          "challengeType": "give-item",
+          "challengeItemMaterial": "minecraft:oak_log",
+          "challengeItemAmount": 128
+        },
+        {
+          "challengeType": "give-item",
+          "challengeItemMaterial": "minecraft:sand",
+          "challengeItemAmount": 64
+        },
+        {
+          "challengeType": "give-item",
+          "challengeItemMaterial": "minecraft:cod",
+          "challengeItemAmount": 8
+        },
+        {
+          "challengeType": "give-item",
+          "challengeItemMaterial": "minecraft:iron_ingot",
+          "challengeItemAmount": 32
+        }
+      ],
+      "rankUpPrerequisites": {
+        "moneyPrice": 0,
+        "totalMcExpLevels": 0,
+        "totalJobLevel": 0
+      },
+      "rankUpTarget": "paysan"
+    },
+    {
+      "id": "paysan",
+      "rankName": "Paysan",
+      "rankDesc": [
+        "Tu commences à te faire un nom ! Continue ainsi."
+      ],
+      "rankColor": "#9D9D97",
+      "rankProfits": [
+        "3 Homes",
+        "Accès /bottle"
+      ],
+      "rankUpActivated": true,
+      "rankUpChallenges": [
+        {
+          "challengeType": "give-item",
+          "challengeItemMaterial": "minecraft:dirt",
+          "challengeItemAmount": 1000
+        },
+        {
+          "challengeType": "give-item",
+          "challengeItemMaterial": "minecraft:sand",
+          "challengeItemAmount": 1000
+        },
+        {
+          "challengeType": "give-item",
+          "challengeItemMaterial": "minecraft:cobblestone",
+          "challengeItemAmount": 1000
+        },
+        {
+          "challengeType": "give-item",
+          "challengeItemMaterial": "minecraft:oak_log",
+          "challengeItemAmount": 256
+        },
+        {
+          "challengeType": "give-item",
+          "challengeItemMaterial": "minecraft:birch_log",
+          "challengeItemAmount": 256
+        },
+        {
+          "challengeType": "give-item",
+          "challengeItemMaterial": "minecraft:iron_block",
+          "challengeItemAmount": 16
+        },
+        {
+          "challengeType": "give-item",
+          "challengeItemMaterial": "minecraft:gold_block",
+          "challengeItemAmount": 8
+        },
+        {
+          "challengeType": "give-item",
+          "challengeItemMaterial": "minecraft:potato",
+          "challengeItemAmount": 256
+        },
+        {
+          "challengeType": "give-item",
+          "challengeItemMaterial": "minecraft:carrot",
+          "challengeItemAmount": 256
+        },
+        {
+          "challengeType": "give-item",
+          "challengeItemMaterial": "minecraft:bamboo",
+          "challengeItemAmount": 256
+        },
+        {
+          "challengeType": "give-item",
+          "challengeItemMaterial": "minecraft:cooked_beef",
+          "challengeItemAmount": 128
+        },
+        {
+          "challengeType": "give-item",
+          "challengeItemMaterial": "minecraft:cod",
+          "challengeItemAmount": 64
+        },
+        {
+          "challengeType": "give-item",
+          "challengeItemMaterial": "minecraft:salmon",
+          "challengeItemAmount": 25
+        },
+        {
+          "challengeType": "give-item",
+          "challengeItemMaterial": "minecraft:pufferfish",
+          "challengeItemAmount": 16
+        },
+        {
+          "challengeType": "give-item",
+          "challengeItemMaterial": "minecraft:stick",
+          "challengeItemAmount": 256
+        },
+        {
+          "challengeType": "give-item",
+          "challengeItemMaterial": "minecraft:wheat_seeds",
+          "challengeItemAmount": 256
+        },
+        {
+          "challengeType": "give-item",
+          "challengeItemMaterial": "minecraft:bone",
+          "challengeItemAmount": 128
+        },
+        {
+          "challengeType": "give-item",
+          "challengeItemMaterial": "minecraft:rotten_flesh",
+          "challengeItemAmount": 256
+        },
+        {
+          "challengeType": "give-item",
+          "challengeItemMaterial": "minecraft:feather",
+          "challengeItemAmount": 128
+        },
+        {
+          "challengeType": "give-item",
+          "challengeItemMaterial": "minecraft:redstone_torch",
+          "challengeItemAmount": 256
+        },
+        {
+          "challengeType": "give-item",
+          "challengeItemMaterial": "minecraft:bell",
+          "challengeItemAmount": 1
+        }
+      ],
+      "rankUpPrerequisites": {
+        "moneyPrice": 25000,
+        "totalMcExpLevels": 15,
+        "totalJobLevel": 10
+      },
+      "rankUpTarget": "artisan"
+    },
+    {
+      "id": "artisan",
+      "rankName": "Artisan",
+      "rankDesc": [
+        "Devient un aventurier, et débute ton aventure !"
+      ],
+      "rankColor": "#9D9D97",
+      "rankProfits": [
+        "Kit du nouveau",
+        "1 Home"
+      ],
+      "rankUpActivated": true,
+      "rankUpChallenges": [
+        {
+          "challengeType": "give-item",
+          "challengeItemMaterial": "minecraft:dirt",
+          "challengeItemAmount": 3600
+        }
+      ],
+      "rankUpPrerequisites": {
+        "moneyPrice": 50000,
+        "totalMcExpLevels": 30,
+        "totalJobLevel": 20
+      },
+      "rankUpTarget": "ecuyer"
+    },
+    {
+      "id": "ecuyer",
+      "rankName": "Ecuyer",
+      "rankDesc": [
+        "Devient un aventurier, et débute ton aventure !"
+      ],
+      "rankColor": "#4211872",
+      "rankProfits": [
+        "Kit du nouveau",
+        "1 Home"
+      ],
+      "rankUpActivated": true,
+      "rankUpChallenges": [
+        {
+          "challengeType": "give-item",
+          "challengeItemMaterial": "minecraft:dirt",
+          "challengeItemAmount": 3600
+        }
+      ],
+      "rankUpPrerequisites": {
+        "moneyPrice": 75000,
+        "totalMcExpLevels": 60,
+        "totalJobLevel": 30
+      },
+      "rankUpTarget": "citoyen"
+    },
+    {
+      "id": "citoyen",
+      "rankName": "Citoyen",
+      "rankDesc": [
+        "Devient un aventurier, et débute ton aventure !"
+      ],
+      "rankColor": "#169C9C",
+      "rankProfits": [
+        "Kit du nouveau",
+        "1 Home"
+      ],
+      "rankUpActivated": true,
+      "rankUpChallenges": [
+        {
+          "challengeType": "give-item",
+          "challengeItemMaterial": "minecraft:dirt",
+          "challengeItemAmount": 3600
+        }
+      ],
+      "rankUpPrerequisites": {
+        "moneyPrice": 100000,
+        "totalMcExpLevels": 30,
+        "totalJobLevel": 50
+      },
+      "rankUpTarget": "commerçant"
+    },
+    {
+      "id": "commerçant",
+      "rankName": "Commerçant",
+      "rankDesc": [
+        "Devient un aventurier, et débute ton aventure !"
+      ],
+      "rankColor": "#3AB3DA",
+      "rankProfits": [
+        "Kit du nouveau",
+        "1 Home"
+      ],
+      "rankUpActivated": true,
+      "rankUpChallenges": [
+        {
+          "challengeType": "give-item",
+          "challengeItemMaterial": "minecraft:dirt",
+          "challengeItemAmount": 3600
+        }
+      ],
+      "rankUpPrerequisites": {
+        "moneyPrice": 150000,
+        "totalMcExpLevels": 120,
+        "totalJobLevel": 80
+      },
+      "rankUpTarget": "bourgeois"
+    },
+    {
+      "id": "bourgeois",
+      "rankName": "Bourgeois",
+      "rankDesc": [
+        "Devient un aventurier, et débute ton aventure !"
+      ],
+      "rankColor": "#80C71F",
+      "rankProfits": [
+        "Kit du nouveau",
+        "1 Home"
+      ],
+      "rankUpActivated": true,
+      "rankUpChallenges": [
+        {
+          "challengeType": "give-item",
+          "challengeItemMaterial": "minecraft:dirt",
+          "challengeItemAmount": 3600
+        }
+      ],
+      "rankUpPrerequisites": {
+        "moneyPrice": 300000,
+        "totalMcExpLevels": 150,
+        "totalJobLevel": 120
+      },
+      "rankUpTarget": "noble"
+    },
+    {
+      "id": "noble",
+      "rankName": "Noble",
+      "rankDesc": [
+        "Devient un aventurier, et débute ton aventure !"
+      ],
+      "rankColor": "#C74EBD",
+      "rankProfits": [
+        "Kit du nouveau",
+        "1 Home"
+      ],
+      "rankUpActivated": true,
+      "rankUpChallenges": [
+        {
+          "challengeType": "give-item",
+          "challengeItemMaterial": "minecraft:dirt",
+          "challengeItemAmount": 3600
+        }
+      ],
+      "rankUpPrerequisites": {
+        "moneyPrice": 600000,
+        "totalMcExpLevels": 175,
+        "totalJobLevel": 200
+      },
+      "rankUpTarget": "prince"
+    },
+    {
+      "id": "prince",
+      "rankName": "Prince",
+      "rankDesc": [
+        "Devient un aventurier, et débute ton aventure !"
+      ],
+      "rankColor": "#C74EBD",
+      "rankProfits": [
+        "Kit du nouveau",
+        "1 Home"
+      ],
+      "rankUpActivated": false
+    }
+  ]
+}

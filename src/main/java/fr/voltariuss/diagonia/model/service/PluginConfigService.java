@@ -1,10 +1,10 @@
-package fr.voltariuss.diagonia.model;
+package fr.voltariuss.diagonia.model.service;
 
 import fr.voltariuss.diagonia.model.config.PluginConfig;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.jetbrains.annotations.NotNull;
 
-public final class ConfigurationManager {
+public final class PluginConfigService {
 
   public static final String DEBUG_MODE = "debug";
   public static final String DATABASE_IS_ENABLED = "database.is_enabled";
@@ -60,5 +60,5 @@ public final class ConfigurationManager {
         .build();
   }
 
-  private ConfigurationManager() {}
+  private PluginConfigService() {}
 }

@@ -4,8 +4,9 @@ import co.aikar.commands.PaperCommandManager;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
+import java.io.File;
 import java.util.Objects;
-
+import javax.inject.Named;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Server;
@@ -121,5 +122,12 @@ public class GuiceBukkitModule extends AbstractModule {
   @Singleton
   public @NotNull MiniMessage provideMiniMessage() {
     return MiniMessage.miniMessage();
+  }
+
+  @Provides
+  @Named("dataFolder")
+  @Singleton
+  public @NotNull File provideDataFolder() {
+    return plugin.getDataFolder();
   }
 }
