@@ -14,7 +14,7 @@
       "rankUpActivated": true,
       "rankUpChallenges": [
         {
-          "challengeType": "give-item",
+          "challengeType": "GIVE_ITEM",
           "challengeItemMaterial": "minecraft:dirt",
           "challengeItemAmount": 3600
         }
@@ -40,32 +40,32 @@
       "rankUpActivated": true,
       "rankUpChallenges": [
         {
-          "challengeType": "give-item",
+          "challengeType": "GIVE_ITEM",
           "challengeItemMaterial": "minecraft:coal",
           "challengeItemAmount": 64
         },
         {
-          "challengeType": "give-item",
+          "challengeType": "GIVE_ITEM",
           "challengeItemMaterial": "minecraft:cobblestone",
           "challengeItemAmount": 128
         },
         {
-          "challengeType": "give-item",
+          "challengeType": "GIVE_ITEM",
           "challengeItemMaterial": "minecraft:oak_log",
           "challengeItemAmount": 128
         },
         {
-          "challengeType": "give-item",
+          "challengeType": "GIVE_ITEM",
           "challengeItemMaterial": "minecraft:sand",
           "challengeItemAmount": 64
         },
         {
-          "challengeType": "give-item",
+          "challengeType": "GIVE_ITEM",
           "challengeItemMaterial": "minecraft:cod",
           "challengeItemAmount": 8
         },
         {
-          "challengeType": "give-item",
+          "challengeType": "GIVE_ITEM",
           "challengeItemMaterial": "minecraft:iron_ingot",
           "challengeItemAmount": 32
         }
@@ -91,107 +91,107 @@
       "rankUpActivated": true,
       "rankUpChallenges": [
         {
-          "challengeType": "give-item",
+          "challengeType": "GIVE_ITEM",
           "challengeItemMaterial": "minecraft:dirt",
           "challengeItemAmount": 1000
         },
         {
-          "challengeType": "give-item",
+          "challengeType": "GIVE_ITEM",
           "challengeItemMaterial": "minecraft:sand",
           "challengeItemAmount": 1000
         },
         {
-          "challengeType": "give-item",
+          "challengeType": "GIVE_ITEM",
           "challengeItemMaterial": "minecraft:cobblestone",
           "challengeItemAmount": 1000
         },
         {
-          "challengeType": "give-item",
+          "challengeType": "GIVE_ITEM",
           "challengeItemMaterial": "minecraft:oak_log",
           "challengeItemAmount": 256
         },
         {
-          "challengeType": "give-item",
+          "challengeType": "GIVE_ITEM",
           "challengeItemMaterial": "minecraft:birch_log",
           "challengeItemAmount": 256
         },
         {
-          "challengeType": "give-item",
+          "challengeType": "GIVE_ITEM",
           "challengeItemMaterial": "minecraft:iron_block",
           "challengeItemAmount": 16
         },
         {
-          "challengeType": "give-item",
+          "challengeType": "GIVE_ITEM",
           "challengeItemMaterial": "minecraft:gold_block",
           "challengeItemAmount": 8
         },
         {
-          "challengeType": "give-item",
+          "challengeType": "GIVE_ITEM",
           "challengeItemMaterial": "minecraft:potato",
           "challengeItemAmount": 256
         },
         {
-          "challengeType": "give-item",
+          "challengeType": "GIVE_ITEM",
           "challengeItemMaterial": "minecraft:carrot",
           "challengeItemAmount": 256
         },
         {
-          "challengeType": "give-item",
+          "challengeType": "GIVE_ITEM",
           "challengeItemMaterial": "minecraft:bamboo",
           "challengeItemAmount": 256
         },
         {
-          "challengeType": "give-item",
+          "challengeType": "GIVE_ITEM",
           "challengeItemMaterial": "minecraft:cooked_beef",
           "challengeItemAmount": 128
         },
         {
-          "challengeType": "give-item",
+          "challengeType": "GIVE_ITEM",
           "challengeItemMaterial": "minecraft:cod",
           "challengeItemAmount": 64
         },
         {
-          "challengeType": "give-item",
+          "challengeType": "GIVE_ITEM",
           "challengeItemMaterial": "minecraft:salmon",
           "challengeItemAmount": 25
         },
         {
-          "challengeType": "give-item",
+          "challengeType": "GIVE_ITEM",
           "challengeItemMaterial": "minecraft:pufferfish",
           "challengeItemAmount": 16
         },
         {
-          "challengeType": "give-item",
+          "challengeType": "GIVE_ITEM",
           "challengeItemMaterial": "minecraft:stick",
           "challengeItemAmount": 256
         },
         {
-          "challengeType": "give-item",
+          "challengeType": "GIVE_ITEM",
           "challengeItemMaterial": "minecraft:wheat_seeds",
           "challengeItemAmount": 256
         },
         {
-          "challengeType": "give-item",
+          "challengeType": "GIVE_ITEM",
           "challengeItemMaterial": "minecraft:bone",
           "challengeItemAmount": 128
         },
         {
-          "challengeType": "give-item",
+          "challengeType": "GIVE_ITEM",
           "challengeItemMaterial": "minecraft:rotten_flesh",
           "challengeItemAmount": 256
         },
         {
-          "challengeType": "give-item",
+          "challengeType": "GIVE_ITEM",
           "challengeItemMaterial": "minecraft:feather",
           "challengeItemAmount": 128
         },
         {
-          "challengeType": "give-item",
+          "challengeType": "GIVE_ITEM",
           "challengeItemMaterial": "minecraft:redstone_torch",
           "challengeItemAmount": 256
         },
         {
-          "challengeType": "give-item",
+          "challengeType": "GIVE_ITEM",
           "challengeItemMaterial": "minecraft:bell",
           "challengeItemAmount": 1
         }
@@ -217,7 +217,7 @@
       "rankUpActivated": true,
       "rankUpChallenges": [
         {
-          "challengeType": "give-item",
+          "challengeType": "GIVE_ITEM",
           "challengeItemMaterial": "minecraft:dirt",
           "challengeItemAmount": 3600
         }
@@ -243,7 +243,7 @@
       "rankUpActivated": true,
       "rankUpChallenges": [
         {
-          "challengeType": "give-item",
+          "challengeType": "GIVE_ITEM",
           "challengeItemMaterial": "minecraft:dirt",
           "challengeItemAmount": 3600
         }
@@ -269,7 +269,7 @@
       "rankUpActivated": true,
       "rankUpChallenges": [
         {
-          "challengeType": "give-item",
+          "challengeType": "GIVE_ITEM",
           "challengeItemMaterial": "minecraft:dirt",
           "challengeItemAmount": 3600
         }
@@ -295,7 +295,7 @@
       "rankUpActivated": true,
       "rankUpChallenges": [
         {
-          "challengeType": "give-item",
+          "challengeType": "GIVE_ITEM",
           "challengeItemMaterial": "minecraft:dirt",
           "challengeItemAmount": 3600
         }
@@ -321,7 +321,7 @@
       "rankUpActivated": true,
       "rankUpChallenges": [
         {
-          "challengeType": "give-item",
+          "challengeType": "GIVE_ITEM",
           "challengeItemMaterial": "minecraft:dirt",
           "challengeItemAmount": 3600
         }
@@ -347,7 +347,7 @@
       "rankUpActivated": true,
       "rankUpChallenges": [
         {
-          "challengeType": "give-item",
+          "challengeType": "GIVE_ITEM",
           "challengeItemMaterial": "minecraft:dirt",
           "challengeItemAmount": 3600
         }

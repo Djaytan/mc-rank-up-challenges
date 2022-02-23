@@ -4,12 +4,10 @@ import javax.inject.Inject;
 
 import fr.voltariuss.diagonia.model.service.PluginConfigService;
 import fr.voltariuss.diagonia.model.config.PluginConfig;
-import fr.voltariuss.diagonia.model.service.RankService;
+import fr.voltariuss.diagonia.model.service.RankConfigService;
 import lombok.SneakyThrows;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.hibernate.SessionFactory;
-
-import java.io.File;
 
 /** Diagonia-PlayerShops plugin */
 public class DiagoniaPlayerShopsPlugin extends JavaPlugin {
@@ -17,7 +15,7 @@ public class DiagoniaPlayerShopsPlugin extends JavaPlugin {
   @Inject private SessionFactory sessionFactory;
   @Inject private CommandRegister commandRegister;
   @Inject private PrerequisitesValidation prerequisitesValidation;
-  @Inject private RankService rankService;
+  @Inject private RankConfigService rankConfigService;
 
   @SneakyThrows
   @Override
@@ -36,7 +34,7 @@ public class DiagoniaPlayerShopsPlugin extends JavaPlugin {
       DiagoniaPlayerShopsInjector.inject(this, pluginConfig);
 
       // Additional setup
-      rankService.prepareDataFile();
+      rankConfigService.init();
       prerequisitesValidation.validate();
       commandRegister.registerCommands();
 
