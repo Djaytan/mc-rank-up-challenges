@@ -4,6 +4,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import fr.voltariuss.diagonia.model.config.PluginConfig;
+import fr.voltariuss.diagonia.model.config.RankConfig;
 import fr.voltariuss.diagonia.model.dao.PlayerShopDao;
 import fr.voltariuss.diagonia.model.dao.PlayerShopDaoImpl;
 import fr.voltariuss.diagonia.model.entity.PlayerShop;
@@ -24,6 +25,7 @@ public class GuiceGeneralModule extends AbstractModule {
   private final Logger logger;
   private final JavaPlugin javaPlugin;
   private final PluginConfig pluginConfig;
+  private final RankConfig rankConfig;
 
   /**
    * Constructor.
@@ -33,12 +35,14 @@ public class GuiceGeneralModule extends AbstractModule {
    * @param pluginConfig The plugin configuration.
    */
   public GuiceGeneralModule(
-      @NotNull Logger logger,
-      @NotNull JavaPlugin javaPlugin,
-      @NotNull PluginConfig pluginConfig) {
+    @NotNull Logger logger,
+    @NotNull JavaPlugin javaPlugin,
+    @NotNull PluginConfig pluginConfig,
+    @NotNull RankConfig rankConfig) {
     this.logger = logger;
     this.javaPlugin = javaPlugin;
     this.pluginConfig = pluginConfig;
+    this.rankConfig = rankConfig;
   }
 
   @Override
@@ -57,6 +61,12 @@ public class GuiceGeneralModule extends AbstractModule {
   @Singleton
   public @NotNull PluginConfig providePluginConfig() {
     return pluginConfig;
+  }
+
+  @Provides
+  @Singleton
+  public @NotNull RankConfig provideRankConfig() {
+    return rankConfig;
   }
 
   @Provides

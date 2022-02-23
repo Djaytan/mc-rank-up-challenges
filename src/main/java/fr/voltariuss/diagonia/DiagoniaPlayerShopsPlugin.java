@@ -1,10 +1,12 @@
 package fr.voltariuss.diagonia;
 
-import javax.inject.Inject;
-
-import fr.voltariuss.diagonia.model.service.PluginConfigService;
+import com.google.inject.Injector;
+import fr.voltariuss.diagonia.model.RankConfigDeserializer;
 import fr.voltariuss.diagonia.model.config.PluginConfig;
+import fr.voltariuss.diagonia.model.config.RankConfig;
+import fr.voltariuss.diagonia.model.service.PluginConfigService;
 import fr.voltariuss.diagonia.model.service.RankConfigService;
+import javax.inject.Inject;
 import lombok.SneakyThrows;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.hibernate.SessionFactory;
@@ -15,7 +17,6 @@ public class DiagoniaPlayerShopsPlugin extends JavaPlugin {
   @Inject private SessionFactory sessionFactory;
   @Inject private CommandRegister commandRegister;
   @Inject private PrerequisitesValidation prerequisitesValidation;
-  @Inject private RankConfigService rankConfigService;
 
   @SneakyThrows
   @Override
@@ -29,12 +30,17 @@ public class DiagoniaPlayerShopsPlugin extends JavaPlugin {
     PluginConfig pluginConfig = PluginConfigService.loadConfig(getConfig());
     getSLF4JLogger().info("Configuration loaded");
 
+    RankConfigService rankConfigService =
+        new RankConfigService(
+            getDataFolder(), this, getSLF4JLogger(), new RankConfigDeserializer());
+    rankConfigService.init();
+    RankConfig rankConfig = rankConfigService.readRankConfig();
+
     if (pluginConfig.getDatabaseConfig().isEnabled()) {
       // Guice setup
-      DiagoniaPlayerShopsInjector.inject(this, pluginConfig);
+      DiagoniaPlayerShopsInjector.inject(this, pluginConfig, rankConfig);
 
       // Additional setup
-      rankConfigService.init();
       prerequisitesValidation.validate();
       commandRegister.registerCommands();
 
