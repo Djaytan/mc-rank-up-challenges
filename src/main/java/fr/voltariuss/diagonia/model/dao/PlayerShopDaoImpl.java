@@ -22,36 +22,6 @@ public class PlayerShopDaoImpl extends AbstractJpaDao<PlayerShop, Long> implemen
   }
 
   @Override
-  public void persist(@NotNull PlayerShop entity) {
-    Preconditions.checkNotNull(entity);
-    getCurrentSession().persist(entity);
-  }
-
-  @Override
-  public void update(@NotNull PlayerShop entity) {
-    Preconditions.checkNotNull(entity);
-    getCurrentSession().merge(entity);
-  }
-
-  @Override
-  public @NotNull Optional<PlayerShop> findById(@Nullable Long id) {
-    // TODO: why nullable???
-    Preconditions.checkNotNull(id);
-    return Optional.ofNullable(getCurrentSession().get(PlayerShop.class, id));
-  }
-
-  @Override
-  public void delete(@NotNull PlayerShop entity) {
-    Preconditions.checkNotNull(entity);
-    getCurrentSession().delete(entity);
-  }
-
-  @Override
-  public @NotNull List<PlayerShop> findAll() {
-    return getCurrentSession().createQuery("FROM PlayerShop", PlayerShop.class).list();
-  }
-
-  @Override
   public @NotNull Optional<PlayerShop> findByUuid(@NotNull UUID uuid) {
     Preconditions.checkNotNull(uuid);
     return getCurrentSession()

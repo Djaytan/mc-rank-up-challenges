@@ -36,7 +36,7 @@ public class PlayerShop {
   private String description;
 
   @Column(name = "ps_item_icon")
-  @Enumerated(EnumType.ORDINAL)
+  @Enumerated(EnumType.STRING)
   @Setter
   private Material itemIcon;
 

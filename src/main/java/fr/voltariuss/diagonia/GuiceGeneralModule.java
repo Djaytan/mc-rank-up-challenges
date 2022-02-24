@@ -11,6 +11,8 @@ import fr.voltariuss.diagonia.model.entity.PlayerShop;
 import java.util.Objects;
 import java.util.ResourceBundle;
 import javax.inject.Named;
+
+import fr.voltariuss.diagonia.model.entity.RankChallengeProgression;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
@@ -106,6 +108,7 @@ public class GuiceGeneralModule extends AbstractModule {
       configuration.setProperty("hibernate.hikari.minimumIdle", "5");
 
       configuration.addAnnotatedClass(PlayerShop.class);
+      configuration.addAnnotatedClass(RankChallengeProgression.class);
 
       sessionFactory = configuration.buildSessionFactory();
       logger.info("Database connexion established.");
