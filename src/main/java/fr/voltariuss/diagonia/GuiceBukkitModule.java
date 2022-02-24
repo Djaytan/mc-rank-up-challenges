@@ -8,6 +8,8 @@ import java.io.File;
 import java.util.Objects;
 import javax.inject.Named;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.luckperms.api.LuckPerms;
+import net.luckperms.api.LuckPermsProvider;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Server;
 import org.bukkit.command.ConsoleCommandSender;
@@ -129,5 +131,11 @@ public class GuiceBukkitModule extends AbstractModule {
   @Singleton
   public @NotNull File provideDataFolder() {
     return plugin.getDataFolder();
+  }
+
+  @Provides
+  @Singleton
+  public @NotNull LuckPerms provideLuckPerms() {
+    return LuckPermsProvider.get();
   }
 }
