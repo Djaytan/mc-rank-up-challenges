@@ -40,8 +40,7 @@ public class RankChallengeProgression {
 
   @Column(name = "rankup_challenge_amount_given", nullable = false)
   @Setter
-  @NonNull
-  private Integer challengeAmountGiven;
+  private int challengeAmountGiven;
 
   @Override
   public boolean equals(Object o) {

@@ -155,7 +155,7 @@ public class RankChallengeProgressionService {
           rankChallengeProgressionDao.find(playerUuid, rankId, material).orElse(null);
       if (rankChallengeProgression == null) {
         debugger.debug("RankChallengeProgression not found.");
-        rankChallengeProgression = new RankChallengeProgression(playerUuid, rankId, material, 0);
+        rankChallengeProgression = new RankChallengeProgression(playerUuid, rankId, material);
         rankChallengeProgressionDao.persist(rankChallengeProgression);
         debugger.debug("RankChallengeProgression persisted.");
       }

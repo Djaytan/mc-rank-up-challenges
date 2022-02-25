@@ -17,7 +17,7 @@ class RankChallengeProgressionServiceTest extends AbstractBaseTest {
   @Test
   void givenNewRankChallengeProgression_WhenPersisted_ThenShouldBeRegisteredIntoDatabase() {
     RankChallengeProgression rcp =
-        new RankChallengeProgression(UUID.randomUUID(), "test-rank", Material.OAK_LOG, 64);
+        new RankChallengeProgression(UUID.randomUUID(), "test-rank", Material.OAK_LOG);
 
     rankChallengeProgressionService.persist(rcp);
 

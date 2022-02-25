@@ -51,47 +51,68 @@ public class RankChallengeItem {
             .findChallenge(playerUuid, rankInfo.getId(), rankChallenge.getChallengeItemMaterial())
             .orElse(null);
 
-    return ItemBuilder.from(rankChallenge.getChallengeItemMaterial())
-        .name(
-            miniMessage
-                .deserialize(
-                    String.format(
-                        resourceBundle.getString("diagonia.rankup.rankup.challenge.name"),
-                        rankChallenge.getChallengeItemMaterial().name()))
-                .decoration(TextDecoration.ITALIC, false))
-        .lore(
-            Stream.concat(
-                    Stream.of(
-                        miniMessage
-                            .deserialize(
-                                String.format(
-                                    resourceBundle.getString(
-                                        "diagonia.rankup.rankup.challenge.progress"),
-                                    rcp != null ? rcp.getChallengeAmountGiven() : 0,
-                                    rankChallenge.getChallengeItemAmount()))
-                            .decoration(TextDecoration.ITALIC, false),
-                        Component.empty()),
-                    Stream.of(
-                        miniMessage
-                            .deserialize(
-                                resourceBundle.getString(
-                                    "diagonia.rankup.rankup.challenge.left_click"))
-                            .decoration(TextDecoration.ITALIC, false),
-                        miniMessage
-                            .deserialize(
-                                resourceBundle.getString(
-                                    "diagonia.rankup.rankup.challenge.right_click"))
-                            .decoration(TextDecoration.ITALIC, false),
-                        miniMessage
-                            .deserialize(
-                                resourceBundle.getString(
-                                    "diagonia.rankup.rankup.challenge.middle_click"))
-                            .decoration(TextDecoration.ITALIC, false)))
-                .toList())
-        .asGuiItem(onClick(rankInfo));
+    boolean isChallengeCompleted =
+        rcp != null && rankChallenge.getChallengeItemAmount() == rcp.getChallengeAmountGiven();
+    if (!isChallengeCompleted) {
+      return ItemBuilder.from(rankChallenge.getChallengeItemMaterial())
+          .name(
+              miniMessage
+                  .deserialize(
+                      String.format(
+                          resourceBundle.getString("diagonia.rankup.rankup.challenge.name"),
+                          rankChallenge.getChallengeItemMaterial().name()))
+                  .decoration(TextDecoration.ITALIC, false))
+          .lore(
+              Stream.concat(
+                      Stream.of(
+                          miniMessage
+                              .deserialize(
+                                  String.format(
+                                      resourceBundle.getString(
+                                          "diagonia.rankup.rankup.challenge.progress"),
+                                      rcp != null ? rcp.getChallengeAmountGiven() : 0,
+                                      rankChallenge.getChallengeItemAmount()))
+                              .decoration(TextDecoration.ITALIC, false),
+                          Component.empty()),
+                      Stream.of(
+                          miniMessage
+                              .deserialize(
+                                  resourceBundle.getString(
+                                      "diagonia.rankup.rankup.challenge.left_click"))
+                              .decoration(TextDecoration.ITALIC, false),
+                          miniMessage
+                              .deserialize(
+                                  resourceBundle.getString(
+                                      "diagonia.rankup.rankup.challenge.right_click"))
+                              .decoration(TextDecoration.ITALIC, false),
+                          miniMessage
+                              .deserialize(
+                                  resourceBundle.getString(
+                                      "diagonia.rankup.rankup.challenge.middle_click"))
+                              .decoration(TextDecoration.ITALIC, false)))
+                  .toList())
+          .asGuiItem(onClick(rankInfo, rankChallenge));
+    } else {
+      return ItemBuilder.from(rankChallenge.getChallengeItemMaterial())
+          .name(
+              miniMessage
+                  .deserialize(
+                      String.format(
+                          resourceBundle.getString("diagonia.rankup.rankup.challenge.name"),
+                          rankChallenge.getChallengeItemMaterial().name()))
+                  .decoration(TextDecoration.ITALIC, false))
+          .lore(
+              List.of(
+                  miniMessage
+                      .deserialize(
+                          resourceBundle.getString("diagonia.rankup.rankup.challenge.completed"))
+                      .decoration(TextDecoration.ITALIC, false)))
+          .asGuiItem();
+    }
   }
 
-  public @NotNull GuiAction<InventoryClickEvent> onClick(@NotNull RankConfig.RankInfo rankInfo) {
+  public @NotNull GuiAction<InventoryClickEvent> onClick(
+      @NotNull RankConfig.RankInfo rankInfo, @NotNull RankConfig.RankChallenge rankChallenge) {
     return event -> {
       Player whoClicked = (Player) event.getWhoClicked();
       ClickType clickType = event.getClick();
@@ -106,33 +127,75 @@ public class RankChallengeItem {
           if (clickType == ClickType.RIGHT) {
             amountToGive = 64;
           }
-          amountToGive = Math.min(nbItemsInInventory, amountToGive);
+          if (nbItemsInInventory == 0) {
+            amountToGive = 0;
+          } else if (amountToGive > nbItemsInInventory) {
+            amountToGive = -1;
+          }
         }
         if (clickType == ClickType.MIDDLE) {
           amountToGive = nbItemsInInventory;
         }
-        logger.info("GUI-amountToGive={}", amountToGive);
-        int effectiveGivenAmount =
-            rankUpController.giveItemChallenge(
-                whoClicked, rankInfo.getId(), clickedItem.getType(), amountToGive);
-        logger.info("effectiveGivenAmount={}", effectiveGivenAmount);
-        HashMap<Integer, ItemStack> notRemovedItems =
-            whoClicked
-                .getInventory()
-                .removeItem(new ItemStack(clickedItem.getType(), effectiveGivenAmount));
-        if (!notRemovedItems.isEmpty()) {
-          logger.error(
-              "Some items failed to be removed from the {}'s inventory: {}",
-              whoClicked.getName(),
-              notRemovedItems);
+        if (amountToGive > 0) {
+          logger.info("GUI-amountToGive={}", amountToGive);
+          int effectiveGivenAmount =
+              rankUpController.giveItemChallenge(
+                  whoClicked, rankInfo.getId(), clickedItem.getType(), amountToGive);
+          logger.info("effectiveGivenAmount={}", effectiveGivenAmount);
+          if (effectiveGivenAmount > 0) {
+            HashMap<Integer, ItemStack> notRemovedItems =
+                whoClicked
+                    .getInventory()
+                    .removeItem(new ItemStack(clickedItem.getType(), effectiveGivenAmount));
+            if (!notRemovedItems.isEmpty()) {
+              logger.error(
+                  "Some items failed to be removed from the {}'s inventory: {}",
+                  whoClicked.getName(),
+                  notRemovedItems);
+            }
+            whoClicked.sendMessage(
+                miniMessage.deserialize(
+                    String.format(
+                        resourceBundle.getString("diagonia.rankup.rankup.challenge.success_give"),
+                        effectiveGivenAmount,
+                        clickedItem.getType().name())));
+            RankChallengeProgression rcp =
+                rankUpController
+                    .findChallenge(
+                        whoClicked.getUniqueId(), rankInfo.getId(), clickedItem.getType())
+                    .orElseThrow();
+            if (rcp.getChallengeAmountGiven() == rankChallenge.getChallengeItemAmount()) {
+              whoClicked.sendMessage(
+                  miniMessage.deserialize(
+                      String.format(
+                          resourceBundle.getString(
+                              "diagonia.rankup.rankup.challenge.now_completed"),
+                          rankChallenge.getChallengeItemMaterial().name())));
+            }
+            rankUpController.openRankUpGui(whoClicked, rankInfo);
+          } else if (effectiveGivenAmount == 0) {
+            whoClicked.sendMessage(
+                miniMessage.deserialize(
+                    String.format(
+                        resourceBundle.getString(
+                            "diagonia.rankup.rankup.challenge.challenge_already_completed"),
+                        effectiveGivenAmount,
+                        clickedItem.getType().name())));
+          }
+        } else if (amountToGive == 0) {
+          whoClicked.sendMessage(
+              miniMessage
+                  .deserialize(
+                      resourceBundle.getString(
+                          "diagonia.rankup.rankup.challenge.no_item_in_inventory"))
+                  .decoration(TextDecoration.ITALIC, false));
+        } else {
+          whoClicked.sendMessage(
+              miniMessage
+                  .deserialize(
+                      resourceBundle.getString("diagonia.rankup.rankup.challenge.not_enough_item"))
+                  .decoration(TextDecoration.ITALIC, false));
         }
-        whoClicked.sendMessage(
-            miniMessage.deserialize(
-                String.format(
-                    resourceBundle.getString("diagonia.rankup.rankup.challenge.success_give"),
-                    effectiveGivenAmount,
-                    clickedItem.getType().name())));
-        rankUpController.openRankUpGui(whoClicked, rankInfo);
       }
     };
   }
