@@ -5,12 +5,12 @@ import dev.triumphteam.gui.components.GuiAction;
 import dev.triumphteam.gui.guis.GuiItem;
 import fr.voltariuss.diagonia.controller.RankUpController;
 import fr.voltariuss.diagonia.model.config.RankConfig;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.ResourceBundle;
+import fr.voltariuss.diagonia.model.entity.RankChallengeProgression;
+import java.util.*;
+import java.util.stream.Stream;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Material;
@@ -43,9 +43,14 @@ public class RankChallengeItem {
   }
 
   public @NotNull GuiItem createItem(
+      @NotNull UUID playerUuid,
       @NotNull RankConfig.RankInfo rankInfo,
-      @NotNull RankConfig.RankChallenge rankChallenge,
-      int amountGiven) {
+      @NotNull RankConfig.RankChallenge rankChallenge) {
+    RankChallengeProgression rcp =
+        rankUpController
+            .findChallenge(playerUuid, rankInfo.getId(), rankChallenge.getChallengeItemMaterial())
+            .orElse(null);
+
     return ItemBuilder.from(rankChallenge.getChallengeItemMaterial())
         .name(
             miniMessage
@@ -55,14 +60,34 @@ public class RankChallengeItem {
                         rankChallenge.getChallengeItemMaterial().name()))
                 .decoration(TextDecoration.ITALIC, false))
         .lore(
-            Collections.singletonList(
-                miniMessage
-                    .deserialize(
-                        String.format(
-                            resourceBundle.getString("diagonia.rankup.rankup.challenge.progress"),
-                            amountGiven,
-                            rankChallenge.getChallengeItemAmount()))
-                    .decoration(TextDecoration.ITALIC, false)))
+            Stream.concat(
+                    Stream.of(
+                        miniMessage
+                            .deserialize(
+                                String.format(
+                                    resourceBundle.getString(
+                                        "diagonia.rankup.rankup.challenge.progress"),
+                                    rcp != null ? rcp.getChallengeAmountGiven() : 0,
+                                    rankChallenge.getChallengeItemAmount()))
+                            .decoration(TextDecoration.ITALIC, false),
+                        Component.empty()),
+                    Stream.of(
+                        miniMessage
+                            .deserialize(
+                                resourceBundle.getString(
+                                    "diagonia.rankup.rankup.challenge.left_click"))
+                            .decoration(TextDecoration.ITALIC, false),
+                        miniMessage
+                            .deserialize(
+                                resourceBundle.getString(
+                                    "diagonia.rankup.rankup.challenge.right_click"))
+                            .decoration(TextDecoration.ITALIC, false),
+                        miniMessage
+                            .deserialize(
+                                resourceBundle.getString(
+                                    "diagonia.rankup.rankup.challenge.middle_click"))
+                            .decoration(TextDecoration.ITALIC, false)))
+                .toList())
         .asGuiItem(onClick(rankInfo));
   }
 
@@ -73,25 +98,20 @@ public class RankChallengeItem {
       ItemStack clickedItem = event.getCurrentItem();
       if (clickedItem != null) {
         int amountToGive = 0;
-        switch (clickType) {
-          case LEFT:
-            {
-              amountToGive = 1;
-              break;
-            }
-          case RIGHT:
-            {
-              amountToGive = 64;
-              break;
-            }
+        int nbItemsInInventory = countItem(whoClicked.getInventory(), clickedItem.getType());
+        if (clickType == ClickType.LEFT || clickType == ClickType.RIGHT) {
+          if (clickType == ClickType.LEFT) {
+            amountToGive = 1;
+          }
+          if (clickType == ClickType.RIGHT) {
+            amountToGive = 64;
+          }
+          amountToGive = Math.min(nbItemsInInventory, amountToGive);
         }
-        if (clickType == ClickType.LEFT
-            || clickType == ClickType.RIGHT
-            || clickType == ClickType.MIDDLE) {
-          amountToGive =
-              Math.min(countItem(whoClicked.getInventory(), clickedItem.getType()), amountToGive);
+        if (clickType == ClickType.MIDDLE) {
+          amountToGive = nbItemsInInventory;
         }
-        logger.info("amountToGive={}", amountToGive);
+        logger.info("GUI-amountToGive={}", amountToGive);
         int effectiveGivenAmount =
             rankUpController.giveItemChallenge(
                 whoClicked, rankInfo.getId(), clickedItem.getType(), amountToGive);
@@ -118,9 +138,9 @@ public class RankChallengeItem {
   }
 
   public int countItem(Inventory inventory, Material material) {
-    return (int)
-        Arrays.stream(inventory.getContents())
-            .filter(item -> item != null && item.getType().equals(material))
-            .count();
+    return Arrays.stream(inventory.getContents())
+        .filter(item -> item != null && item.getType().equals(material))
+        .mapToInt(ItemStack::getAmount)
+        .sum();
   }
 }

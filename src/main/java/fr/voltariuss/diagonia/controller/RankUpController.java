@@ -1,9 +1,12 @@
 package fr.voltariuss.diagonia.controller;
 
 import fr.voltariuss.diagonia.model.config.RankConfig;
+import fr.voltariuss.diagonia.model.entity.RankChallengeProgression;
 import fr.voltariuss.diagonia.model.service.RankChallengeProgressionService;
 import fr.voltariuss.diagonia.view.gui.RankListGui;
 import fr.voltariuss.diagonia.view.gui.RankUpGui;
+import java.util.Optional;
+import java.util.UUID;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.inject.Singleton;
@@ -54,5 +57,10 @@ public class RankUpController {
       int givenAmount) {
     return rankChallengeProgressionService.giveItemChallenge(
         targetPlayer.getUniqueId(), rankId, material, givenAmount);
+  }
+
+  public @NotNull Optional<RankChallengeProgression> findChallenge(
+      @NotNull UUID playerUuid, @NotNull String rankId, @NotNull Material material) {
+    return rankChallengeProgressionService.find(playerUuid, rankId, material);
   }
 }
