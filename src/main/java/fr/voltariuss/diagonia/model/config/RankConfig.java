@@ -12,11 +12,11 @@ import org.jetbrains.annotations.Nullable;
 @Data
 @Builder
 public class RankConfig {
-  private final List<Rank> ranks;
+  private final List<RankInfo> ranks;
 
   @Data
   @Builder
-  public static class Rank {
+  public static class RankInfo {
     private final String id;
     private final String name;
     private final List<String> description;

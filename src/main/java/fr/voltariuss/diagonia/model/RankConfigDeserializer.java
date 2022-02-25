@@ -18,7 +18,7 @@ public class RankConfigDeserializer implements JsonDeserializer<RankConfig> {
       throws JsonParseException {
     JsonObject root = jsonElement.getAsJsonObject();
     JsonArray ranksJson = root.get("ranks").getAsJsonArray();
-    List<RankConfig.Rank> ranks = new ArrayList<>();
+    List<RankConfig.RankInfo> ranks = new ArrayList<>();
 
     ranksJson.forEach(
         rankElt -> {
@@ -58,7 +58,7 @@ public class RankConfigDeserializer implements JsonDeserializer<RankConfig> {
                                           .getAsString()
                                           .toUpperCase()))
                               .challengeItemMaterial(
-                                  Material.getMaterial(
+                                  Material.matchMaterial(
                                       challengeObject.get("challengeItemMaterial").getAsString()))
                               .challengeItemAmount(
                                   challengeObject.get("challengeItemAmount").getAsInt())
@@ -76,7 +76,7 @@ public class RankConfigDeserializer implements JsonDeserializer<RankConfig> {
             String rankUpTarget = rankJson.get("rankUpTarget").getAsString();
 
             ranks.add(
-                RankConfig.Rank.builder()
+                RankConfig.RankInfo.builder()
                     .id(id)
                     .name(rankName)
                     .description(description)
@@ -89,7 +89,7 @@ public class RankConfigDeserializer implements JsonDeserializer<RankConfig> {
                     .build());
           } else {
             ranks.add(
-                RankConfig.Rank.builder()
+                RankConfig.RankInfo.builder()
                     .id(id)
                     .name(rankName)
                     .description(description)

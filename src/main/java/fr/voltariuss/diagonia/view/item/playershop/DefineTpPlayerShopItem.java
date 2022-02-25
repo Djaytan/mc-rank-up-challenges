@@ -1,4 +1,4 @@
-package fr.voltariuss.diagonia.view.item;
+package fr.voltariuss.diagonia.view.item.playershop;
 
 import com.google.common.collect.Lists;
 import dev.triumphteam.gui.builder.item.ItemBuilder;

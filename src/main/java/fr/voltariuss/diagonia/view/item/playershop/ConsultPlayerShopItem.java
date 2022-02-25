@@ -1,4 +1,4 @@
-package fr.voltariuss.diagonia.view.item;
+package fr.voltariuss.diagonia.view.item.playershop;
 
 import dev.triumphteam.gui.builder.item.ItemBuilder;
 import dev.triumphteam.gui.components.GuiAction;
