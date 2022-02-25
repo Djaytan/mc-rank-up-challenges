@@ -1,8 +1,7 @@
 package fr.voltariuss.diagonia.model.config;
 
-import java.util.List;
-
 import fr.voltariuss.diagonia.model.RankChallengeType;
+import java.util.List;
 import lombok.Builder;
 import lombok.Data;
 import net.kyori.adventure.text.format.TextColor;

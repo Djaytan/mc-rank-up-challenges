@@ -2,6 +2,7 @@ package fr.voltariuss.diagonia;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
+import fr.voltariuss.diagonia.model.config.RankConfig;
 import fr.voltariuss.diagonia.model.dao.PlayerShopDao;
 import fr.voltariuss.diagonia.model.dao.PlayerShopDaoImpl;
 import javax.inject.Named;
@@ -37,5 +38,11 @@ public class GuiceGeneralTestModule extends AbstractModule {
   public @NotNull SessionFactory provideSessionFactory() {
     // The SessionFactory must be built only once for application lifecycle
     return new Configuration().configure().buildSessionFactory();
+  }
+
+  @Provides
+  @Singleton
+  public @NotNull RankConfig provideRankConfig() {
+    return RankConfig.builder().build();
   }
 }

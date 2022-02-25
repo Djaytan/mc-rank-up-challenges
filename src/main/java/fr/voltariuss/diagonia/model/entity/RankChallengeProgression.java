@@ -33,11 +33,12 @@ public class RankChallengeProgression {
   private String rankId;
 
   @Column(name = "rankup_challenge_material", nullable = false, updatable = false)
+  @Enumerated(EnumType.STRING)
   @Setter
   @NonNull
   private Material challengeMaterial;
 
-  @Column(name = "rankup_challenge_amount_given", nullable = false, updatable = false)
+  @Column(name = "rankup_challenge_amount_given", nullable = false)
   @Setter
   @NonNull
   private Integer challengeAmountGiven;

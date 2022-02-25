@@ -64,7 +64,9 @@ public class RankUpGui {
 
       rankInfo
           .getRankUpChallenges()
-          .forEach(rankChallenge -> gui.addItem(rankChallengeItem.createItem(rankChallenge, 0)));
+          .forEach(
+              rankChallenge ->
+                  gui.addItem(rankChallengeItem.createItem(rankInfo, rankChallenge, 0)));
 
       gui.setItem(5, 3, paginatedItem.createPreviousPageItem(gui));
       gui.setItem(5, 7, paginatedItem.createNextPageItem(gui));
