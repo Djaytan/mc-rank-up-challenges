@@ -1,10 +1,12 @@
 package fr.voltariuss.diagonia.controller;
 
+import com.google.common.base.Preconditions;
 import fr.voltariuss.diagonia.model.config.RankConfig;
 import fr.voltariuss.diagonia.model.entity.RankChallengeProgression;
 import fr.voltariuss.diagonia.model.service.RankChallengeProgressionService;
 import fr.voltariuss.diagonia.view.gui.RankListGui;
 import fr.voltariuss.diagonia.view.gui.RankUpGui;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import javax.inject.Inject;
@@ -62,5 +64,28 @@ public class RankUpController {
   public @NotNull Optional<RankChallengeProgression> findChallenge(
       @NotNull UUID playerUuid, @NotNull String rankId, @NotNull Material material) {
     return rankChallengeProgressionService.find(playerUuid, rankId, material);
+  }
+
+  public @NotNull List<RankChallengeProgression> getRankUpProgression(
+      @NotNull Player targetPlayer, @NotNull String rankId) {
+    return rankChallengeProgressionService.find(targetPlayer.getUniqueId(), rankId);
+  }
+
+  public boolean isRankable(@NotNull Player targetPlayer, @NotNull RankConfig.RankInfo rankInfo) {
+    Preconditions.checkNotNull(rankInfo.getRankUpChallenges());
+    List<RankChallengeProgression> playerProgression = getRankUpProgression(targetPlayer, rankInfo.getId());
+    boolean isRankable = false;
+    if (rankInfo.getRankUpChallenges().size() == playerProgression.size()) {
+      isRankable = true;
+      for (int i = 0; i < playerProgression.size(); i++) {
+        int requiredAmount = rankInfo.getRankUpChallenges().get(i).getChallengeItemAmount();
+        int currentAmount = playerProgression.get(i).getChallengeAmountGiven();
+        if (requiredAmount > currentAmount) {
+          isRankable = false;
+          break;
+        }
+      }
+    }
+    return isRankable;
   }
 }

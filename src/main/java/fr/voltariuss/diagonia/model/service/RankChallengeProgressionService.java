@@ -119,13 +119,25 @@ public class RankChallengeProgressionService {
 
   public @NotNull Optional<RankChallengeProgression> find(
       @NotNull UUID playerUuid, @NotNull String rankId, @NotNull Material material) {
-
     rankChallengeProgressionDao.openSession();
     try {
       Optional<RankChallengeProgression> rankChallengeProgression =
           rankChallengeProgressionDao.find(playerUuid, rankId, material);
       debugger.debug("RankChallengeProgression found: {}", rankChallengeProgression);
       return rankChallengeProgression;
+    } finally {
+      rankChallengeProgressionDao.destroySession();
+    }
+  }
+
+  public @NotNull List<RankChallengeProgression> find(
+      @NotNull UUID playerUuid, @NotNull String rankId) {
+    rankChallengeProgressionDao.openSession();
+    try {
+      List<RankChallengeProgression> rankChallengeProgressions =
+          rankChallengeProgressionDao.find(playerUuid, rankId);
+      debugger.debug("RankChallengeProgressions found: {}", rankChallengeProgressions);
+      return rankChallengeProgressions;
     } finally {
       rankChallengeProgressionDao.destroySession();
     }

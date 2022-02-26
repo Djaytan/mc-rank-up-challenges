@@ -181,6 +181,12 @@
             <version>5.4</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>com.github.Zrips</groupId>
+            <artifactId>Jobs</artifactId>
+            <version>v4.17.2</version>
+            <scope>provided</scope>
+        </dependency>
 
         <!-- Java dependencies -->
         <dependency>

@@ -3,6 +3,7 @@ package fr.voltariuss.diagonia.model.dao;
 import com.google.common.base.Preconditions;
 import fr.voltariuss.diagonia.model.AbstractJpaDao;
 import fr.voltariuss.diagonia.model.entity.RankChallengeProgression;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import javax.inject.Inject;
@@ -19,7 +20,7 @@ public class RankChallengeProgressionDao extends AbstractJpaDao<RankChallengePro
     super(sessionFactory);
   }
 
-  public Optional<RankChallengeProgression> find(
+  public @NotNull Optional<RankChallengeProgression> find(
       @NotNull UUID playerUuid, @NotNull String rankId, @NotNull Material material) {
     Preconditions.checkNotNull(playerUuid);
     Preconditions.checkNotNull(rankId);
@@ -34,5 +35,20 @@ public class RankChallengeProgressionDao extends AbstractJpaDao<RankChallengePro
         .setParameter("rankId", rankId)
         .setParameter("challengeMaterial", material)
         .uniqueResultOptional();
+  }
+
+  public @NotNull List<RankChallengeProgression> find(
+      @NotNull UUID playerUuid, @NotNull String rankId) {
+    Preconditions.checkNotNull(playerUuid);
+    Preconditions.checkNotNull(rankId);
+
+    return getCurrentSession()
+        .createQuery(
+            "FROM RankChallengeProgression rcp WHERE rcp.playerUuid = :playerUuid AND rcp.rankId ="
+                + " :rankId",
+            RankChallengeProgression.class)
+        .setParameter("playerUuid", playerUuid)
+        .setParameter("rankId", rankId)
+        .list();
   }
 }
