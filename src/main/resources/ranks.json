@@ -207,19 +207,120 @@
       "id": "artisan",
       "rankName": "Artisan",
       "rankDesc": [
-        "Devient un aventurier, et débute ton aventure !"
+        "Tu commences à te faire un nom ! Continue ainsi."
       ],
       "rankColor": "#9D9D97",
       "rankProfits": [
-        "Kit du nouveau",
-        "1 Home"
+        "4 Homes",
+        "Accès /craft",
+        "Accès création shop"
       ],
       "rankUpActivated": true,
       "rankUpChallenges": [
         {
           "challengeType": "GIVE_ITEM",
-          "challengeItemMaterial": "minecraft:dirt",
-          "challengeItemAmount": 3600
+          "challengeItemMaterial": "minecraft:gravel",
+          "challengeItemAmount": 3000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:granite",
+          "challengeItemAmount": 3000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:stone",
+          "challengeItemAmount": 5000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:spruce_log",
+          "challengeItemAmount": 1000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:jungle_log",
+          "challengeItemAmount": 1000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:iron_block",
+          "challengeItemAmount": 100
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:gold_block",
+          "challengeItemAmount": 50
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:wheat",
+          "challengeItemAmount": 1000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:beetroot",
+          "challengeItemAmount": 1000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:sweet_berries",
+          "challengeItemAmount": 2500
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:sugar_cane",
+          "challengeItemAmount": 2500
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:cocoa_beans",
+          "challengeItemAmount": 1000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:brown_mushroom",
+          "challengeItemAmount": 500
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:cooked_mutton",
+          "challengeItemAmount": 1500
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:kelp",
+          "challengeItemAmount": 2000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:tropical_fish",
+          "challengeItemAmount": 64
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:quartz",
+          "challengeItemAmount": 1500
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:brick",
+          "challengeItemAmount": 1000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:gunpowder",
+          "challengeItemAmount": 500
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:honey_bottle",
+          "challengeItemAmount": 500
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:shroomlight",
+          "challengeItemAmount": 256
         }
       ],
       "rankUpPrerequisites": {
@@ -233,19 +334,120 @@
       "id": "ecuyer",
       "rankName": "Ecuyer",
       "rankDesc": [
-        "Devient un aventurier, et débute ton aventure !"
+        "Tu progresses, il ne faut pas lâcher !"
       ],
       "rankColor": "#4211872",
       "rankProfits": [
-        "Kit du nouveau",
-        "1 Home"
+        "5 Homes",
+        "Backpack 9 slots",
+        "Pouvoir poser les spawners"
       ],
       "rankUpActivated": true,
       "rankUpChallenges": [
         {
           "challengeType": "GIVE_ITEM",
-          "challengeItemMaterial": "minecraft:dirt",
-          "challengeItemAmount": 3600
+          "challengeItemMaterial": "minecraft:terracotta",
+          "challengeItemAmount": 5000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:magma_block",
+          "challengeItemAmount": 5000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:dried_kelp_block",
+          "challengeItemAmount": 1500
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:dark_oak_log",
+          "challengeItemAmount": 3000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:warped_stem",
+          "challengeItemAmount": 2000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:cyan_wool",
+          "challengeItemAmount": 1500
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:bricks",
+          "challengeItemAmount": 1500
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:rabbit_hide",
+          "challengeItemAmount": 1500
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:cooked_rabbit",
+          "challengeItemAmount": 1500
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:leather",
+          "challengeItemAmount": 3000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:egg",
+          "challengeItemAmount": 2000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:honeycomb",
+          "challengeItemAmount": 1000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:ink_sac",
+          "challengeItemAmount": 1000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:salmon",
+          "challengeItemAmount": 500
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:glistering_melon_slice",
+          "challengeItemAmount": 2000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:blaze_powder",
+          "challengeItemAmount": 1000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:flint",
+          "challengeItemAmount": 5000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:nether_wart",
+          "challengeItemAmount": 3000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:magma_cream",
+          "challengeItemAmount": 1000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:ghast_tear",
+          "challengeItemAmount": 100
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:nautilus_shell",
+          "challengeItemAmount": 64
         }
       ],
       "rankUpPrerequisites": {
@@ -259,19 +461,119 @@
       "id": "citoyen",
       "rankName": "Citoyen",
       "rankDesc": [
-        "Devient un aventurier, et débute ton aventure !"
+        "Ta place n'est plus à prouver !"
       ],
       "rankColor": "#169C9C",
       "rankProfits": [
-        "Kit du nouveau",
-        "1 Home"
+        "6 Homes",
+        "Accès second métier"
       ],
       "rankUpActivated": true,
       "rankUpChallenges": [
         {
           "challengeType": "GIVE_ITEM",
-          "challengeItemMaterial": "minecraft:dirt",
-          "challengeItemAmount": 3600
+          "challengeItemMaterial": "minecraft:netherrack",
+          "challengeItemAmount": 8000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:redstone_block",
+          "challengeItemAmount": 1500
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:coal_block",
+          "challengeItemAmount": 1500
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:crimson_stem",
+          "challengeItemAmount": 2500
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:piston",
+          "challengeItemAmount": 2000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:lapis_block",
+          "challengeItemAmount": 500
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:pumpkin_pie",
+          "challengeItemAmount": 2000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:chorus_fruit",
+          "challengeItemAmount": 2000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:bone_block",
+          "challengeItemAmount": 5000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:blaze_rod",
+          "challengeItemAmount": 3000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:spectral_arrow",
+          "challengeItemAmount": 1500
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:honey_bottle",
+          "challengeItemAmount": 1500
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:poisonous_potato",
+          "challengeItemAmount": 1000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:mutton",
+          "challengeItemAmount": 6000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:sea_pickle",
+          "challengeItemAmount": 1000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:spider_eye",
+          "challengeItemAmount": 6000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:rabbit_foot",
+          "challengeItemAmount": 2500
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:golden_apple",
+          "challengeItemAmount": 500
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:turtle_egg",
+          "challengeItemAmount": 1500
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:wither_skeleton_skull",
+          "challengeItemAmount": 50
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:cake",
+          "challengeItemAmount": 2000
         }
       ],
       "rankUpPrerequisites": {
@@ -279,25 +581,126 @@
         "totalMcExpLevels": 30,
         "totalJobLevel": 50
       },
-      "rankUpTarget": "commerçant"
+      "rankUpTarget": "commercant"
     },
     {
-      "id": "commerçant",
+      "id": "commercant",
       "rankName": "Commerçant",
       "rankDesc": [
-        "Devient un aventurier, et débute ton aventure !"
+        "Ton nom devient populaire !"
       ],
       "rankColor": "#3AB3DA",
       "rankProfits": [
-        "Kit du nouveau",
-        "1 Home"
+        "7 Homes",
+        "Backpack 18 slots",
+        "Accès au /ec"
       ],
       "rankUpActivated": true,
       "rankUpChallenges": [
         {
           "challengeType": "GIVE_ITEM",
-          "challengeItemMaterial": "minecraft:dirt",
-          "challengeItemAmount": 3600
+          "challengeItemMaterial": "minecraft:soul_sand",
+          "challengeItemAmount": 10000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:nether_bricks",
+          "challengeItemAmount": 8000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:obsidian",
+          "challengeItemAmount": 6000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:gilded_blackstone",
+          "challengeItemAmount": 2000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:iron_ore",
+          "challengeItemAmount": 5000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:copper_ore",
+          "challengeItemAmount": 5000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:arrow",
+          "challengeItemAmount": 2000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:twisting_vines",
+          "challengeItemAmount": 6000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:phantom_membrane",
+          "challengeItemAmount": 1500
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:sticky_piston",
+          "challengeItemAmount": 2000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:comparator",
+          "challengeItemAmount": 2000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:crimson_fungus",
+          "challengeItemAmount": 2000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:sea_lantern",
+          "challengeItemAmount": 1500
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:sponge",
+          "challengeItemAmount": 500
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:jungle_leaves",
+          "challengeItemAmount": 10000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:end_rod",
+          "challengeItemAmount": 3000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:bell",
+          "challengeItemAmount": 500
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:amethyst_shard",
+          "challengeItemAmount": 2000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:wither_rose",
+          "challengeItemAmount": 200
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:heart_of_the_sea",
+          "challengeItemAmount": 20
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:nether_star",
+          "challengeItemAmount": 3
         }
       ],
       "rankUpPrerequisites": {
@@ -311,19 +714,119 @@
       "id": "bourgeois",
       "rankName": "Bourgeois",
       "rankDesc": [
-        "Devient un aventurier, et débute ton aventure !"
+        "Tu te balades fièrement en ville !"
       ],
       "rankColor": "#80C71F",
       "rankProfits": [
-        "Kit du nouveau",
-        "1 Home"
+        "8 Homes",
+        "Backpack 27 slots"
       ],
       "rankUpActivated": true,
       "rankUpChallenges": [
         {
           "challengeType": "GIVE_ITEM",
-          "challengeItemMaterial": "minecraft:dirt",
-          "challengeItemAmount": 3600
+          "challengeItemMaterial": "minecraft:purple_concrete",
+          "challengeItemAmount": 12000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:stone_bricks",
+          "challengeItemAmount": 15000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:polished_andesite",
+          "challengeItemAmount": 15000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:smooth_quartz",
+          "challengeItemAmount": 15000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:ender_pearl",
+          "challengeItemAmount": 10000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:rotten_flesh",
+          "challengeItemAmount": 10000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:apple",
+          "challengeItemAmount": 2000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:oxeye_daisy",
+          "challengeItemAmount": 4000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:honey_block",
+          "challengeItemAmount": 6000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:chain",
+          "challengeItemAmount": 10000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:lily_pad",
+          "challengeItemAmount": 1000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:cauldron",
+          "challengeItemAmount": 3000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:scute",
+          "challengeItemAmount": 800
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:trapped_chest",
+          "challengeItemAmount": 8000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:compass",
+          "challengeItemAmount": 4000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:observer",
+          "challengeItemAmount": 4000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:clock",
+          "challengeItemAmount": 8000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:wither_skeleton_skull",
+          "challengeItemAmount": 200
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:beacon",
+          "challengeItemAmount": 16
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:nether_star",
+          "challengeItemAmount": 15
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:dragon_egg",
+          "challengeItemAmount": 1
         }
       ],
       "rankUpPrerequisites": {
@@ -337,19 +840,119 @@
       "id": "noble",
       "rankName": "Noble",
       "rankDesc": [
-        "Devient un aventurier, et débute ton aventure !"
+        "Ta valeur est au sommet !"
       ],
       "rankColor": "#C74EBD",
       "rankProfits": [
-        "Kit du nouveau",
-        "1 Home"
+        "9 Homes",
+        "Backpack 36 slots + option drop"
       ],
       "rankUpActivated": true,
       "rankUpChallenges": [
         {
           "challengeType": "GIVE_ITEM",
-          "challengeItemMaterial": "minecraft:dirt",
-          "challengeItemAmount": 3600
+          "challengeItemMaterial": "minecraft:hay_block",
+          "challengeItemAmount": 10000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:packed_ice",
+          "challengeItemAmount": 15000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:red_mushroom_block",
+          "challengeItemAmount": 10000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:note_block",
+          "challengeItemAmount": 15000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:calcite",
+          "challengeItemAmount": 10000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:redstone_lamp",
+          "challengeItemAmount": 10000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:dripstone_block",
+          "challengeItemAmount": 8000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:copper_block",
+          "challengeItemAmount": 15000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:golden_carrot",
+          "challengeItemAmount": 8000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:glowstone_dust",
+          "challengeItemAmount": 10000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:firework_rocket",
+          "challengeItemAmount": 6000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:name_tag",
+          "challengeItemAmount": 500
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:writable_book",
+          "challengeItemAmount": 5000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:dragon_breath",
+          "challengeItemAmount": 2000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:ender_eye",
+          "challengeItemAmount": 10000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:popped_chorus_fruit",
+          "challengeItemAmount": 10000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:glow_ink_sac",
+          "challengeItemAmount": 6000
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:shulker_shell",
+          "challengeItemAmount": 500
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:end_crystal",
+          "challengeItemAmount": 64
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:dragon_head",
+          "challengeItemAmount": 32
+        },
+        {
+          "challengeType": "GIVE_ITEM",
+          "challengeItemMaterial": "minecraft:dragon_egg",
+          "challengeItemAmount": 3
         }
       ],
       "rankUpPrerequisites": {
@@ -358,19 +961,6 @@
         "totalJobLevel": 200
       },
       "rankUpTarget": "prince"
-    },
-    {
-      "id": "prince",
-      "rankName": "Prince",
-      "rankDesc": [
-        "Devient un aventurier, et débute ton aventure !"
-      ],
-      "rankColor": "#C74EBD",
-      "rankProfits": [
-        "Kit du nouveau",
-        "1 Home"
-      ],
-      "rankUpActivated": false
     }
   ]
 }
