@@ -17,17 +17,22 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.model.group.Group;
 import net.luckperms.api.model.user.User;
+import net.luckperms.api.node.types.InheritanceNode;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitScheduler;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
 @Singleton
 public class RankUpItem {
 
+  private final BukkitScheduler bukkitScheduler;
   private final Economy economy;
+  private final JavaPlugin javaPlugin;
   private final Logger logger;
   private final LuckPerms luckPerms;
   private final MiniMessage miniMessage;
@@ -36,13 +41,17 @@ public class RankUpItem {
 
   @Inject
   public RankUpItem(
+      @NotNull BukkitScheduler bukkitScheduler,
       @NotNull Economy economy,
+      @NotNull JavaPlugin javaPlugin,
       @NotNull Logger logger,
       @NotNull LuckPerms luckPerms,
       @NotNull MiniMessage miniMessage,
       @NotNull RankUpController rankUpController,
       @NotNull ResourceBundle resourceBundle) {
+    this.bukkitScheduler = bukkitScheduler;
     this.economy = economy;
+    this.javaPlugin = javaPlugin;
     this.logger = logger;
     this.luckPerms = luckPerms;
     this.miniMessage = miniMessage;
@@ -152,19 +161,34 @@ public class RankUpItem {
     return event -> {
       Player player = (Player) event.getWhoClicked();
       if (isRankable) {
-        luckPerms.getUserManager().getUser(player.getUniqueId()).setPrimaryGroup(rankInfo.getId());
-        player.sendMessage(
-            miniMessage
-                .deserialize(
-                    String.format(
-                        resourceBundle.getString("diagonia.rankup.rankup.success"),
-                        rankInfo.getId()))
-                .decoration(TextDecoration.ITALIC, false)
-                .append(
-                    Component.text(rankInfo.getName())
-                        .color(rankInfo.getColor())
-                        .decoration(TextDecoration.ITALIC, false)));
-        rankUpController.openRankUpGui(player, rankInfo);
+        luckPerms
+            .getUserManager()
+            .modifyUser(
+                player.getUniqueId(),
+                user -> {
+                  Group group = luckPerms.getGroupManager().getGroup(rankInfo.getId());
+                  user.data().add(InheritanceNode.builder(group).build());
+                  user.setPrimaryGroup(rankInfo.getId());
+                })
+            .whenCompleteAsync(
+                (log, exception) -> {
+                  if (exception != null) {
+                    logger.error("LuckPerms exception with Diagonia rankup system", exception);
+                  }
+                  player.sendMessage(
+                      miniMessage
+                          .deserialize(
+                              String.format(
+                                  resourceBundle.getString("diagonia.rankup.rankup.success"),
+                                  rankInfo.getId()))
+                          .decoration(TextDecoration.ITALIC, false)
+                          .append(
+                              Component.text(rankInfo.getName())
+                                  .color(rankInfo.getColor())
+                                  .decoration(TextDecoration.ITALIC, false)));
+                  rankUpController.openRankListGui(player);
+                },
+                runnable -> bukkitScheduler.runTask(javaPlugin, runnable));
       } else {
         player.sendMessage(
             miniMessage
