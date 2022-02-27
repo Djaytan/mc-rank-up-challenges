@@ -99,7 +99,7 @@ public class GuiceGeneralModule extends AbstractModule {
       configuration.setProperty(AvailableSettings.CURRENT_SESSION_CONTEXT_CLASS, "thread");
       configuration.setProperty(AvailableSettings.SHOW_SQL, "false");
       configuration.setProperty(AvailableSettings.FORMAT_SQL, "false");
-      configuration.setProperty(AvailableSettings.HBM2DDL_AUTO, "create");
+      configuration.setProperty(AvailableSettings.HBM2DDL_AUTO, "update");
       configuration.setProperty(AvailableSettings.HBM2DDL_CHARSET_NAME, "UTF-8");
       // TODO: what about isolation level?
       // TODO: cache properties definition

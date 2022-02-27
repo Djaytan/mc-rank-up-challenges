@@ -9,7 +9,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.bukkit.Material;
 
 @Entity
-@Table(name = "diagonia_ps_rankup_challenge_progression")
+@Table(name = "diagonia_rankup_challenge_progression")
 @ToString
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
