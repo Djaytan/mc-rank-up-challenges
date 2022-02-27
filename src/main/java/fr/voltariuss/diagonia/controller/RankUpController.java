@@ -73,7 +73,15 @@ public class RankUpController {
 
   public boolean isRankable(@NotNull Player targetPlayer, @NotNull RankConfig.RankInfo rankInfo) {
     Preconditions.checkNotNull(rankInfo.getRankUpChallenges());
-    List<RankChallengeProgression> playerProgression = getRankUpProgression(targetPlayer, rankInfo.getId());
+    List<RankChallengeProgression> playerProgression =
+        getRankUpProgression(targetPlayer, rankInfo.getId()).stream()
+            .filter(
+                rcp ->
+                    rankInfo.getRankUpChallenges().stream()
+                        .map(RankConfig.RankChallenge::getChallengeItemMaterial)
+                        .toList()
+                        .contains(rcp.getChallengeMaterial()))
+            .toList();
     boolean isRankable = false;
     if (rankInfo.getRankUpChallenges().size() == playerProgression.size()) {
       isRankable = true;
