@@ -88,7 +88,7 @@ public class RankChallengeItem {
                           miniMessage
                               .deserialize(
                                   resourceBundle.getString(
-                                      "diagonia.rankup.rankup.challenge.middle_click"))
+                                      "diagonia.rankup.rankup.challenge.shift_right_click"))
                               .decoration(TextDecoration.ITALIC, false)))
                   .toList())
           .asGuiItem(onClick(rankInfo, rankChallenge));
@@ -117,7 +117,10 @@ public class RankChallengeItem {
       Player whoClicked = (Player) event.getWhoClicked();
       ClickType clickType = event.getClick();
       ItemStack clickedItem = event.getCurrentItem();
-      if (clickedItem != null) {
+      if (clickedItem != null
+          && (clickType == ClickType.LEFT
+              || clickType == ClickType.RIGHT
+              || clickType == ClickType.SHIFT_RIGHT)) {
         int amountToGive = 0;
         int nbItemsInInventory = countItem(whoClicked.getInventory(), clickedItem.getType());
         if (clickType == ClickType.LEFT || clickType == ClickType.RIGHT) {
@@ -133,7 +136,7 @@ public class RankChallengeItem {
             amountToGive = -1;
           }
         }
-        if (clickType == ClickType.MIDDLE) {
+        if (clickType == ClickType.SHIFT_RIGHT) {
           amountToGive = nbItemsInInventory;
         }
         if (amountToGive > 0) {
