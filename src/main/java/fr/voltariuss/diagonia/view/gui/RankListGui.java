@@ -57,7 +57,8 @@ public class RankListGui {
         .forEach(
             rankInfo ->
                 gui.addItem(
-                    rankItem.createItem(rankInfo, rankInfo.getId().equals(currentRankName))));
+                    rankItem.createItem(
+                        whoOpen, rankInfo, rankInfo.getId().equals(currentRankName))));
 
     gui.setDefaultClickAction(event -> event.setCancelled(true));
 

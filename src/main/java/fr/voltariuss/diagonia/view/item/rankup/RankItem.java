@@ -15,6 +15,8 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.luckperms.api.LuckPerms;
+import net.luckperms.api.model.group.Group;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -26,21 +28,25 @@ import org.jetbrains.annotations.NotNull;
 @Singleton
 public class RankItem {
 
+  private final LuckPerms luckPerms;
   private final MiniMessage miniMessage;
   private final RankUpController rankUpController;
   private final ResourceBundle resourceBundle;
 
   @Inject
   public RankItem(
+      @NotNull LuckPerms luckPerms,
       @NotNull MiniMessage miniMessage,
       @NotNull RankUpController rankUpController,
       @NotNull ResourceBundle resourceBundle) {
+    this.luckPerms = luckPerms;
     this.miniMessage = miniMessage;
     this.rankUpController = rankUpController;
     this.resourceBundle = resourceBundle;
   }
 
-  public @NotNull GuiItem createItem(@NotNull RankConfig.RankInfo rankInfo, boolean isCurrentRank) {
+  public @NotNull GuiItem createItem(
+      @NotNull Player whoOpen, @NotNull RankConfig.RankInfo rankInfo, boolean isCurrentRank) {
     List<Component> introProfits = new ArrayList<>();
     introProfits.add(Component.empty());
     introProfits.add(
@@ -48,13 +54,30 @@ public class RankItem {
             .deserialize(resourceBundle.getString("diagonia.rankup.rank_list.profits"))
             .decoration(TextDecoration.ITALIC, false));
 
+    Group rankGroup = luckPerms.getGroupManager().getGroup(rankInfo.getId());
+    Group playerGroup =
+        luckPerms
+            .getGroupManager()
+            .getGroup(luckPerms.getUserManager().getUser(whoOpen.getUniqueId()).getPrimaryGroup());
+
+    boolean isRankable =
+        (playerGroup.getWeight().orElseThrow() + 10) >= rankGroup.getWeight().orElseThrow();
+
     List<Component> endRank = new ArrayList<>();
     endRank.add(Component.empty());
     if (rankInfo.isRankUpActivated()) {
-      endRank.add(
-          miniMessage
-              .deserialize(resourceBundle.getString("diagonia.rankup.rank_list.rankup_activated"))
-              .decoration(TextDecoration.ITALIC, false));
+      if (isRankable) {
+        endRank.add(
+            miniMessage
+                .deserialize(resourceBundle.getString("diagonia.rankup.rank_list.rankup_activated"))
+                .decoration(TextDecoration.ITALIC, false));
+      } else {
+        endRank.add(
+            miniMessage
+                .deserialize(
+                    resourceBundle.getString("diagonia.rankup.rank_list.rankup_impossible"))
+                .decoration(TextDecoration.ITALIC, false));
+      }
     } else {
       endRank.add(
           miniMessage
@@ -104,7 +127,13 @@ public class RankItem {
       itemBuilder.enchant(Enchantment.DURABILITY);
     }
 
-    return itemBuilder.asGuiItem(onClick(rankInfo));
+    GuiItem guiItem;
+    if (!rankInfo.isRankUpActivated() || !isRankable) {
+      guiItem = itemBuilder.asGuiItem();
+    } else {
+      guiItem = itemBuilder.asGuiItem(onClick(rankInfo));
+    }
+    return guiItem;
   }
 
   public @NotNull GuiAction<InventoryClickEvent> onClick(RankConfig.RankInfo rankInfo) {
