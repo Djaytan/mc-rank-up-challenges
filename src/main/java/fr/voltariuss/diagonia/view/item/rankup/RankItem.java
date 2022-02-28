@@ -83,7 +83,9 @@ public class RankItem {
 
     boolean isRankOwned = ownedGroups.contains(currentGroup);
 
-    boolean isNextRank = nextPlayerRank.isPresent() && currentGroup.equals(nextPlayerRank.get());
+    boolean isNextRank =
+        nextPlayerRank.isPresent() && currentGroup.equals(nextPlayerRank.get())
+            || trackedPlayerGroup.isEmpty();
 
     boolean isCurrentRank =
         ownedGroups.contains(currentGroup)

@@ -19,6 +19,7 @@ import net.luckperms.api.model.group.Group;
 import net.luckperms.api.model.user.User;
 import net.luckperms.api.node.types.InheritanceNode;
 import net.luckperms.api.query.QueryOptions;
+import net.luckperms.api.track.Track;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -26,6 +27,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
 @Singleton
@@ -81,8 +83,17 @@ public class RankUpItem {
     double price = rankUpPrerequisite.getMoneyPrice();
     boolean isMoneyPrerequisiteDone = currentMoney >= price;
 
-    boolean isRankOwned =
-        playerGroups.stream().map(Group::getName).toList().contains(rankInfo.getId());
+    Track track = luckPerms.getTrackManager().getTrack("ranks");
+    User user = luckPerms.getUserManager().getUser(whoOpen.getUniqueId());
+    Optional<Group> trackedPlayerGroup =
+      user.getInheritedGroups(QueryOptions.defaultContextualOptions()).stream()
+        .filter(track::containsGroup)
+        .findFirst();
+    List<Group> ownedGroups = getOwnedGroups(trackedPlayerGroup.orElse(null), track);
+
+    Group currentGroup = luckPerms.getGroupManager().getGroup(rankInfo.getId());
+
+    boolean isRankOwned = ownedGroups.contains(currentGroup);
 
     logger.info("isRankOwned={}", isRankOwned);
 
@@ -199,5 +210,21 @@ public class RankUpItem {
                 .decoration(TextDecoration.ITALIC, false));
       }
     };
+  }
+
+  private @NotNull List<Group> getOwnedGroups(
+    @Nullable Group trackedPlayerGroup, @NotNull Track track) {
+    List<Group> ownedGroups = new ArrayList<>();
+    Group currentGroup = trackedPlayerGroup;
+    while (currentGroup != null) {
+      ownedGroups.add(currentGroup);
+      String prevGroupStr = track.getPrevious(currentGroup);
+      if (prevGroupStr != null) {
+        currentGroup = luckPerms.getGroupManager().getGroup(prevGroupStr);
+      } else {
+        currentGroup = null;
+      }
+    }
+    return ownedGroups;
   }
 }

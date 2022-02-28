@@ -82,18 +82,24 @@ public class RankUpController {
                         .toList()
                         .contains(rcp.getChallengeMaterial()))
             .toList();
-    boolean isRankable = false;
-    if (rankInfo.getRankUpChallenges().size() == playerProgression.size()) {
-      isRankable = true;
-      for (int i = 0; i < playerProgression.size(); i++) {
-        int requiredAmount = rankInfo.getRankUpChallenges().get(i).getChallengeItemAmount();
-        int currentAmount = playerProgression.get(i).getChallengeAmountGiven();
-        if (requiredAmount > currentAmount) {
-          isRankable = false;
-          break;
-        }
+    boolean isRankable = true;
+
+    for (RankConfig.RankChallenge rankChallenge : rankInfo.getRankUpChallenges()) {
+      int amount =
+        playerProgression.stream()
+          .filter(
+            pp ->
+              rankChallenge
+                .getChallengeItemMaterial()
+                .equals(pp.getChallengeMaterial()))
+          .mapToInt(RankChallengeProgression::getChallengeAmountGiven)
+          .sum();
+      if (amount < rankChallenge.getChallengeItemAmount()) {
+        isRankable = false;
+        break;
       }
     }
+
     return isRankable;
   }
 }
