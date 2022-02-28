@@ -84,7 +84,7 @@ public class RankItem {
 
     boolean isNextRank =
         nextPlayerRank.isPresent() && currentGroup.equals(nextPlayerRank.get())
-            || currentGroup.getName().equals(
+            || trackedPlayerGroup.isEmpty() && currentGroup.getName().equals(
                 track.getGroups().stream()
                     .filter(s -> track.getPrevious(luckPerms.getGroupManager().getGroup(s)) == null)
                     .findFirst()
