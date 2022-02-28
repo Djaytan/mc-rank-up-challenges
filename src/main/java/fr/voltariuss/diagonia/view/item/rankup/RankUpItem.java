@@ -18,6 +18,7 @@ import net.luckperms.api.LuckPerms;
 import net.luckperms.api.model.group.Group;
 import net.luckperms.api.model.user.User;
 import net.luckperms.api.node.types.InheritanceNode;
+import net.luckperms.api.query.QueryOptions;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -65,8 +66,8 @@ public class RankUpItem {
     RankConfig.RankUpPrerequisite rankUpPrerequisite = rankInfo.getRankUpPrerequisite();
     JobsPlayer jobsPlayer = Jobs.getPlayerManager().getJobsPlayer(whoOpen);
     User userPlayer = luckPerms.getUserManager().getUser(whoOpen.getUniqueId());
-    Group playerGroup = luckPerms.getGroupManager().getGroup(userPlayer.getPrimaryGroup());
-    Group rankGroup = luckPerms.getGroupManager().getGroup(rankInfo.getId());
+    Collection<Group> playerGroups =
+        userPlayer.getInheritedGroups(QueryOptions.defaultContextualOptions());
 
     int currentXpLevel = whoOpen.getLevel();
     int requiredXpLevel = rankUpPrerequisite.getTotalMcExpLevels();
@@ -81,7 +82,7 @@ public class RankUpItem {
     boolean isMoneyPrerequisiteDone = currentMoney >= price;
 
     boolean isRankOwned =
-        playerGroup.getWeight().orElseThrow() >= rankGroup.getWeight().orElseThrow();
+        playerGroups.stream().map(Group::getName).toList().contains(rankInfo.getId());
 
     logger.info("isRankOwned={}", isRankOwned);
 

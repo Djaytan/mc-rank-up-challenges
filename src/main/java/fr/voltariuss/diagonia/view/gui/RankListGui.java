@@ -3,7 +3,6 @@ package fr.voltariuss.diagonia.view.gui;
 import dev.triumphteam.gui.guis.Gui;
 import fr.voltariuss.diagonia.model.config.RankConfig;
 import fr.voltariuss.diagonia.view.item.rankup.RankItem;
-import java.util.Objects;
 import java.util.ResourceBundle;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -48,17 +47,7 @@ public class RankListGui {
             .rows((int) Math.ceil(rankConfig.getRanks().size() / 9.0D))
             .create();
 
-    String currentRankName =
-        Objects.requireNonNull(luckPerms.getUserManager().getUser(whoOpen.getUniqueId()))
-            .getPrimaryGroup();
-
-    rankConfig
-        .getRanks()
-        .forEach(
-            rankInfo ->
-                gui.addItem(
-                    rankItem.createItem(
-                        whoOpen, rankInfo, rankInfo.getId().equals(currentRankName))));
+    rankConfig.getRanks().forEach(rankInfo -> gui.addItem(rankItem.createItem(whoOpen, rankInfo)));
 
     gui.setDefaultClickAction(event -> event.setCancelled(true));
 
