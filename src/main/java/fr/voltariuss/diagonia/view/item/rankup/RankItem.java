@@ -26,10 +26,12 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
 
 @Singleton
 public class RankItem {
 
+  private final Logger logger;
   private final LuckPerms luckPerms;
   private final MiniMessage miniMessage;
   private final RankUpController rankUpController;
@@ -37,10 +39,12 @@ public class RankItem {
 
   @Inject
   public RankItem(
+    @NotNull Logger logger,
       @NotNull LuckPerms luckPerms,
       @NotNull MiniMessage miniMessage,
       @NotNull RankUpController rankUpController,
       @NotNull ResourceBundle resourceBundle) {
+    this.logger = logger;
     this.luckPerms = luckPerms;
     this.miniMessage = miniMessage;
     this.rankUpController = rankUpController;
@@ -65,11 +69,6 @@ public class RankItem {
     List<Group> ownedGroups = getOwnedGroups(trackedPlayerGroup.orElse(null), track);
 
     Group currentGroup = luckPerms.getGroupManager().getGroup(rankInfo.getId());
-    Optional<Group> previousGroup =
-        Optional.ofNullable(
-            track.getPrevious(currentGroup) != null
-                ? luckPerms.getGroupManager().getGroup(track.getPrevious(currentGroup))
-                : null);
     Optional<Group> nextGroup =
         Optional.ofNullable(
             track.getNext(currentGroup) != null
@@ -85,7 +84,11 @@ public class RankItem {
 
     boolean isNextRank =
         nextPlayerRank.isPresent() && currentGroup.equals(nextPlayerRank.get())
-            || trackedPlayerGroup.isEmpty();
+            || currentGroup.getName().equals(
+                track.getGroups().stream()
+                    .filter(s -> track.getPrevious(luckPerms.getGroupManager().getGroup(s)) == null)
+                    .findFirst()
+                    .orElseThrow());
 
     boolean isCurrentRank =
         ownedGroups.contains(currentGroup)

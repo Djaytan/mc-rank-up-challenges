@@ -68,8 +68,6 @@ public class RankUpItem {
     RankConfig.RankUpPrerequisite rankUpPrerequisite = rankInfo.getRankUpPrerequisite();
     JobsPlayer jobsPlayer = Jobs.getPlayerManager().getJobsPlayer(whoOpen);
     User userPlayer = luckPerms.getUserManager().getUser(whoOpen.getUniqueId());
-    Collection<Group> playerGroups =
-        userPlayer.getInheritedGroups(QueryOptions.defaultContextualOptions());
 
     int currentXpLevel = whoOpen.getLevel();
     int requiredXpLevel = rankUpPrerequisite.getTotalMcExpLevels();
