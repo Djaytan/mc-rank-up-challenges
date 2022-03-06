@@ -1,4 +1,4 @@
-package fr.voltariuss.diagonia;
+package fr.voltariuss.diagonia.guice;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -19,11 +19,16 @@ public final class DiagoniaPlayerShopsInjector {
    * @param plugin The plugin to inject into Guice.
    * @param pluginConfig The plugin configuration.
    */
-  public static void inject(@NotNull JavaPlugin plugin, @NotNull PluginConfig pluginConfig, @NotNull RankConfig rankConfig) {
+  public static void inject(
+      @NotNull JavaPlugin plugin,
+      @NotNull PluginConfig pluginConfig,
+      @NotNull RankConfig rankConfig) {
     Injector injector =
         Guice.createInjector(
             new GuiceGeneralModule(plugin.getSLF4JLogger(), plugin, pluginConfig, rankConfig),
-            new GuiceBukkitModule(plugin, plugin.getSLF4JLogger()));
+            new GuiceBukkitModule(plugin),
+            new GuiceBukkitLibsModule(plugin),
+            new GuiceLuckPermsModule());
     injector.injectMembers(plugin);
   }
 }

@@ -1,8 +1,9 @@
-package fr.voltariuss.diagonia;
+package fr.voltariuss.diagonia.guice;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
+import fr.voltariuss.diagonia.CriticalErrorHandler;
 import fr.voltariuss.diagonia.model.config.PluginConfig;
 import fr.voltariuss.diagonia.model.config.RankConfig;
 import fr.voltariuss.diagonia.model.dao.PlayerShopDao;
