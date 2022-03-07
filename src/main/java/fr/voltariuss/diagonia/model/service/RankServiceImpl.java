@@ -3,7 +3,6 @@ package fr.voltariuss.diagonia.model.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.luckperms.api.model.group.Group;
@@ -52,21 +51,22 @@ public class RankServiceImpl implements RankService {
   }
 
   @Override
-  public @NotNull Optional<Group> getCurrentRank(@NotNull Player player) {
+  public @Nullable Group getCurrentRank(@NotNull Player player) {
     User user = Objects.requireNonNull(userManager.getUser(player.getUniqueId()));
     return user.getInheritedGroups(QueryOptions.nonContextual()).stream()
         .filter(track::containsGroup)
-        .findFirst();
+        .findFirst()
+        .orElse(null);
   }
 
   @Override
   public @Nullable Group getUnlockableRank(@NotNull Player player) {
     Group unlockableRank;
 
-    Optional<Group> currentRank = getCurrentRank(player);
+    Group currentRank = getCurrentRank(player);
 
-    if (currentRank.isPresent()) {
-      String unlockableRankStr = track.getNext(currentRank.get());
+    if (currentRank != null) {
+      String unlockableRankStr = track.getNext(currentRank);
       if (unlockableRankStr != null) {
         unlockableRank = groupManager.getGroup(unlockableRankStr);
       } else {
@@ -81,17 +81,17 @@ public class RankServiceImpl implements RankService {
 
   @Override
   public @NotNull List<Group> getOwnedRanks(@NotNull Player player) {
-    return getOwnedRanks(getCurrentRank(player).orElse(null));
+    return getOwnedRanks(getCurrentRank(player));
   }
 
   @Override
   public boolean isRankOwned(@NotNull Player player, @NotNull String rankName) {
     boolean isRankOwned = false;
 
-    Optional<Group> currentRank = getCurrentRank(player);
+    Group currentRank = getCurrentRank(player);
 
-    if (currentRank.isPresent()) {
-      if (currentRank.get().getName().equals(rankName)) {
+    if (currentRank != null) {
+      if (currentRank.getName().equals(rankName)) {
         isRankOwned = true;
       } else {
         List<Group> ownedRanks = getOwnedRanks(player);
@@ -104,8 +104,14 @@ public class RankServiceImpl implements RankService {
 
   @Override
   public boolean isCurrentRank(@NotNull Player player, @NotNull String rankName) {
-    Optional<Group> currentRank = getCurrentRank(player);
-    return currentRank.isPresent() && currentRank.get().getName().equals(rankName);
+    Group currentRank = getCurrentRank(player);
+    return currentRank != null && currentRank.getName().equals(rankName);
+  }
+
+  @Override
+  public boolean isUnlockableRank(@NotNull Player player, @NotNull String rankName) {
+    Group unlockableRank = getUnlockableRank(player);
+    return unlockableRank != null && unlockableRank.getName().equals(rankName);
   }
 
   private @NotNull List<Group> getOwnedRanks(@Nullable Group currentRank) {
@@ -117,7 +123,7 @@ public class RankServiceImpl implements RankService {
       ownedGroups.add(currentGroup);
       String prevGroupStr = track.getPrevious(currentGroup);
       currentGroup =
-        prevGroupStr != null ? Objects.requireNonNull(groupManager.getGroup(prevGroupStr)) : null;
+          prevGroupStr != null ? Objects.requireNonNull(groupManager.getGroup(prevGroupStr)) : null;
     }
 
     return ownedGroups;

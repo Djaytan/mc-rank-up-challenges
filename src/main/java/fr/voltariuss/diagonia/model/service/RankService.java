@@ -1,11 +1,11 @@
 package fr.voltariuss.diagonia.model.service;
 
-import java.util.List;
-import java.util.Optional;
 import net.luckperms.api.model.group.Group;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 /**
  * Rank service interface.
@@ -23,8 +23,8 @@ public interface RankService {
    * @param player The player.
    * @return The current rank of the specified player.
    */
-  @NotNull
-  Optional<Group> getCurrentRank(@NotNull Player player);
+  @Nullable
+  Group getCurrentRank(@NotNull Player player);
 
   /**
    * Gets the unlockable rank if the player doesn't have the last rank yet. Otherwise, the returned
@@ -49,15 +49,6 @@ public interface RankService {
   List<Group> getOwnedRanks(@NotNull Player player);
 
   /**
-   * Checks if the specified rank is owned by the given player.
-   *
-   * @param player The player.
-   * @param rankName The rank's name.
-   * @return "true" if the specified rank is owned by the given player, "false" otherwise.
-   */
-  boolean isRankOwned(@NotNull Player player, @NotNull String rankName);
-
-  /**
    * Checks if the specified rank correspond to the current one of the given player.
    *
    * @param player The player.
@@ -66,4 +57,23 @@ public interface RankService {
    *     otherwise.
    */
   boolean isCurrentRank(@NotNull Player player, @NotNull String rankName);
+
+  /**
+   * Checks if the specified rank correspond to the unlockable one for the given player.
+   *
+   * @param player The player.
+   * @param rankName The rank's name.
+   * @return "true" if the specified rank correspond to the unlockable one for the given player,
+   *     "false" otherwise.
+   */
+  boolean isUnlockableRank(@NotNull Player player, @NotNull String rankName);
+
+  /**
+   * Checks if the specified rank is owned by the given player.
+   *
+   * @param player The player.
+   * @param rankName The rank's name.
+   * @return "true" if the specified rank is owned by the given player, "false" otherwise.
+   */
+  boolean isRankOwned(@NotNull Player player, @NotNull String rankName);
 }
