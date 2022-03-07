@@ -52,28 +52,28 @@ public interface RankService {
    * Checks if the specified rank correspond to the current one of the given player.
    *
    * @param player The player.
-   * @param rankName The rank's name.
+   * @param rankId The rank's ID.
    * @return "true" if the specified rank correspond to the current one of the given player, "false"
    *     otherwise.
    */
-  boolean isCurrentRank(@NotNull Player player, @NotNull String rankName);
+  boolean isCurrentRank(@NotNull Player player, @NotNull String rankId);
 
   /**
    * Checks if the specified rank correspond to the unlockable one for the given player.
    *
    * @param player The player.
-   * @param rankName The rank's name.
+   * @param rankId The rank's ID.
    * @return "true" if the specified rank correspond to the unlockable one for the given player,
    *     "false" otherwise.
    */
-  boolean isUnlockableRank(@NotNull Player player, @NotNull String rankName);
+  boolean isUnlockableRank(@NotNull Player player, @NotNull String rankId);
 
   /**
    * Checks if the specified rank is owned by the given player.
    *
    * @param player The player.
-   * @param rankName The rank's name.
+   * @param rankId The rank's ID.
    * @return "true" if the specified rank is owned by the given player, "false" otherwise.
    */
-  boolean isRankOwned(@NotNull Player player, @NotNull String rankName);
+  boolean isRankOwned(@NotNull Player player, @NotNull String rankId);
 }
