@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import fr.voltariuss.diagonia.model.config.RankConfig;
 import fr.voltariuss.diagonia.model.entity.RankChallengeProgression;
 import fr.voltariuss.diagonia.model.service.RankChallengeProgressionService;
+import fr.voltariuss.diagonia.model.service.RankService;
 import fr.voltariuss.diagonia.view.gui.RankListGui;
 import fr.voltariuss.diagonia.view.gui.RankUpGui;
 import java.util.List;
@@ -12,18 +13,18 @@ import java.util.UUID;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.inject.Singleton;
-import net.luckperms.api.LuckPerms;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
 @Singleton
+// TODO: split this big controller
 public class RankUpController {
 
   private final Logger logger;
-  private final LuckPerms luckPerms;
   private final RankChallengeProgressionService rankChallengeProgressionService;
+  private final RankService rankService;
 
   private final Provider<RankListGui> rankListGuiProvider;
   private final Provider<RankUpGui> rankUpGuiProvider;
@@ -31,13 +32,13 @@ public class RankUpController {
   @Inject
   public RankUpController(
       @NotNull Logger logger,
-      @NotNull LuckPerms luckPerms,
       @NotNull RankChallengeProgressionService rankChallengeProgressionService,
+      @NotNull RankService rankService,
       @NotNull Provider<RankListGui> rankListGuiProvider,
       @NotNull Provider<RankUpGui> rankUpGuiProvider) {
     this.logger = logger;
-    this.luckPerms = luckPerms;
     this.rankChallengeProgressionService = rankChallengeProgressionService;
+    this.rankService = rankService;
     this.rankListGuiProvider = rankListGuiProvider;
     this.rankUpGuiProvider = rankUpGuiProvider;
   }
@@ -86,14 +87,11 @@ public class RankUpController {
 
     for (RankConfig.RankChallenge rankChallenge : rankInfo.getRankUpChallenges()) {
       int amount =
-        playerProgression.stream()
-          .filter(
-            pp ->
-              rankChallenge
-                .getChallengeItemMaterial()
-                .equals(pp.getChallengeMaterial()))
-          .mapToInt(RankChallengeProgression::getChallengeAmountGiven)
-          .sum();
+          playerProgression.stream()
+              .filter(
+                  pp -> rankChallenge.getChallengeItemMaterial().equals(pp.getChallengeMaterial()))
+              .mapToInt(RankChallengeProgression::getChallengeAmountGiven)
+              .sum();
       if (amount < rankChallenge.getChallengeItemAmount()) {
         isRankable = false;
         break;
@@ -101,5 +99,17 @@ public class RankUpController {
     }
 
     return isRankable;
+  }
+
+  public boolean isRankOwned(@NotNull Player player, @NotNull String rankId) {
+    return rankService.isRankOwned(player, rankId);
+  }
+
+  public boolean isCurrentRank(@NotNull Player player, @NotNull String rankId) {
+    return rankService.isCurrentRank(player, rankId);
+  }
+
+  public boolean isUnlockableRank(@NotNull Player player, @NotNull String rankId) {
+    return rankService.isUnlockableRank(player, rankId);
   }
 }

@@ -1,40 +1,37 @@
 package fr.voltariuss.diagonia.view.gui;
 
 import dev.triumphteam.gui.guis.Gui;
+import dev.triumphteam.gui.guis.GuiItem;
+import fr.voltariuss.diagonia.controller.RankUpController;
 import fr.voltariuss.diagonia.model.config.RankConfig;
 import fr.voltariuss.diagonia.view.item.rankup.RankItem;
 import java.util.ResourceBundle;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.luckperms.api.LuckPerms;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
 
 @Singleton
 public class RankListGui {
 
-  private final Logger logger;
-  private final LuckPerms luckPerms;
   private final MiniMessage miniMessage;
   private final RankConfig rankConfig;
   private final RankItem rankItem;
+  private final RankUpController rankUpController;
   private final ResourceBundle resourceBundle;
 
   @Inject
   public RankListGui(
-      @NotNull Logger logger,
-      @NotNull LuckPerms luckPerms,
       @NotNull MiniMessage miniMessage,
       @NotNull RankConfig rankConfig,
       @NotNull RankItem rankItem,
+      @NotNull RankUpController rankUpController,
       @NotNull ResourceBundle resourceBundle) {
-    this.logger = logger;
-    this.luckPerms = luckPerms;
     this.miniMessage = miniMessage;
     this.rankConfig = rankConfig;
     this.rankItem = rankItem;
+    this.rankUpController = rankUpController;
     this.resourceBundle = resourceBundle;
   }
 
@@ -47,7 +44,15 @@ public class RankListGui {
             .rows((int) Math.ceil(rankConfig.getRanks().size() / 9.0D))
             .create();
 
-    rankConfig.getRanks().forEach(rankInfo -> gui.addItem(rankItem.createItem(whoOpen, rankInfo)));
+    for (RankConfig.RankInfo rankInfo : rankConfig.getRanks()) {
+      boolean isRankOwned = rankUpController.isRankOwned(whoOpen, rankInfo.getId());
+      boolean isCurrentRank = rankUpController.isCurrentRank(whoOpen, rankInfo.getId());
+      boolean isUnlockableRank = rankUpController.isUnlockableRank(whoOpen, rankInfo.getId());
+
+      GuiItem rankGuiItem =
+          rankItem.createItem(rankInfo, isRankOwned, isCurrentRank, isUnlockableRank);
+      gui.addItem(rankGuiItem);
+    }
 
     gui.setDefaultClickAction(event -> event.setCancelled(true));
 
