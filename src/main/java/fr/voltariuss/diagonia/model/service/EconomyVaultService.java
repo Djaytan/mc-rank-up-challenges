@@ -9,12 +9,12 @@ import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 
 @Singleton
-public class EconomyServiceImpl implements EconomyService {
+public class EconomyVaultService implements EconomyService {
 
   private final Economy economy;
 
   @Inject
-  public EconomyServiceImpl(@NotNull Economy economy) {
+  public EconomyVaultService(@NotNull Economy economy) {
     this.economy = economy;
   }
 
