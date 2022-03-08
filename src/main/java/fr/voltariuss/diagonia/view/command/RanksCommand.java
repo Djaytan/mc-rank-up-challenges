@@ -1,8 +1,9 @@
-package fr.voltariuss.diagonia.controller;
+package fr.voltariuss.diagonia.view.command;
 
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.Default;
+import fr.voltariuss.diagonia.controller.RankUpController;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 

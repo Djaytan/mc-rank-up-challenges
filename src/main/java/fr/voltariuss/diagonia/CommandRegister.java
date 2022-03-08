@@ -1,9 +1,9 @@
 package fr.voltariuss.diagonia;
 
 import co.aikar.commands.PaperCommandManager;
-import fr.voltariuss.diagonia.controller.PlayerShopCommand;
-import fr.voltariuss.diagonia.controller.RanksCommand;
-import fr.voltariuss.diagonia.controller.UuidCommand;
+import fr.voltariuss.diagonia.view.command.PlayerShopCommand;
+import fr.voltariuss.diagonia.view.command.RanksCommand;
+import fr.voltariuss.diagonia.view.command.UuidCommand;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.jetbrains.annotations.NotNull;

@@ -1,4 +1,4 @@
-package fr.voltariuss.diagonia.controller;
+package fr.voltariuss.diagonia.view.command;
 
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
