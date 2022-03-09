@@ -7,7 +7,8 @@ import dev.triumphteam.gui.builder.item.ItemBuilder;
 import dev.triumphteam.gui.components.GuiAction;
 import dev.triumphteam.gui.guis.GuiItem;
 import fr.voltariuss.diagonia.controller.RankUpController;
-import fr.voltariuss.diagonia.model.config.RankConfig;
+import fr.voltariuss.diagonia.model.config.rank.Rank;
+import fr.voltariuss.diagonia.model.config.rank.RankUpPrerequisites;
 import fr.voltariuss.diagonia.view.EconomyFormatter;
 import java.util.*;
 import javax.inject.Inject;
@@ -45,24 +46,21 @@ public class RankUpItem {
   }
 
   public @NotNull GuiItem createItem(
-      @NotNull Player whoOpen,
-      @NotNull RankConfig.RankInfo rankInfo,
-      boolean isRankOwned,
-      double currentBalance) {
-    Preconditions.checkNotNull(rankInfo.getRankUpPrerequisite());
-    RankConfig.RankUpPrerequisite rankUpPrerequisite = rankInfo.getRankUpPrerequisite();
+      @NotNull Player whoOpen, @NotNull Rank rank, boolean isRankOwned, double currentBalance) {
+    Preconditions.checkNotNull(rank.getRankUpPrerequisites());
+    RankUpPrerequisites rankUpPrerequisites = rank.getRankUpPrerequisites();
     JobsPlayer jobsPlayer = Jobs.getPlayerManager().getJobsPlayer(whoOpen);
 
     // TODO: business logic to put into model
     int currentXpLevel = whoOpen.getLevel();
-    int requiredXpLevel = rankUpPrerequisite.getTotalMcExpLevels();
+    int requiredXpLevel = rankUpPrerequisites.getTotalMcExpLevels();
     boolean isXpLevelPrerequisiteDone = currentXpLevel >= requiredXpLevel;
 
     int currentTotalJobsLevel = jobsPlayer.getTotalLevels();
-    int requiredTotalJobsLevel = rankUpPrerequisite.getTotalJobsLevel();
+    int requiredTotalJobsLevel = rankUpPrerequisites.getTotalJobsLevel();
     boolean isTotalJobsLevelPrerequisiteDone = currentTotalJobsLevel >= requiredTotalJobsLevel;
 
-    double price = rankUpPrerequisite.getMoneyPrice();
+    double price = rankUpPrerequisites.getMoneyPrice();
     boolean isMoneyPrerequisiteDone = currentBalance >= price;
 
     logger.info("isRankOwned={}", isRankOwned);
@@ -71,7 +69,7 @@ public class RankUpItem {
         isXpLevelPrerequisiteDone
             && isTotalJobsLevelPrerequisiteDone
             && isMoneyPrerequisiteDone
-            && rankUpController.isRankable(whoOpen, rankInfo);
+            && rankUpController.isRankable(whoOpen, rank);
 
     logger.info("isRankable={}", isRankable);
 
@@ -99,7 +97,7 @@ public class RankUpItem {
                                     String.format(
                                         "%s%s",
                                         isXpLevelPrerequisiteDone ? "<green>" : "", currentXpLevel),
-                                    rankUpPrerequisite.getTotalMcExpLevels()))
+                                    rankUpPrerequisites.getTotalMcExpLevels()))
                             .decoration(TextDecoration.ITALIC, false),
                         miniMessage
                             .deserialize(
@@ -110,7 +108,7 @@ public class RankUpItem {
                                         "%s%s",
                                         isTotalJobsLevelPrerequisiteDone ? "<green>" : "",
                                         currentTotalJobsLevel),
-                                    rankUpPrerequisite.getTotalJobsLevel()))
+                                    rankUpPrerequisites.getTotalJobsLevel()))
                             .decoration(TextDecoration.ITALIC, false),
                         miniMessage
                             .deserialize(
@@ -120,7 +118,7 @@ public class RankUpItem {
                                         "%s%s",
                                         isMoneyPrerequisiteDone ? "<green>" : "",
                                         economyFormatter.format(currentBalance)),
-                                    economyFormatter.format(rankUpPrerequisite.getMoneyPrice())))
+                                    economyFormatter.format(rankUpPrerequisites.getMoneyPrice())))
                             .decoration(TextDecoration.ITALIC, false),
                         Component.empty(),
                         isRankable

@@ -1,7 +1,10 @@
 package fr.voltariuss.diagonia.model;
 
 import com.google.gson.*;
-import fr.voltariuss.diagonia.model.config.RankConfig;
+import fr.voltariuss.diagonia.model.config.rank.Rank;
+import fr.voltariuss.diagonia.model.config.rank.RankChallenge;
+import fr.voltariuss.diagonia.model.config.rank.RankConfig;
+import fr.voltariuss.diagonia.model.config.rank.RankUpPrerequisites;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +21,7 @@ public class RankConfigDeserializer implements JsonDeserializer<RankConfig> {
       throws JsonParseException {
     JsonObject root = jsonElement.getAsJsonObject();
     JsonArray ranksJson = root.get("ranks").getAsJsonArray();
-    List<RankConfig.RankInfo> ranks = new ArrayList<>();
+    List<Rank> ranks = new ArrayList<>();
 
     ranksJson.forEach(
         rankElt -> {
@@ -42,7 +45,7 @@ public class RankConfigDeserializer implements JsonDeserializer<RankConfig> {
           boolean isRankUpActivated = rankJson.get("rankUpActivated").getAsBoolean();
 
           if (isRankUpActivated) {
-            List<RankConfig.RankChallenge> challenges = new ArrayList<>();
+            List<RankChallenge> challenges = new ArrayList<>();
             rankJson
                 .get("rankUpChallenges")
                 .getAsJsonArray()
@@ -50,7 +53,7 @@ public class RankConfigDeserializer implements JsonDeserializer<RankConfig> {
                     challengeElem -> {
                       JsonObject challengeObject = challengeElem.getAsJsonObject();
                       challenges.add(
-                          RankConfig.RankChallenge.builder()
+                          RankChallenge.builder()
                               .challengeType(
                                   RankChallengeType.valueOf(
                                       challengeObject
@@ -66,8 +69,8 @@ public class RankConfigDeserializer implements JsonDeserializer<RankConfig> {
                     });
 
             JsonObject prerequisiteJson = rankJson.get("rankUpPrerequisites").getAsJsonObject();
-            RankConfig.RankUpPrerequisite rankUpPrerequisite =
-                RankConfig.RankUpPrerequisite.builder()
+            RankUpPrerequisites rankUpPrerequisites =
+                RankUpPrerequisites.builder()
                     .moneyPrice(prerequisiteJson.get("moneyPrice").getAsDouble())
                     .totalMcExpLevels(prerequisiteJson.get("totalMcExpLevels").getAsInt())
                     .totalJobsLevel(prerequisiteJson.get("totalJobLevel").getAsInt())
@@ -76,20 +79,20 @@ public class RankConfigDeserializer implements JsonDeserializer<RankConfig> {
             String rankUpTarget = rankJson.get("rankUpTarget").getAsString();
 
             ranks.add(
-                RankConfig.RankInfo.builder()
+                Rank.builder()
                     .id(id)
                     .name(rankName)
                     .description(description)
                     .color(rankColor)
                     .profits(profits)
                     .isRankUpActivated(true)
-                    .rankUpPrerequisite(rankUpPrerequisite)
+                    .rankUpPrerequisites(rankUpPrerequisites)
                     .rankUpChallenges(challenges)
                     .rankUpTarget(rankUpTarget)
                     .build());
           } else {
             ranks.add(
-                RankConfig.RankInfo.builder()
+                Rank.builder()
                     .id(id)
                     .name(rankName)
                     .description(description)

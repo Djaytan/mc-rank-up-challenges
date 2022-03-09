@@ -2,7 +2,9 @@ package fr.voltariuss.diagonia.model.service;
 
 import fr.voltariuss.diagonia.Debugger;
 import fr.voltariuss.diagonia.model.JpaDaoException;
-import fr.voltariuss.diagonia.model.config.RankConfig;
+import fr.voltariuss.diagonia.model.config.rank.Rank;
+import fr.voltariuss.diagonia.model.config.rank.RankChallenge;
+import fr.voltariuss.diagonia.model.config.rank.RankConfig;
 import fr.voltariuss.diagonia.model.dao.RankChallengeProgressionDao;
 import fr.voltariuss.diagonia.model.entity.RankChallengeProgression;
 import java.util.List;
@@ -149,13 +151,13 @@ public class RankChallengeProgressionService {
       @NotNull Material material,
       int givenAmount) {
     int effectiveGivenAmount = 0;
-    RankConfig.RankInfo rankInfo =
+    Rank rank =
         rankConfig.getRanks().stream()
-            .filter(rank -> rank.getId().equals(rankId))
+            .filter(r -> r.getId().equals(rankId))
             .findFirst()
             .orElseThrow();
-    RankConfig.RankChallenge rankChallenge =
-        Objects.requireNonNull(rankInfo.getRankUpChallenges()).stream()
+    RankChallenge rankChallenge =
+        Objects.requireNonNull(rank.getRankUpChallenges()).stream()
             .filter(challenge -> challenge.getChallengeItemMaterial().equals(material))
             .findFirst()
             .orElseThrow();

@@ -3,7 +3,7 @@ package fr.voltariuss.diagonia;
 import fr.voltariuss.diagonia.guice.DiagoniaPlayerShopsInjector;
 import fr.voltariuss.diagonia.model.RankConfigDeserializer;
 import fr.voltariuss.diagonia.model.config.PluginConfig;
-import fr.voltariuss.diagonia.model.config.RankConfig;
+import fr.voltariuss.diagonia.model.config.rank.RankConfig;
 import fr.voltariuss.diagonia.model.service.PluginConfigService;
 import fr.voltariuss.diagonia.model.service.RankConfigService;
 import javax.inject.Inject;

@@ -3,7 +3,7 @@ package fr.voltariuss.diagonia.guice;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import fr.voltariuss.diagonia.model.config.PluginConfig;
-import fr.voltariuss.diagonia.model.config.RankConfig;
+import fr.voltariuss.diagonia.model.config.rank.RankConfig;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 

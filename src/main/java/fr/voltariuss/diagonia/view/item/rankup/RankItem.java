@@ -4,7 +4,7 @@ import dev.triumphteam.gui.builder.item.ItemBuilder;
 import dev.triumphteam.gui.components.GuiAction;
 import dev.triumphteam.gui.guis.GuiItem;
 import fr.voltariuss.diagonia.controller.RankUpController;
-import fr.voltariuss.diagonia.model.config.RankConfig;
+import fr.voltariuss.diagonia.model.config.rank.Rank;
 import java.util.*;
 import java.util.stream.Stream;
 import javax.inject.Inject;
@@ -39,10 +39,7 @@ public class RankItem {
   }
 
   public @NotNull GuiItem createItem(
-      @NotNull RankConfig.RankInfo rankInfo,
-      boolean isRankOwned,
-      boolean isCurrentRank,
-      boolean isUnlockableRank) {
+      @NotNull Rank rank, boolean isRankOwned, boolean isCurrentRank, boolean isUnlockableRank) {
     List<Component> introProfits = new ArrayList<>();
     introProfits.add(Component.empty());
     introProfits.add(
@@ -52,7 +49,7 @@ public class RankItem {
 
     List<Component> endRank = new ArrayList<>();
     endRank.add(Component.empty());
-    if (rankInfo.isRankUpActivated()) {
+    if (rank.isRankUpActivated()) {
       if (isRankOwned || isUnlockableRank) {
         endRank.add(
             miniMessage
@@ -76,12 +73,10 @@ public class RankItem {
         ItemBuilder.from(Material.LEATHER_CHESTPLATE)
             .color(
                 Color.fromRGB(
-                    rankInfo.getColor().red(),
-                    rankInfo.getColor().green(),
-                    rankInfo.getColor().blue()))
+                    rank.getColor().red(), rank.getColor().green(), rank.getColor().blue()))
             .name(
-                Component.text(rankInfo.getName())
-                    .color(rankInfo.getColor())
+                Component.text(rank.getName())
+                    .color(rank.getColor())
                     .decoration(TextDecoration.ITALIC, false)
                     .decoration(TextDecoration.BOLD, true)
                     .append(
@@ -96,7 +91,7 @@ public class RankItem {
                                                 : "diagonia.rankup.rank_list.locked"))))))
             .lore(
                 Stream.concat(
-                        rankInfo.getDescription().stream()
+                        rank.getDescription().stream()
                             .map(
                                 descLine ->
                                     miniMessage
@@ -106,7 +101,7 @@ public class RankItem {
                         Stream.concat(
                             introProfits.stream(),
                             Stream.concat(
-                                rankInfo.getProfits().stream()
+                                rank.getProfits().stream()
                                     .map(
                                         descLine ->
                                             miniMessage
@@ -125,15 +120,15 @@ public class RankItem {
     }
 
     GuiItem guiItem;
-    if (!rankInfo.isRankUpActivated() || !isRankOwned && !isUnlockableRank) {
+    if (!rank.isRankUpActivated() || !isRankOwned && !isUnlockableRank) {
       guiItem = itemBuilder.asGuiItem();
     } else {
-      guiItem = itemBuilder.asGuiItem(onClick(rankInfo));
+      guiItem = itemBuilder.asGuiItem(onClick(rank));
     }
     return guiItem;
   }
 
-  public @NotNull GuiAction<InventoryClickEvent> onClick(RankConfig.RankInfo rankInfo) {
-    return event -> rankUpController.openRankUpGui((Player) event.getWhoClicked(), rankInfo);
+  public @NotNull GuiAction<InventoryClickEvent> onClick(Rank rank) {
+    return event -> rankUpController.openRankUpGui((Player) event.getWhoClicked(), rank);
   }
 }

@@ -4,7 +4,8 @@ import dev.triumphteam.gui.builder.item.ItemBuilder;
 import dev.triumphteam.gui.components.GuiAction;
 import dev.triumphteam.gui.guis.GuiItem;
 import fr.voltariuss.diagonia.controller.RankUpController;
-import fr.voltariuss.diagonia.model.config.RankConfig;
+import fr.voltariuss.diagonia.model.config.rank.Rank;
+import fr.voltariuss.diagonia.model.config.rank.RankChallenge;
 import fr.voltariuss.diagonia.model.entity.RankChallengeProgression;
 import java.util.*;
 import java.util.stream.Stream;
@@ -43,12 +44,10 @@ public class RankChallengeItem {
   }
 
   public @NotNull GuiItem createItem(
-      @NotNull UUID playerUuid,
-      @NotNull RankConfig.RankInfo rankInfo,
-      @NotNull RankConfig.RankChallenge rankChallenge) {
+      @NotNull UUID playerUuid, @NotNull Rank rank, @NotNull RankChallenge rankChallenge) {
     RankChallengeProgression rcp =
         rankUpController
-            .findChallenge(playerUuid, rankInfo.getId(), rankChallenge.getChallengeItemMaterial())
+            .findChallenge(playerUuid, rank.getId(), rankChallenge.getChallengeItemMaterial())
             .orElse(null);
 
     boolean isChallengeCompleted =
@@ -91,7 +90,7 @@ public class RankChallengeItem {
                                       "diagonia.rankup.rankup.challenge.shift_right_click"))
                               .decoration(TextDecoration.ITALIC, false)))
                   .toList())
-          .asGuiItem(onClick(rankInfo, rankChallenge));
+          .asGuiItem(onClick(rank, rankChallenge));
     } else {
       return ItemBuilder.from(rankChallenge.getChallengeItemMaterial())
           .name(
@@ -112,7 +111,7 @@ public class RankChallengeItem {
   }
 
   public @NotNull GuiAction<InventoryClickEvent> onClick(
-      @NotNull RankConfig.RankInfo rankInfo, @NotNull RankConfig.RankChallenge rankChallenge) {
+      @NotNull Rank rank, @NotNull RankChallenge rankChallenge) {
     return event -> {
       Player whoClicked = (Player) event.getWhoClicked();
       ClickType clickType = event.getClick();
@@ -143,7 +142,7 @@ public class RankChallengeItem {
           logger.info("GUI-amountToGive={}", amountToGive);
           int effectiveGivenAmount =
               rankUpController.giveItemChallenge(
-                  whoClicked, rankInfo.getId(), clickedItem.getType(), amountToGive);
+                  whoClicked, rank.getId(), clickedItem.getType(), amountToGive);
           logger.info("effectiveGivenAmount={}", effectiveGivenAmount);
           if (effectiveGivenAmount > 0) {
             HashMap<Integer, ItemStack> notRemovedItems =
@@ -164,8 +163,7 @@ public class RankChallengeItem {
                         clickedItem.getType().name())));
             RankChallengeProgression rcp =
                 rankUpController
-                    .findChallenge(
-                        whoClicked.getUniqueId(), rankInfo.getId(), clickedItem.getType())
+                    .findChallenge(whoClicked.getUniqueId(), rank.getId(), clickedItem.getType())
                     .orElseThrow();
             if (rcp.getChallengeAmountGiven() == rankChallenge.getChallengeItemAmount()) {
               whoClicked.sendMessage(
@@ -175,7 +173,7 @@ public class RankChallengeItem {
                               "diagonia.rankup.rankup.challenge.now_completed"),
                           rankChallenge.getChallengeItemMaterial().name())));
             }
-            rankUpController.openRankUpGui(whoClicked, rankInfo);
+            rankUpController.openRankUpGui(whoClicked, rank);
           } else if (effectiveGivenAmount == 0) {
             whoClicked.sendMessage(
                 miniMessage.deserialize(

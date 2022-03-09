@@ -5,7 +5,7 @@ import dev.triumphteam.gui.guis.Gui;
 import dev.triumphteam.gui.guis.GuiItem;
 import dev.triumphteam.gui.guis.PaginatedGui;
 import fr.voltariuss.diagonia.controller.RankUpController;
-import fr.voltariuss.diagonia.model.config.RankConfig;
+import fr.voltariuss.diagonia.model.config.rank.Rank;
 import fr.voltariuss.diagonia.view.item.PaginatedItem;
 import fr.voltariuss.diagonia.view.item.rankup.RankChallengeItem;
 import fr.voltariuss.diagonia.view.item.rankup.RankUpItem;
@@ -52,8 +52,8 @@ public class RankUpGui {
     this.resourceBundle = resourceBundle;
   }
 
-  public void open(@NotNull Player whoOpen, @NotNull RankConfig.RankInfo rankInfo) {
-    if (rankInfo.getRankUpChallenges() != null) {
+  public void open(@NotNull Player whoOpen, @NotNull Rank rank) {
+    if (rank.getRankUpChallenges() != null) {
       PaginatedGui gui =
           Gui.paginated()
               .pageSize(36)
@@ -62,7 +62,7 @@ public class RankUpGui {
                   miniMessage.deserialize(
                       String.format(
                           resourceBundle.getString("diagonia.rankup.rankup.challenge.title"),
-                          rankInfo.getName())))
+                          rank.getName())))
               .create();
 
       GuiItem decorationItem =
@@ -72,15 +72,13 @@ public class RankUpGui {
         gui.setItem(5, i, decorationItem);
       }
 
-      rankInfo
-          .getRankUpChallenges()
+      rank.getRankUpChallenges()
           .forEach(
               rankChallenge ->
                   gui.addItem(
-                      rankChallengeItem.createItem(
-                          whoOpen.getUniqueId(), rankInfo, rankChallenge)));
+                      rankChallengeItem.createItem(whoOpen.getUniqueId(), rank, rankChallenge)));
 
-      gui.setItem(6, 5, rankUpItem.createItem(whoOpen, rankInfo));
+      gui.setItem(6, 5, rankUpItem.createItem(whoOpen, rank));
 
       gui.setItem(5, 3, paginatedItem.createPreviousPageItem(gui));
       gui.setItem(5, 7, paginatedItem.createNextPageItem(gui));
@@ -100,7 +98,7 @@ public class RankUpGui {
 
       gui.open(whoOpen);
     } else {
-      logger.error("No challenge is associated with the rank {}", rankInfo.getId());
+      logger.error("No challenge is associated with the rank {}", rank.getId());
       // TODO: feedback player
     }
   }

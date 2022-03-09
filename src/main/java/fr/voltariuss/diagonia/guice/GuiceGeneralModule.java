@@ -5,19 +5,18 @@ import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import fr.voltariuss.diagonia.CriticalErrorHandler;
 import fr.voltariuss.diagonia.model.config.PluginConfig;
-import fr.voltariuss.diagonia.model.config.RankConfig;
+import fr.voltariuss.diagonia.model.config.rank.RankConfig;
 import fr.voltariuss.diagonia.model.dao.PlayerShopDao;
 import fr.voltariuss.diagonia.model.dao.PlayerShopDaoImpl;
 import fr.voltariuss.diagonia.model.entity.PlayerShop;
-import java.util.Objects;
-import java.util.ResourceBundle;
-import javax.inject.Named;
-
 import fr.voltariuss.diagonia.model.entity.RankChallengeProgression;
 import fr.voltariuss.diagonia.model.service.JobsRebornService;
 import fr.voltariuss.diagonia.model.service.JobsService;
 import fr.voltariuss.diagonia.model.service.RankService;
 import fr.voltariuss.diagonia.model.service.RankServiceImpl;
+import java.util.Objects;
+import java.util.ResourceBundle;
+import javax.inject.Named;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
@@ -42,10 +41,10 @@ public class GuiceGeneralModule extends AbstractModule {
    * @param pluginConfig The plugin configuration.
    */
   public GuiceGeneralModule(
-    @NotNull Logger logger,
-    @NotNull JavaPlugin javaPlugin,
-    @NotNull PluginConfig pluginConfig,
-    @NotNull RankConfig rankConfig) {
+      @NotNull Logger logger,
+      @NotNull JavaPlugin javaPlugin,
+      @NotNull PluginConfig pluginConfig,
+      @NotNull RankConfig rankConfig) {
     this.logger = logger;
     this.javaPlugin = javaPlugin;
     this.pluginConfig = pluginConfig;

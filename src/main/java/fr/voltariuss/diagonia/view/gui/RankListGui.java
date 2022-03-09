@@ -3,7 +3,8 @@ package fr.voltariuss.diagonia.view.gui;
 import dev.triumphteam.gui.guis.Gui;
 import dev.triumphteam.gui.guis.GuiItem;
 import fr.voltariuss.diagonia.controller.RankUpController;
-import fr.voltariuss.diagonia.model.config.RankConfig;
+import fr.voltariuss.diagonia.model.config.rank.Rank;
+import fr.voltariuss.diagonia.model.config.rank.RankConfig;
 import fr.voltariuss.diagonia.view.item.rankup.RankItem;
 import java.util.ResourceBundle;
 import javax.inject.Inject;
@@ -44,13 +45,12 @@ public class RankListGui {
             .rows((int) Math.ceil(rankConfig.getRanks().size() / 9.0D))
             .create();
 
-    for (RankConfig.RankInfo rankInfo : rankConfig.getRanks()) {
-      boolean isRankOwned = rankUpController.isRankOwned(whoOpen, rankInfo.getId());
-      boolean isCurrentRank = rankUpController.isCurrentRank(whoOpen, rankInfo.getId());
-      boolean isUnlockableRank = rankUpController.isUnlockableRank(whoOpen, rankInfo.getId());
+    for (Rank rank : rankConfig.getRanks()) {
+      boolean isRankOwned = rankUpController.isRankOwned(whoOpen, rank.getId());
+      boolean isCurrentRank = rankUpController.isCurrentRank(whoOpen, rank.getId());
+      boolean isUnlockableRank = rankUpController.isUnlockableRank(whoOpen, rank.getId());
 
-      GuiItem rankGuiItem =
-          rankItem.createItem(rankInfo, isRankOwned, isCurrentRank, isUnlockableRank);
+      GuiItem rankGuiItem = rankItem.createItem(rank, isRankOwned, isCurrentRank, isUnlockableRank);
       gui.addItem(rankGuiItem);
     }
 

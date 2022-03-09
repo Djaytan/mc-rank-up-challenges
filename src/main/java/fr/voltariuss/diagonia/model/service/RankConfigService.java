@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import fr.voltariuss.diagonia.DiagoniaException;
 import fr.voltariuss.diagonia.model.RankConfigDeserializer;
-import fr.voltariuss.diagonia.model.config.RankConfig;
+import fr.voltariuss.diagonia.model.config.rank.RankConfig;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import javax.inject.Inject;
@@ -27,10 +27,10 @@ public class RankConfigService {
 
   @Inject
   public RankConfigService(
-    @Named("dataFolder") @NotNull File dataFolder,
-    @NotNull JavaPlugin plugin,
-    @NotNull Logger logger,
-    @NotNull RankConfigDeserializer rankConfigDeserializer) {
+      @Named("dataFolder") @NotNull File dataFolder,
+      @NotNull JavaPlugin plugin,
+      @NotNull Logger logger,
+      @NotNull RankConfigDeserializer rankConfigDeserializer) {
     this.dataFolder = dataFolder;
     this.plugin = plugin;
     this.logger = logger;
