@@ -14,6 +14,8 @@ import java.util.ResourceBundle;
 import javax.inject.Named;
 
 import fr.voltariuss.diagonia.model.entity.RankChallengeProgression;
+import fr.voltariuss.diagonia.model.service.JobsRebornService;
+import fr.voltariuss.diagonia.model.service.JobsService;
 import fr.voltariuss.diagonia.model.service.RankService;
 import fr.voltariuss.diagonia.model.service.RankServiceImpl;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -54,6 +56,7 @@ public class GuiceGeneralModule extends AbstractModule {
   public void configure() {
     bind(PlayerShopDao.class).to(PlayerShopDaoImpl.class);
     bind(RankService.class).to(RankServiceImpl.class);
+    bind(JobsService.class).to(JobsRebornService.class);
   }
 
   @Provides
