@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Objects;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import net.luckperms.api.context.ImmutableContextSet;
 import net.luckperms.api.model.group.Group;
 import net.luckperms.api.model.group.GroupManager;
 import net.luckperms.api.model.user.User;
@@ -23,6 +24,7 @@ import org.jetbrains.annotations.Nullable;
  * @author Voltariuss
  * @since 1.1.0
  */
+// TODO: rename RankLuckPermsService
 @Singleton
 public class RankServiceImpl implements RankService {
 
@@ -160,6 +162,13 @@ public class RankServiceImpl implements RankService {
         isUnlockableRank);
 
     return isUnlockableRank;
+  }
+
+  @Override
+  public void promote(@NotNull Player player) {
+    User user = Objects.requireNonNull(userManager.getUser(player.getUniqueId()));
+    track.promote(user, ImmutableContextSet.empty());
+    // TODO: manage status and raise errors if needed
   }
 
   private @NotNull List<Group> getOwnedRanks(@Nullable Group currentRank) {

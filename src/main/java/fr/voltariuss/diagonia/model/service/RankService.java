@@ -1,11 +1,10 @@
 package fr.voltariuss.diagonia.model.service;
 
+import java.util.List;
 import net.luckperms.api.model.group.Group;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
 
 /**
  * Rank service interface.
@@ -76,4 +75,11 @@ public interface RankService {
    * @return "true" if the specified rank is owned by the given player, "false" otherwise.
    */
   boolean isRankOwned(@NotNull Player player, @NotNull String rankId);
+
+  /**
+   * Give the upper rank to the specified player.
+   *
+   * @param player The concerned player by the rank up.
+   */
+  void promote(@NotNull Player player);
 }
