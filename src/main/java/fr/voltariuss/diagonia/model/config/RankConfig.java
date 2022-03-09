@@ -10,6 +10,7 @@ import org.jetbrains.annotations.Nullable;
 
 @Data
 @Builder
+// TODO: move inner classes into separated classes
 public class RankConfig {
   private final List<RankInfo> ranks;
 
