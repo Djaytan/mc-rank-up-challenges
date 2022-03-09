@@ -1,4 +1,4 @@
-package fr.voltariuss.diagonia.model;
+package fr.voltariuss.diagonia.view;
 
 import net.milkbowl.vault.economy.Economy;
 import org.jetbrains.annotations.NotNull;

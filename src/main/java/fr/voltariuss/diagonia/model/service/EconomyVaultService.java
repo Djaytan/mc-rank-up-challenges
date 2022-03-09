@@ -1,8 +1,6 @@
 package fr.voltariuss.diagonia.model.service;
 
 import com.google.common.base.Preconditions;
-import fr.voltariuss.diagonia.model.EconomyFormatter;
-import fr.voltariuss.diagonia.model.dto.EconomyBalanceDto;
 import fr.voltariuss.diagonia.model.dto.response.EconomyResponse;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -14,19 +12,15 @@ import org.jetbrains.annotations.NotNull;
 public class EconomyVaultService implements EconomyService {
 
   private final Economy economy;
-  private final EconomyFormatter economyFormatter;
 
   @Inject
-  public EconomyVaultService(@NotNull Economy economy, @NotNull EconomyFormatter economyFormatter) {
+  public EconomyVaultService(@NotNull Economy economy) {
     this.economy = economy;
-    this.economyFormatter = economyFormatter;
   }
 
   @Override
-  public @NotNull EconomyBalanceDto getBalance(@NotNull OfflinePlayer offlinePlayer) {
-    double amount = economy.getBalance(offlinePlayer);
-    String formattedAmount = economyFormatter.format(amount);
-    return EconomyBalanceDto.builder().amount(amount).formattedAmount(formattedAmount).build();
+  public double getBalance(@NotNull OfflinePlayer offlinePlayer) {
+    return economy.getBalance(offlinePlayer);
   }
 
   @Override
