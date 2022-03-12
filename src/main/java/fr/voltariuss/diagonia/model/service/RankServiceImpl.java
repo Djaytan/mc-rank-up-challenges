@@ -15,6 +15,7 @@ import net.luckperms.api.model.group.GroupManager;
 import net.luckperms.api.model.user.User;
 import net.luckperms.api.model.user.UserManager;
 import net.luckperms.api.query.QueryOptions;
+import net.luckperms.api.track.PromotionResult;
 import net.luckperms.api.track.Track;
 import net.luckperms.api.track.TrackManager;
 import org.bukkit.entity.Player;
@@ -176,9 +177,9 @@ public class RankServiceImpl implements RankService {
   }
 
   @Override
-  public void promote(@NotNull Player player) {
+  public @NotNull PromotionResult promote(@NotNull Player player) {
     User user = Objects.requireNonNull(userManager.getUser(player.getUniqueId()));
-    track.promote(user, ImmutableContextSet.empty());
+    return track.promote(user, ImmutableContextSet.empty());
     // TODO: manage status and raise errors if needed
   }
 

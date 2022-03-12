@@ -2,6 +2,7 @@ package fr.voltariuss.diagonia.model.service;
 
 import java.util.List;
 import net.luckperms.api.model.group.Group;
+import net.luckperms.api.track.PromotionResult;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -80,8 +81,10 @@ public interface RankService {
    * Give the upper rank to the specified player.
    *
    * @param player The concerned player by the rank up.
+   * @return The result response about the promotion.
    */
-  void promote(@NotNull Player player);
+  @NotNull
+  PromotionResult promote(@NotNull Player player);
 
   /**
    * Checks if the specified player can rank up.
