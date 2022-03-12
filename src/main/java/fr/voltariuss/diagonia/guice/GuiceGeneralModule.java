@@ -10,6 +10,8 @@ import fr.voltariuss.diagonia.model.dao.PlayerShopDao;
 import fr.voltariuss.diagonia.model.dao.PlayerShopDaoImpl;
 import fr.voltariuss.diagonia.model.entity.PlayerShop;
 import fr.voltariuss.diagonia.model.entity.RankChallengeProgression;
+import fr.voltariuss.diagonia.model.service.EconomyService;
+import fr.voltariuss.diagonia.model.service.EconomyVaultService;
 import fr.voltariuss.diagonia.model.service.JobsRebornService;
 import fr.voltariuss.diagonia.model.service.JobsService;
 import fr.voltariuss.diagonia.model.service.RankService;
@@ -53,9 +55,10 @@ public class GuiceGeneralModule extends AbstractModule {
 
   @Override
   public void configure() {
+    bind(EconomyService.class).to(EconomyVaultService.class);
+    bind(JobsService.class).to(JobsRebornService.class);
     bind(PlayerShopDao.class).to(PlayerShopDaoImpl.class);
     bind(RankService.class).to(RankServiceImpl.class);
-    bind(JobsService.class).to(JobsRebornService.class);
   }
 
   @Provides
