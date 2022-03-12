@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import fr.voltariuss.diagonia.Debugger;
 import fr.voltariuss.diagonia.model.config.rank.Rank;
 import fr.voltariuss.diagonia.model.config.rank.RankUpPrerequisites;
+import fr.voltariuss.diagonia.model.dto.RankUpProgression;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -184,11 +185,13 @@ public class RankServiceImpl implements RankService {
   }
 
   @Override
-  public boolean canRankUp(@NotNull Player player, int totalJobsLevels, double currentBalance) {
+  public @Nullable RankUpProgression getRankUpProgression(
+      @NotNull Player player, int totalJobsLevels, double currentBalance) {
     Preconditions.checkArgument(
         totalJobsLevels >= 0, "The total jobs levels must be higher or equals to 0.");
+    // TODO: what about economy?
 
-    boolean canRankUp = false;
+    RankUpProgression rankUpProgression = null;
     Group unlockableGroup = getUnlockableRank(player);
 
     if (unlockableGroup != null) {
@@ -208,19 +211,27 @@ public class RankServiceImpl implements RankService {
       boolean isXpLevelPrerequisiteDone = currentXpLevel >= requiredXpLevel;
 
       int requiredTotalJobsLevel = prerequisites.getTotalJobsLevel();
-      boolean isTotalJobsLevelPrerequisiteDone = totalJobsLevels >= requiredTotalJobsLevel;
+      boolean isTotalJobsLevelsPrerequisiteDone = totalJobsLevels >= requiredTotalJobsLevel;
 
       double price = prerequisites.getMoneyPrice();
       boolean isMoneyPrerequisiteDone = currentBalance >= price;
 
-      canRankUp =
-          isXpLevelPrerequisiteDone
-              && isTotalJobsLevelPrerequisiteDone
-              && isMoneyPrerequisiteDone
-              && rankChallengeProgressionService.areChallengesCompleted(player, unlockableRank);
+      boolean isChallengesPrerequisiteDone =
+          rankChallengeProgressionService.areChallengesCompleted(player, unlockableRank);
+
+      rankUpProgression =
+          RankUpProgression.builder()
+              .currentXpLevel(currentXpLevel)
+              .isXpLevelPrerequisiteDone(isXpLevelPrerequisiteDone)
+              .totalJobsLevels(totalJobsLevels)
+              .isTotalJobsLevelsPrerequisiteDone(isTotalJobsLevelsPrerequisiteDone)
+              .currentBalance(currentBalance)
+              .isMoneyPrerequisiteDone(isMoneyPrerequisiteDone)
+              .isChallengesPrerequisiteDone(isChallengesPrerequisiteDone)
+              .build();
     }
 
-    return canRankUp;
+    return rankUpProgression;
   }
 
   private @NotNull List<Group> getOwnedRanks(@Nullable Group currentRank) {

@@ -1,5 +1,6 @@
 package fr.voltariuss.diagonia.model.service;
 
+import fr.voltariuss.diagonia.model.dto.RankUpProgression;
 import java.util.List;
 import net.luckperms.api.model.group.Group;
 import net.luckperms.api.track.PromotionResult;
@@ -87,12 +88,14 @@ public interface RankService {
   PromotionResult promote(@NotNull Player player);
 
   /**
-   * Checks if the specified player can rank up.
+   * Provides the rank up progression of a given player.
    *
    * @param player The player.
    * @param totalJobsLevels Total jobs levels for the specified player.
    * @param currentBalance The current economy balance of the player.
-   * @return <code>true</code> if the player is able to rank up, <code>false</code> otherwise.
+   * @return The rank up progression of the given player.
    */
-  boolean canRankUp(@NotNull Player player, int totalJobsLevels, double currentBalance);
+  @Nullable
+  RankUpProgression getRankUpProgression(
+      @NotNull Player player, int totalJobsLevels, double currentBalance);
 }
