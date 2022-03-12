@@ -14,6 +14,7 @@ public class RankUpProgression {
   private final double currentBalance;
   private final boolean isMoneyPrerequisiteDone;
   private final boolean isChallengesPrerequisiteDone;
+  private final boolean isRankOwned;
 
   public boolean canRankUp() {
     return isXpLevelPrerequisiteDone

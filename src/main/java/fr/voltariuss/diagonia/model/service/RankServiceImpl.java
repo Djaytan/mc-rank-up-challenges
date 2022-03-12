@@ -186,52 +186,50 @@ public class RankServiceImpl implements RankService {
 
   @Override
   public @Nullable RankUpProgression getRankUpProgression(
-      @NotNull Player player, int totalJobsLevels, double currentBalance) {
+      @NotNull Player player,
+      @NotNull Rank targetedRank,
+      int totalJobsLevels,
+      double currentBalance) {
     Preconditions.checkArgument(
         totalJobsLevels >= 0, "The total jobs levels must be higher or equals to 0.");
     // TODO: what about economy?
 
-    RankUpProgression rankUpProgression = null;
-    Group unlockableGroup = getUnlockableRank(player);
+    Rank unlockableRank = rankConfigService.findById(targetedRank.getId()).orElseThrow();
+    RankUpPrerequisites prerequisites = unlockableRank.getRankUpPrerequisites();
 
-    if (unlockableGroup != null) {
-      Rank unlockableRank = rankConfigService.findById(unlockableGroup.getName()).orElseThrow();
-      RankUpPrerequisites prerequisites = unlockableRank.getRankUpPrerequisites();
-
-      if (prerequisites == null) {
-        throw new IllegalStateException(
-            String.format(
-                "Unlockable rank '%s' don't have any challenge to accomplish which is not allowed.",
-                unlockableRank.getId()),
-            new NullPointerException("Prerequisites list of unlockable rank is null."));
-      }
-
-      int currentXpLevel = player.getLevel();
-      int requiredXpLevel = prerequisites.getTotalMcExpLevels();
-      boolean isXpLevelPrerequisiteDone = currentXpLevel >= requiredXpLevel;
-
-      int requiredTotalJobsLevel = prerequisites.getTotalJobsLevel();
-      boolean isTotalJobsLevelsPrerequisiteDone = totalJobsLevels >= requiredTotalJobsLevel;
-
-      double price = prerequisites.getMoneyPrice();
-      boolean isMoneyPrerequisiteDone = currentBalance >= price;
-
-      boolean isChallengesPrerequisiteDone =
-          rankChallengeProgressionService.areChallengesCompleted(player, unlockableRank);
-
-      rankUpProgression =
-          RankUpProgression.builder()
-              .currentXpLevel(currentXpLevel)
-              .isXpLevelPrerequisiteDone(isXpLevelPrerequisiteDone)
-              .totalJobsLevels(totalJobsLevels)
-              .isTotalJobsLevelsPrerequisiteDone(isTotalJobsLevelsPrerequisiteDone)
-              .currentBalance(currentBalance)
-              .isMoneyPrerequisiteDone(isMoneyPrerequisiteDone)
-              .isChallengesPrerequisiteDone(isChallengesPrerequisiteDone)
-              .build();
+    if (prerequisites == null) {
+      throw new IllegalStateException(
+          String.format(
+              "Unlockable rank '%s' don't have any challenge to accomplish which is not allowed.",
+              unlockableRank.getId()),
+          new NullPointerException("Prerequisites list of unlockable rank is null."));
     }
 
-    return rankUpProgression;
+    int currentXpLevel = player.getLevel();
+    int requiredXpLevel = prerequisites.getTotalMcExpLevels();
+    boolean isXpLevelPrerequisiteDone = currentXpLevel >= requiredXpLevel;
+
+    int requiredTotalJobsLevel = prerequisites.getTotalJobsLevel();
+    boolean isTotalJobsLevelsPrerequisiteDone = totalJobsLevels >= requiredTotalJobsLevel;
+
+    double price = prerequisites.getMoneyPrice();
+    boolean isMoneyPrerequisiteDone = currentBalance >= price;
+
+    boolean isChallengesPrerequisiteDone =
+        rankChallengeProgressionService.areChallengesCompleted(player, unlockableRank);
+
+    boolean isRankOwned = isRankOwned(player, unlockableRank.getId());
+
+    return RankUpProgression.builder()
+        .currentXpLevel(currentXpLevel)
+        .isXpLevelPrerequisiteDone(isXpLevelPrerequisiteDone)
+        .totalJobsLevels(totalJobsLevels)
+        .isTotalJobsLevelsPrerequisiteDone(isTotalJobsLevelsPrerequisiteDone)
+        .currentBalance(currentBalance)
+        .isMoneyPrerequisiteDone(isMoneyPrerequisiteDone)
+        .isChallengesPrerequisiteDone(isChallengesPrerequisiteDone)
+        .isRankOwned(isRankOwned)
+        .build();
   }
 
   private @NotNull List<Group> getOwnedRanks(@Nullable Group currentRank) {
