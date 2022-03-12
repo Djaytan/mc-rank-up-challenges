@@ -82,4 +82,14 @@ public interface RankService {
    * @param player The concerned player by the rank up.
    */
   void promote(@NotNull Player player);
+
+  /**
+   * Checks if the specified player can rank up.
+   *
+   * @param player The player.
+   * @param totalJobsLevels Total jobs levels for the specified player.
+   * @param currentBalance The current economy balance of the player.
+   * @return <code>true</code> if the player is able to rank up, <code>false</code> otherwise.
+   */
+  boolean canRankUp(@NotNull Player player, int totalJobsLevels, double currentBalance);
 }

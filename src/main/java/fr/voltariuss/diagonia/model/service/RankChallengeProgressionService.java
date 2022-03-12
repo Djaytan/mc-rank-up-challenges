@@ -1,5 +1,6 @@
 package fr.voltariuss.diagonia.model.service;
 
+import com.google.common.base.Preconditions;
 import fr.voltariuss.diagonia.Debugger;
 import fr.voltariuss.diagonia.model.JpaDaoException;
 import fr.voltariuss.diagonia.model.config.rank.Rank;
@@ -14,6 +15,7 @@ import java.util.UUID;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.hibernate.HibernateException;
 import org.hibernate.Transaction;
 import org.jetbrains.annotations.NotNull;
@@ -143,6 +145,37 @@ public class RankChallengeProgressionService {
     } finally {
       rankChallengeProgressionDao.destroySession();
     }
+  }
+
+  public boolean areChallengesCompleted(@NotNull Player player, @NotNull Rank rank) {
+    Preconditions.checkNotNull(rank.getRankUpChallenges());
+
+    boolean areChallengesCompleted = true;
+
+    List<RankChallengeProgression> playerProgression =
+        find(player.getUniqueId(), rank.getId()).stream()
+            .filter(
+                rcp ->
+                    rank.getRankUpChallenges().stream()
+                        .map(RankChallenge::getChallengeItemMaterial)
+                        .toList()
+                        .contains(rcp.getChallengeMaterial()))
+            .toList();
+
+    for (RankChallenge rankChallenge : rank.getRankUpChallenges()) {
+      int amount =
+          playerProgression.stream()
+              .filter(
+                  pp -> rankChallenge.getChallengeItemMaterial().equals(pp.getChallengeMaterial()))
+              .mapToInt(RankChallengeProgression::getChallengeAmountGiven)
+              .sum();
+      if (amount < rankChallenge.getChallengeItemAmount()) {
+        areChallengesCompleted = false;
+        break;
+      }
+    }
+
+    return areChallengesCompleted;
   }
 
   public int giveItemChallenge(

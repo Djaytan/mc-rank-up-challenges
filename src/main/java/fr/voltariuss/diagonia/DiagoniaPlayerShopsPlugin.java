@@ -5,7 +5,7 @@ import fr.voltariuss.diagonia.model.RankConfigDeserializer;
 import fr.voltariuss.diagonia.model.config.PluginConfig;
 import fr.voltariuss.diagonia.model.config.rank.RankConfig;
 import fr.voltariuss.diagonia.model.service.PluginConfigService;
-import fr.voltariuss.diagonia.model.service.RankConfigService;
+import fr.voltariuss.diagonia.model.RankConfigInitializer;
 import javax.inject.Inject;
 import lombok.SneakyThrows;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -30,11 +30,11 @@ public class DiagoniaPlayerShopsPlugin extends JavaPlugin {
     PluginConfig pluginConfig = PluginConfigService.loadConfig(getConfig());
     getSLF4JLogger().info("Configuration loaded");
 
-    RankConfigService rankConfigService =
-        new RankConfigService(
+    RankConfigInitializer rankConfigInitializer =
+        new RankConfigInitializer(
             getDataFolder(), this, getSLF4JLogger(), new RankConfigDeserializer());
-    rankConfigService.init();
-    RankConfig rankConfig = rankConfigService.readRankConfig();
+    rankConfigInitializer.init();
+    RankConfig rankConfig = rankConfigInitializer.readRankConfig();
 
     if (pluginConfig.getDatabaseConfig().isEnabled()) {
       // Guice setup

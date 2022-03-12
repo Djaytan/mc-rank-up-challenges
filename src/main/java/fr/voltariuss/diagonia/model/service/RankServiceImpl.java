@@ -1,6 +1,9 @@
 package fr.voltariuss.diagonia.model.service;
 
+import com.google.common.base.Preconditions;
 import fr.voltariuss.diagonia.Debugger;
+import fr.voltariuss.diagonia.model.config.rank.Rank;
+import fr.voltariuss.diagonia.model.config.rank.RankUpPrerequisites;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -32,6 +35,8 @@ public class RankServiceImpl implements RankService {
 
   private final Debugger debugger;
   private final GroupManager groupManager;
+  private final RankChallengeProgressionService rankChallengeProgressionService;
+  private final RankConfigService rankConfigService;
   private final UserManager userManager;
 
   private Track track;
@@ -41,17 +46,23 @@ public class RankServiceImpl implements RankService {
    *
    * @param debugger The debugger logger.
    * @param groupManager The group manager of LuckPerms API.
-   * @param userManager The user manager of LuckPerms API.
+   * @param rankChallengeProgressionService The rank challenge progression service.
+   * @param rankConfigService The rank config service.
    * @param trackManager The track manager of LuckPerms API.
+   * @param userManager The user manager of LuckPerms API.
    */
   @Inject
   public RankServiceImpl(
       @NotNull Debugger debugger,
       @NotNull GroupManager groupManager,
-      @NotNull UserManager userManager,
-      @NotNull TrackManager trackManager) {
+      @NotNull RankChallengeProgressionService rankChallengeProgressionService,
+      @NotNull RankConfigService rankConfigService,
+      @NotNull TrackManager trackManager,
+      @NotNull UserManager userManager) {
     this.debugger = debugger;
     this.groupManager = groupManager;
+    this.rankChallengeProgressionService = rankChallengeProgressionService;
+    this.rankConfigService = rankConfigService;
     this.userManager = userManager;
 
     this.track = trackManager.getTrack(TRACK_NAME);
@@ -169,6 +180,46 @@ public class RankServiceImpl implements RankService {
     User user = Objects.requireNonNull(userManager.getUser(player.getUniqueId()));
     track.promote(user, ImmutableContextSet.empty());
     // TODO: manage status and raise errors if needed
+  }
+
+  @Override
+  public boolean canRankUp(@NotNull Player player, int totalJobsLevels, double currentBalance) {
+    Preconditions.checkArgument(
+        totalJobsLevels >= 0, "The total jobs levels must be higher or equals to 0.");
+
+    boolean canRankUp = false;
+    Group unlockableGroup = getUnlockableRank(player);
+
+    if (unlockableGroup != null) {
+      Rank unlockableRank = rankConfigService.findById(unlockableGroup.getName()).orElseThrow();
+      RankUpPrerequisites prerequisites = unlockableRank.getRankUpPrerequisites();
+
+      if (prerequisites == null) {
+        throw new IllegalStateException(
+            String.format(
+                "Unlockable rank '%s' don't have any challenge to accomplish which is not allowed.",
+                unlockableRank.getId()),
+            new NullPointerException("Prerequisites list of unlockable rank is null."));
+      }
+
+      int currentXpLevel = player.getLevel();
+      int requiredXpLevel = prerequisites.getTotalMcExpLevels();
+      boolean isXpLevelPrerequisiteDone = currentXpLevel >= requiredXpLevel;
+
+      int requiredTotalJobsLevel = prerequisites.getTotalJobsLevel();
+      boolean isTotalJobsLevelPrerequisiteDone = totalJobsLevels >= requiredTotalJobsLevel;
+
+      double price = prerequisites.getMoneyPrice();
+      boolean isMoneyPrerequisiteDone = currentBalance >= price;
+
+      canRankUp =
+          isXpLevelPrerequisiteDone
+              && isTotalJobsLevelPrerequisiteDone
+              && isMoneyPrerequisiteDone
+              && rankChallengeProgressionService.areChallengesCompleted(player, unlockableRank);
+    }
+
+    return canRankUp;
   }
 
   private @NotNull List<Group> getOwnedRanks(@Nullable Group currentRank) {
