@@ -1,10 +1,9 @@
 package fr.voltariuss.diagonia.view;
 
-import net.milkbowl.vault.economy.Economy;
-import org.jetbrains.annotations.NotNull;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import net.milkbowl.vault.economy.Economy;
+import org.jetbrains.annotations.NotNull;
 
 @Singleton
 public class EconomyFormatter {

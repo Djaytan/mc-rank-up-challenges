@@ -14,6 +14,7 @@ public class PluginConfig {
   @Data
   @Builder
   public static class DatabaseConfig {
+
     private final boolean isEnabled;
     private final String host;
     private final int port;
@@ -25,6 +26,7 @@ public class PluginConfig {
   @Data
   @Builder
   public static class PlayerShopConfig {
+
     private final double buyCost;
     private final int descriptionMaxSize;
     private final int inactivityDelay;

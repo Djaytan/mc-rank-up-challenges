@@ -4,11 +4,10 @@ import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.Default;
 import fr.voltariuss.diagonia.controller.RankUpController;
-import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 @CommandAlias("ranks")
 @Singleton
@@ -26,4 +25,3 @@ public class RanksCommand extends BaseCommand {
     rankUpController.openRankListGui(player);
   }
 }
-

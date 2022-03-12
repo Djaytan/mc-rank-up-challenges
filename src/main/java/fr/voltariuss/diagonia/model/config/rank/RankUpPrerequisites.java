@@ -6,6 +6,7 @@ import lombok.Data;
 @Data
 @Builder
 public class RankUpPrerequisites {
+
   private final double moneyPrice;
   private final int totalMcExpLevels;
   private final int totalJobsLevel;

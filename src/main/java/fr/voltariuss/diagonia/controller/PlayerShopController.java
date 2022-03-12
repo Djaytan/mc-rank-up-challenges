@@ -1,8 +1,8 @@
 package fr.voltariuss.diagonia.controller;
 
 import fr.voltariuss.diagonia.Debugger;
-import fr.voltariuss.diagonia.model.config.PluginConfig;
 import fr.voltariuss.diagonia.model.LocationMapper;
+import fr.voltariuss.diagonia.model.config.PluginConfig;
 import fr.voltariuss.diagonia.model.dto.LocationDto;
 import fr.voltariuss.diagonia.model.entity.PlayerShop;
 import fr.voltariuss.diagonia.model.service.PlayerShopService;
@@ -76,8 +76,7 @@ public class PlayerShopController {
 
   public void openConfigPlayerShop(@NotNull Player whoOpen, @NotNull PlayerShop playerShop) {
     if (pluginConfig.isDebugMode()) {
-      debugger.debug(
-        "Open config playershop for player {} ({})", whoOpen.getName(), playerShop);
+      debugger.debug("Open config playershop for player {} ({})", whoOpen.getName(), playerShop);
     } else {
       logger.info("Open config playershop gui for player {}", whoOpen.getName());
     }

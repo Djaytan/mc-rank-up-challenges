@@ -3,8 +3,8 @@ package fr.voltariuss.diagonia.view.item.playershop;
 import dev.triumphteam.gui.builder.item.ItemBuilder;
 import dev.triumphteam.gui.components.GuiAction;
 import dev.triumphteam.gui.guis.GuiItem;
-import fr.voltariuss.diagonia.model.config.PluginConfig;
 import fr.voltariuss.diagonia.controller.PlayerShopController;
+import fr.voltariuss.diagonia.model.config.PluginConfig;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -78,7 +78,8 @@ public class BuyPlayerShopItem {
 
       if (balance < buyCost) {
         player.sendMessage(
-            miniMessage.deserialize(resourceBundle.getString("diagonia.playershop.buy.insufficient_funds")));
+            miniMessage.deserialize(
+                resourceBundle.getString("diagonia.playershop.buy.insufficient_funds")));
       } else {
         // TODO: fix breaking of MVC rules by managing economy in controllers
         EconomyResponse economyResponse =

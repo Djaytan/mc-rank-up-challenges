@@ -8,6 +8,7 @@ import org.bukkit.Material;
 @Data
 @Builder
 public class RankChallenge {
+
   private final RankChallengeType challengeType;
   private final Material challengeItemMaterial;
   private final int challengeItemAmount;

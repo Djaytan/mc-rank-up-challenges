@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 @Data
 @Builder
 public class Rank {
+
   private final String id;
   private final String name;
   private final List<String> description;

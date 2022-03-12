@@ -4,9 +4,8 @@ import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.Default;
 import fr.voltariuss.diagonia.Debugger;
-import javax.inject.Inject;
-
 import fr.voltariuss.diagonia.controller.PlayerShopController;
+import javax.inject.Inject;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;

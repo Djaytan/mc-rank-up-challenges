@@ -20,33 +20,36 @@ public class LocationMapper {
     this.server = server;
   }
 
-  public @Contract("null -> null; !null -> !null") LocationDto toDto(@Nullable Location location) {
+  @Contract("null -> null; !null -> !null")
+  public LocationDto toDto(@Nullable Location location) {
     LocationDto locationDto = null;
     if (location != null) {
-      locationDto = LocationDto.builder()
-        .worldName(location.getWorld().getName())
-        .x(location.getX())
-        .y(location.getY())
-        .z(location.getZ())
-        .pitch(location.getPitch())
-        .yaw(location.getYaw())
-        .build();
+      locationDto =
+          LocationDto.builder()
+              .worldName(location.getWorld().getName())
+              .x(location.getX())
+              .y(location.getY())
+              .z(location.getZ())
+              .pitch(location.getPitch())
+              .yaw(location.getYaw())
+              .build();
     }
     return locationDto;
   }
 
-  public @Contract("null -> null; !null -> !null") Location fromDto(
-      @Nullable LocationDto locationDto) {
+  @Contract("null -> null; !null -> !null")
+  public Location fromDto(@Nullable LocationDto locationDto) {
     Location location = null;
     if (locationDto != null) {
       World world = server.getWorld(locationDto.getWorldName());
-      location = new Location(
-        world,
-        locationDto.getX(),
-        locationDto.getY(),
-        locationDto.getZ(),
-        locationDto.getPitch(),
-        locationDto.getYaw());
+      location =
+          new Location(
+              world,
+              locationDto.getX(),
+              locationDto.getY(),
+              locationDto.getZ(),
+              locationDto.getPitch(),
+              locationDto.getYaw());
     }
     return location;
   }

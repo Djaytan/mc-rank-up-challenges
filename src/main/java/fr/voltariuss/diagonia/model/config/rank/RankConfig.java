@@ -7,5 +7,6 @@ import lombok.Data;
 @Data
 @Builder
 public class RankConfig {
+
   private final List<Rank> ranks;
 }
