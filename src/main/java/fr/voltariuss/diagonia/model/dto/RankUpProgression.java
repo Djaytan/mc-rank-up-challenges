@@ -17,7 +17,7 @@ public class RankUpProgression {
 
   public boolean canRankUp() {
     return isXpLevelPrerequisiteDone
-        && isJobsPrerequisiteDone
+        && isTotalJobsLevelsPrerequisiteDone
         && isMoneyPrerequisiteDone
         && isChallengesPrerequisiteDone;
   }
