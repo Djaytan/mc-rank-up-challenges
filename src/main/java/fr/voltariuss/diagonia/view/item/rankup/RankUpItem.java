@@ -1,7 +1,5 @@
 package fr.voltariuss.diagonia.view.item.rankup;
 
-import com.gamingmesh.jobs.Jobs;
-import com.gamingmesh.jobs.container.JobsPlayer;
 import com.google.common.base.Preconditions;
 import dev.triumphteam.gui.builder.item.ItemBuilder;
 import dev.triumphteam.gui.components.GuiAction;
@@ -9,6 +7,7 @@ import dev.triumphteam.gui.guis.GuiItem;
 import fr.voltariuss.diagonia.controller.RankUpController;
 import fr.voltariuss.diagonia.model.config.rank.Rank;
 import fr.voltariuss.diagonia.model.config.rank.RankUpPrerequisites;
+import fr.voltariuss.diagonia.model.dto.RankUpProgression;
 import fr.voltariuss.diagonia.view.EconomyFormatter;
 import java.util.Arrays;
 import java.util.Collections;
@@ -22,13 +21,11 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
 
 @Singleton
 public class RankUpItem {
 
   private final EconomyFormatter economyFormatter;
-  private final Logger logger;
   private final MiniMessage miniMessage;
   private final RankUpController rankUpController;
   private final ResourceBundle resourceBundle;
@@ -36,49 +33,24 @@ public class RankUpItem {
   @Inject
   public RankUpItem(
       @NotNull EconomyFormatter economyFormatter,
-      @NotNull Logger logger,
       @NotNull MiniMessage miniMessage,
       @NotNull RankUpController rankUpController,
       @NotNull ResourceBundle resourceBundle) {
     this.economyFormatter = economyFormatter;
-    this.logger = logger;
     this.miniMessage = miniMessage;
     this.rankUpController = rankUpController;
     this.resourceBundle = resourceBundle;
   }
 
   public @NotNull GuiItem createItem(
-      @NotNull Player whoOpen, @NotNull Rank rank, boolean isRankOwned, double currentBalance) {
+      @NotNull Rank rank, @NotNull RankUpProgression rankUpProgression) {
     Preconditions.checkNotNull(rank.getRankUpPrerequisites());
     RankUpPrerequisites rankUpPrerequisites = rank.getRankUpPrerequisites();
-    JobsPlayer jobsPlayer = Jobs.getPlayerManager().getJobsPlayer(whoOpen);
-
-    // TODO: business logic to put into model
-    int currentXpLevel = whoOpen.getLevel();
-    int requiredXpLevel = rankUpPrerequisites.getTotalMcExpLevels();
-    boolean isXpLevelPrerequisiteDone = currentXpLevel >= requiredXpLevel;
-
-    int currentTotalJobsLevel = jobsPlayer.getTotalLevels();
-    int requiredTotalJobsLevel = rankUpPrerequisites.getTotalJobsLevel();
-    boolean isTotalJobsLevelPrerequisiteDone = currentTotalJobsLevel >= requiredTotalJobsLevel;
-
-    double price = rankUpPrerequisites.getMoneyPrice();
-    boolean isMoneyPrerequisiteDone = currentBalance >= price;
-
-    logger.info("isRankOwned={}", isRankOwned);
-
-    boolean isRankable =
-        isXpLevelPrerequisiteDone
-            && isTotalJobsLevelPrerequisiteDone
-            && isMoneyPrerequisiteDone
-            && rankUpController.isRankable(whoOpen, rank);
-
-    logger.info("isRankable={}", isRankable);
 
     ItemBuilder itemBuilder =
         ItemBuilder.from(Material.WRITABLE_BOOK)
             .name(
-                isRankOwned
+                rankUpProgression.isRankOwned()
                     ? miniMessage
                         .deserialize(
                             resourceBundle.getString(
@@ -88,7 +60,7 @@ public class RankUpItem {
                         .deserialize(resourceBundle.getString("diagonia.rankup.rankup.name"))
                         .decoration(TextDecoration.ITALIC, false))
             .lore(
-                isRankOwned
+                rankUpProgression.isRankOwned()
                     ? Collections.emptyList()
                     : Arrays.asList(
                         miniMessage
@@ -98,7 +70,10 @@ public class RankUpItem {
                                         "diagonia.rankup.rankup.cost.minecraft_xp"),
                                     String.format(
                                         "%s%s",
-                                        isXpLevelPrerequisiteDone ? "<green>" : "", currentXpLevel),
+                                        rankUpProgression.isXpLevelPrerequisiteDone()
+                                            ? "<green>"
+                                            : "",
+                                        rankUpProgression.getCurrentXpLevel()),
                                     rankUpPrerequisites.getTotalMcExpLevels()))
                             .decoration(TextDecoration.ITALIC, false),
                         miniMessage
@@ -108,8 +83,10 @@ public class RankUpItem {
                                         "diagonia.rankup.rankup.cost.jobs_levels"),
                                     String.format(
                                         "%s%s",
-                                        isTotalJobsLevelPrerequisiteDone ? "<green>" : "",
-                                        currentTotalJobsLevel),
+                                        rankUpProgression.isTotalJobsLevelsPrerequisiteDone()
+                                            ? "<green>"
+                                            : "",
+                                        rankUpProgression.getTotalJobsLevels()),
                                     rankUpPrerequisites.getTotalJobsLevel()))
                             .decoration(TextDecoration.ITALIC, false),
                         miniMessage
@@ -118,12 +95,15 @@ public class RankUpItem {
                                     resourceBundle.getString("diagonia.rankup.rankup.cost.money"),
                                     String.format(
                                         "%s%s",
-                                        isMoneyPrerequisiteDone ? "<green>" : "",
-                                        economyFormatter.format(currentBalance)),
+                                        rankUpProgression.isMoneyPrerequisiteDone()
+                                            ? "<green>"
+                                            : "",
+                                        economyFormatter.format(
+                                            rankUpProgression.getCurrentBalance())),
                                     economyFormatter.format(rankUpPrerequisites.getMoneyPrice())))
                             .decoration(TextDecoration.ITALIC, false),
                         Component.empty(),
-                        isRankable
+                        rankUpProgression.canRankUp()
                             ? miniMessage
                                 .deserialize(
                                     resourceBundle.getString("diagonia.rankup.rankup.unlock_rank"))
@@ -133,13 +113,16 @@ public class RankUpItem {
                                     resourceBundle.getString(
                                         "diagonia.rankup.rankup.prerequisites_required"))
                                 .decoration(TextDecoration.ITALIC, false)));
-    return isRankOwned ? itemBuilder.asGuiItem() : itemBuilder.asGuiItem(onClick());
+    return rankUpProgression.isRankOwned()
+        ? itemBuilder.asGuiItem()
+        : itemBuilder.asGuiItem(onClick(rankUpProgression));
   }
 
-  public @NotNull GuiAction<InventoryClickEvent> onClick() {
+  public @NotNull GuiAction<InventoryClickEvent> onClick(
+      @NotNull RankUpProgression rankUpProgression) {
     return event -> {
       Player player = (Player) event.getWhoClicked();
-      rankUpController.rankUp(player);
+      rankUpController.onRankUpRequested(player, rankUpProgression);
     };
   }
 }

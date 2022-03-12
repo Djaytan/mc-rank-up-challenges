@@ -6,6 +6,7 @@ import dev.triumphteam.gui.guis.GuiItem;
 import dev.triumphteam.gui.guis.PaginatedGui;
 import fr.voltariuss.diagonia.controller.RankUpController;
 import fr.voltariuss.diagonia.model.config.rank.Rank;
+import fr.voltariuss.diagonia.model.dto.RankUpProgression;
 import fr.voltariuss.diagonia.view.item.PaginatedItem;
 import fr.voltariuss.diagonia.view.item.rankup.RankChallengeItem;
 import fr.voltariuss.diagonia.view.item.rankup.RankUpItem;
@@ -52,7 +53,8 @@ public class RankUpGui {
     this.resourceBundle = resourceBundle;
   }
 
-  public void open(@NotNull Player whoOpen, @NotNull Rank rank) {
+  public void open(
+      @NotNull Player whoOpen, @NotNull Rank rank, @NotNull RankUpProgression rankUpProgression) {
     if (rank.getRankUpChallenges() != null) {
       PaginatedGui gui =
           Gui.paginated()
@@ -78,7 +80,7 @@ public class RankUpGui {
                   gui.addItem(
                       rankChallengeItem.createItem(whoOpen.getUniqueId(), rank, rankChallenge)));
 
-      gui.setItem(6, 5, rankUpItem.createItem(whoOpen, rank));
+      gui.setItem(6, 5, rankUpItem.createItem(rank, rankUpProgression));
 
       gui.setItem(5, 3, paginatedItem.createPreviousPageItem(gui));
       gui.setItem(5, 7, paginatedItem.createNextPageItem(gui));
