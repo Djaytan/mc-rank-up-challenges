@@ -26,6 +26,7 @@ public class EconomyVaultService implements EconomyService {
   @Override
   public @NotNull EconomyResponse withdraw(@NotNull OfflinePlayer offlinePlayer, double amount)
       throws EconomyException {
+    // TODO: add logs
     Preconditions.checkArgument(amount >= 0, "The amount to withdraw must be a positive number");
 
     net.milkbowl.vault.economy.EconomyResponse vaultEconomyResponse =

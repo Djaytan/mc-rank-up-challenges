@@ -2,10 +2,10 @@ package fr.voltariuss.diagonia;
 
 import fr.voltariuss.diagonia.guice.DiagoniaPlayerShopsInjector;
 import fr.voltariuss.diagonia.model.RankConfigDeserializer;
+import fr.voltariuss.diagonia.model.RankConfigInitializer;
 import fr.voltariuss.diagonia.model.config.PluginConfig;
 import fr.voltariuss.diagonia.model.config.rank.RankConfig;
 import fr.voltariuss.diagonia.model.service.PluginConfigService;
-import fr.voltariuss.diagonia.model.RankConfigInitializer;
 import javax.inject.Inject;
 import lombok.SneakyThrows;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -21,6 +21,7 @@ public class DiagoniaPlayerShopsPlugin extends JavaPlugin {
   @SneakyThrows
   @Override
   public void onEnable() {
+    // TODO: Early instanciation of DiagoniaLogger here
     getSLF4JLogger().info("This plugin has been developed by Voltariuss");
 
     // Configuration initialization

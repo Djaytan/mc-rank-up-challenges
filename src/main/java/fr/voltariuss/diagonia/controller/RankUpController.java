@@ -1,5 +1,6 @@
 package fr.voltariuss.diagonia.controller;
 
+import fr.voltariuss.diagonia.DiagoniaLogger;
 import fr.voltariuss.diagonia.model.config.rank.Rank;
 import fr.voltariuss.diagonia.model.dto.RankUpProgression;
 import fr.voltariuss.diagonia.model.entity.RankChallengeProgression;
@@ -31,9 +32,9 @@ import org.slf4j.Logger;
 // TODO: split this big controller
 public class RankUpController {
 
+  private final DiagoniaLogger logger;
   private final EconomyService economyService;
   private final JobsService jobsService;
-  private final Logger logger;
   private final MiniMessage miniMessage;
   private final RankChallengeProgressionService rankChallengeProgressionService;
   private final RankConfigService rankConfigService;
@@ -47,7 +48,7 @@ public class RankUpController {
   public RankUpController(
       @NotNull EconomyService economyService,
       @NotNull JobsService jobsService,
-      @NotNull Logger logger,
+      @NotNull DiagoniaLogger logger,
       @NotNull MiniMessage miniMessage,
       @NotNull RankChallengeProgressionService rankChallengeProgressionService,
       @NotNull RankConfigService rankConfigService,

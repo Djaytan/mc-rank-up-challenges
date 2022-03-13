@@ -1,7 +1,7 @@
 package fr.voltariuss.diagonia.model.service;
 
 import com.google.common.base.Preconditions;
-import fr.voltariuss.diagonia.Debugger;
+import fr.voltariuss.diagonia.DiagoniaLogger;
 import fr.voltariuss.diagonia.model.JpaDaoException;
 import fr.voltariuss.diagonia.model.config.rank.Rank;
 import fr.voltariuss.diagonia.model.config.rank.RankChallenge;
@@ -25,16 +25,16 @@ public class RankChallengeProgressionService {
 
   private static final String TRANSACTION_ROLLBACK_FAIL_MESSAGE = "Failed to rollback transaction";
 
-  private final Debugger debugger;
+  private final DiagoniaLogger logger;
   private final RankChallengeProgressionDao rankChallengeProgressionDao;
   private final RankConfig rankConfig;
 
   @Inject
   public RankChallengeProgressionService(
-      @NotNull Debugger debugger,
+      @NotNull DiagoniaLogger logger,
       @NotNull RankChallengeProgressionDao rankChallengeProgressionDao,
       @NotNull RankConfig rankConfig) {
-    this.debugger = debugger;
+    this.logger = logger;
     this.rankChallengeProgressionDao = rankChallengeProgressionDao;
     this.rankConfig = rankConfig;
   }
@@ -45,7 +45,7 @@ public class RankChallengeProgressionService {
     try {
       rankChallengeProgressionDao.persist(rankChallengeProgression);
       tx.commit();
-      debugger.debug("RankChallengeProgression persisted: {}", rankChallengeProgression);
+      logger.debug("RankChallengeProgression persisted: {}", rankChallengeProgression);
     } catch (HibernateException e) {
       try {
         tx.rollback();
@@ -64,7 +64,7 @@ public class RankChallengeProgressionService {
     try {
       rankChallengeProgressionDao.update(rankChallengeProgression);
       tx.commit();
-      debugger.debug("RankChallengeProgression updated: {}", rankChallengeProgression);
+      logger.debug("RankChallengeProgression updated: {}", rankChallengeProgression);
     } catch (HibernateException e) {
       try {
         tx.rollback();
@@ -82,7 +82,7 @@ public class RankChallengeProgressionService {
     try {
       Optional<RankChallengeProgression> rankChallengeProgression =
           rankChallengeProgressionDao.findById(id);
-      debugger.debug("RankChallengeProgression found for ID {}: {}", id, rankChallengeProgression);
+      logger.debug("RankChallengeProgression found for ID {}: {}", id, rankChallengeProgression);
       return rankChallengeProgression;
     } finally {
       rankChallengeProgressionDao.destroySession();
@@ -96,7 +96,7 @@ public class RankChallengeProgressionService {
       long idPlayerShop = rankChallengeProgression.getId();
       rankChallengeProgressionDao.delete(rankChallengeProgression);
       tx.commit();
-      debugger.debug("RankChallengeProgression deleted: id={}", idPlayerShop);
+      logger.debug("RankChallengeProgression deleted: id={}", idPlayerShop);
     } catch (HibernateException e) {
       try {
         tx.rollback();
@@ -114,7 +114,7 @@ public class RankChallengeProgressionService {
     try {
       List<RankChallengeProgression> rankChallengeProgressions =
           rankChallengeProgressionDao.findAll();
-      debugger.debug("RankChallengeProgression find all: {}", rankChallengeProgressions);
+      logger.debug("RankChallengeProgression find all: {}", rankChallengeProgressions);
       return rankChallengeProgressions;
     } finally {
       rankChallengeProgressionDao.destroySession();
@@ -127,7 +127,7 @@ public class RankChallengeProgressionService {
     try {
       Optional<RankChallengeProgression> rankChallengeProgression =
           rankChallengeProgressionDao.find(playerUuid, rankId, material);
-      debugger.debug("RankChallengeProgression found: {}", rankChallengeProgression);
+      logger.debug("RankChallengeProgression found: {}", rankChallengeProgression);
       return rankChallengeProgression;
     } finally {
       rankChallengeProgressionDao.destroySession();
@@ -140,7 +140,7 @@ public class RankChallengeProgressionService {
     try {
       List<RankChallengeProgression> rankChallengeProgressions =
           rankChallengeProgressionDao.find(playerUuid, rankId);
-      debugger.debug("RankChallengeProgressions found: {}", rankChallengeProgressions);
+      logger.debug("RankChallengeProgressions found: {}", rankChallengeProgressions);
       return rankChallengeProgressions;
     } finally {
       rankChallengeProgressionDao.destroySession();
@@ -201,24 +201,24 @@ public class RankChallengeProgressionService {
       RankChallengeProgression rankChallengeProgression =
           rankChallengeProgressionDao.find(playerUuid, rankId, material).orElse(null);
       if (rankChallengeProgression == null) {
-        debugger.debug("RankChallengeProgression not found.");
+        logger.debug("RankChallengeProgression not found.");
         rankChallengeProgression = new RankChallengeProgression(playerUuid, rankId, material);
         rankChallengeProgressionDao.persist(rankChallengeProgression);
-        debugger.debug("RankChallengeProgression persisted.");
+        logger.debug("RankChallengeProgression persisted.");
       }
 
       int remainingToGiveAmount =
           rankChallenge.getChallengeItemAmount()
               - rankChallengeProgression.getChallengeAmountGiven();
-      debugger.debug(String.format("remainingToGiveAmount=%d", remainingToGiveAmount));
+      logger.debug(String.format("remainingToGiveAmount=%d", remainingToGiveAmount));
       effectiveGivenAmount = Math.min(givenAmount, remainingToGiveAmount);
-      debugger.debug(String.format("effectiveGivenAmount=%d", effectiveGivenAmount));
+      logger.debug(String.format("effectiveGivenAmount=%d", effectiveGivenAmount));
       int newAmount = rankChallengeProgression.getChallengeAmountGiven() + effectiveGivenAmount;
       rankChallengeProgression.setChallengeAmountGiven(newAmount);
-      debugger.debug(String.format("newAmount=%d", newAmount));
+      logger.debug(String.format("newAmount=%d", newAmount));
       rankChallengeProgressionDao.update(rankChallengeProgression);
       tx.commit();
-      debugger.debug("RankChallengeProgression updated: {}", rankChallengeProgression);
+      logger.debug("RankChallengeProgression updated: {}", rankChallengeProgression);
     } catch (HibernateException e) {
       try {
         tx.rollback();

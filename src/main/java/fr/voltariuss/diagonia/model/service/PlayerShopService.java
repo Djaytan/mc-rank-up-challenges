@@ -1,6 +1,6 @@
 package fr.voltariuss.diagonia.model.service;
 
-import fr.voltariuss.diagonia.Debugger;
+import fr.voltariuss.diagonia.DiagoniaLogger;
 import fr.voltariuss.diagonia.model.JpaDaoException;
 import fr.voltariuss.diagonia.model.dao.PlayerShopDao;
 import fr.voltariuss.diagonia.model.entity.PlayerShop;
@@ -18,12 +18,12 @@ public class PlayerShopService {
 
   private static final String TRANSACTION_ROLLBACK_FAIL_MESSAGE = "Failed to rollback transaction";
 
-  private final Debugger debugger;
+  private final DiagoniaLogger logger;
   private final PlayerShopDao playerShopDao;
 
   @Inject
-  public PlayerShopService(@NotNull Debugger debugger, @NotNull PlayerShopDao playerShopDao) {
-    this.debugger = debugger;
+  public PlayerShopService(@NotNull DiagoniaLogger logger, @NotNull PlayerShopDao playerShopDao) {
+    this.logger = logger;
     this.playerShopDao = playerShopDao;
   }
 
@@ -33,7 +33,7 @@ public class PlayerShopService {
     try {
       playerShopDao.persist(playerShop);
       tx.commit();
-      debugger.debug("PlayerShop persisted: {}", playerShop);
+      logger.debug("PlayerShop persisted: {}", playerShop);
     } catch (HibernateException e) {
       try {
         tx.rollback();
@@ -52,7 +52,7 @@ public class PlayerShopService {
     try {
       playerShopDao.update(playerShop);
       tx.commit();
-      debugger.debug("PlayerShop updated: {}", playerShop);
+      logger.debug("PlayerShop updated: {}", playerShop);
     } catch (HibernateException e) {
       try {
         tx.rollback();
@@ -69,7 +69,7 @@ public class PlayerShopService {
     playerShopDao.openSession();
     try {
       Optional<PlayerShop> playerShop = playerShopDao.findById(id);
-      debugger.debug("PlayerShop found for ID {}: {}", id, playerShop);
+      logger.debug("PlayerShop found for ID {}: {}", id, playerShop);
       return playerShop;
     } finally {
       playerShopDao.destroySession();
@@ -80,7 +80,7 @@ public class PlayerShopService {
     playerShopDao.openSession();
     try {
       Optional<PlayerShop> playerShop = playerShopDao.findByUuid(uuid);
-      debugger.debug("PlayerShop found for UUID {}: {}", uuid, playerShop);
+      logger.debug("PlayerShop found for UUID {}: {}", uuid, playerShop);
       return playerShop;
     } finally {
       playerShopDao.destroySession();
@@ -94,7 +94,7 @@ public class PlayerShopService {
       long idPlayerShop = playerShop.getId();
       playerShopDao.delete(playerShop);
       tx.commit();
-      debugger.debug("PlayerShop deleted: id={}", idPlayerShop);
+      logger.debug("PlayerShop deleted: id={}", idPlayerShop);
     } catch (HibernateException e) {
       try {
         tx.rollback();
@@ -111,7 +111,7 @@ public class PlayerShopService {
     playerShopDao.openSession();
     try {
       List<PlayerShop> playerShops = playerShopDao.findAll();
-      debugger.debug("PlayerShop find all: {}", playerShops);
+      logger.debug("PlayerShop find all: {}", playerShops);
       return playerShops;
     } finally {
       playerShopDao.destroySession();

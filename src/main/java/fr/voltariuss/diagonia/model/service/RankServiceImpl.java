@@ -1,7 +1,7 @@
 package fr.voltariuss.diagonia.model.service;
 
 import com.google.common.base.Preconditions;
-import fr.voltariuss.diagonia.Debugger;
+import fr.voltariuss.diagonia.DiagoniaLogger;
 import fr.voltariuss.diagonia.model.config.rank.Rank;
 import fr.voltariuss.diagonia.model.config.rank.RankUpPrerequisites;
 import fr.voltariuss.diagonia.model.dto.RankUpProgression;
@@ -35,7 +35,7 @@ public class RankServiceImpl implements RankService {
 
   private static final String TRACK_NAME = "ranks"; // TODO: make it configurable
 
-  private final Debugger debugger;
+  private final DiagoniaLogger logger;
   private final GroupManager groupManager;
   private final RankChallengeProgressionService rankChallengeProgressionService;
   private final RankConfigService rankConfigService;
@@ -46,7 +46,7 @@ public class RankServiceImpl implements RankService {
   /**
    * Constructor.
    *
-   * @param debugger The debugger logger.
+   * @param logger The logger.
    * @param groupManager The group manager of LuckPerms API.
    * @param rankChallengeProgressionService The rank challenge progression service.
    * @param rankConfigService The rank config service.
@@ -55,13 +55,13 @@ public class RankServiceImpl implements RankService {
    */
   @Inject
   public RankServiceImpl(
-      @NotNull Debugger debugger,
+      @NotNull DiagoniaLogger logger,
       @NotNull GroupManager groupManager,
       @NotNull RankChallengeProgressionService rankChallengeProgressionService,
       @NotNull RankConfigService rankConfigService,
       @NotNull TrackManager trackManager,
       @NotNull UserManager userManager) {
-    this.debugger = debugger;
+    this.logger = logger;
     this.groupManager = groupManager;
     this.rankChallengeProgressionService = rankChallengeProgressionService;
     this.rankConfigService = rankConfigService;
@@ -72,20 +72,28 @@ public class RankServiceImpl implements RankService {
 
   @Override
   public @Nullable Group getCurrentRank(@NotNull Player player) {
-    User user = Objects.requireNonNull(userManager.getUser(player.getUniqueId()));
+    Preconditions.checkNotNull(player);
 
-    Group currentRank =
+    User user = userManager.getUser(player.getUniqueId());
+    Objects.requireNonNull(user);
+
+    Group currentGroup =
         user.getInheritedGroups(QueryOptions.nonContextual()).stream()
             .filter(track::containsGroup)
             .findFirst()
             .orElse(null);
 
-    debugger.debug(
+    if (currentGroup == null) {
+      logger.debug("The player don't have any rank yet: player={}", player.getName());
+      return null;
+    }
+
+    logger.debug(
         "Current player rank: player={}, currentRank={}",
         player.getName(),
         currentRank != null ? currentRank.getName() : null);
 
-    return currentRank;
+    return currentGroup;
   }
 
   @Override
@@ -105,7 +113,7 @@ public class RankServiceImpl implements RankService {
       unlockableRank = getFirstRank();
     }
 
-    debugger.debug(
+    logger.debug(
         "Unlockable player rank: player={}, unlockableRank={}",
         player.getName(),
         unlockableRank != null ? unlockableRank.getName() : null);
@@ -117,7 +125,7 @@ public class RankServiceImpl implements RankService {
   public @NotNull List<Group> getOwnedRanks(@NotNull Player player) {
     List<Group> ownedRanks = getOwnedRanks(getCurrentRank(player));
 
-    debugger.debug(
+    logger.debug(
         "Owned player ranks: player={}, ownedRanks={}",
         player.getName(),
         ownedRanks.stream().map(Group::getName).toList());
@@ -140,7 +148,7 @@ public class RankServiceImpl implements RankService {
       }
     }
 
-    debugger.debug(
+    logger.debug(
         "Is rank owned by player: player={}, rankId={}, isRankOwned={}",
         player.getName(),
         rankId,
@@ -154,7 +162,7 @@ public class RankServiceImpl implements RankService {
     Group currentRank = getCurrentRank(player);
     boolean isCurrentRank = currentRank != null && currentRank.getName().equals(rankId);
 
-    debugger.debug(
+    logger.debug(
         "Is current player rank: player={}, rankId={}, isCurrentRank={}",
         player.getName(),
         rankId,
@@ -168,7 +176,7 @@ public class RankServiceImpl implements RankService {
     Group unlockableRank = getUnlockableRank(player);
     boolean isUnlockableRank = unlockableRank != null && unlockableRank.getName().equals(rankId);
 
-    debugger.debug(
+    logger.debug(
         "Is unlockable player rank: player={}, rankId={}, isUnlockableRank={}",
         player.getName(),
         rankId,

@@ -1,6 +1,6 @@
 package fr.voltariuss.diagonia.controller;
 
-import fr.voltariuss.diagonia.Debugger;
+import fr.voltariuss.diagonia.DiagoniaLogger;
 import fr.voltariuss.diagonia.model.LocationMapper;
 import fr.voltariuss.diagonia.model.config.PluginConfig;
 import fr.voltariuss.diagonia.model.dto.LocationDto;
@@ -28,16 +28,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.slf4j.Logger;
 
 @Singleton
 public class PlayerShopController {
 
-  private final Debugger debugger;
+  private final DiagoniaLogger logger;
   private final EconomyFormatter economyFormatter;
   private final EconomyService economyService;
   private final LocationMapper locationMapper;
-  private final Logger logger;
   private final MiniMessage miniMessage;
   private final PlayerShopService playerShopService;
   private final PluginConfig pluginConfig;
@@ -49,11 +47,10 @@ public class PlayerShopController {
 
   @Inject
   public PlayerShopController(
-      @NotNull Debugger debugger,
+      @NotNull DiagoniaLogger logger,
       @NotNull EconomyFormatter economyFormatter,
       @NotNull EconomyService economyService,
       @NotNull LocationMapper locationMapper,
-      @NotNull Logger logger,
       @NotNull MiniMessage miniMessage,
       @NotNull PlayerShopService playerShopService,
       @NotNull PluginConfig pluginConfig,
@@ -61,7 +58,6 @@ public class PlayerShopController {
       @NotNull Server server,
       @NotNull Provider<ConfigPlayerShopGui> configPlayerShopGui,
       @NotNull Provider<MainPlayerShopGui> mainPlayerShopGui) {
-    this.debugger = debugger;
     this.economyFormatter = economyFormatter;
     this.economyService = economyService;
     this.locationMapper = locationMapper;
@@ -83,7 +79,7 @@ public class PlayerShopController {
 
   public void openConfigPlayerShop(@NotNull Player whoOpen, @NotNull PlayerShop playerShop) {
     if (pluginConfig.isDebugMode()) {
-      debugger.debug("Open config playershop for player {} ({})", whoOpen.getName(), playerShop);
+      logger.debug("Open config playershop for player {} ({})", whoOpen.getName(), playerShop);
     } else {
       logger.info("Open config playershop gui for player {}", whoOpen.getName());
     }
@@ -112,7 +108,7 @@ public class PlayerShopController {
     @Nullable OfflinePlayer owner = server.getOfflinePlayer(playerShop.getOwnerUuid());
     LocationDto locationDto = locationMapper.toDto(location);
     if (pluginConfig.isDebugMode()) {
-      debugger.debug(
+      logger.debug(
           "Update teleport point for the playershop of {} (playershop: {}, new location: {})",
           playerShop,
           locationDto);
@@ -136,7 +132,7 @@ public class PlayerShopController {
     // TODO: move business logic to model part
     @Nullable OfflinePlayer owner = server.getOfflinePlayer(playerShop.getOwnerUuid());
     if (pluginConfig.isDebugMode()) {
-      debugger.debug("Toggle playershop of {}: {}", owner, playerShop);
+      logger.debug("Toggle playershop of {}: {}", owner, playerShop);
     } else {
       logger.info("Toggle playershop of {}", owner.getName());
     }
@@ -194,18 +190,20 @@ public class PlayerShopController {
     }
   }
 
-  public void onTeleportPlayerShop(@NotNull Player player, @NotNull PlayerShop playerShopDestination) {
+  public void onTeleportPlayerShop(
+      @NotNull Player player, @NotNull PlayerShop playerShopDestination) {
     Location tpLocation = locationMapper.fromDto(playerShopDestination.getTpLocation());
     if (tpLocation != null) {
       player.teleport(tpLocation, PlayerTeleportEvent.TeleportCause.PLUGIN);
     } else {
       player.sendMessage(
-        miniMessage.deserialize(
-          resourceBundle.getString("diagonia.playershop.teleport.no_tp_defined_error")));
+          miniMessage.deserialize(
+              resourceBundle.getString("diagonia.playershop.teleport.no_tp_defined_error")));
     }
   }
 
-  public void onDefiningPlayerShopTeleportPoint(@NotNull Player player, @NotNull PlayerShop playerShop) {
+  public void onDefiningPlayerShopTeleportPoint(
+      @NotNull Player player, @NotNull PlayerShop playerShop) {
     Location location = player.getLocation();
     defineTeleportPoint(player, playerShop, location);
   }
