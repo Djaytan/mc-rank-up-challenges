@@ -4,8 +4,12 @@ import fr.voltariuss.diagonia.Debugger;
 import fr.voltariuss.diagonia.model.LocationMapper;
 import fr.voltariuss.diagonia.model.config.PluginConfig;
 import fr.voltariuss.diagonia.model.dto.LocationDto;
+import fr.voltariuss.diagonia.model.dto.response.EconomyResponse;
 import fr.voltariuss.diagonia.model.entity.PlayerShop;
+import fr.voltariuss.diagonia.model.service.EconomyException;
+import fr.voltariuss.diagonia.model.service.EconomyService;
 import fr.voltariuss.diagonia.model.service.PlayerShopService;
+import fr.voltariuss.diagonia.view.EconomyFormatter;
 import fr.voltariuss.diagonia.view.gui.ConfigPlayerShopGui;
 import fr.voltariuss.diagonia.view.gui.MainPlayerShopGui;
 import java.util.List;
@@ -16,12 +20,12 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.inject.Singleton;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -30,7 +34,8 @@ import org.slf4j.Logger;
 public class PlayerShopController {
 
   private final Debugger debugger;
-  private final Economy economy;
+  private final EconomyFormatter economyFormatter;
+  private final EconomyService economyService;
   private final LocationMapper locationMapper;
   private final Logger logger;
   private final MiniMessage miniMessage;
@@ -45,7 +50,8 @@ public class PlayerShopController {
   @Inject
   public PlayerShopController(
       @NotNull Debugger debugger,
-      @NotNull Economy economy,
+      @NotNull EconomyFormatter economyFormatter,
+      @NotNull EconomyService economyService,
       @NotNull LocationMapper locationMapper,
       @NotNull Logger logger,
       @NotNull MiniMessage miniMessage,
@@ -56,7 +62,8 @@ public class PlayerShopController {
       @NotNull Provider<ConfigPlayerShopGui> configPlayerShopGui,
       @NotNull Provider<MainPlayerShopGui> mainPlayerShopGui) {
     this.debugger = debugger;
-    this.economy = economy;
+    this.economyFormatter = economyFormatter;
+    this.economyService = economyService;
     this.locationMapper = locationMapper;
     this.logger = logger;
     this.miniMessage = miniMessage;
@@ -87,11 +94,13 @@ public class PlayerShopController {
     logger.info("Buy of a playershop for player {}", player.getName());
     PlayerShop ps = new PlayerShop(player.getUniqueId());
     playerShopService.persist(ps);
+    // TODO: and if something went wrong after economy transaction and before or during the shop
+    // creation?
     player.sendMessage(
         miniMessage.deserialize(
             String.format(
                 resourceBundle.getString("diagonia.playershop.buy.successfully_bought"),
-                economy.format(pluginConfig.getPlayerShopConfig().getBuyCost()))));
+                economyFormatter.format(pluginConfig.getPlayerShopConfig().getBuyCost()))));
   }
 
   public boolean hasPlayerShop(@NotNull Player player) {
@@ -124,6 +133,7 @@ public class PlayerShopController {
   }
 
   public void togglePlayerShop(@NotNull CommandSender sender, @NotNull PlayerShop playerShop) {
+    // TODO: move business logic to model part
     @Nullable OfflinePlayer owner = server.getOfflinePlayer(playerShop.getOwnerUuid());
     if (pluginConfig.isDebugMode()) {
       debugger.debug("Toggle playershop of {}: {}", owner, playerShop);
@@ -148,5 +158,55 @@ public class PlayerShopController {
               resourceBundle.getString(
                   "diagonia.playershop.config.activation.enabling.teleport_point_definition_required")));
     }
+  }
+
+  public void onTogglePlayerShopActivation(@NotNull Player player, @NotNull PlayerShop playerShop) {
+    togglePlayerShop(player, playerShop);
+    openConfigPlayerShop(player, playerShop);
+  }
+
+  public void onBuyPlayerShop(@NotNull Player player) {
+    double balance = economyService.getBalance(player);
+    double buyCost = pluginConfig.getPlayerShopConfig().getBuyCost();
+
+    if (balance < buyCost) {
+      // TODO: stop using else part (harder to read)
+      player.sendMessage(
+          miniMessage.deserialize(
+              resourceBundle.getString("diagonia.playershop.buy.insufficient_funds")));
+    } else {
+      // TODO: fix breaking of MVC rules by managing economy in controllers
+      try {
+        EconomyResponse economyResponse = economyService.withdraw(player, buyCost);
+        // TODO: use EconomyResponse for sending feedback to player
+        buyPlayerShop(player);
+        openPlayerShop(player);
+      } catch (EconomyException e) {
+        logger.error(
+            "Failed to withdraw {} money from the player's balance {}: {}",
+            buyCost,
+            player.getName(),
+            e.getMessage());
+        player.sendMessage(
+            miniMessage.deserialize(
+                resourceBundle.getString("diagonia.playershop.buy.transaction_failed")));
+      }
+    }
+  }
+
+  public void onTeleportPlayerShop(@NotNull Player player, @NotNull PlayerShop playerShopDestination) {
+    Location tpLocation = locationMapper.fromDto(playerShopDestination.getTpLocation());
+    if (tpLocation != null) {
+      player.teleport(tpLocation, PlayerTeleportEvent.TeleportCause.PLUGIN);
+    } else {
+      player.sendMessage(
+        miniMessage.deserialize(
+          resourceBundle.getString("diagonia.playershop.teleport.no_tp_defined_error")));
+    }
+  }
+
+  public void onDefiningPlayerShopTeleportPoint(@NotNull Player player, @NotNull PlayerShop playerShop) {
+    Location location = player.getLocation();
+    defineTeleportPoint(player, playerShop, location);
   }
 }

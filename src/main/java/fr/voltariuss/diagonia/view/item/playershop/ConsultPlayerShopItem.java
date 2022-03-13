@@ -3,7 +3,7 @@ package fr.voltariuss.diagonia.view.item.playershop;
 import dev.triumphteam.gui.builder.item.ItemBuilder;
 import dev.triumphteam.gui.components.GuiAction;
 import dev.triumphteam.gui.guis.GuiItem;
-import fr.voltariuss.diagonia.model.LocationMapper;
+import fr.voltariuss.diagonia.controller.PlayerShopController;
 import fr.voltariuss.diagonia.model.entity.PlayerShop;
 import java.util.Collections;
 import java.util.List;
@@ -14,12 +14,10 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -27,28 +25,29 @@ import org.slf4j.Logger;
 @Singleton
 public class ConsultPlayerShopItem {
 
-  private final LocationMapper locationMapper;
   private final Logger logger;
   private final MiniMessage miniMessage;
+  private final PlayerShopController playerShopController;
   private final ResourceBundle resourceBundle;
   private final Server server;
 
   @Inject
   public ConsultPlayerShopItem(
-      @NotNull LocationMapper locationMapper,
       @NotNull Logger logger,
       @NotNull MiniMessage miniMessage,
+      @NotNull PlayerShopController playerShopController,
       @NotNull ResourceBundle resourceBundle,
       @NotNull Server server) {
-    this.locationMapper = locationMapper;
     this.logger = logger;
     this.miniMessage = miniMessage;
+    this.playerShopController = playerShopController;
     this.resourceBundle = resourceBundle;
     this.server = server;
   }
 
   public @Nullable GuiItem createItem(@NotNull PlayerShop playerShop) {
     GuiItem item = null;
+    // TODO: remove use of Server instance here
     OfflinePlayer ownerPlayer = server.getOfflinePlayer(playerShop.getOwnerUuid());
     String ownerName = ownerPlayer.getName();
 
@@ -95,14 +94,7 @@ public class ConsultPlayerShopItem {
   public @NotNull GuiAction<InventoryClickEvent> getClickEvent(@NotNull PlayerShop playerShop) {
     return event -> {
       Player player = (Player) event.getWhoClicked();
-      Location tpLocation = locationMapper.fromDto(playerShop.getTpLocation());
-      if (tpLocation != null) {
-        player.teleport(tpLocation, PlayerTeleportEvent.TeleportCause.PLUGIN);
-      } else {
-        player.sendMessage(
-            miniMessage.deserialize(
-                resourceBundle.getString("diagonia.playershop.teleport.no_tp_defined_error")));
-      }
+      playerShopController.onTeleportPlayerShop(player, playerShop);
     };
   }
 }

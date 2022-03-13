@@ -11,7 +11,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -20,6 +19,7 @@ import org.jetbrains.annotations.NotNull;
 @Singleton
 public class DefineTpPlayerShopItem {
 
+  // TODO: make it configurable through config file
   private static final Material DEFINE_TP_ITEM_MATERIAL = Material.ENDER_PEARL;
 
   private final MiniMessage miniMessage;
@@ -61,8 +61,7 @@ public class DefineTpPlayerShopItem {
   public @NotNull GuiAction<InventoryClickEvent> onClick(@NotNull PlayerShop playerShop) {
     return event -> {
       Player player = (Player) event.getWhoClicked();
-      Location location = player.getLocation();
-      playerShopController.defineTeleportPoint(player, playerShop, location);
+      playerShopController.onDefiningPlayerShopTeleportPoint(player, playerShop);
     };
   }
 }

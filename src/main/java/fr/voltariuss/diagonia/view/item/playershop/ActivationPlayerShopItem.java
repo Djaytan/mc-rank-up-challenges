@@ -75,8 +75,8 @@ public class ActivationPlayerShopItem {
 
   public @NotNull GuiAction<InventoryClickEvent> onClick(@NotNull PlayerShop playerShop) {
     return event -> {
-      playerShopController.togglePlayerShop(event.getWhoClicked(), playerShop);
-      playerShopController.openConfigPlayerShop((Player) event.getWhoClicked(), playerShop);
+      Player player = (Player) event.getWhoClicked();
+      playerShopController.onTogglePlayerShopActivation(player, playerShop);
     };
   }
 }

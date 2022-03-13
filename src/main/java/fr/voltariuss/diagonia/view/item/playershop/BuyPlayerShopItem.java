@@ -5,6 +5,7 @@ import dev.triumphteam.gui.components.GuiAction;
 import dev.triumphteam.gui.guis.GuiItem;
 import fr.voltariuss.diagonia.controller.PlayerShopController;
 import fr.voltariuss.diagonia.model.config.PluginConfig;
+import fr.voltariuss.diagonia.view.EconomyFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -13,21 +14,18 @@ import javax.inject.Singleton;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.milkbowl.vault.economy.Economy;
-import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
 
 @Singleton
 public class BuyPlayerShopItem {
 
+  // TODO: make it configurable through config file
   private static final Material BUY_ITEM_MATERIAL = Material.EMERALD;
 
-  private final Economy economy;
-  private final Logger logger;
+  private final EconomyFormatter economyFormatter;
   private final MiniMessage miniMessage;
   private final PlayerShopController playerShopController;
   private final PluginConfig pluginConfig;
@@ -35,14 +33,12 @@ public class BuyPlayerShopItem {
 
   @Inject
   public BuyPlayerShopItem(
-      @NotNull Economy economy,
-      @NotNull Logger logger,
+      @NotNull EconomyFormatter economyFormatter,
       @NotNull MiniMessage miniMessage,
       @NotNull PlayerShopController playerShopController,
       @NotNull PluginConfig pluginConfig,
       @NotNull ResourceBundle resourceBundle) {
-    this.economy = economy;
-    this.logger = logger;
+    this.economyFormatter = economyFormatter;
     this.miniMessage = miniMessage;
     this.playerShopController = playerShopController;
     this.pluginConfig = pluginConfig;
@@ -57,7 +53,7 @@ public class BuyPlayerShopItem {
             .deserialize(
                 String.format(
                     resourceBundle.getString("diagonia.playershop.buy.description.1"),
-                    economy.format(pluginConfig.getPlayerShopConfig().getBuyCost())))
+                    economyFormatter.format(pluginConfig.getPlayerShopConfig().getBuyCost())))
             .decoration(TextDecoration.ITALIC, false));
     lore.add(Component.empty());
     lore.add(
@@ -73,32 +69,7 @@ public class BuyPlayerShopItem {
   private @NotNull GuiAction<InventoryClickEvent> onClick() {
     return event -> {
       Player player = (Player) event.getWhoClicked();
-      double balance = economy.getBalance(player, player.getWorld().getName());
-      double buyCost = pluginConfig.getPlayerShopConfig().getBuyCost();
-
-      if (balance < buyCost) {
-        player.sendMessage(
-            miniMessage.deserialize(
-                resourceBundle.getString("diagonia.playershop.buy.insufficient_funds")));
-      } else {
-        // TODO: fix breaking of MVC rules by managing economy in controllers
-        EconomyResponse economyResponse =
-            economy.withdrawPlayer(player, player.getWorld().getName(), buyCost);
-        if (economyResponse.transactionSuccess()) {
-          playerShopController.buyPlayerShop(player);
-          playerShopController.openPlayerShop(player);
-        } else {
-          logger.error(
-              "Failed to withdraw {} money from the player's balance {}: {} (ResponseType={})",
-              buyCost,
-              player.getName(),
-              economyResponse.errorMessage,
-              economyResponse.type);
-          player.sendMessage(
-              miniMessage.deserialize(
-                  resourceBundle.getString("diagonia.playershop.buy.transaction_failed")));
-        }
-      }
+      playerShopController.onBuyPlayerShop(player);
     };
   }
 }

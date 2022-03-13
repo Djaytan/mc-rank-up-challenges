@@ -19,6 +19,8 @@ import org.jetbrains.annotations.NotNull;
 @Singleton
 public class ConfigPlayerShopItem {
 
+  // TODO: make it configurable through config file
+  // TODO: replace default material by a comparator
   private static final Material MANAGE_ITEM_MATERIAL = Material.EMERALD;
 
   private final MiniMessage miniMessage;
