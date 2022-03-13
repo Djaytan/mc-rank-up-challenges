@@ -71,6 +71,7 @@ public class RankItem {
               .decoration(TextDecoration.ITALIC, false));
     }
 
+    // TODO: simplify instruction and reorganize
     ItemBuilder itemBuilder =
         ItemBuilder.from(Material.LEATHER_CHESTPLATE)
             .color(
@@ -131,6 +132,9 @@ public class RankItem {
   }
 
   public @NotNull GuiAction<InventoryClickEvent> onClick(Rank rank) {
-    return event -> rankUpController.openRankUpGui((Player) event.getWhoClicked(), rank);
+    return event -> {
+      Player player = (Player) event.getWhoClicked();
+      rankUpController.openRankUpGui(player, rank);
+    };
   }
 }

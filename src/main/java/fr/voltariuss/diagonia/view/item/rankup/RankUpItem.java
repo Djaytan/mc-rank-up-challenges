@@ -47,6 +47,7 @@ public class RankUpItem {
     Preconditions.checkNotNull(rank.getRankUpPrerequisites());
     RankUpPrerequisites rankUpPrerequisites = rank.getRankUpPrerequisites();
 
+    // TODO: simplify instructions
     ItemBuilder itemBuilder =
         ItemBuilder.from(Material.WRITABLE_BOOK)
             .name(
