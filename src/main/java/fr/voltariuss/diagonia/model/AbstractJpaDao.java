@@ -9,7 +9,6 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Abstract JPA DAO class to be inherited by entities' DAO classes.
@@ -100,8 +99,7 @@ public abstract class AbstractJpaDao<T, I extends Serializable> implements JpaDa
   }
 
   @Override
-  public @NotNull Optional<T> findById(@Nullable I id) {
-    // TODO: why nullable???
+  public @NotNull Optional<T> findById(@NotNull I id) {
     Preconditions.checkNotNull(id);
     return Optional.ofNullable(getCurrentSession().get(persistentClass, id));
   }

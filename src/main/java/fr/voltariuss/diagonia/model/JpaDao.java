@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Optional;
 import org.hibernate.Transaction;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public interface JpaDao<T, I extends Serializable> {
 
@@ -45,7 +44,7 @@ public interface JpaDao<T, I extends Serializable> {
   void update(@NotNull T entity);
 
   @NotNull
-  Optional<T> findById(@Nullable I id);
+  Optional<T> findById(@NotNull I id);
 
   void delete(@NotNull T entity);
 
