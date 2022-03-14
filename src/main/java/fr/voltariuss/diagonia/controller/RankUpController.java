@@ -26,7 +26,6 @@ import net.luckperms.api.track.PromotionResult;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
 
 @Singleton
 // TODO: split this big controller
