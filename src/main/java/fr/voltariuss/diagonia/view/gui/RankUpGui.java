@@ -99,9 +99,9 @@ public class RankUpGui {
       gui.setDefaultClickAction(event -> event.setCancelled(true));
 
       gui.open(whoOpen);
-    } else {
-      logger.error("No challenge is associated with the rank {}", rank.getId());
-      // TODO: feedback player
+      return;
     }
+    logger.error("No challenge is associated with the rank {}", rank.getId());
+    // TODO: feedback player
   }
 }

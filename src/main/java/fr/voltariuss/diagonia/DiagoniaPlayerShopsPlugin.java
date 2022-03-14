@@ -47,11 +47,11 @@ public class DiagoniaPlayerShopsPlugin extends JavaPlugin {
       commandRegister.registerCommands();
 
       getSLF4JLogger().info("Plugin successfully enabled");
-    } else {
-      getSLF4JLogger()
-          .error("Database disabled. Please configure and activate it through config.yml file");
-      getServer().getPluginManager().disablePlugin(this);
+      return;
     }
+    getSLF4JLogger()
+        .error("Database disabled. Please configure and activate it through config.yml file");
+    getServer().getPluginManager().disablePlugin(this);
   }
 
   @Override

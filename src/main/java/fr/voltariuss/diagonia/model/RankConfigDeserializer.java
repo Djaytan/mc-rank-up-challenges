@@ -95,17 +95,17 @@ public class RankConfigDeserializer implements JsonDeserializer<RankConfig> {
                     .rankUpChallenges(challenges)
                     .rankUpTarget(rankUpTarget)
                     .build());
-          } else {
-            ranks.add(
-                Rank.builder()
-                    .id(id)
-                    .name(rankName)
-                    .description(description)
-                    .color(rankColor)
-                    .profits(profits)
-                    .isRankUpActivated(false)
-                    .build());
+            return;
           }
+          ranks.add(
+              Rank.builder()
+                  .id(id)
+                  .name(rankName)
+                  .description(description)
+                  .color(rankColor)
+                  .profits(profits)
+                  .isRankUpActivated(false)
+                  .build());
         });
 
     return RankConfig.builder().ranks(ranks).build();

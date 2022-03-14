@@ -88,6 +88,8 @@ public class RankServiceImpl implements RankService {
       return null;
     }
 
+    Rank currentRank = rankConfigService.findById(currentGroup.getName()).orElseThrow();
+
     logger.debug(
         "Current player rank: player={}, currentRank={}",
         player.getName(),
@@ -104,11 +106,7 @@ public class RankServiceImpl implements RankService {
 
     if (currentRank != null) {
       String unlockableRankStr = track.getNext(currentRank);
-      if (unlockableRankStr != null) {
-        unlockableRank = groupManager.getGroup(unlockableRankStr);
-      } else {
-        unlockableRank = null;
-      }
+      unlockableRank = unlockableRankStr != null ? groupManager.getGroup(unlockableRankStr) : null;
     } else {
       unlockableRank = getFirstRank();
     }

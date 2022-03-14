@@ -148,12 +148,12 @@ public class PlayerShopController {
                           "diagonia.playershop.config.activation.toggled.enabled")
                       : resourceBundle.getString(
                           "diagonia.playershop.config.activation.toggled.disabled"))));
-    } else {
-      sender.sendMessage(
-          miniMessage.deserialize(
-              resourceBundle.getString(
-                  "diagonia.playershop.config.activation.enabling.teleport_point_definition_required")));
+      return;
     }
+    sender.sendMessage(
+        miniMessage.deserialize(
+            resourceBundle.getString(
+                "diagonia.playershop.config.activation.enabling.teleport_point_definition_required")));
   }
 
   public void onTogglePlayerShopActivation(@NotNull Player player, @NotNull PlayerShop playerShop) {
@@ -165,28 +165,30 @@ public class PlayerShopController {
     double balance = economyService.getBalance(player);
     double buyCost = pluginConfig.getPlayerShopConfig().getBuyCost();
 
+    // TODO: move business logic to model
+
     if (balance < buyCost) {
-      // TODO: stop using else part (harder to read)
       player.sendMessage(
           miniMessage.deserialize(
               resourceBundle.getString("diagonia.playershop.buy.insufficient_funds")));
-    } else {
-      // TODO: fix breaking of MVC rules by managing economy in controllers
-      try {
-        EconomyResponse economyResponse = economyService.withdraw(player, buyCost);
-        // TODO: use EconomyResponse for sending feedback to player
-        buyPlayerShop(player);
-        openPlayerShop(player);
-      } catch (EconomyException e) {
-        logger.error(
-            "Failed to withdraw {} money from the player's balance {}: {}",
-            buyCost,
-            player.getName(),
-            e.getMessage());
-        player.sendMessage(
-            miniMessage.deserialize(
-                resourceBundle.getString("diagonia.playershop.buy.transaction_failed")));
-      }
+      return;
+    }
+
+    // TODO: fix breaking of MVC rules by managing economy in controllers
+    try {
+      EconomyResponse economyResponse = economyService.withdraw(player, buyCost);
+      // TODO: use EconomyResponse for sending feedback to player
+      buyPlayerShop(player);
+      openPlayerShop(player);
+    } catch (EconomyException e) {
+      logger.error(
+          "Failed to withdraw {} money from the player's balance {}: {}",
+          buyCost,
+          player.getName(),
+          e.getMessage());
+      player.sendMessage(
+          miniMessage.deserialize(
+              resourceBundle.getString("diagonia.playershop.buy.transaction_failed")));
     }
   }
 
@@ -195,11 +197,11 @@ public class PlayerShopController {
     Location tpLocation = locationMapper.fromDto(playerShopDestination.getTpLocation());
     if (tpLocation != null) {
       player.teleport(tpLocation, PlayerTeleportEvent.TeleportCause.PLUGIN);
-    } else {
-      player.sendMessage(
-          miniMessage.deserialize(
-              resourceBundle.getString("diagonia.playershop.teleport.no_tp_defined_error")));
+      return;
     }
+    player.sendMessage(
+        miniMessage.deserialize(
+            resourceBundle.getString("diagonia.playershop.teleport.no_tp_defined_error")));
   }
 
   public void onDefiningPlayerShopTeleportPoint(

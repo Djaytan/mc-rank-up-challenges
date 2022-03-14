@@ -53,11 +53,10 @@ public class RankConfigInitializer {
             IOUtils.copyLarge(defaultJsonFileReader, jsonFileWriter);
             logger.info("Default {} file copied in data folder.", RANK_JSON_FILE_NAME);
           }
-        } else {
-          throw new DiagoniaException(
-              String.format(
-                  "Failed to copy default %1$s file in data folder.", RANK_JSON_FILE_NAME));
+          return;
         }
+        throw new DiagoniaException(
+            String.format("Failed to copy default %1$s file in data folder.", RANK_JSON_FILE_NAME));
       }
     }
   }

@@ -28,7 +28,6 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 @Singleton
-// TODO: split this big controller
 public class RankUpController {
 
   private final DiagoniaLogger logger;

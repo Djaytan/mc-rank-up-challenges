@@ -122,13 +122,10 @@ public class RankItem {
       itemBuilder.enchant(Enchantment.DURABILITY);
     }
 
-    GuiItem guiItem;
     if (!rank.isRankUpActivated() || !isRankOwned && !isUnlockableRank) {
-      guiItem = itemBuilder.asGuiItem();
-    } else {
-      guiItem = itemBuilder.asGuiItem(onClick(rank));
+      return itemBuilder.asGuiItem();
     }
-    return guiItem;
+    return itemBuilder.asGuiItem(onClick(rank));
   }
 
   public @NotNull GuiAction<InventoryClickEvent> onClick(Rank rank) {

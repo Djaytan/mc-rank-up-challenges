@@ -35,8 +35,6 @@ public class ActivationPlayerShopItem {
   }
 
   public @NotNull GuiItem createItem(@NotNull PlayerShop playerShop) {
-    GuiItem guiItem;
-
     Component name =
         miniMessage
             .deserialize(
@@ -56,21 +54,10 @@ public class ActivationPlayerShopItem {
                         "diagonia.playershop.config.activation.enabling.description"))
             .decoration(TextDecoration.ITALIC, false);
 
-    if (playerShop.isActive()) {
-      guiItem =
-          ItemBuilder.from(Material.LIME_DYE)
-              .name(name)
-              .lore(Collections.singletonList(description))
-              .asGuiItem(onClick(playerShop));
-    } else {
-      guiItem =
-          ItemBuilder.from(Material.GRAY_DYE)
-              .name(name)
-              .lore(Collections.singletonList(description))
-              .asGuiItem(onClick(playerShop));
-    }
-
-    return guiItem;
+    return ItemBuilder.from(playerShop.isActive() ? Material.LIME_DYE : Material.GRAY_DYE)
+        .name(name)
+        .lore(Collections.singletonList(description))
+        .asGuiItem(onClick(playerShop));
   }
 
   public @NotNull GuiAction<InventoryClickEvent> onClick(@NotNull PlayerShop playerShop) {

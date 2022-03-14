@@ -46,7 +46,6 @@ public class ConsultPlayerShopItem {
   }
 
   public @Nullable GuiItem createItem(@NotNull PlayerShop playerShop) {
-    GuiItem item = null;
     // TODO: remove use of Server instance here
     OfflinePlayer ownerPlayer = server.getOfflinePlayer(playerShop.getOwnerUuid());
     String ownerName = ownerPlayer.getName();
@@ -74,21 +73,19 @@ public class ConsultPlayerShopItem {
               .name(psName)
               .lore(psDescLore)
               .asGuiItem();
-        } else {
-          item =
-              ItemBuilder.skull()
-                  .owner(ownerPlayer)
-                  .name(psName)
-                  .lore(psDescLore)
-                  .asGuiItem(getClickEvent(playerShop));
         }
-      } else {
-        logger.error(
-            "The UUID {} isn't associated to any existing user on the server.",
-            playerShop.getOwnerUuid());
+        return ItemBuilder.skull()
+            .owner(ownerPlayer)
+            .name(psName)
+            .lore(psDescLore)
+            .asGuiItem(getClickEvent(playerShop));
       }
+      logger.error(
+          "The UUID {} isn't associated to any existing user on the server.",
+          playerShop.getOwnerUuid());
     }
-    return item;
+
+    return null;
   }
 
   public @NotNull GuiAction<InventoryClickEvent> getClickEvent(@NotNull PlayerShop playerShop) {

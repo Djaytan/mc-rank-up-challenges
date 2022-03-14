@@ -56,6 +56,7 @@ public class RankChallengeItem {
 
     boolean isChallengeCompleted =
         rcp != null && rankChallenge.getChallengeItemAmount() == rcp.getChallengeAmountGiven();
+
     if (!isChallengeCompleted) {
       return ItemBuilder.from(rankChallenge.getChallengeItemMaterial())
           .name(
@@ -95,23 +96,22 @@ public class RankChallengeItem {
                               .decoration(TextDecoration.ITALIC, false)))
                   .toList())
           .asGuiItem(onClick(rank, rankChallenge));
-    } else {
-      return ItemBuilder.from(rankChallenge.getChallengeItemMaterial())
-          .name(
-              miniMessage
-                  .deserialize(
-                      String.format(
-                          resourceBundle.getString("diagonia.rankup.rankup.challenge.name"),
-                          rankChallenge.getChallengeItemMaterial().name()))
-                  .decoration(TextDecoration.ITALIC, false))
-          .lore(
-              List.of(
-                  miniMessage
-                      .deserialize(
-                          resourceBundle.getString("diagonia.rankup.rankup.challenge.completed"))
-                      .decoration(TextDecoration.ITALIC, false)))
-          .asGuiItem();
     }
+    return ItemBuilder.from(rankChallenge.getChallengeItemMaterial())
+        .name(
+            miniMessage
+                .deserialize(
+                    String.format(
+                        resourceBundle.getString("diagonia.rankup.rankup.challenge.name"),
+                        rankChallenge.getChallengeItemMaterial().name()))
+                .decoration(TextDecoration.ITALIC, false))
+        .lore(
+            List.of(
+                miniMessage
+                    .deserialize(
+                        resourceBundle.getString("diagonia.rankup.rankup.challenge.completed"))
+                    .decoration(TextDecoration.ITALIC, false)))
+        .asGuiItem();
   }
 
   public @NotNull GuiAction<InventoryClickEvent> onClick(
@@ -120,6 +120,7 @@ public class RankChallengeItem {
       Player whoClicked = (Player) event.getWhoClicked();
       ClickType clickType = event.getClick();
       ItemStack clickedItem = event.getCurrentItem();
+      // TODO: move business logic into model
       if (clickedItem != null
           && (clickType == ClickType.LEFT
               || clickType == ClickType.RIGHT
@@ -187,20 +188,22 @@ public class RankChallengeItem {
                         effectiveGivenAmount,
                         clickedItem.getType().name())));
           }
-        } else if (amountToGive == 0) {
+          return;
+        }
+        if (amountToGive == 0) {
           whoClicked.sendMessage(
               miniMessage
                   .deserialize(
                       resourceBundle.getString(
                           "diagonia.rankup.rankup.challenge.no_item_in_inventory"))
                   .decoration(TextDecoration.ITALIC, false));
-        } else {
-          whoClicked.sendMessage(
-              miniMessage
-                  .deserialize(
-                      resourceBundle.getString("diagonia.rankup.rankup.challenge.not_enough_item"))
-                  .decoration(TextDecoration.ITALIC, false));
+          return;
         }
+        whoClicked.sendMessage(
+            miniMessage
+                .deserialize(
+                    resourceBundle.getString("diagonia.rankup.rankup.challenge.not_enough_item"))
+                .decoration(TextDecoration.ITALIC, false));
       }
     };
   }
