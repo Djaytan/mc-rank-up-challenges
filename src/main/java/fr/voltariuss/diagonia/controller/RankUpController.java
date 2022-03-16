@@ -22,6 +22,7 @@ import javax.inject.Singleton;
 import net.luckperms.api.track.PromotionResult;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryCloseEvent.Reason;
 import org.jetbrains.annotations.NotNull;
 
 @Singleton
@@ -128,9 +129,8 @@ public class RankUpController {
       Rank newRank =
           rankConfigService.findById(promotionResult.getGroupTo().orElseThrow()).orElseThrow();
 
-      // TODO: close inventory
+      player.closeInventory(Reason.PLUGIN);
       masterController.sendSystemMessage(player, rankUpMessage.rankUpSuccess(newRank));
-      openRankListGui(player);
       return;
     }
 
