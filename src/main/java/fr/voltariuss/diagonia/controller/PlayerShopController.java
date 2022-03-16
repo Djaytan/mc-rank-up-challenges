@@ -12,6 +12,7 @@ import fr.voltariuss.diagonia.model.service.PlayerShopService;
 import fr.voltariuss.diagonia.view.EconomyFormatter;
 import fr.voltariuss.diagonia.view.gui.ConfigPlayerShopGui;
 import fr.voltariuss.diagonia.view.gui.MainPlayerShopGui;
+import fr.voltariuss.diagonia.view.message.PlayerShopBuyMessage;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -36,7 +37,9 @@ public class PlayerShopController {
   private final EconomyFormatter economyFormatter;
   private final EconomyService economyService;
   private final LocationMapper locationMapper;
+  private final MasterController masterController;
   private final MiniMessage miniMessage;
+  private final PlayerShopBuyMessage playerShopBuyMessage;
   private final PlayerShopService playerShopService;
   private final PluginConfig pluginConfig;
   private final ResourceBundle resourceBundle;
@@ -51,7 +54,9 @@ public class PlayerShopController {
       @NotNull EconomyFormatter economyFormatter,
       @NotNull EconomyService economyService,
       @NotNull LocationMapper locationMapper,
+      @NotNull MasterController masterController,
       @NotNull MiniMessage miniMessage,
+      @NotNull PlayerShopBuyMessage playerShopBuyMessage,
       @NotNull PlayerShopService playerShopService,
       @NotNull PluginConfig pluginConfig,
       @NotNull ResourceBundle resourceBundle,
@@ -62,7 +67,9 @@ public class PlayerShopController {
     this.economyService = economyService;
     this.locationMapper = locationMapper;
     this.logger = logger;
+    this.masterController = masterController;
     this.miniMessage = miniMessage;
+    this.playerShopBuyMessage = playerShopBuyMessage;
     this.playerShopService = playerShopService;
     this.pluginConfig = pluginConfig;
     this.resourceBundle = resourceBundle;
@@ -88,15 +95,13 @@ public class PlayerShopController {
 
   public void buyPlayerShop(@NotNull Player player) {
     logger.info("Buy of a playershop for player {}", player.getName());
+    // TODO: economy treatment must be done here
     PlayerShop ps = new PlayerShop(player.getUniqueId());
     playerShopService.persist(ps);
     // TODO: and if something went wrong after economy transaction and before or during the shop
     // creation?
-    player.sendMessage(
-        miniMessage.deserialize(
-            String.format(
-                resourceBundle.getString("diagonia.playershop.buy.successfully_bought"),
-                economyFormatter.format(pluginConfig.getPlayerShopConfig().getBuyCost()))));
+    double buyCost = pluginConfig.getPlayerShopConfig().getBuyCost();
+    masterController.sendSystemMessage(player, playerShopBuyMessage.buySuccessMessage(buyCost));
   }
 
   public boolean hasPlayerShop(@NotNull Player player) {
@@ -166,6 +171,7 @@ public class PlayerShopController {
     double buyCost = pluginConfig.getPlayerShopConfig().getBuyCost();
 
     // TODO: move business logic to model
+    // TODO: move some logic into PlayerShopController#buyPlayerShop method
 
     if (balance < buyCost) {
       player.sendMessage(
