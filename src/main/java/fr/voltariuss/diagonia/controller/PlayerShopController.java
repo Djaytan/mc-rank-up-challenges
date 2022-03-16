@@ -12,7 +12,7 @@ import fr.voltariuss.diagonia.model.service.PlayerShopService;
 import fr.voltariuss.diagonia.view.EconomyFormatter;
 import fr.voltariuss.diagonia.view.gui.ConfigPlayerShopGui;
 import fr.voltariuss.diagonia.view.gui.MainPlayerShopGui;
-import fr.voltariuss.diagonia.view.message.PlayerShopBuyMessage;
+import fr.voltariuss.diagonia.view.message.PlayerShopMessage;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -34,15 +34,12 @@ import org.jetbrains.annotations.Nullable;
 public class PlayerShopController {
 
   private final DiagoniaLogger logger;
-  private final EconomyFormatter economyFormatter;
   private final EconomyService economyService;
   private final LocationMapper locationMapper;
   private final MasterController masterController;
-  private final MiniMessage miniMessage;
-  private final PlayerShopBuyMessage playerShopBuyMessage;
+  private final PlayerShopMessage playerShopMessage;
   private final PlayerShopService playerShopService;
   private final PluginConfig pluginConfig;
-  private final ResourceBundle resourceBundle;
   private final Server server;
 
   private final Provider<ConfigPlayerShopGui> configPlayerShopGui;
@@ -51,28 +48,22 @@ public class PlayerShopController {
   @Inject
   public PlayerShopController(
       @NotNull DiagoniaLogger logger,
-      @NotNull EconomyFormatter economyFormatter,
       @NotNull EconomyService economyService,
       @NotNull LocationMapper locationMapper,
       @NotNull MasterController masterController,
-      @NotNull MiniMessage miniMessage,
-      @NotNull PlayerShopBuyMessage playerShopBuyMessage,
+      @NotNull PlayerShopMessage playerShopMessage,
       @NotNull PlayerShopService playerShopService,
       @NotNull PluginConfig pluginConfig,
-      @NotNull ResourceBundle resourceBundle,
       @NotNull Server server,
       @NotNull Provider<ConfigPlayerShopGui> configPlayerShopGui,
       @NotNull Provider<MainPlayerShopGui> mainPlayerShopGui) {
-    this.economyFormatter = economyFormatter;
     this.economyService = economyService;
     this.locationMapper = locationMapper;
     this.logger = logger;
     this.masterController = masterController;
-    this.miniMessage = miniMessage;
-    this.playerShopBuyMessage = playerShopBuyMessage;
+    this.playerShopMessage = playerShopMessage;
     this.playerShopService = playerShopService;
     this.pluginConfig = pluginConfig;
-    this.resourceBundle = resourceBundle;
     this.server = server;
     this.configPlayerShopGui = configPlayerShopGui;
     this.mainPlayerShopGui = mainPlayerShopGui;
@@ -101,7 +92,7 @@ public class PlayerShopController {
     // TODO: and if something went wrong after economy transaction and before or during the shop
     // creation?
     double buyCost = pluginConfig.getPlayerShopConfig().getBuyCost();
-    masterController.sendSystemMessage(player, playerShopBuyMessage.buySuccessMessage(buyCost));
+    masterController.sendSystemMessage(player, playerShopMessage.buySuccess(buyCost));
   }
 
   public boolean hasPlayerShop(@NotNull Player player) {
@@ -122,11 +113,7 @@ public class PlayerShopController {
     }
     playerShop.setTpLocation(locationDto);
     playerShopService.update(playerShop);
-    sender.sendMessage(
-        miniMessage.deserialize(
-            String.format(
-                resourceBundle.getString("diagonia.playershop.config.define_teleport.defined"),
-                locationDto)));
+    masterController.sendSystemMessage(sender, playerShopMessage.teleportPointDefined(locationDto));
   }
 
   public Optional<PlayerShop> getFromUuid(@NotNull UUID uuid) {
@@ -144,21 +131,12 @@ public class PlayerShopController {
     if (playerShop.isActive() || playerShop.getTpLocation() != null) {
       playerShop.setActive(!playerShop.isActive());
       playerShopService.update(playerShop);
-      sender.sendMessage(
-          miniMessage.deserialize(
-              String.format(
-                  resourceBundle.getString("diagonia.playershop.config.activation.toggled"),
-                  playerShop.isActive()
-                      ? resourceBundle.getString(
-                          "diagonia.playershop.config.activation.toggled.enabled")
-                      : resourceBundle.getString(
-                          "diagonia.playershop.config.activation.toggled.disabled"))));
+      masterController.sendSystemMessage(
+          sender, playerShopMessage.toggleShop(playerShop.isActive()));
       return;
     }
-    sender.sendMessage(
-        miniMessage.deserialize(
-            resourceBundle.getString(
-                "diagonia.playershop.config.activation.enabling.teleport_point_definition_required")));
+    masterController.sendSystemMessage(
+        sender, playerShopMessage.shopActivationRequireTeleportPointFirst());
   }
 
   public void onTogglePlayerShopActivation(@NotNull Player player, @NotNull PlayerShop playerShop) {
@@ -174,9 +152,7 @@ public class PlayerShopController {
     // TODO: move some logic into PlayerShopController#buyPlayerShop method
 
     if (balance < buyCost) {
-      player.sendMessage(
-          miniMessage.deserialize(
-              resourceBundle.getString("diagonia.playershop.buy.insufficient_funds")));
+      masterController.sendSystemMessage(player, playerShopMessage.insufficientFunds());
       return;
     }
 
@@ -192,9 +168,7 @@ public class PlayerShopController {
           buyCost,
           player.getName(),
           e.getMessage());
-      player.sendMessage(
-          miniMessage.deserialize(
-              resourceBundle.getString("diagonia.playershop.buy.transaction_failed")));
+      masterController.sendSystemMessage(player, playerShopMessage.transactionFailed());
     }
   }
 
@@ -205,9 +179,7 @@ public class PlayerShopController {
       player.teleport(tpLocation, PlayerTeleportEvent.TeleportCause.PLUGIN);
       return;
     }
-    player.sendMessage(
-        miniMessage.deserialize(
-            resourceBundle.getString("diagonia.playershop.teleport.no_tp_defined_error")));
+    masterController.sendSystemMessage(player, playerShopMessage.noTeleportPointDefined());
   }
 
   public void onDefiningPlayerShopTeleportPoint(
