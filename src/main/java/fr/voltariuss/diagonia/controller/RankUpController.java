@@ -125,7 +125,6 @@ public class RankUpController {
         return;
       }
 
-      // TODO: better exception throw
       Rank newRank =
           rankConfigService.findById(promotionResult.getGroupTo().orElseThrow()).orElseThrow();
 

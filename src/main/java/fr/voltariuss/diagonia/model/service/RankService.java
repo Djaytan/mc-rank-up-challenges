@@ -86,6 +86,7 @@ public interface RankService {
    * @return The result response about the promotion.
    */
   @NotNull
+  // TODO: custom PromotionResult + include directly the new rank (with check about existence)
   PromotionResult promote(@NotNull Player player);
 
   /**
