@@ -9,18 +9,13 @@ import fr.voltariuss.diagonia.model.entity.PlayerShop;
 import fr.voltariuss.diagonia.model.service.EconomyException;
 import fr.voltariuss.diagonia.model.service.EconomyService;
 import fr.voltariuss.diagonia.model.service.PlayerShopService;
-import fr.voltariuss.diagonia.view.EconomyFormatter;
 import fr.voltariuss.diagonia.view.gui.ConfigPlayerShopGui;
 import fr.voltariuss.diagonia.view.gui.MainPlayerShopGui;
 import fr.voltariuss.diagonia.view.message.PlayerShopMessage;
 import java.util.List;
-import java.util.Optional;
-import java.util.ResourceBundle;
-import java.util.UUID;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.inject.Singleton;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
@@ -95,29 +90,21 @@ public class PlayerShopController {
     masterController.sendSystemMessage(player, playerShopMessage.buySuccess(buyCost));
   }
 
-  public boolean hasPlayerShop(@NotNull Player player) {
-    return playerShopService.findByUuid(player.getUniqueId()).isPresent();
-  }
-
   public void defineTeleportPoint(
       @NotNull CommandSender sender, @NotNull PlayerShop playerShop, @NotNull Location location) {
-    @Nullable OfflinePlayer owner = server.getOfflinePlayer(playerShop.getOwnerUuid());
-    LocationDto locationDto = locationMapper.toDto(location);
-    if (pluginConfig.isDebugMode()) {
-      logger.debug(
-          "Update teleport point for the playershop of {} (playershop: {}, new location: {})",
-          playerShop,
-          locationDto);
-    } else {
-      logger.info("Update teleport point for the playershop of {}", owner.getName());
-    }
-    playerShop.setTpLocation(locationDto);
-    playerShopService.update(playerShop);
-    masterController.sendSystemMessage(sender, playerShopMessage.teleportPointDefined(locationDto));
-  }
 
-  public Optional<PlayerShop> getFromUuid(@NotNull UUID uuid) {
-    return playerShopService.findByUuid(uuid);
+    LocationDto locationDto = locationMapper.toDto(location);
+
+    playerShop.setTpLocation(locationDto);
+    playerShopService.update(playerShop); // TODO: error management?
+
+    logger.info(
+        "Updated teleport point for playershop: ownerUuid={}, playerShop={}, locationDto={}",
+        playerShop.getOwnerUuid(),
+        playerShop.getId(),
+        locationDto);
+
+    masterController.sendSystemMessage(sender, playerShopMessage.teleportPointDefined(locationDto));
   }
 
   public void togglePlayerShop(@NotNull CommandSender sender, @NotNull PlayerShop playerShop) {
@@ -174,12 +161,26 @@ public class PlayerShopController {
 
   public void onTeleportPlayerShop(
       @NotNull Player player, @NotNull PlayerShop playerShopDestination) {
+
     Location tpLocation = locationMapper.fromDto(playerShopDestination.getTpLocation());
-    if (tpLocation != null) {
-      player.teleport(tpLocation, PlayerTeleportEvent.TeleportCause.PLUGIN);
+
+    if (tpLocation == null) {
+      logger.warn(
+          "Failed to teleport a player to a playershop because no teleport point has been defined."
+              + " This may be an error because activated playershops are supposed to have a"
+              + " teleport point defined: playerUuid={}, playerShopId={}",
+          player.getUniqueId(),
+          playerShopDestination.getId());
+      masterController.sendSystemMessage(player, playerShopMessage.noTeleportPointDefined());
       return;
     }
-    masterController.sendSystemMessage(player, playerShopMessage.noTeleportPointDefined());
+
+    player.teleport(tpLocation, PlayerTeleportEvent.TeleportCause.PLUGIN);
+
+    logger.info(
+        "Teleportation of a player to a playershop: playerUuid={}, playerShopId={}",
+        player.getUniqueId(),
+        playerShopDestination.getId());
   }
 
   public void onDefiningPlayerShopTeleportPoint(
