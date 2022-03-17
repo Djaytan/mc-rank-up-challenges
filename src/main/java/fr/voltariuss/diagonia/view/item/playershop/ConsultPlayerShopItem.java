@@ -45,6 +45,7 @@ public class ConsultPlayerShopItem {
     this.server = server;
   }
 
+  // TODO: return a wrapper of GuiItem and an active state (better readability)
   public @Nullable GuiItem createItem(@NotNull PlayerShop playerShop) {
     // TODO: remove use of Server instance here
     OfflinePlayer ownerPlayer = server.getOfflinePlayer(playerShop.getOwnerUuid());
@@ -91,6 +92,7 @@ public class ConsultPlayerShopItem {
   public @NotNull GuiAction<InventoryClickEvent> getClickEvent(@NotNull PlayerShop playerShop) {
     return event -> {
       Player player = (Player) event.getWhoClicked();
+      // TODO: create a real event with Observer pattern or Bukkit API
       playerShopController.onTeleportPlayerShop(player, playerShop);
     };
   }

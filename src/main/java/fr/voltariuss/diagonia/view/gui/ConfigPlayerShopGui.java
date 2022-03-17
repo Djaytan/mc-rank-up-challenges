@@ -18,6 +18,7 @@ import org.jetbrains.annotations.NotNull;
 @Singleton
 public class ConfigPlayerShopGui {
 
+  // TODO: make it configurable
   private static final Material PREVIOUS_GUI_MATERIAL = Material.ARROW;
 
   private final ActivationPlayerShopItem activationPlayerShopItem;
@@ -52,6 +53,7 @@ public class ConfigPlayerShopGui {
     gui.setItem(2, 4, activationPlayerShopItem.createItem(playerShop));
     gui.setItem(2, 6, defineTpPlayerShopItem.createItem(playerShop));
 
+    // TODO: manage a stack of guis with go back capabilities
     gui.setItem(
         3,
         1,
@@ -62,8 +64,11 @@ public class ConfigPlayerShopGui {
                     .decoration(TextDecoration.ITALIC, false))
             .asGuiItem(
                 event -> playerShopController.openPlayerShop((Player) event.getWhoClicked())));
+    // TODO: remove call to controller from view
 
     gui.setDefaultClickAction(event -> event.setCancelled(true));
+
+    // TODO: move open actions to controller view
     gui.open(whoOpen);
   }
 }

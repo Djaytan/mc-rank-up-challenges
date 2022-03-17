@@ -61,6 +61,7 @@ public class DefineTpPlayerShopItem {
   public @NotNull GuiAction<InventoryClickEvent> onClick(@NotNull PlayerShop playerShop) {
     return event -> {
       Player player = (Player) event.getWhoClicked();
+      // TODO: create a real event with Observer pattern or Bukkit API
       playerShopController.onDefiningPlayerShopTeleportPoint(player, playerShop);
     };
   }

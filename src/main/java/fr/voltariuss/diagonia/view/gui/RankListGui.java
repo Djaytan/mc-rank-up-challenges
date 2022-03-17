@@ -46,6 +46,7 @@ public class RankListGui {
             .create();
 
     for (Rank rank : rankConfig.getRanks()) {
+      // TODO: remove use of controller in view
       boolean isRankOwned = rankUpController.isRankOwned(whoOpen, rank.getId());
       boolean isCurrentRank = rankUpController.isCurrentRank(whoOpen, rank.getId());
       boolean isUnlockableRank = rankUpController.isUnlockableRank(whoOpen, rank.getId());
@@ -56,6 +57,7 @@ public class RankListGui {
 
     gui.setDefaultClickAction(event -> event.setCancelled(true));
 
+    // TODO: move open actions to controller view
     gui.open(whoOpen);
   }
 }

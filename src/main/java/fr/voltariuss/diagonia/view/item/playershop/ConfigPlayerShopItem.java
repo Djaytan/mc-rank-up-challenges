@@ -52,6 +52,7 @@ public class ConfigPlayerShopItem {
   }
 
   public @NotNull GuiAction<InventoryClickEvent> onClick(@NotNull PlayerShop playerShop) {
+    // TODO: create a real event with Observer pattern or Bukkit API
     return event ->
         playerShopController.openConfigPlayerShop((Player) event.getWhoClicked(), playerShop);
   }

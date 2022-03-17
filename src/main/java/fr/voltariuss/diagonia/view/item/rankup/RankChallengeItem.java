@@ -116,6 +116,7 @@ public class RankChallengeItem {
 
   public @NotNull GuiAction<InventoryClickEvent> onClick(
       @NotNull Rank rank, @NotNull RankChallenge rankChallenge) {
+    // TODO: create a real event with Observer pattern or Bukkit API
     return event -> {
       Player whoClicked = (Player) event.getWhoClicked();
       ClickType clickType = event.getClick();

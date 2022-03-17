@@ -53,6 +53,7 @@ public class RankUpGui {
     this.resourceBundle = resourceBundle;
   }
 
+  // TODO: return a response object to controller with status, and eventually the created Gui
   public void open(
       @NotNull Player whoOpen, @NotNull Rank rank, @NotNull RankUpProgression rankUpProgression) {
     if (rank.getRankUpChallenges() != null) {
@@ -95,13 +96,15 @@ public class RankUpGui {
                       .decoration(TextDecoration.ITALIC, false))
               .asGuiItem(
                   event -> rankUpController.openRankListGui((Player) event.getWhoClicked())));
+      // TODO: create a real event with Observer pattern or Bukkit API
 
       gui.setDefaultClickAction(event -> event.setCancelled(true));
 
+      // TODO: move open actions to controller view
       gui.open(whoOpen);
       return;
     }
     logger.error("No challenge is associated with the rank {}", rank.getId());
-    // TODO: feedback player
+    // TODO: feedback player (unexpected error) + move this part to controller
   }
 }

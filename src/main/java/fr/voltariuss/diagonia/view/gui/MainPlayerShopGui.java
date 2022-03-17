@@ -23,6 +23,7 @@ import org.jetbrains.annotations.NotNull;
 @Singleton
 public class MainPlayerShopGui {
 
+  // TODO: make it configurable
   private static final int NB_COLUMNS_PER_LINE = 9;
   private static final int NB_ROW_PER_PAGE = 4;
   private static final Material DECORATION_MATERIAL = Material.GRAY_STAINED_GLASS_PANE;
@@ -73,6 +74,7 @@ public class MainPlayerShopGui {
             .filter(Objects::nonNull)
             .toArray(GuiItem[]::new));
 
+    // TODO: remove call to controller from view
     gui.setItem(
         6,
         5,
@@ -86,6 +88,7 @@ public class MainPlayerShopGui {
 
     gui.setDefaultClickAction(event -> event.setCancelled(true));
 
+    // TODO: move open actions to controller view
     gui.open(whoOpen);
   }
 }
