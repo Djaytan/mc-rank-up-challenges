@@ -121,7 +121,10 @@ public class RankUpController {
 
       if (!promotionResult.wasSuccessful()) {
         masterController.sendSystemMessage(player, rankUpMessage.rankUpFailure());
-        // TODO: logging error
+        logger.error(
+            "Player promotion failed: player={}, promotionResult={}",
+            player.getName(),
+            promotionResult);
         return;
       }
 
