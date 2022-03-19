@@ -18,13 +18,10 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.inject.Singleton;
 import org.bukkit.Location;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 @Singleton
 public class PlayerShopController {
@@ -36,7 +33,6 @@ public class PlayerShopController {
   private final PlayerShopMessage playerShopMessage;
   private final PlayerShopService playerShopService;
   private final PluginConfig pluginConfig;
-  private final Server server;
 
   private final Provider<ConfigPlayerShopGui> configPlayerShopGui;
   private final Provider<MainPlayerShopGui> mainPlayerShopGui;
@@ -50,7 +46,6 @@ public class PlayerShopController {
       @NotNull PlayerShopMessage playerShopMessage,
       @NotNull PlayerShopService playerShopService,
       @NotNull PluginConfig pluginConfig,
-      @NotNull Server server,
       @NotNull Provider<ConfigPlayerShopGui> configPlayerShopGui,
       @NotNull Provider<MainPlayerShopGui> mainPlayerShopGui) {
     this.economyService = economyService;
@@ -60,7 +55,6 @@ public class PlayerShopController {
     this.playerShopMessage = playerShopMessage;
     this.playerShopService = playerShopService;
     this.pluginConfig = pluginConfig;
-    this.server = server;
     this.configPlayerShopGui = configPlayerShopGui;
     this.mainPlayerShopGui = mainPlayerShopGui;
   }
@@ -90,35 +84,65 @@ public class PlayerShopController {
   }
 
   public void defineTeleportPoint(
-      @NotNull CommandSender sender, @NotNull PlayerShop playerShop, @NotNull Location location) {
+      @NotNull CommandSender sender,
+      @NotNull PlayerShop playerShop,
+      @NotNull Location newLocation) {
+    logger.debug(
+        "Start defining a teleport point: senderName={}, playerShopId={},"
+            + " playerShopCurrentTpLocation={}, newLocation={}",
+        sender.getName(),
+        playerShop.getId(),
+        playerShop.getTpLocation(),
+        newLocation);
 
-    LocationDto locationDto = locationMapper.toDto(location);
+    LocationDto newLocationDto = locationMapper.toDto(newLocation);
 
-    playerShop.setTpLocation(locationDto);
-    playerShopService.update(playerShop); // TODO: error management?
+    playerShop.setTpLocation(newLocationDto);
+    playerShopService.update(playerShop);
 
     logger.info(
-        "Updated teleport point for playershop: ownerUuid={}, playerShop={}, locationDto={}",
+        "Updated teleport point for playershop: playerShopOwnerUuid={}, playerShopId={},"
+            + " playerShopNewTpLocation={}",
         playerShop.getOwnerUuid(),
         playerShop.getId(),
-        locationDto);
+        playerShop.getTpLocation());
 
-    masterController.sendSystemMessage(sender, playerShopMessage.teleportPointDefined(locationDto));
+    masterController.sendSystemMessage(
+        sender, playerShopMessage.teleportPointDefined(newLocationDto));
   }
 
   public void togglePlayerShop(@NotNull CommandSender sender, @NotNull PlayerShop playerShop) {
-    // TODO: move business logic to model part
-    @Nullable OfflinePlayer owner = server.getOfflinePlayer(playerShop.getOwnerUuid());
-    logger.info("Toggle playershop of {}", owner.getName());
-    if (playerShop.isActive() || playerShop.getTpLocation() != null) {
-      playerShop.setActive(!playerShop.isActive());
-      playerShopService.update(playerShop);
+    logger.debug(
+        "Start toggling playershop: senderName={}, playerShopId={}, playerShopIsActive={},"
+            + " playerShopTpLocation={}",
+        sender.getName(),
+        playerShop.getId(),
+        playerShop.isActive(),
+        playerShop.getTpLocation());
+
+    if (playerShop.getTpLocation() == null && playerShop.isActive()) {
+      throw new IllegalStateException(
+          "A playershop without teleport point defined mustn't be activated.");
+    }
+
+    if (playerShop.getTpLocation() == null) {
+      logger.debug("Failed to toggle playershop: tp location must be defined.");
+
       masterController.sendSystemMessage(
-          sender, playerShopMessage.toggleShop(playerShop.isActive()));
+          sender, playerShopMessage.shopActivationRequireTeleportPointFirst());
+
       return;
     }
-    masterController.sendSystemMessage(
-        sender, playerShopMessage.shopActivationRequireTeleportPointFirst());
+
+    playerShop.setActive(!playerShop.isActive());
+    playerShopService.update(playerShop);
+
+    logger.info(
+        "Toggled playershop: playerShopId={}, isNowActive={}",
+        playerShop.getId(),
+        playerShop.isActive());
+
+    masterController.sendSystemMessage(sender, playerShopMessage.toggleShop(playerShop.isActive()));
   }
 
   public void onTogglePlayerShopActivation(@NotNull Player player, @NotNull PlayerShop playerShop) {
@@ -155,7 +179,12 @@ public class PlayerShopController {
   }
 
   public void onTeleportPlayerShop(
-      @NotNull Player player, @NotNull PlayerShop playerShopDestination) {
+      @NotNull Player playerToTp, @NotNull PlayerShop playerShopDestination) {
+    logger.debug(
+        "Start event handling of teleporting a player to a playershop: playerToTpUuid={},"
+            + " playerShopDestinationId={}",
+        playerToTp.getUniqueId(),
+        playerShopDestination.getId());
 
     Location tpLocation = locationMapper.fromDto(playerShopDestination.getTpLocation());
 
@@ -163,18 +192,18 @@ public class PlayerShopController {
       logger.warn(
           "Failed to teleport a player to a playershop because no teleport point has been defined."
               + " This may be an error because activated playershops are supposed to have a"
-              + " teleport point defined: playerUuid={}, playerShopId={}",
-          player.getUniqueId(),
+              + " teleport point defined: playerToTpUuid={}, playerShopId={}",
+          playerToTp.getUniqueId(),
           playerShopDestination.getId());
-      masterController.sendSystemMessage(player, playerShopMessage.noTeleportPointDefined());
+      masterController.sendSystemMessage(playerToTp, playerShopMessage.noTeleportPointDefined());
       return;
     }
 
-    player.teleport(tpLocation, PlayerTeleportEvent.TeleportCause.PLUGIN);
+    playerToTp.teleport(tpLocation, PlayerTeleportEvent.TeleportCause.PLUGIN);
 
     logger.info(
-        "Teleportation of a player to a playershop: playerUuid={}, playerShopId={}",
-        player.getUniqueId(),
+        "Teleportation of a player to a playershop: playerToTpUuid={}, playerShopId={}",
+        playerToTp.getUniqueId(),
         playerShopDestination.getId());
   }
 
