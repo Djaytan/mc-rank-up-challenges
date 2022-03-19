@@ -66,8 +66,9 @@ public class PlayerShopController {
 
   public void openPlayerShop(@NotNull Player whoOpen) {
     logger.info("Open playershop for player {}", whoOpen.getName());
+    PlayerShop playerShopOwned = playerShopService.findByUuid(whoOpen.getUniqueId()).orElse(null);
     List<PlayerShop> playerShopList = playerShopService.findAll();
-    mainPlayerShopGui.get().open(whoOpen, playerShopList);
+    mainPlayerShopGui.get().open(whoOpen, playerShopOwned, playerShopList);
   }
 
   public void openConfigPlayerShop(@NotNull Player whoOpen, @NotNull PlayerShop playerShop) {

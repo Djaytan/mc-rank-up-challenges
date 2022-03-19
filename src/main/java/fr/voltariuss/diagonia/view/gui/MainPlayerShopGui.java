@@ -19,6 +19,7 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 @Singleton
 public class MainPlayerShopGui {
@@ -51,12 +52,17 @@ public class MainPlayerShopGui {
     this.resourceBundle = resourceBundle;
   }
 
-  public void open(@NotNull Player whoOpen, List<PlayerShop> playerShopList) {
+  public void open(
+      @NotNull Player whoOpen,
+      @Nullable PlayerShop playerShopOwned,
+      @NotNull List<PlayerShop> playerShopList) {
     int pageSize = NB_ROW_PER_PAGE * NB_COLUMNS_PER_LINE;
     PaginatedGui gui =
         Gui.paginated()
             .title(
-                Component.text(resourceBundle.getString("diagonia.playershop.consult.gui.title")))
+                Component.text(
+                    resourceBundle.getString(
+                        "diagonia.playershop.consult.gui.title"))) // TODO: use MiniMessage here
             .rows(6)
             .pageSize(pageSize)
             .create();
@@ -74,14 +80,13 @@ public class MainPlayerShopGui {
             .filter(Objects::nonNull)
             .toArray(GuiItem[]::new));
 
-    // TODO: remove call to controller from view
-    gui.setItem(
-        6,
-        5,
-        playerShopController
-            .getFromUuid(whoOpen.getUniqueId())
-            .map(configPlayerShopItem::createItem)
-            .orElseGet(buyPlayerShopItem::createItem));
+    GuiItem configItem;
+    if (playerShopOwned == null) {
+      configItem = buyPlayerShopItem.createItem();
+    } else {
+      configItem = configPlayerShopItem.createItem(playerShopOwned);
+    }
+    gui.setItem(6, 5, configItem);
 
     gui.setItem(5, 3, paginatedItem.createPreviousPageItem(gui));
     gui.setItem(5, 7, paginatedItem.createNextPageItem(gui));
