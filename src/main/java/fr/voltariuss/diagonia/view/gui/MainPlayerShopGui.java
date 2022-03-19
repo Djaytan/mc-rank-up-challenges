@@ -4,7 +4,6 @@ import dev.triumphteam.gui.builder.item.ItemBuilder;
 import dev.triumphteam.gui.guis.Gui;
 import dev.triumphteam.gui.guis.GuiItem;
 import dev.triumphteam.gui.guis.PaginatedGui;
-import fr.voltariuss.diagonia.controller.PlayerShopController;
 import fr.voltariuss.diagonia.model.entity.PlayerShop;
 import fr.voltariuss.diagonia.view.item.PaginatedItem;
 import fr.voltariuss.diagonia.view.item.playershop.BuyPlayerShopItem;
@@ -19,7 +18,6 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 @Singleton
 public class MainPlayerShopGui {
@@ -33,7 +31,6 @@ public class MainPlayerShopGui {
   private final ConfigPlayerShopItem configPlayerShopItem;
   private final ConsultPlayerShopItem consultPlayerShopItem;
   private final PaginatedItem paginatedItem;
-  private final PlayerShopController playerShopController;
   private final ResourceBundle resourceBundle;
 
   @Inject
@@ -42,20 +39,16 @@ public class MainPlayerShopGui {
       @NotNull ConfigPlayerShopItem configPlayerShopItem,
       @NotNull ConsultPlayerShopItem consultPlayerShopItem,
       @NotNull PaginatedItem paginatedItem,
-      @NotNull PlayerShopController playerShopController,
       @NotNull ResourceBundle resourceBundle) {
     this.buyPlayerShopItem = buyPlayerShopItem;
     this.configPlayerShopItem = configPlayerShopItem;
     this.consultPlayerShopItem = consultPlayerShopItem;
     this.paginatedItem = paginatedItem;
-    this.playerShopController = playerShopController;
     this.resourceBundle = resourceBundle;
   }
 
   public void open(
-      @NotNull Player whoOpen,
-      @Nullable PlayerShop playerShopOwned,
-      @NotNull List<PlayerShop> playerShopList) {
+      @NotNull Player whoOpen, @NotNull List<PlayerShop> playerShopList, boolean hasPlayerShop) {
     int pageSize = NB_ROW_PER_PAGE * NB_COLUMNS_PER_LINE;
     PaginatedGui gui =
         Gui.paginated()
@@ -81,19 +74,19 @@ public class MainPlayerShopGui {
             .toArray(GuiItem[]::new));
 
     GuiItem configItem;
-    if (playerShopOwned == null) {
+    if (!hasPlayerShop) {
       configItem = buyPlayerShopItem.createItem();
     } else {
-      configItem = configPlayerShopItem.createItem(playerShopOwned);
+      configItem = configPlayerShopItem.createItem();
     }
     gui.setItem(6, 5, configItem);
 
+    // TODO: show rows only when necessary
     gui.setItem(5, 3, paginatedItem.createPreviousPageItem(gui));
     gui.setItem(5, 7, paginatedItem.createNextPageItem(gui));
 
     gui.setDefaultClickAction(event -> event.setCancelled(true));
 
-    // TODO: move open actions to controller view
     gui.open(whoOpen);
   }
 }

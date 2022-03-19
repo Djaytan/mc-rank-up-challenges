@@ -37,7 +37,7 @@ public class ConfigPlayerShopItem {
     this.resourceBundle = resourceBundle;
   }
 
-  public @NotNull GuiItem createItem(@NotNull PlayerShop playerShop) {
+  public @NotNull GuiItem createItem() {
     return ItemBuilder.from(MANAGE_ITEM_MATERIAL)
         .name(
             miniMessage
@@ -48,12 +48,12 @@ public class ConfigPlayerShopItem {
                 miniMessage
                     .deserialize(resourceBundle.getString("diagonia.playershop.config.description"))
                     .decoration(TextDecoration.ITALIC, false)))
-        .asGuiItem(onClick(playerShop));
+        .asGuiItem(onClick());
   }
 
-  public @NotNull GuiAction<InventoryClickEvent> onClick(@NotNull PlayerShop playerShop) {
+  public @NotNull GuiAction<InventoryClickEvent> onClick() {
     // TODO: create a real event with Observer pattern or Bukkit API
     return event ->
-        playerShopController.openConfigPlayerShop((Player) event.getWhoClicked(), playerShop);
+        playerShopController.openConfigPlayerShopView((Player) event.getWhoClicked());
   }
 }

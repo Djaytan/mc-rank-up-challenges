@@ -13,6 +13,7 @@ import fr.voltariuss.diagonia.view.gui.ConfigPlayerShopGui;
 import fr.voltariuss.diagonia.view.gui.MainPlayerShopGui;
 import fr.voltariuss.diagonia.view.message.PlayerShopMessage;
 import java.util.List;
+import java.util.Optional;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.inject.Singleton;
@@ -64,19 +65,16 @@ public class PlayerShopController {
     this.mainPlayerShopGui = mainPlayerShopGui;
   }
 
-  public void openPlayerShop(@NotNull Player whoOpen) {
-    logger.info("Open playershop for player {}", whoOpen.getName());
-    PlayerShop playerShopOwned = playerShopService.findByUuid(whoOpen.getUniqueId()).orElse(null);
+  public void openPlayerShopListView(@NotNull Player whoOpen) {
+    logger.info("Open playershop list view for player {}", whoOpen.getName());
+    Optional<PlayerShop> playerShopOwned = playerShopService.findByUuid(whoOpen.getUniqueId());
     List<PlayerShop> playerShopList = playerShopService.findAll();
-    mainPlayerShopGui.get().open(whoOpen, playerShopOwned, playerShopList);
+    mainPlayerShopGui.get().open(whoOpen, playerShopList, playerShopOwned.isPresent());
   }
 
-  public void openConfigPlayerShop(@NotNull Player whoOpen, @NotNull PlayerShop playerShop) {
-    if (pluginConfig.isDebugMode()) {
-      logger.debug("Open config playershop for player {} ({})", whoOpen.getName(), playerShop);
-    } else {
-      logger.info("Open config playershop gui for player {}", whoOpen.getName());
-    }
+  public void openConfigPlayerShopView(@NotNull Player whoOpen) {
+    logger.info("Open config playershop view for player {}", whoOpen.getName());
+    PlayerShop playerShop = playerShopService.findByUuid(whoOpen.getUniqueId()).orElseThrow();
     configPlayerShopGui.get().open(whoOpen, playerShop);
   }
 
@@ -111,11 +109,7 @@ public class PlayerShopController {
   public void togglePlayerShop(@NotNull CommandSender sender, @NotNull PlayerShop playerShop) {
     // TODO: move business logic to model part
     @Nullable OfflinePlayer owner = server.getOfflinePlayer(playerShop.getOwnerUuid());
-    if (pluginConfig.isDebugMode()) {
-      logger.debug("Toggle playershop of {}: {}", owner, playerShop);
-    } else {
-      logger.info("Toggle playershop of {}", owner.getName());
-    }
+    logger.info("Toggle playershop of {}", owner.getName());
     if (playerShop.isActive() || playerShop.getTpLocation() != null) {
       playerShop.setActive(!playerShop.isActive());
       playerShopService.update(playerShop);
@@ -129,7 +123,7 @@ public class PlayerShopController {
 
   public void onTogglePlayerShopActivation(@NotNull Player player, @NotNull PlayerShop playerShop) {
     togglePlayerShop(player, playerShop);
-    openConfigPlayerShop(player, playerShop);
+    openConfigPlayerShopView(player);
   }
 
   public void onBuyPlayerShop(@NotNull Player player) {
@@ -149,7 +143,7 @@ public class PlayerShopController {
       EconomyResponse economyResponse = economyService.withdraw(player, buyCost);
       // TODO: use EconomyResponse for sending feedback to player
       buyPlayerShop(player);
-      openPlayerShop(player);
+      openPlayerShopListView(player);
     } catch (EconomyException e) {
       logger.error(
           "Failed to withdraw {} money from the player's balance {}: {}",

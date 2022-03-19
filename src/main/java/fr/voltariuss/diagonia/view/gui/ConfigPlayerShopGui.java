@@ -63,7 +63,8 @@ public class ConfigPlayerShopGui {
                     .deserialize(resourceBundle.getString("diagonia.gui.go_to_previous"))
                     .decoration(TextDecoration.ITALIC, false))
             .asGuiItem(
-                event -> playerShopController.openPlayerShop((Player) event.getWhoClicked())));
+                event ->
+                    playerShopController.openPlayerShopListView((Player) event.getWhoClicked())));
     // TODO: remove call to controller from view
 
     gui.setDefaultClickAction(event -> event.setCancelled(true));
