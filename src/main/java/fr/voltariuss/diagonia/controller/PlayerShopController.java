@@ -111,7 +111,7 @@ public class PlayerShopController {
         sender, playerShopMessage.teleportPointDefined(newLocationDto));
   }
 
-  public void togglePlayerShop(@NotNull CommandSender sender, @NotNull PlayerShop playerShop) {
+  public void togglePlayerShop(@NotNull Player sender, @NotNull PlayerShop playerShop) {
     logger.debug(
         "Start toggling playershop: senderName={}, playerShopId={}, playerShopIsActive={},"
             + " playerShopTpLocation={}",
@@ -138,16 +138,13 @@ public class PlayerShopController {
     playerShopService.update(playerShop);
 
     logger.info(
-        "Toggled playershop: playerShopId={}, isNowActive={}",
+        "Toggled playershop: senderName={}, playerShopId={}, isNowActive={}",
+        sender.getName(),
         playerShop.getId(),
         playerShop.isActive());
 
     masterController.sendSystemMessage(sender, playerShopMessage.toggleShop(playerShop.isActive()));
-  }
-
-  public void onTogglePlayerShopActivation(@NotNull Player player, @NotNull PlayerShop playerShop) {
-    togglePlayerShop(player, playerShop);
-    openConfigPlayerShopView(player);
+    openConfigPlayerShopView(sender);
   }
 
   public void onBuyPlayerShop(@NotNull Player player) {
