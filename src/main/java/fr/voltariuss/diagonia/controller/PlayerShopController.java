@@ -175,7 +175,7 @@ public class PlayerShopController {
     }
   }
 
-  public void onTeleportPlayerShop(
+  public void teleportToPlayerShop(
       @NotNull Player playerToTp, @NotNull PlayerShop playerShopDestination) {
     logger.debug(
         "Start event handling of teleporting a player to a playershop: playerToTpUuid={},"
@@ -202,11 +202,5 @@ public class PlayerShopController {
         "Teleportation of a player to a playershop: playerToTpUuid={}, playerShopId={}",
         playerToTp.getUniqueId(),
         playerShopDestination.getId());
-  }
-
-  public void onDefiningPlayerShopTeleportPoint(
-      @NotNull Player player, @NotNull PlayerShop playerShop) {
-    Location location = player.getLocation();
-    defineTeleportPoint(player, playerShop, location);
   }
 }

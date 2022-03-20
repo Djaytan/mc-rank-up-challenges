@@ -92,8 +92,7 @@ public class ConsultPlayerShopItem {
   public @NotNull GuiAction<InventoryClickEvent> getClickEvent(@NotNull PlayerShop playerShop) {
     return event -> {
       Player player = (Player) event.getWhoClicked();
-      // TODO: create a real event with Observer pattern or Bukkit API
-      playerShopController.onTeleportPlayerShop(player, playerShop);
+      playerShopController.teleportToPlayerShop(player, playerShop);
     };
   }
 }
