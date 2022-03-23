@@ -69,8 +69,7 @@ public class BuyPlayerShopItem {
   private @NotNull GuiAction<InventoryClickEvent> onClick() {
     return event -> {
       Player player = (Player) event.getWhoClicked();
-      // TODO: create a real event with Observer pattern or Bukkit API
-      playerShopController.onBuyPlayerShop(player);
+      playerShopController.buyPlayerShop(player);
     };
   }
 }

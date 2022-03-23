@@ -73,14 +73,31 @@ public class PlayerShopController {
   }
 
   public void buyPlayerShop(@NotNull Player player) {
+    // TODO: add logs
+    // TODO: and if something went wrong after economy transaction and before the shop creation?
     logger.info("Buy of a playershop for player {}", player.getName());
-    // TODO: economy treatment must be done here
-    PlayerShop ps = new PlayerShop(player.getUniqueId());
-    playerShopService.persist(ps);
-    // TODO: and if something went wrong after economy transaction and before or during the shop
-    // creation?
-    double buyCost = pluginConfig.getPlayerShopConfig().getBuyCost();
-    masterController.sendSystemMessage(player, playerShopMessage.buySuccess(buyCost));
+
+    double playerShopPrice = pluginConfig.getPlayerShopConfig().getBuyCost();
+
+    if (!economyService.isAffordable(player, playerShopPrice)) {
+      masterController.sendSystemMessage(player, playerShopMessage.insufficientFunds());
+      return;
+    }
+
+    try {
+      EconomyResponse economyResponse = economyService.withdraw(player, playerShopPrice);
+      PlayerShop ps = new PlayerShop(player.getUniqueId());
+      playerShopService.persist(ps);
+      masterController.sendSystemMessage(player, playerShopMessage.buySuccess(economyResponse));
+      openPlayerShopListView(player);
+    } catch (EconomyException e) {
+      logger.error(
+          "Failed to withdraw {} money from the player's balance {}: {}",
+          playerShopPrice,
+          player.getName(),
+          e.getMessage());
+      masterController.sendSystemMessage(player, playerShopMessage.transactionFailed());
+    }
   }
 
   public void defineTeleportPoint(
@@ -145,34 +162,6 @@ public class PlayerShopController {
 
     masterController.sendSystemMessage(sender, playerShopMessage.toggleShop(playerShop.isActive()));
     openConfigPlayerShopView(sender);
-  }
-
-  public void onBuyPlayerShop(@NotNull Player player) {
-    double balance = economyService.getBalance(player);
-    double buyCost = pluginConfig.getPlayerShopConfig().getBuyCost();
-
-    // TODO: move business logic to model
-    // TODO: move some logic into PlayerShopController#buyPlayerShop method
-
-    if (balance < buyCost) {
-      masterController.sendSystemMessage(player, playerShopMessage.insufficientFunds());
-      return;
-    }
-
-    // TODO: fix breaking of MVC rules by managing economy in controllers
-    try {
-      EconomyResponse economyResponse = economyService.withdraw(player, buyCost);
-      // TODO: use EconomyResponse for sending feedback to player
-      buyPlayerShop(player);
-      openPlayerShopListView(player);
-    } catch (EconomyException e) {
-      logger.error(
-          "Failed to withdraw {} money from the player's balance {}: {}",
-          buyCost,
-          player.getName(),
-          e.getMessage());
-      masterController.sendSystemMessage(player, playerShopMessage.transactionFailed());
-    }
   }
 
   public void teleportToPlayerShop(

@@ -1,6 +1,7 @@
 package fr.voltariuss.diagonia.view.message;
 
 import fr.voltariuss.diagonia.model.dto.LocationDto;
+import fr.voltariuss.diagonia.model.dto.response.EconomyResponse;
 import fr.voltariuss.diagonia.view.EconomyFormatter;
 import java.util.ResourceBundle;
 import javax.inject.Inject;
@@ -26,12 +27,13 @@ public class PlayerShopMessage {
     this.resourceBundle = resourceBundle;
   }
 
-  public @NotNull Component buySuccess(double buyCost) {
+  public @NotNull Component buySuccess(@NotNull EconomyResponse economyResponse) {
     // TODO: use TagResolver instead of String#format()
     return miniMessage.deserialize(
         String.format(
             resourceBundle.getString("diagonia.playershop.buy.successfully_bought"),
-            economyFormatter.format(buyCost)));
+            economyFormatter.format(economyResponse.getModifiedAmount()),
+            economyFormatter.format(economyResponse.getNewBalance())));
   }
 
   public @NotNull Component teleportPointDefined(@NotNull LocationDto locationDto) {
