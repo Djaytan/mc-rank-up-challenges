@@ -55,12 +55,12 @@
             <url>https://papermc.io/repo/repository/maven-public/</url>
         </repository>
         <repository>
-            <id>aikar</id>
-            <url>https://repo.aikar.co/content/groups/aikar/</url>
+            <id>kyori</id>
+            <url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
         </repository>
         <repository>
-            <id>repo</id>
-            <url>https://repo.mattstudios.me/artifactory/public/</url>
+            <id>aikar</id>
+            <url>https://repo.aikar.co/content/groups/aikar/</url>
         </repository>
         <repository>
             <id>jitpack.io</id>
