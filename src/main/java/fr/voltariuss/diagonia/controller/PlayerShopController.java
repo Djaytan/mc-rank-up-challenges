@@ -60,27 +60,30 @@ public class PlayerShopController {
   }
 
   public void openPlayerShopListView(@NotNull Player whoOpen) {
-    logger.info("Open playershop list view for player {}", whoOpen.getName());
+    logger.info("Open MainPlayerShop GUI for a player: playerName={}", whoOpen.getName());
     Optional<PlayerShop> playerShopOwned = playerShopService.findByUuid(whoOpen.getUniqueId());
     List<PlayerShop> playerShopList = playerShopService.findAll();
     mainPlayerShopGui.get().open(whoOpen, playerShopList, playerShopOwned.isPresent());
   }
 
   public void openConfigPlayerShopView(@NotNull Player whoOpen) {
-    logger.info("Open config playershop view for player {}", whoOpen.getName());
+    logger.info("Open ConfigPlayerShop GUI for a player: playerName={}", whoOpen.getName());
     PlayerShop playerShop = playerShopService.findByUuid(whoOpen.getUniqueId()).orElseThrow();
     configPlayerShopGui.get().open(whoOpen, playerShop);
   }
 
   public void buyPlayerShop(@NotNull Player player) {
-    // TODO: add logs
     // TODO: and if something went wrong after economy transaction and before the shop creation?
-    logger.info("Buy of a playershop for player {}", player.getName());
+    logger.debug("Start buying a playershop: playerName={}", player.getName());
 
     double playerShopPrice = pluginConfig.getPlayerShopConfig().getBuyCost();
 
     if (!economyService.isAffordable(player, playerShopPrice)) {
       masterController.sendSystemMessage(player, playerShopMessage.insufficientFunds());
+      logger.debug(
+          "The player can't afford a playershop: playerName={}, playerShopPrice={}",
+          player.getName(),
+          playerShopPrice);
       return;
     }
 
@@ -90,9 +93,11 @@ public class PlayerShopController {
       playerShopService.persist(ps);
       masterController.sendSystemMessage(player, playerShopMessage.buySuccess(economyResponse));
       openPlayerShopListView(player);
+      logger.info("Buy of a playershop for a player: playerName={}", player.getName());
     } catch (EconomyException e) {
       logger.error(
-          "Failed to withdraw {} money from the player's balance {}: {}",
+          "Failed to withdraw money from the player's balance: playerShopPrice={}, playerName={},"
+              + " errorMessage={}",
           playerShopPrice,
           player.getName(),
           e.getMessage());
