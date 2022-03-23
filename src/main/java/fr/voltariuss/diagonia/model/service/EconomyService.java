@@ -2,6 +2,7 @@ package fr.voltariuss.diagonia.model.service;
 
 import fr.voltariuss.diagonia.model.dto.response.EconomyResponse;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 public interface EconomyService {
@@ -11,4 +12,6 @@ public interface EconomyService {
   @NotNull
   EconomyResponse withdraw(@NotNull OfflinePlayer offlinePlayer, double amount)
       throws EconomyException;
+
+  boolean isAffordable(@NotNull Player player, double price);
 }

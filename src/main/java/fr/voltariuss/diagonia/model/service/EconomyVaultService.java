@@ -6,6 +6,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 @Singleton
@@ -55,5 +56,11 @@ public class EconomyVaultService implements EconomyService {
         .modifiedAmount(vaultEconomyResponse.amount)
         .newBalance(vaultEconomyResponse.balance)
         .build();
+  }
+
+  @Override
+  public boolean isAffordable(@NotNull Player player, double price) {
+    double balance = getBalance(player);
+    return price <= balance;
   }
 }
