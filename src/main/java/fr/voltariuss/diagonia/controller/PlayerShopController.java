@@ -93,7 +93,12 @@ public class PlayerShopController {
       playerShopService.persist(ps);
       masterController.sendSystemMessage(player, playerShopMessage.buySuccess(economyResponse));
       openPlayerShopListView(player);
-      logger.info("Buy of a playershop for a player: playerName={}", player.getName());
+      logger.info(
+          "Purchase of a playershop for the player {} ({}) for the price of {}. New solde: {}",
+          player.getName(),
+          player.getUniqueId(),
+          economyResponse.getModifiedAmount(),
+          economyResponse.getNewBalance()); // TODO: format economy values
     } catch (EconomyException e) {
       logger.error(
           "Failed to withdraw money from the player's balance: playerShopPrice={}, playerName={},"
