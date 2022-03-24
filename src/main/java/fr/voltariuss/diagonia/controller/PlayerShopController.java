@@ -60,14 +60,14 @@ public class PlayerShopController {
   }
 
   public void openPlayerShopListView(@NotNull Player whoOpen) {
-    logger.info("Open MainPlayerShop GUI for a player: playerName={}", whoOpen.getName());
+    logger.debug("Open MainPlayerShop GUI for a player: playerName={}", whoOpen.getName());
     Optional<PlayerShop> playerShopOwned = playerShopService.findByUuid(whoOpen.getUniqueId());
     List<PlayerShop> playerShopList = playerShopService.findAll();
     mainPlayerShopGui.get().open(whoOpen, playerShopList, playerShopOwned.isPresent());
   }
 
   public void openConfigPlayerShopView(@NotNull Player whoOpen) {
-    logger.info("Open ConfigPlayerShop GUI for a player: playerName={}", whoOpen.getName());
+    logger.debug("Open ConfigPlayerShop GUI for a player: playerName={}", whoOpen.getName());
     PlayerShop playerShop = playerShopService.findByUuid(whoOpen.getUniqueId()).orElseThrow();
     configPlayerShopGui.get().open(whoOpen, playerShop);
   }
@@ -122,7 +122,7 @@ public class PlayerShopController {
     playerShop.setTpLocation(newLocationDto);
     playerShopService.update(playerShop);
 
-    logger.info(
+    logger.debug(
         "Updated teleport point for playershop: playerShopOwnerUuid={}, playerShopId={},"
             + " playerShopNewTpLocation={}",
         playerShop.getOwnerUuid(),
@@ -159,7 +159,7 @@ public class PlayerShopController {
     playerShop.setActive(!playerShop.isActive());
     playerShopService.update(playerShop);
 
-    logger.info(
+    logger.debug(
         "Toggled playershop: senderName={}, playerShopId={}, isNowActive={}",
         sender.getName(),
         playerShop.getId(),
@@ -192,7 +192,7 @@ public class PlayerShopController {
 
     playerToTp.teleport(tpLocation, PlayerTeleportEvent.TeleportCause.PLUGIN);
 
-    logger.info(
+    logger.debug(
         "Teleportation of a player to a playershop: playerToTpUuid={}, playerShopId={}",
         playerToTp.getUniqueId(),
         playerShopDestination.getId());

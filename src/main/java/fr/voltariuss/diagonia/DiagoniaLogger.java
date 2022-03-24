@@ -22,6 +22,7 @@ import org.slf4j.Marker;
  *
  * @author Voltariuss
  */
+// TODO: maybe finally the debug to be shown only in log file is not as bad as this?
 @Singleton
 public final class DiagoniaLogger implements Logger {
 
