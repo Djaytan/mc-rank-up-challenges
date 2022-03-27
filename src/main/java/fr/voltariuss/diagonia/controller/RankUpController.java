@@ -31,7 +31,7 @@ public class RankUpController {
   private final DiagoniaLogger logger;
   private final EconomyService economyService;
   private final JobsService jobsService;
-  private final MainController mainController;
+  private final ControllerHelper controllerHelper;
   private final RankChallengeProgressionService rankChallengeProgressionService;
   private final RankConfigService rankConfigService;
   private final RankService rankService;
@@ -45,7 +45,7 @@ public class RankUpController {
       @NotNull DiagoniaLogger logger,
       @NotNull EconomyService economyService,
       @NotNull JobsService jobsService,
-      @NotNull MainController mainController,
+      @NotNull ControllerHelper controllerHelper,
       @NotNull RankChallengeProgressionService rankChallengeProgressionService,
       @NotNull RankConfigService rankConfigService,
       @NotNull RankService rankService,
@@ -55,7 +55,7 @@ public class RankUpController {
     this.logger = logger;
     this.economyService = economyService;
     this.jobsService = jobsService;
-    this.mainController = mainController;
+    this.controllerHelper = controllerHelper;
     this.rankChallengeProgressionService = rankChallengeProgressionService;
     this.rankConfigService = rankConfigService;
     this.rankService = rankService;
@@ -120,7 +120,7 @@ public class RankUpController {
       PromotionResult promotionResult = rankService.promote(player);
 
       if (!promotionResult.wasSuccessful()) {
-        mainController.sendSystemMessage(player, rankUpMessage.rankUpFailure());
+        controllerHelper.sendSystemMessage(player, rankUpMessage.rankUpFailure());
         logger.error(
             "Player promotion failed: player={}, promotionResult={}",
             player.getName(),
@@ -132,10 +132,10 @@ public class RankUpController {
           rankConfigService.findById(promotionResult.getGroupTo().orElseThrow()).orElseThrow();
 
       player.closeInventory(Reason.PLUGIN);
-      mainController.sendSystemMessage(player, rankUpMessage.rankUpSuccess(newRank));
+      controllerHelper.sendSystemMessage(player, rankUpMessage.rankUpSuccess(newRank));
       return;
     }
 
-    mainController.sendSystemMessage(player, rankUpMessage.prerequisitesNotRespected());
+    controllerHelper.sendSystemMessage(player, rankUpMessage.prerequisitesNotRespected());
   }
 }
