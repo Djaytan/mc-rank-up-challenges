@@ -132,7 +132,7 @@ public class RankUpController {
           rankConfigService.findById(promotionResult.getGroupTo().orElseThrow()).orElseThrow();
 
       player.closeInventory(Reason.PLUGIN);
-      controllerHelper.sendSystemMessage(player, rankUpMessage.rankUpSuccess(newRank));
+      controllerHelper.broadcastMessage(rankUpMessage.rankUpSuccess(player, newRank));
       return;
     }
 

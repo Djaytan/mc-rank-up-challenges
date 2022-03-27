@@ -7,6 +7,9 @@ import javax.inject.Singleton;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.Template;
+import net.kyori.adventure.text.minimessage.template.TemplateResolver;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 @Singleton
@@ -27,16 +30,15 @@ public class RankUpMessage {
         .decoration(TextDecoration.ITALIC, false);
   }
 
-  public @NotNull Component rankUpSuccess(@NotNull Rank newRank) {
+  public @NotNull Component rankUpSuccess(@NotNull Player whoRankUp, @NotNull Rank newRank) {
     return miniMessage
         .deserialize(
-            String.format(
-                resourceBundle.getString("diagonia.rankup.rankup.success"), newRank.getId()))
-        .decoration(TextDecoration.ITALIC, false)
-        .append(
-            Component.text(newRank.getName())
-                .color(newRank.getColor())
-                .decoration(TextDecoration.ITALIC, false));
+            resourceBundle.getString("diagonia.rankup.rankup.success"),
+            TemplateResolver.templates(
+                Template.template("player_name", whoRankUp.getName()),
+                Template.template(
+                    "rank", Component.text(newRank.getName()).color(newRank.getColor()))))
+        .decoration(TextDecoration.ITALIC, false);
   }
 
   public @NotNull Component prerequisitesNotRespected() {
