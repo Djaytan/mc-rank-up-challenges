@@ -57,58 +57,57 @@ public class RankUpGui {
   // TODO: return a response object to controller with status, and eventually the created Gui
   public void open(
       @NotNull Player whoOpen, @NotNull Rank rank, @NotNull RankUpProgression rankUpProgression) {
-    // TODO: refactor is-else
-    if (rank.getRankUpChallenges() != null) {
-      PaginatedGui gui =
-          Gui.paginated()
-              .pageSize(PAGE_SIZE)
-              .rows(6)
-              .title(
-                  miniMessage.deserialize(
-                      String.format(
-                          resourceBundle.getString("diagonia.rankup.rankup.challenge.title"),
-                          rank.getName())))
-              .create();
 
-      GuiItem decorationItem =
-          ItemBuilder.from(DECORATION_MATERIAL).name(Component.empty()).asGuiItem();
-
-      for (int i = 1; i <= 9; i++) {
-        gui.setItem(5, i, decorationItem);
-      }
-
-      rank.getRankUpChallenges()
-          .forEach(
-              rankChallenge ->
-                  gui.addItem(
-                      rankChallengeItem.createItem(whoOpen.getUniqueId(), rank, rankChallenge)));
-
-      gui.setItem(6, 5, rankUpItem.createItem(rank, rankUpProgression));
-
-      if (rank.getRankUpChallenges().size() > PAGE_SIZE) {
-        gui.setItem(5, 3, paginatedItem.createPreviousPageItem(gui));
-        gui.setItem(5, 7, paginatedItem.createNextPageItem(gui));
-      }
-
-      gui.setItem(
-          6,
-          1,
-          ItemBuilder.from(PREVIOUS_GUI_MATERIAL)
-              .name(
-                  miniMessage
-                      .deserialize(resourceBundle.getString("diagonia.gui.go_to_previous"))
-                      .decoration(TextDecoration.ITALIC, false))
-              .asGuiItem(
-                  event -> rankUpController.openRankListGui((Player) event.getWhoClicked())));
-      // TODO: create a real event with Observer pattern or Bukkit API
-
-      gui.setDefaultClickAction(event -> event.setCancelled(true));
-
-      // TODO: move open actions to controller view
-      gui.open(whoOpen);
+    if (rank.getRankUpChallenges() == null) {
+      logger.error("No challenge is associated with the rank {}", rank.getId());
+      // TODO: feedback player (unexpected error) + move this part to controller
       return;
     }
-    logger.error("No challenge is associated with the rank {}", rank.getId());
-    // TODO: feedback player (unexpected error) + move this part to controller
+
+    PaginatedGui gui =
+        Gui.paginated()
+            .pageSize(PAGE_SIZE)
+            .rows(6)
+            .title(
+                miniMessage.deserialize(
+                    String.format(
+                        resourceBundle.getString("diagonia.rankup.rankup.challenge.title"),
+                        rank.getName())))
+            .create();
+
+    GuiItem decorationItem =
+        ItemBuilder.from(DECORATION_MATERIAL).name(Component.empty()).asGuiItem();
+
+    for (int i = 1; i <= 9; i++) {
+      gui.setItem(5, i, decorationItem);
+    }
+
+    rank.getRankUpChallenges()
+        .forEach(
+            rankChallenge ->
+                gui.addItem(
+                    rankChallengeItem.createItem(whoOpen.getUniqueId(), rank, rankChallenge)));
+
+    gui.setItem(6, 5, rankUpItem.createItem(rank, rankUpProgression));
+
+    if (rank.getRankUpChallenges().size() > PAGE_SIZE) {
+      gui.setItem(5, 3, paginatedItem.createPreviousPageItem(gui));
+      gui.setItem(5, 7, paginatedItem.createNextPageItem(gui));
+    }
+
+    gui.setItem(
+        6,
+        1,
+        ItemBuilder.from(PREVIOUS_GUI_MATERIAL)
+            .name(
+                miniMessage
+                    .deserialize(resourceBundle.getString("diagonia.gui.go_to_previous"))
+                    .decoration(TextDecoration.ITALIC, false))
+            .asGuiItem(event -> rankUpController.openRankListGui((Player) event.getWhoClicked())));
+    // TODO: create a real event with Observer pattern or Bukkit API
+
+    gui.setDefaultClickAction(event -> event.setCancelled(true));
+
+    gui.open(whoOpen);
   }
 }
