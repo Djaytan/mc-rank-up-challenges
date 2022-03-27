@@ -14,6 +14,8 @@ import javax.inject.Singleton;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.Template;
+import net.kyori.adventure.text.minimessage.template.TemplateResolver;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -51,10 +53,13 @@ public class BuyPlayerShopItem {
     lore.add(
         miniMessage
             .deserialize(
-                String.format(
-                    resourceBundle.getString("diagonia.playershop.buy.description.1"),
-                    economyFormatter.format(pluginConfig.getPlayerShopConfig().getBuyCost())))
+                resourceBundle.getString("diagonia.playershop.buy.description.1"),
+                TemplateResolver.templates(
+                    Template.template(
+                        "diag_buy_price",
+                        economyFormatter.format(pluginConfig.getPlayerShopConfig().getBuyCost()))))
             .decoration(TextDecoration.ITALIC, false));
+    // TODO: merge this lore with TemplateResolver
     lore.add(Component.empty());
     lore.add(
         miniMessage

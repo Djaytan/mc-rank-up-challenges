@@ -8,6 +8,8 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.Template;
+import net.kyori.adventure.text.minimessage.template.TemplateResolver;
 import org.jetbrains.annotations.NotNull;
 
 @Singleton
@@ -28,29 +30,34 @@ public class PlayerShopMessage {
   }
 
   public @NotNull Component buySuccess(@NotNull EconomyResponse economyResponse) {
-    // TODO: use TagResolver instead of String#format()
     return miniMessage.deserialize(
-        String.format(
-            resourceBundle.getString("diagonia.playershop.buy.successfully_bought"),
-            economyFormatter.format(economyResponse.getModifiedAmount()),
-            economyFormatter.format(economyResponse.getNewBalance())));
+        resourceBundle.getString("diagonia.playershop.buy.successfully_bought"),
+        TemplateResolver.templates(
+            Template.template(
+                "diag_price", economyFormatter.format(economyResponse.getModifiedAmount())),
+            Template.template(
+                "diag_new_balance", economyFormatter.format(economyResponse.getNewBalance()))));
   }
 
   public @NotNull Component teleportPointDefined(@NotNull LocationDto locationDto) {
     return miniMessage.deserialize(
-        String.format(
-            resourceBundle.getString("diagonia.playershop.config.define_teleport.defined"),
-            locationDto));
+        resourceBundle.getString("diagonia.playershop.config.define_teleport.defined"),
+        TemplateResolver.templates(
+            Template.template("diag_teleport_point", locationDto.toString())));
+    // TODO: more user-friendly message by preventing usage of LocationDto#toString()
   }
 
   public @NotNull Component toggleShop(boolean isPlayerShopActive) {
     return miniMessage.deserialize(
-        String.format(
-            resourceBundle.getString("diagonia.playershop.config.activation.toggled"),
-            isPlayerShopActive
-                ? resourceBundle.getString("diagonia.playershop.config.activation.toggled.enabled")
-                : resourceBundle.getString(
-                    "diagonia.playershop.config.activation.toggled.disabled")));
+        resourceBundle.getString("diagonia.playershop.config.activation.toggled"),
+        TemplateResolver.templates(
+            Template.template(
+                "diag_activation_state",
+                isPlayerShopActive
+                    ? resourceBundle.getString(
+                        "diagonia.playershop.config.activation.toggled.enabled")
+                    : resourceBundle.getString(
+                        "diagonia.playershop.config.activation.toggled.disabled"))));
   }
 
   public @NotNull Component shopActivationRequireTeleportPointFirst() {

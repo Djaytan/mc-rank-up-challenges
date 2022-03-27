@@ -15,6 +15,8 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.Template;
+import net.kyori.adventure.text.minimessage.template.TemplateResolver;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -52,12 +54,14 @@ public class ConsultPlayerShopItem {
     String ownerName = ownerPlayer.getName();
 
     if (playerShop.isActive()) {
+      // TODO: refactor if-else
+      // TODO: is ownerName can really be null?
       if (ownerName != null) {
         Component psName =
             miniMessage
                 .deserialize(
-                    String.format(
-                        resourceBundle.getString("diagonia.playershop.consult.name"), ownerName))
+                    resourceBundle.getString("diagonia.playershop.consult.name"),
+                    TemplateResolver.templates(Template.template("diag_player_name", ownerName)))
                 .decoration(TextDecoration.ITALIC, false);
         List<Component> psDescLore =
             Collections.singletonList(

@@ -17,6 +17,8 @@ import javax.inject.Singleton;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.Template;
+import net.kyori.adventure.text.minimessage.template.TemplateResolver;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -66,42 +68,56 @@ public class RankUpItem {
                     : Arrays.asList(
                         miniMessage
                             .deserialize(
-                                String.format(
-                                    resourceBundle.getString(
-                                        "diagonia.rankup.rankup.cost.minecraft_xp"),
-                                    String.format(
-                                        "%s%s",
-                                        rankUpProgression.isXpLevelPrerequisiteDone()
-                                            ? "<green>"
-                                            : "",
-                                        rankUpProgression.getCurrentXpLevel()),
-                                    rankUpPrerequisites.getTotalMcExpLevels()))
+                                resourceBundle.getString(
+                                    "diagonia.rankup.rankup.cost.minecraft_xp"),
+                                TemplateResolver.templates(
+                                    Template.template(
+                                        "diag_current_level",
+                                        String.format( // TODO: refactor
+                                            "%s%s",
+                                            rankUpProgression.isXpLevelPrerequisiteDone()
+                                                ? "<green>"
+                                                : "",
+                                            rankUpProgression.getCurrentXpLevel())),
+                                    Template.template(
+                                        "diag_required_level",
+                                        String.valueOf(rankUpPrerequisites.getTotalMcExpLevels()))))
                             .decoration(TextDecoration.ITALIC, false),
                         miniMessage
                             .deserialize(
-                                String.format(
-                                    resourceBundle.getString(
-                                        "diagonia.rankup.rankup.cost.jobs_levels"),
-                                    String.format(
-                                        "%s%s",
-                                        rankUpProgression.isTotalJobsLevelsPrerequisiteDone()
-                                            ? "<green>"
-                                            : "",
-                                        rankUpProgression.getTotalJobsLevels()),
-                                    rankUpPrerequisites.getTotalJobsLevel()))
+                                resourceBundle.getString("diagonia.rankup.rankup.cost.jobs_levels"),
+                                TemplateResolver.templates(
+                                    Template.template(
+                                        "diag_current_level",
+                                        String.format(
+                                            "%s%s",
+                                            rankUpProgression.isTotalJobsLevelsPrerequisiteDone()
+                                                ? "<green>"
+                                                : "",
+                                            rankUpProgression.getTotalJobsLevels())),
+                                    Template.template(
+                                        "diag_required_level",
+                                        String.valueOf(
+                                            rankUpProgression
+                                                .isTotalJobsLevelsPrerequisiteDone()))))
                             .decoration(TextDecoration.ITALIC, false),
                         miniMessage
                             .deserialize(
-                                String.format(
-                                    resourceBundle.getString("diagonia.rankup.rankup.cost.money"),
-                                    String.format(
-                                        "%s%s",
-                                        rankUpProgression.isMoneyPrerequisiteDone()
-                                            ? "<green>"
-                                            : "",
+                                resourceBundle.getString("diagonia.rankup.rankup.cost.money"),
+                                TemplateResolver.templates(
+                                    Template.template(
+                                        "diag_current_balance",
+                                        String.format(
+                                            "%s%s",
+                                            rankUpProgression.isMoneyPrerequisiteDone()
+                                                ? "<green>"
+                                                : "",
+                                            economyFormatter.format(
+                                                rankUpProgression.getCurrentBalance()))),
+                                    Template.template(
+                                        "diag_rankup_price",
                                         economyFormatter.format(
-                                            rankUpProgression.getCurrentBalance())),
-                                    economyFormatter.format(rankUpPrerequisites.getMoneyPrice())))
+                                            rankUpPrerequisites.getMoneyPrice()))))
                             .decoration(TextDecoration.ITALIC, false),
                         Component.empty(),
                         rankUpProgression.canRankUp()

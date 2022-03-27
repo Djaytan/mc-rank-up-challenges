@@ -15,6 +15,8 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.Template;
+import net.kyori.adventure.text.minimessage.template.TemplateResolver;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -106,13 +108,14 @@ public class RankItem {
                             Stream.concat(
                                 rank.getProfits().stream()
                                     .map(
-                                        descLine ->
+                                        profitDescLine ->
                                             miniMessage
                                                 .deserialize(
-                                                    String.format(
-                                                        resourceBundle.getString(
-                                                            "diagonia.rankup.rank_list.profit"),
-                                                        descLine))
+                                                    resourceBundle.getString(
+                                                        "diagonia.rankup.rank_list.profit"),
+                                                    TemplateResolver.templates(
+                                                        Template.template(
+                                                            "diag_profit", profitDescLine)))
                                                 .decoration(TextDecoration.ITALIC, false)),
                                 endRank.stream())))
                     .toList())

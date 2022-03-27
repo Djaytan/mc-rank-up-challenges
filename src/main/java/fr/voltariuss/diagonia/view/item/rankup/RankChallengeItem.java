@@ -18,6 +18,8 @@ import javax.inject.Singleton;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.Template;
+import net.kyori.adventure.text.minimessage.template.TemplateResolver;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -57,25 +59,33 @@ public class RankChallengeItem {
     boolean isChallengeCompleted =
         rcp != null && rankChallenge.getChallengeItemAmount() == rcp.getChallengeAmountGiven();
 
+    // TODO: refactoring - remove duplication
     if (!isChallengeCompleted) {
       return ItemBuilder.from(rankChallenge.getChallengeItemMaterial())
           .name(
               miniMessage
                   .deserialize(
-                      String.format(
-                          resourceBundle.getString("diagonia.rankup.rankup.challenge.name"),
-                          rankChallenge.getChallengeItemMaterial().name()))
+                      resourceBundle.getString("diagonia.rankup.rankup.challenge.name"),
+                      TemplateResolver.templates(
+                          Template.template(
+                              "diag_challenge_name",
+                              rankChallenge.getChallengeItemMaterial().name())))
                   .decoration(TextDecoration.ITALIC, false))
           .lore(
               Stream.concat(
                       Stream.of(
                           miniMessage
                               .deserialize(
-                                  String.format(
-                                      resourceBundle.getString(
-                                          "diagonia.rankup.rankup.challenge.progress"),
-                                      rcp != null ? rcp.getChallengeAmountGiven() : 0,
-                                      rankChallenge.getChallengeItemAmount()))
+                                  resourceBundle.getString(
+                                      "diagonia.rankup.rankup.challenge.progress"),
+                                  TemplateResolver.templates(
+                                      Template.template(
+                                          "diag_amount_given",
+                                          String.valueOf(
+                                              rcp != null ? rcp.getChallengeAmountGiven() : 0)),
+                                      Template.template(
+                                          "diag_amount_required",
+                                          String.valueOf(rankChallenge.getChallengeItemAmount()))))
                               .decoration(TextDecoration.ITALIC, false),
                           Component.empty()),
                       Stream.of(
@@ -106,9 +116,11 @@ public class RankChallengeItem {
         .name(
             miniMessage
                 .deserialize(
-                    String.format(
-                        resourceBundle.getString("diagonia.rankup.rankup.challenge.name"),
-                        rankChallenge.getChallengeItemMaterial().name()))
+                    resourceBundle.getString("diagonia.rankup.rankup.challenge.name"),
+                    TemplateResolver.templates(
+                        Template.template(
+                            "diag_challenge_name",
+                            rankChallenge.getChallengeItemMaterial().name())))
                 .decoration(TextDecoration.ITALIC, false))
         .lore(
             List.of(
@@ -168,10 +180,11 @@ public class RankChallengeItem {
             }
             whoClicked.sendMessage(
                 miniMessage.deserialize(
-                    String.format(
-                        resourceBundle.getString("diagonia.rankup.rankup.challenge.success_give"),
-                        effectiveGivenAmount,
-                        clickedItem.getType().name())));
+                    resourceBundle.getString("diagonia.rankup.rankup.challenge.success_give"),
+                    TemplateResolver.templates(
+                        Template.template(
+                            "diag_amount_given", String.valueOf(effectiveGivenAmount)),
+                        Template.template("diag_item_name", clickedItem.getType().name()))));
             RankChallengeProgression rcp =
                 rankUpController
                     .findChallenge(whoClicked.getUniqueId(), rank.getId(), clickedItem.getType())
@@ -179,20 +192,18 @@ public class RankChallengeItem {
             if (rcp.getChallengeAmountGiven() == rankChallenge.getChallengeItemAmount()) {
               whoClicked.sendMessage(
                   miniMessage.deserialize(
-                      String.format(
-                          resourceBundle.getString(
-                              "diagonia.rankup.rankup.challenge.now_completed"),
-                          rankChallenge.getChallengeItemMaterial().name())));
+                      resourceBundle.getString("diagonia.rankup.rankup.challenge.now_completed"),
+                      TemplateResolver.templates(
+                          Template.template(
+                              "diag_challenge_name",
+                              rankChallenge.getChallengeItemMaterial().name()))));
             }
             rankUpController.openRankUpGui(whoClicked, rank);
           } else if (effectiveGivenAmount == 0) {
             whoClicked.sendMessage(
                 miniMessage.deserialize(
-                    String.format(
-                        resourceBundle.getString(
-                            "diagonia.rankup.rankup.challenge.challenge_already_completed"),
-                        effectiveGivenAmount,
-                        clickedItem.getType().name())));
+                    resourceBundle.getString(
+                        "diagonia.rankup.rankup.challenge.challenge_already_completed")));
           }
           return;
         }

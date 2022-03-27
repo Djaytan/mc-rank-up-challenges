@@ -16,6 +16,8 @@ import javax.inject.Singleton;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.Template;
+import net.kyori.adventure.text.minimessage.template.TemplateResolver;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -70,9 +72,8 @@ public class RankUpGui {
             .rows(6)
             .title(
                 miniMessage.deserialize(
-                    String.format(
-                        resourceBundle.getString("diagonia.rankup.rankup.challenge.title"),
-                        rank.getName())))
+                    resourceBundle.getString("diagonia.rankup.rankup.challenge.title"),
+                    TemplateResolver.templates(Template.template("diag_rank", rank.getName()))))
             .create();
 
     GuiItem decorationItem =

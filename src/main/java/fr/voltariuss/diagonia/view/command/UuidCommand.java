@@ -7,6 +7,8 @@ import java.util.ResourceBundle;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.Template;
+import net.kyori.adventure.text.minimessage.template.TemplateResolver;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -27,6 +29,8 @@ public class UuidCommand extends BaseCommand {
   public void onExecute(@NotNull Player player) {
     player.sendMessage(
         miniMessage.deserialize(
-            String.format(resourceBundle.getString("diagonia.uuid"), player.getUniqueId())));
+            resourceBundle.getString("diagonia.uuid"),
+            TemplateResolver.templates(
+                Template.template("diag_uuid", player.getUniqueId().toString()))));
   }
 }
