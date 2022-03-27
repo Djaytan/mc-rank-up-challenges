@@ -4,4 +4,6 @@ author: Voltariuss
 api-version: ${minecraft.api.version}
 main: fr.voltariuss.diagonia.DiagoniaPlugin
 depend:
+  - Jobs
+  - LuckPerms
   - Vault
