@@ -5,6 +5,7 @@ import dev.triumphteam.gui.guis.GuiItem;
 import fr.voltariuss.diagonia.controller.RankUpController;
 import fr.voltariuss.diagonia.model.config.rank.Rank;
 import fr.voltariuss.diagonia.model.config.rank.RankConfig;
+import fr.voltariuss.diagonia.view.item.GoToMainMenuItem;
 import fr.voltariuss.diagonia.view.item.rankup.RankItem;
 import java.util.ResourceBundle;
 import javax.inject.Inject;
@@ -16,6 +17,7 @@ import org.jetbrains.annotations.NotNull;
 @Singleton
 public class RankListGui {
 
+  private final GoToMainMenuItem goToMainMenuItem;
   private final MiniMessage miniMessage;
   private final RankConfig rankConfig;
   private final RankItem rankItem;
@@ -24,11 +26,13 @@ public class RankListGui {
 
   @Inject
   public RankListGui(
+      @NotNull GoToMainMenuItem goToMainMenuItem,
       @NotNull MiniMessage miniMessage,
       @NotNull RankConfig rankConfig,
       @NotNull RankItem rankItem,
       @NotNull RankUpController rankUpController,
       @NotNull ResourceBundle resourceBundle) {
+    this.goToMainMenuItem = goToMainMenuItem;
     this.miniMessage = miniMessage;
     this.rankConfig = rankConfig;
     this.rankItem = rankItem;
@@ -37,12 +41,14 @@ public class RankListGui {
   }
 
   public void open(@NotNull Player whoOpen) {
+    int nbRows = (int) Math.ceil(rankConfig.getRanks().size() / 9.0D) + 2;
+
     Gui gui =
         Gui.gui()
             .title(
                 miniMessage.deserialize(
                     resourceBundle.getString("diagonia.rankup.rank_list.title")))
-            .rows((int) Math.ceil(rankConfig.getRanks().size() / 9.0D))
+            .rows(nbRows)
             .create();
 
     for (Rank rank : rankConfig.getRanks()) {
@@ -54,6 +60,8 @@ public class RankListGui {
       GuiItem rankGuiItem = rankItem.createItem(rank, isRankOwned, isCurrentRank, isUnlockableRank);
       gui.addItem(rankGuiItem);
     }
+
+    gui.setItem(nbRows, 1, goToMainMenuItem.createItem());
 
     gui.setDefaultClickAction(event -> event.setCancelled(true));
 

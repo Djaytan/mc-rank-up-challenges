@@ -5,6 +5,7 @@ import dev.triumphteam.gui.guis.Gui;
 import dev.triumphteam.gui.guis.GuiItem;
 import dev.triumphteam.gui.guis.PaginatedGui;
 import fr.voltariuss.diagonia.model.entity.PlayerShop;
+import fr.voltariuss.diagonia.view.item.GoToMainMenuItem;
 import fr.voltariuss.diagonia.view.item.PaginatedItem;
 import fr.voltariuss.diagonia.view.item.playershop.BuyPlayerShopItem;
 import fr.voltariuss.diagonia.view.item.playershop.ConfigPlayerShopItem;
@@ -30,6 +31,7 @@ public class MainPlayerShopGui {
   private final BuyPlayerShopItem buyPlayerShopItem;
   private final ConfigPlayerShopItem configPlayerShopItem;
   private final ConsultPlayerShopItem consultPlayerShopItem;
+  private final GoToMainMenuItem goToMainMenuItem;
   private final PaginatedItem paginatedItem;
   private final ResourceBundle resourceBundle;
 
@@ -38,11 +40,13 @@ public class MainPlayerShopGui {
       @NotNull BuyPlayerShopItem buyPlayerShopItem,
       @NotNull ConfigPlayerShopItem configPlayerShopItem,
       @NotNull ConsultPlayerShopItem consultPlayerShopItem,
+      @NotNull GoToMainMenuItem goToMainMenuItem,
       @NotNull PaginatedItem paginatedItem,
       @NotNull ResourceBundle resourceBundle) {
     this.buyPlayerShopItem = buyPlayerShopItem;
     this.configPlayerShopItem = configPlayerShopItem;
     this.consultPlayerShopItem = consultPlayerShopItem;
+    this.goToMainMenuItem = goToMainMenuItem;
     this.paginatedItem = paginatedItem;
     this.resourceBundle = resourceBundle;
   }
@@ -84,6 +88,8 @@ public class MainPlayerShopGui {
     // TODO: show rows only when necessary
     gui.setItem(5, 3, paginatedItem.createPreviousPageItem(gui));
     gui.setItem(5, 7, paginatedItem.createNextPageItem(gui));
+
+    gui.setItem(6, 1, goToMainMenuItem.createItem());
 
     gui.setDefaultClickAction(event -> event.setCancelled(true));
 
