@@ -29,9 +29,8 @@ import org.jetbrains.annotations.Nullable;
  * @author Voltariuss
  * @since 1.1.0
  */
-// TODO: rename RankLuckPermsService
 @Singleton
-public class RankServiceImpl implements RankService {
+public class RankLuckPermsService implements RankService {
 
   private static final String TRACK_NAME = "ranks"; // TODO: make it configurable
 
@@ -54,7 +53,7 @@ public class RankServiceImpl implements RankService {
    * @param userManager The user manager of LuckPerms API.
    */
   @Inject
-  public RankServiceImpl(
+  public RankLuckPermsService(
       @NotNull DiagoniaLogger logger,
       @NotNull GroupManager groupManager,
       @NotNull RankChallengeProgressionService rankChallengeProgressionService,

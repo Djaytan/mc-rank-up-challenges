@@ -15,7 +15,7 @@ import fr.voltariuss.diagonia.model.service.EconomyVaultService;
 import fr.voltariuss.diagonia.model.service.JobsRebornService;
 import fr.voltariuss.diagonia.model.service.JobsService;
 import fr.voltariuss.diagonia.model.service.RankService;
-import fr.voltariuss.diagonia.model.service.RankServiceImpl;
+import fr.voltariuss.diagonia.model.service.RankLuckPermsService;
 import java.util.Objects;
 import java.util.ResourceBundle;
 import javax.inject.Named;
@@ -58,7 +58,7 @@ public class GuiceGeneralModule extends AbstractModule {
     bind(EconomyService.class).to(EconomyVaultService.class);
     bind(JobsService.class).to(JobsRebornService.class);
     bind(PlayerShopDao.class).to(PlayerShopDaoImpl.class);
-    bind(RankService.class).to(RankServiceImpl.class);
+    bind(RankService.class).to(RankLuckPermsService.class);
   }
 
   @Provides
