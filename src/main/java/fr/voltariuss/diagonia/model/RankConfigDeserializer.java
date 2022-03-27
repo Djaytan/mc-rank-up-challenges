@@ -59,12 +59,6 @@ public class RankConfigDeserializer implements JsonDeserializer<RankConfig> {
                       JsonObject challengeObject = challengeElem.getAsJsonObject();
                       challenges.add(
                           RankChallenge.builder()
-                              .challengeType(
-                                  RankChallengeType.valueOf(
-                                      challengeObject
-                                          .get("challengeType")
-                                          .getAsString()
-                                          .toUpperCase()))
                               .challengeItemMaterial(
                                   Material.matchMaterial(
                                       challengeObject.get("challengeItemMaterial").getAsString()))
