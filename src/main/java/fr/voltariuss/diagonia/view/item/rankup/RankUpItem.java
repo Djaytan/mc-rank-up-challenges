@@ -15,6 +15,7 @@ import java.util.ResourceBundle;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.Template;
@@ -73,12 +74,12 @@ public class RankUpItem {
                                 TemplateResolver.templates(
                                     Template.template(
                                         "diag_current_level",
-                                        String.format( // TODO: refactor
-                                            "%s%s",
+                                        Component.text(
+                                            String.valueOf(rankUpProgression.getCurrentXpLevel()),
                                             rankUpProgression.isXpLevelPrerequisiteDone()
-                                                ? "<green>"
-                                                : "",
-                                            rankUpProgression.getCurrentXpLevel())),
+                                                ? NamedTextColor
+                                                    .GREEN // TODO: transfer it into resourceBundle
+                                                : NamedTextColor.GRAY)),
                                     Template.template(
                                         "diag_required_level",
                                         String.valueOf(rankUpPrerequisites.getTotalMcExpLevels()))))
@@ -89,17 +90,14 @@ public class RankUpItem {
                                 TemplateResolver.templates(
                                     Template.template(
                                         "diag_current_level",
-                                        String.format(
-                                            "%s%s",
+                                        Component.text(
+                                            String.valueOf(rankUpProgression.getTotalJobsLevels()),
                                             rankUpProgression.isTotalJobsLevelsPrerequisiteDone()
-                                                ? "<green>"
-                                                : "",
-                                            rankUpProgression.getTotalJobsLevels())),
+                                                ? NamedTextColor.GREEN
+                                                : NamedTextColor.GRAY)),
                                     Template.template(
                                         "diag_required_level",
-                                        String.valueOf(
-                                            rankUpProgression
-                                                .isTotalJobsLevelsPrerequisiteDone()))))
+                                        String.valueOf(rankUpPrerequisites.getTotalJobsLevel()))))
                             .decoration(TextDecoration.ITALIC, false),
                         miniMessage
                             .deserialize(
@@ -107,13 +105,12 @@ public class RankUpItem {
                                 TemplateResolver.templates(
                                     Template.template(
                                         "diag_current_balance",
-                                        String.format(
-                                            "%s%s",
-                                            rankUpProgression.isMoneyPrerequisiteDone()
-                                                ? "<green>"
-                                                : "",
+                                        Component.text(
                                             economyFormatter.format(
-                                                rankUpProgression.getCurrentBalance()))),
+                                                rankUpProgression.getCurrentBalance()),
+                                            rankUpProgression.isMoneyPrerequisiteDone()
+                                                ? NamedTextColor.GREEN
+                                                : NamedTextColor.GRAY)),
                                     Template.template(
                                         "diag_rankup_price",
                                         economyFormatter.format(

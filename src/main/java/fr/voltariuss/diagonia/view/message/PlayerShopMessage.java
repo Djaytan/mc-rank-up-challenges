@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.Template;
 import net.kyori.adventure.text.minimessage.template.TemplateResolver;
@@ -54,10 +55,14 @@ public class PlayerShopMessage {
             Template.template(
                 "diag_activation_state",
                 isPlayerShopActive
-                    ? resourceBundle.getString(
-                        "diagonia.playershop.config.activation.toggled.enabled")
-                    : resourceBundle.getString(
-                        "diagonia.playershop.config.activation.toggled.disabled"))));
+                    ? Component.text(
+                            resourceBundle.getString(
+                                "diagonia.playershop.config.activation.toggled.enabled"))
+                        .color(NamedTextColor.GREEN)
+                    : Component.text(
+                            resourceBundle.getString(
+                                "diagonia.playershop.config.activation.toggled.disabled"))
+                        .color(NamedTextColor.RED))));
   }
 
   public @NotNull Component shopActivationRequireTeleportPointFirst() {
