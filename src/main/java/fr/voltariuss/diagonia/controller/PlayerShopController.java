@@ -119,12 +119,12 @@ public class PlayerShopController {
             + " playerShopCurrentTpLocation={}, newLocation={}",
         sender.getName(),
         playerShop.getId(),
-        playerShop.getTpLocation(),
+        playerShop.getTpLocationDto(),
         newLocation);
 
     LocationDto newLocationDto = locationMapper.toDto(newLocation);
 
-    playerShop.setTpLocation(newLocationDto);
+    playerShop.setTpLocationDto(newLocationDto);
     playerShopService.update(playerShop);
 
     logger.debug(
@@ -132,7 +132,7 @@ public class PlayerShopController {
             + " playerShopNewTpLocation={}",
         playerShop.getOwnerUuid(),
         playerShop.getId(),
-        playerShop.getTpLocation());
+        playerShop.getTpLocationDto());
 
     controllerHelper.sendSystemMessage(
         sender, playerShopMessage.teleportPointDefined(newLocationDto));
@@ -145,14 +145,14 @@ public class PlayerShopController {
         sender.getName(),
         playerShop.getId(),
         playerShop.isActive(),
-        playerShop.getTpLocation());
+        playerShop.getTpLocationDto());
 
-    if (playerShop.getTpLocation() == null && playerShop.isActive()) {
+    if (playerShop.getTpLocationDto() == null && playerShop.isActive()) {
       throw new IllegalStateException(
           "A playershop without teleport point defined mustn't be activated.");
     }
 
-    if (playerShop.getTpLocation() == null) {
+    if (playerShop.getTpLocationDto() == null) {
       logger.debug("Failed to toggle playershop: tp location must be defined.");
 
       controllerHelper.sendSystemMessage(
@@ -182,7 +182,7 @@ public class PlayerShopController {
         playerToTp.getUniqueId(),
         playerShopDestination.getId());
 
-    Location tpLocation = locationMapper.fromDto(playerShopDestination.getTpLocation());
+    Location tpLocation = locationMapper.fromDto(playerShopDestination.getTpLocationDto());
 
     if (tpLocation == null) {
       logger.warn(

@@ -19,7 +19,7 @@ class PlayerShopServiceTest extends AbstractBaseTest {
     PlayerShop ps = new PlayerShop(UUID.randomUUID());
     ps.setDescription("Test description");
     ps.setItemIcon(Material.NAME_TAG);
-    ps.setTpLocation(null);
+    ps.setTpLocationDto(null);
     ps.setActive(true);
 
     playerShopService.persist(ps);

@@ -57,7 +57,7 @@ public class PlayerShop {
   @Column(name = "ps_tp_location")
   @Convert(converter = LocationDtoConverter.class)
   @Setter
-  private LocationDto tpLocation; // TODO: rename tpLocationDto (to prevent confusions)
+  private LocationDto tpLocationDto;
 
   @Column(name = "ps_is_active", nullable = false)
   @Setter

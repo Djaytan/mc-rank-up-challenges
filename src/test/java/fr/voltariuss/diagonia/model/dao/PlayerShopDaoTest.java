@@ -78,7 +78,7 @@ class PlayerShopDaoTest extends AbstractBaseTest {
       Assert.assertEquals(ps.getOwnerUuid(), psBis.getOwnerUuid());
       Assert.assertEquals(ps.getDescription(), psBis.getDescription());
       Assert.assertEquals(ps.getItemIcon(), psBis.getItemIcon());
-      Assert.assertEquals(ps.getTpLocation(), psBis.getTpLocation());
+      Assert.assertEquals(ps.getTpLocationDto(), psBis.getTpLocationDto());
       Assert.assertEquals(ps.isActive(), psBis.isActive());
     }
 
@@ -87,7 +87,7 @@ class PlayerShopDaoTest extends AbstractBaseTest {
       PlayerShop ps = new PlayerShop(UUID.randomUUID());
       ps.setDescription("one");
       ps.setItemIcon(Material.NAME_TAG);
-      ps.setTpLocation(
+      ps.setTpLocationDto(
           LocationDto.builder()
               .worldName("two")
               .x(0.5D)
@@ -108,7 +108,7 @@ class PlayerShopDaoTest extends AbstractBaseTest {
       Assert.assertEquals(ps.getOwnerUuid(), psBis.getOwnerUuid());
       Assert.assertEquals(ps.getDescription(), psBis.getDescription());
       Assert.assertEquals(ps.getItemIcon(), psBis.getItemIcon());
-      Assert.assertEquals(ps.getTpLocation(), psBis.getTpLocation());
+      Assert.assertEquals(ps.getTpLocationDto(), psBis.getTpLocationDto());
       Assert.assertEquals(ps.isActive(), psBis.isActive());
     }
 
