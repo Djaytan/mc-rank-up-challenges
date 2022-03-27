@@ -16,6 +16,7 @@ import java.util.ResourceBundle;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -32,6 +33,7 @@ public class MainPlayerShopGui {
   private final ConfigPlayerShopItem configPlayerShopItem;
   private final ConsultPlayerShopItem consultPlayerShopItem;
   private final GoToMainMenuItem goToMainMenuItem;
+  private final MiniMessage miniMessage;
   private final PaginatedItem paginatedItem;
   private final ResourceBundle resourceBundle;
 
@@ -41,12 +43,14 @@ public class MainPlayerShopGui {
       @NotNull ConfigPlayerShopItem configPlayerShopItem,
       @NotNull ConsultPlayerShopItem consultPlayerShopItem,
       @NotNull GoToMainMenuItem goToMainMenuItem,
+      @NotNull MiniMessage miniMessage,
       @NotNull PaginatedItem paginatedItem,
       @NotNull ResourceBundle resourceBundle) {
     this.buyPlayerShopItem = buyPlayerShopItem;
     this.configPlayerShopItem = configPlayerShopItem;
     this.consultPlayerShopItem = consultPlayerShopItem;
     this.goToMainMenuItem = goToMainMenuItem;
+    this.miniMessage = miniMessage;
     this.paginatedItem = paginatedItem;
     this.resourceBundle = resourceBundle;
   }
@@ -57,9 +61,9 @@ public class MainPlayerShopGui {
     PaginatedGui gui =
         Gui.paginated()
             .title(
-                Component.text(
+                miniMessage.deserialize(
                     resourceBundle.getString(
-                        "diagonia.playershop.consult.gui.title"))) // TODO: use MiniMessage here
+                        "diagonia.playershop.consult.gui.title")))
             .rows(6)
             .pageSize(pageSize)
             .create();
