@@ -70,7 +70,7 @@ public class RankUpController {
   }
 
   public void openRankUpGui(@NotNull Player whoOpen, @NotNull Rank rank) {
-    logger.info("Open RankUp GUI {} for player {}", rank.getId(), whoOpen.getName());
+    logger.debug("Open RankUp GUI {} for player {}", rank.getId(), whoOpen.getName());
     int totalJobsLevels = jobsService.getTotalLevels(whoOpen);
     double currentBalance = economyService.getBalance(whoOpen);
     RankUpProgression rankUpProgression =

@@ -150,11 +150,11 @@ public class RankChallengeItem {
           amountToGive = nbItemsInInventory;
         }
         if (amountToGive > 0) {
-          logger.info("GUI-amountToGive={}", amountToGive);
+          logger.debug("GUI-amountToGive={}", amountToGive);
           int effectiveGivenAmount =
               rankUpController.giveItemChallenge(
                   whoClicked, rank.getId(), clickedItem.getType(), amountToGive);
-          logger.info("effectiveGivenAmount={}", effectiveGivenAmount);
+          logger.debug("effectiveGivenAmount={}", effectiveGivenAmount);
           if (effectiveGivenAmount > 0) {
             HashMap<Integer, ItemStack> notRemovedItems =
                 whoClicked
