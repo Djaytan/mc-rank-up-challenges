@@ -26,6 +26,7 @@ public class RankUpGui {
 
   private static final Material PREVIOUS_GUI_MATERIAL = Material.ARROW;
   private static final Material DECORATION_MATERIAL = Material.GRAY_STAINED_GLASS_PANE;
+  private static final int PAGE_SIZE = 36;
 
   private final DiagoniaLogger logger;
   private final MiniMessage miniMessage;
@@ -56,10 +57,11 @@ public class RankUpGui {
   // TODO: return a response object to controller with status, and eventually the created Gui
   public void open(
       @NotNull Player whoOpen, @NotNull Rank rank, @NotNull RankUpProgression rankUpProgression) {
+    // TODO: refactor is-else
     if (rank.getRankUpChallenges() != null) {
       PaginatedGui gui =
           Gui.paginated()
-              .pageSize(36)
+              .pageSize(PAGE_SIZE)
               .rows(6)
               .title(
                   miniMessage.deserialize(
@@ -83,8 +85,10 @@ public class RankUpGui {
 
       gui.setItem(6, 5, rankUpItem.createItem(rank, rankUpProgression));
 
-      gui.setItem(5, 3, paginatedItem.createPreviousPageItem(gui));
-      gui.setItem(5, 7, paginatedItem.createNextPageItem(gui));
+      if (rank.getRankUpChallenges().size() > PAGE_SIZE) {
+        gui.setItem(5, 3, paginatedItem.createPreviousPageItem(gui));
+        gui.setItem(5, 7, paginatedItem.createNextPageItem(gui));
+      }
 
       gui.setItem(
           6,

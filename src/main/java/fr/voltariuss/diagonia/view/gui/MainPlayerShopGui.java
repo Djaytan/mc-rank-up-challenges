@@ -89,9 +89,11 @@ public class MainPlayerShopGui {
     }
     gui.setItem(6, 5, configItem);
 
-    // TODO: show rows only when necessary
-    gui.setItem(5, 3, paginatedItem.createPreviousPageItem(gui));
-    gui.setItem(5, 7, paginatedItem.createNextPageItem(gui));
+    if (playerShopList.size() > pageSize) {
+      // TODO: setup a reel page management system
+      gui.setItem(5, 3, paginatedItem.createPreviousPageItem(gui));
+      gui.setItem(5, 7, paginatedItem.createNextPageItem(gui));
+    }
 
     gui.setItem(6, 1, goToMainMenuItem.createItem());
 
