@@ -8,12 +8,11 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
-// TODO: rename to MainController
 @Singleton
-public class MasterController {
+public class MainController {
 
   @Inject
-  public MasterController() {}
+  public MainController() {}
 
   // TODO: redirect all view calls to this controller first
 

@@ -29,7 +29,7 @@ public class PlayerShopController {
   private final DiagoniaLogger logger;
   private final EconomyService economyService;
   private final LocationMapper locationMapper;
-  private final MasterController masterController;
+  private final MainController mainController;
   private final PlayerShopMessage playerShopMessage;
   private final PlayerShopService playerShopService;
   private final PluginConfig pluginConfig;
@@ -42,7 +42,7 @@ public class PlayerShopController {
       @NotNull DiagoniaLogger logger,
       @NotNull EconomyService economyService,
       @NotNull LocationMapper locationMapper,
-      @NotNull MasterController masterController,
+      @NotNull MainController mainController,
       @NotNull PlayerShopMessage playerShopMessage,
       @NotNull PlayerShopService playerShopService,
       @NotNull PluginConfig pluginConfig,
@@ -51,7 +51,7 @@ public class PlayerShopController {
     this.economyService = economyService;
     this.locationMapper = locationMapper;
     this.logger = logger;
-    this.masterController = masterController;
+    this.mainController = mainController;
     this.playerShopMessage = playerShopMessage;
     this.playerShopService = playerShopService;
     this.pluginConfig = pluginConfig;
@@ -79,7 +79,7 @@ public class PlayerShopController {
     double playerShopPrice = pluginConfig.getPlayerShopConfig().getBuyCost();
 
     if (!economyService.isAffordable(player, playerShopPrice)) {
-      masterController.sendSystemMessage(player, playerShopMessage.insufficientFunds());
+      mainController.sendSystemMessage(player, playerShopMessage.insufficientFunds());
       logger.debug(
           "The player can't afford a playershop: playerName={}, playerShopPrice={}",
           player.getName(),
@@ -91,7 +91,7 @@ public class PlayerShopController {
       EconomyResponse economyResponse = economyService.withdraw(player, playerShopPrice);
       PlayerShop ps = new PlayerShop(player.getUniqueId());
       playerShopService.persist(ps);
-      masterController.sendSystemMessage(player, playerShopMessage.buySuccess(economyResponse));
+      mainController.sendSystemMessage(player, playerShopMessage.buySuccess(economyResponse));
       openPlayerShopListView(player);
       logger.info(
           "Purchase of a playershop for the player {} ({}) for the price of {}. New solde: {}",
@@ -106,7 +106,7 @@ public class PlayerShopController {
           playerShopPrice,
           player.getName(),
           e.getMessage());
-      masterController.sendSystemMessage(player, playerShopMessage.transactionFailed());
+      mainController.sendSystemMessage(player, playerShopMessage.transactionFailed());
     }
   }
 
@@ -134,7 +134,7 @@ public class PlayerShopController {
         playerShop.getId(),
         playerShop.getTpLocation());
 
-    masterController.sendSystemMessage(
+    mainController.sendSystemMessage(
         sender, playerShopMessage.teleportPointDefined(newLocationDto));
   }
 
@@ -155,7 +155,7 @@ public class PlayerShopController {
     if (playerShop.getTpLocation() == null) {
       logger.debug("Failed to toggle playershop: tp location must be defined.");
 
-      masterController.sendSystemMessage(
+      mainController.sendSystemMessage(
           sender, playerShopMessage.shopActivationRequireTeleportPointFirst());
 
       return;
@@ -170,7 +170,7 @@ public class PlayerShopController {
         playerShop.getId(),
         playerShop.isActive());
 
-    masterController.sendSystemMessage(sender, playerShopMessage.toggleShop(playerShop.isActive()));
+    mainController.sendSystemMessage(sender, playerShopMessage.toggleShop(playerShop.isActive()));
     openConfigPlayerShopView(sender);
   }
 
@@ -191,7 +191,7 @@ public class PlayerShopController {
               + " teleport point defined: playerToTpUuid={}, playerShopId={}",
           playerToTp.getUniqueId(),
           playerShopDestination.getId());
-      masterController.sendSystemMessage(playerToTp, playerShopMessage.noTeleportPointDefined());
+      mainController.sendSystemMessage(playerToTp, playerShopMessage.noTeleportPointDefined());
       return;
     }
 
