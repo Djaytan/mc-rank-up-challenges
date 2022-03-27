@@ -17,7 +17,9 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -62,8 +64,7 @@ public class MainPlayerShopGui {
         Gui.paginated()
             .title(
                 miniMessage.deserialize(
-                    resourceBundle.getString(
-                        "diagonia.playershop.consult.gui.title")))
+                    resourceBundle.getString("diagonia.playershop.consult.gui.title")))
             .rows(6)
             .pageSize(pageSize)
             .create();
@@ -77,7 +78,13 @@ public class MainPlayerShopGui {
 
     gui.addItem(
         playerShopList.stream()
-            .map(consultPlayerShopItem::createItem)
+            .map(
+                playerShop -> {
+                  OfflinePlayer ownerPlayer =
+                      Bukkit.getOfflinePlayer(
+                          playerShop.getOwnerUuid()); // TODO: move owner recovering out of view
+                  return consultPlayerShopItem.createItem(ownerPlayer, playerShop);
+                })
             .filter(Objects::nonNull)
             .toArray(GuiItem[]::new));
 
