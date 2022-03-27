@@ -20,8 +20,7 @@ import org.jetbrains.annotations.NotNull;
 public class ConfigPlayerShopItem {
 
   // TODO: make it configurable through config file
-  // TODO: replace default material by a comparator
-  private static final Material MANAGE_ITEM_MATERIAL = Material.EMERALD;
+  private static final Material MANAGE_ITEM_MATERIAL = Material.COMPARATOR;
 
   private final MiniMessage miniMessage;
   private final PlayerShopController playerShopController;
