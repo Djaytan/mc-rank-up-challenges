@@ -92,7 +92,12 @@ public class RankChallengeItem {
                           miniMessage
                               .deserialize(
                                   resourceBundle.getString(
-                                      "diagonia.rankup.rankup.challenge.shift_right_click"))
+                                      "diagonia.rankup.rankup.challenge.shift_right_click.1"))
+                              .decoration(TextDecoration.ITALIC, false),
+                          miniMessage
+                              .deserialize(
+                                  resourceBundle.getString(
+                                      "diagonia.rankup.rankup.challenge.shift_right_click.2"))
                               .decoration(TextDecoration.ITALIC, false)))
                   .toList())
           .asGuiItem(onClick(rank, rankChallenge));
