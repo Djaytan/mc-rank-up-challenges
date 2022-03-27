@@ -67,14 +67,14 @@ public class PlayerShopController {
   }
 
   public void openConfigPlayerShopView(@NotNull Player whoOpen) {
-    logger.debug("Open ConfigPlayerShop GUI for a player: playerName={}", whoOpen.getName());
+    logger.debug("Open ConfigPlayerShop GUI for player {}", whoOpen.getName());
     PlayerShop playerShop = playerShopService.findByUuid(whoOpen.getUniqueId()).orElseThrow();
     configPlayerShopGui.get().open(whoOpen, playerShop);
   }
 
   public void buyPlayerShop(@NotNull Player player) {
     // TODO: and if something went wrong after economy transaction and before the shop creation?
-    logger.debug("Start buying a playershop: playerName={}", player.getName());
+    logger.debug("Start buying a playershop for player {}", player.getName());
 
     double playerShopPrice = pluginConfig.getPlayerShopConfig().getBuyCost();
 

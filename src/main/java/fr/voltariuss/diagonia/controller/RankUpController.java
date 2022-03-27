@@ -65,12 +65,12 @@ public class RankUpController {
   }
 
   public void openRankListGui(@NotNull Player whoOpen) {
-    logger.info("Open the list of ranks GUI for player {}", whoOpen.getName());
+    logger.debug("Open RankList GUI for player {}", whoOpen.getName());
     rankListGuiProvider.get().open(whoOpen);
   }
 
   public void openRankUpGui(@NotNull Player whoOpen, @NotNull Rank rank) {
-    logger.info("Open the rank up GUI {} for player {}", rank.getId(), whoOpen.getName());
+    logger.info("Open RankUp GUI {} for player {}", rank.getId(), whoOpen.getName());
     int totalJobsLevels = jobsService.getTotalLevels(whoOpen);
     double currentBalance = economyService.getBalance(whoOpen);
     RankUpProgression rankUpProgression =
