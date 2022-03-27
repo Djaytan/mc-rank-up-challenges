@@ -13,10 +13,6 @@
         <property name="hibernate.connection.username">sa</property>
         <property name="hibernate.connection.password" />
 
-        <!-- TODO: what about isolation level? -->
-
-        <!-- TODO: cache properties definition -->
-
         <!-- Additional configuration -->
         <property name="hibernate.current_session_context_class">thread</property>
         <property name="hibernate.show_sql">false</property>

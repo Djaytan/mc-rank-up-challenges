@@ -11,9 +11,8 @@ import lombok.SneakyThrows;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.hibernate.SessionFactory;
 
-/** Diagonia-PlayerShops plugin */
-// TODO: rename
-public class DiagoniaPlayerShopsPlugin extends JavaPlugin {
+/** Diagonia plugin */
+public class DiagoniaPlugin extends JavaPlugin {
 
   @Inject private SessionFactory sessionFactory;
   @Inject private CommandRegister commandRegister;

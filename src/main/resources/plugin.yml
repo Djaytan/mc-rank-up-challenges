@@ -2,6 +2,6 @@ name: ${name}
 version: ${version}
 author: Voltariuss
 api-version: ${minecraft.api.version}
-main: fr.voltariuss.diagonia.DiagoniaPlayerShopsPlugin
+main: fr.voltariuss.diagonia.DiagoniaPlugin
 depend:
   - Vault
