@@ -4,7 +4,6 @@ import dev.triumphteam.gui.builder.item.ItemBuilder;
 import dev.triumphteam.gui.guis.Gui;
 import dev.triumphteam.gui.guis.GuiItem;
 import dev.triumphteam.gui.guis.PaginatedGui;
-import fr.voltariuss.diagonia.DiagoniaLogger;
 import fr.voltariuss.diagonia.controller.RankUpController;
 import fr.voltariuss.diagonia.model.config.rank.Rank;
 import fr.voltariuss.diagonia.model.dto.RankUpProgression;
@@ -20,6 +19,7 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
 
 @Singleton
 public class RankUpGui {
@@ -28,7 +28,7 @@ public class RankUpGui {
   private static final Material DECORATION_MATERIAL = Material.GRAY_STAINED_GLASS_PANE;
   private static final int PAGE_SIZE = 36;
 
-  private final DiagoniaLogger logger;
+  private final Logger logger;
   private final MiniMessage miniMessage;
   private final PaginatedItem paginatedItem;
   private final RankChallengeItem rankChallengeItem;
@@ -38,7 +38,7 @@ public class RankUpGui {
 
   @Inject
   public RankUpGui(
-      @NotNull DiagoniaLogger logger,
+      @NotNull Logger logger,
       @NotNull MiniMessage miniMessage,
       @NotNull PaginatedItem paginatedItem,
       @NotNull RankChallengeItem rankChallengeItem,

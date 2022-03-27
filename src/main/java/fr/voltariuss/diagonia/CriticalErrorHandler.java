@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 @Singleton
 public class CriticalErrorHandler {
 
-  // used instead of DiagoniaLogger because of instanciation before Guice injection
   private final Logger logger;
   private final PluginManager pluginManager;
   private final JavaPlugin javaPlugin;

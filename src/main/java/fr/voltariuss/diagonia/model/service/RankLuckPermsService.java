@@ -1,7 +1,6 @@
 package fr.voltariuss.diagonia.model.service;
 
 import com.google.common.base.Preconditions;
-import fr.voltariuss.diagonia.DiagoniaLogger;
 import fr.voltariuss.diagonia.model.config.rank.Rank;
 import fr.voltariuss.diagonia.model.config.rank.RankUpPrerequisites;
 import fr.voltariuss.diagonia.model.dto.RankUpProgression;
@@ -22,6 +21,7 @@ import net.luckperms.api.track.TrackManager;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
 
 /**
  * The rank service implementation class which use the LuckPerms API.
@@ -34,7 +34,7 @@ public class RankLuckPermsService implements RankService {
 
   private static final String TRACK_NAME = "ranks"; // TODO: make it configurable
 
-  private final DiagoniaLogger logger;
+  private final Logger logger;
   private final GroupManager groupManager;
   private final RankChallengeProgressionService rankChallengeProgressionService;
   private final RankConfigService rankConfigService;
@@ -54,7 +54,7 @@ public class RankLuckPermsService implements RankService {
    */
   @Inject
   public RankLuckPermsService(
-      @NotNull DiagoniaLogger logger,
+      @NotNull Logger logger,
       @NotNull GroupManager groupManager,
       @NotNull RankChallengeProgressionService rankChallengeProgressionService,
       @NotNull RankConfigService rankConfigService,

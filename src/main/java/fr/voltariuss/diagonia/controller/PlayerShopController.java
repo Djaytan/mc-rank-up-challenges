@@ -1,6 +1,5 @@
 package fr.voltariuss.diagonia.controller;
 
-import fr.voltariuss.diagonia.DiagoniaLogger;
 import fr.voltariuss.diagonia.model.LocationMapper;
 import fr.voltariuss.diagonia.model.config.PluginConfig;
 import fr.voltariuss.diagonia.model.dto.LocationDto;
@@ -22,11 +21,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
 
 @Singleton
 public class PlayerShopController {
 
-  private final DiagoniaLogger logger;
+  private final Logger logger;
   private final EconomyService economyService;
   private final LocationMapper locationMapper;
   private final ControllerHelper controllerHelper;
@@ -39,7 +39,7 @@ public class PlayerShopController {
 
   @Inject
   public PlayerShopController(
-      @NotNull DiagoniaLogger logger,
+      @NotNull Logger logger,
       @NotNull EconomyService economyService,
       @NotNull LocationMapper locationMapper,
       @NotNull ControllerHelper controllerHelper,

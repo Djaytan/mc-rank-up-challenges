@@ -3,7 +3,6 @@ package fr.voltariuss.diagonia.view.item.playershop;
 import dev.triumphteam.gui.builder.item.ItemBuilder;
 import dev.triumphteam.gui.components.GuiAction;
 import dev.triumphteam.gui.guis.GuiItem;
-import fr.voltariuss.diagonia.DiagoniaLogger;
 import fr.voltariuss.diagonia.controller.PlayerShopController;
 import fr.voltariuss.diagonia.model.entity.PlayerShop;
 import java.util.Collections;
@@ -21,11 +20,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
 
 @Singleton
 public class ConsultPlayerShopItem {
 
-  private final DiagoniaLogger logger;
+  private final Logger logger;
   private final MiniMessage miniMessage;
   private final PlayerShopController playerShopController;
   private final ResourceBundle resourceBundle;
@@ -33,7 +33,7 @@ public class ConsultPlayerShopItem {
 
   @Inject
   public ConsultPlayerShopItem(
-      @NotNull DiagoniaLogger logger,
+      @NotNull Logger logger,
       @NotNull MiniMessage miniMessage,
       @NotNull PlayerShopController playerShopController,
       @NotNull ResourceBundle resourceBundle,

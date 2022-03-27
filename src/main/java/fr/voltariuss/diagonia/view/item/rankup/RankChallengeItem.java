@@ -3,7 +3,6 @@ package fr.voltariuss.diagonia.view.item.rankup;
 import dev.triumphteam.gui.builder.item.ItemBuilder;
 import dev.triumphteam.gui.components.GuiAction;
 import dev.triumphteam.gui.guis.GuiItem;
-import fr.voltariuss.diagonia.DiagoniaLogger;
 import fr.voltariuss.diagonia.controller.RankUpController;
 import fr.voltariuss.diagonia.model.config.rank.Rank;
 import fr.voltariuss.diagonia.model.config.rank.RankChallenge;
@@ -26,18 +25,19 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
 
 @Singleton
 public class RankChallengeItem {
 
-  private final DiagoniaLogger logger;
+  private final Logger logger;
   private final MiniMessage miniMessage;
   private final RankUpController rankUpController;
   private final ResourceBundle resourceBundle;
 
   @Inject
   public RankChallengeItem(
-      @NotNull DiagoniaLogger logger,
+      @NotNull Logger logger,
       @NotNull MiniMessage miniMessage,
       @NotNull RankUpController rankUpController,
       @NotNull ResourceBundle resourceBundle) {
