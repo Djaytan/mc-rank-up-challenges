@@ -1,6 +1,7 @@
 package fr.voltariuss.diagonia.model.service;
 
 import com.google.common.base.Preconditions;
+import fr.voltariuss.diagonia.DiagoniaLogger;
 import fr.voltariuss.diagonia.model.JpaDaoException;
 import fr.voltariuss.diagonia.model.config.rank.Rank;
 import fr.voltariuss.diagonia.model.config.rank.RankChallenge;
@@ -18,20 +19,19 @@ import org.bukkit.entity.Player;
 import org.hibernate.HibernateException;
 import org.hibernate.Transaction;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
 
 @Singleton
 public class RankChallengeProgressionService {
 
   private static final String TRANSACTION_ROLLBACK_FAIL_MESSAGE = "Failed to rollback transaction";
 
-  private final Logger logger;
+  private final DiagoniaLogger logger;
   private final RankChallengeProgressionDao rankChallengeProgressionDao;
   private final RankConfig rankConfig;
 
   @Inject
   public RankChallengeProgressionService(
-      @NotNull Logger logger,
+      @NotNull DiagoniaLogger logger,
       @NotNull RankChallengeProgressionDao rankChallengeProgressionDao,
       @NotNull RankConfig rankConfig) {
     this.logger = logger;

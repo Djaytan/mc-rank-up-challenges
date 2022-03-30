@@ -1,5 +1,6 @@
 package fr.voltariuss.diagonia.model.service;
 
+import fr.voltariuss.diagonia.DiagoniaLogger;
 import fr.voltariuss.diagonia.model.JpaDaoException;
 import fr.voltariuss.diagonia.model.dao.PlayerShopDao;
 import fr.voltariuss.diagonia.model.entity.PlayerShop;
@@ -11,18 +12,17 @@ import javax.inject.Singleton;
 import org.hibernate.HibernateException;
 import org.hibernate.Transaction;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
 
 @Singleton
 public class PlayerShopService {
 
   private static final String TRANSACTION_ROLLBACK_FAIL_MESSAGE = "Failed to rollback transaction";
 
-  private final Logger logger;
+  private final DiagoniaLogger logger;
   private final PlayerShopDao playerShopDao;
 
   @Inject
-  public PlayerShopService(@NotNull Logger logger, @NotNull PlayerShopDao playerShopDao) {
+  public PlayerShopService(@NotNull DiagoniaLogger logger, @NotNull PlayerShopDao playerShopDao) {
     this.logger = logger;
     this.playerShopDao = playerShopDao;
   }

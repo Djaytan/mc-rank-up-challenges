@@ -21,6 +21,7 @@ public class DiagoniaPlugin extends JavaPlugin {
   @SneakyThrows
   @Override
   public void onEnable() {
+    // TODO: Early instanciation of DiagoniaLogger here
     getSLF4JLogger().info("This plugin has been developed by Voltariuss");
 
     // Configuration initialization

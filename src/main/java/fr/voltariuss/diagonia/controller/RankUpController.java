@@ -1,5 +1,6 @@
 package fr.voltariuss.diagonia.controller;
 
+import fr.voltariuss.diagonia.DiagoniaLogger;
 import fr.voltariuss.diagonia.model.config.rank.Rank;
 import fr.voltariuss.diagonia.model.dto.RankUpProgression;
 import fr.voltariuss.diagonia.model.entity.RankChallengeProgression;
@@ -23,12 +24,11 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryCloseEvent.Reason;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
 
 @Singleton
 public class RankUpController {
 
-  private final Logger logger;
+  private final DiagoniaLogger logger;
   private final EconomyService economyService;
   private final JobsService jobsService;
   private final ControllerHelper controllerHelper;
@@ -42,7 +42,7 @@ public class RankUpController {
 
   @Inject
   public RankUpController(
-      @NotNull Logger logger,
+      @NotNull DiagoniaLogger logger,
       @NotNull EconomyService economyService,
       @NotNull JobsService jobsService,
       @NotNull ControllerHelper controllerHelper,

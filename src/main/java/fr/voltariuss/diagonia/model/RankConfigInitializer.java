@@ -26,6 +26,7 @@ public class RankConfigInitializer {
 
   private final File dataFolder;
   private final JavaPlugin plugin;
+  // used instead of DiagoniaLogger because of instanciation before Guice injection
   private final Logger logger;
   private final RankConfigDeserializer rankConfigDeserializer;
 
