@@ -8,6 +8,7 @@ import fr.voltariuss.diagonia.model.dto.RankUpProgression;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.ExecutionException;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.luckperms.api.context.ImmutableContextSet;
@@ -185,7 +186,16 @@ public class RankLuckPermsService implements RankService {
   @Override
   public @NotNull PromotionResult promote(@NotNull Player player) {
     User user = Objects.requireNonNull(userManager.getUser(player.getUniqueId()));
-    return track.promote(user, ImmutableContextSet.empty());
+    PromotionResult promotionResult = track.promote(user, ImmutableContextSet.empty());
+    try {
+      userManager.saveUser(user).get();
+    } catch (InterruptedException | ExecutionException e) {
+      logger.error(
+          "Failed to save promoted rank '{}' for the player '{}'",
+          promotionResult.getGroupTo().orElse(null),
+          player.getName());
+    }
+    return promotionResult;
     // TODO: manage status and raise errors if needed
   }
 
