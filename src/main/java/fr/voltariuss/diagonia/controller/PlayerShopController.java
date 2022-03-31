@@ -73,7 +73,7 @@ public class PlayerShopController {
   }
 
   public void buyPlayerShop(@NotNull Player player) {
-    // TODO: and if something went wrong after economy transaction and before the shop creation?
+    // TODO: 2PC with JTA
     logger.debug("Start buying a playershop for player {}", player.getName());
 
     double playerShopPrice = pluginConfig.getPlayerShopConfig().getBuyCost();
