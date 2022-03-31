@@ -207,7 +207,6 @@ public class RankLuckPermsService implements RankService {
       double currentBalance) {
     Preconditions.checkArgument(
         totalJobsLevels >= 0, "The total jobs levels must be higher or equals to 0.");
-    // TODO: what about economy?
 
     Rank unlockableRank = rankConfigService.findById(targetedRank.getId()).orElseThrow();
     RankUpPrerequisites prerequisites = unlockableRank.getRankUpPrerequisites();
