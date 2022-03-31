@@ -1,5 +1,6 @@
 package fr.voltariuss.diagonia.controller;
 
+import fr.voltariuss.diagonia.DiagoniaException;
 import fr.voltariuss.diagonia.DiagoniaLogger;
 import fr.voltariuss.diagonia.model.config.rank.Rank;
 import fr.voltariuss.diagonia.model.dto.RankUpProgression;
@@ -71,13 +72,13 @@ public class RankUpController {
 
   public void openRankUpGui(@NotNull Player whoOpen, @NotNull Rank rank) {
     logger.debug("Open RankUp GUI {} for player {}", rank.getId(), whoOpen.getName());
+
     int totalJobsLevels = jobsService.getTotalLevels(whoOpen);
     double currentBalance = economyService.getBalance(whoOpen);
+
     RankUpProgression rankUpProgression =
         rankService.getRankUpProgression(whoOpen, rank, totalJobsLevels, currentBalance);
-    Objects.requireNonNull(rankUpProgression);
-    // TODO: what about if rank isn't properly defined? (e.g. an unknown ID rank because of
-    // a wrong call of the developer or a bad configuration of LuckPerms by server admin)
+
     rankUpGuiProvider.get().open(whoOpen, rank, rankUpProgression);
   }
 

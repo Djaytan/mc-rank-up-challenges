@@ -98,7 +98,7 @@ public interface RankService {
    * @param currentBalance The current economy balance of the player.
    * @return The rank up progression of the given player for the specified rank.
    */
-  @Nullable
+  @NotNull
   RankUpProgression getRankUpProgression(
       @NotNull Player player,
       @NotNull Rank targetedRank,

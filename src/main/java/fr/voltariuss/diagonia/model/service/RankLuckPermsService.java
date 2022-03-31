@@ -200,7 +200,7 @@ public class RankLuckPermsService implements RankService {
   }
 
   @Override
-  public @Nullable RankUpProgression getRankUpProgression(
+  public @NotNull RankUpProgression getRankUpProgression(
       @NotNull Player player,
       @NotNull Rank targetedRank,
       int totalJobsLevels,
@@ -208,7 +208,15 @@ public class RankLuckPermsService implements RankService {
     Preconditions.checkArgument(
         totalJobsLevels >= 0, "The total jobs levels must be higher or equals to 0.");
 
-    Rank unlockableRank = rankConfigService.findById(targetedRank.getId()).orElseThrow();
+    Rank unlockableRank =
+        rankConfigService
+            .findById(targetedRank.getId())
+            .orElseThrow(
+                () ->
+                    new IllegalStateException(
+                        "The specified rank ID isn't associated with any registered rank in"
+                            + " configuration."));
+
     RankUpPrerequisites prerequisites = unlockableRank.getRankUpPrerequisites();
 
     if (prerequisites == null) {
