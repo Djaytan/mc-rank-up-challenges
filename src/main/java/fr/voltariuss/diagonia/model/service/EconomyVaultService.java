@@ -1,6 +1,7 @@
 package fr.voltariuss.diagonia.model.service;
 
 import com.google.common.base.Preconditions;
+import fr.voltariuss.diagonia.DiagoniaLogger;
 import fr.voltariuss.diagonia.model.dto.response.EconomyResponse;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -12,22 +13,30 @@ import org.jetbrains.annotations.NotNull;
 @Singleton
 public class EconomyVaultService implements EconomyService {
 
+  private final DiagoniaLogger logger;
   private final Economy economy;
 
   @Inject
-  public EconomyVaultService(@NotNull Economy economy) {
+  public EconomyVaultService(@NotNull DiagoniaLogger logger, @NotNull Economy economy) {
+    this.logger = logger;
     this.economy = economy;
   }
 
   @Override
   public double getBalance(@NotNull OfflinePlayer offlinePlayer) {
-    return economy.getBalance(offlinePlayer);
+    double balance = economy.getBalance(offlinePlayer);
+
+    logger.debug(
+        "Economy balance recovered for a player: playerName={}, balance={}",
+        offlinePlayer.getName(),
+        balance);
+
+    return balance;
   }
 
   @Override
   public @NotNull EconomyResponse withdraw(@NotNull OfflinePlayer offlinePlayer, double amount)
       throws EconomyException {
-    // TODO: add logs
     Preconditions.checkArgument(amount >= 0, "The amount to withdraw must be a positive number");
 
     net.milkbowl.vault.economy.EconomyResponse vaultEconomyResponse =
@@ -52,6 +61,12 @@ public class EconomyVaultService implements EconomyService {
       throw new EconomyException("[Vault] Method not implemented");
     }
 
+    logger.debug(
+        "Economy withdraw for a player: playerName={}, amount={}, newBalance={}",
+        offlinePlayer.getName(),
+        vaultEconomyResponse.amount,
+        vaultEconomyResponse.balance);
+
     return EconomyResponse.builder()
         .modifiedAmount(vaultEconomyResponse.amount)
         .newBalance(vaultEconomyResponse.balance)
@@ -60,7 +75,19 @@ public class EconomyVaultService implements EconomyService {
 
   @Override
   public boolean isAffordable(@NotNull Player player, double price) {
+    Preconditions.checkArgument(price >= 0, "The price must be higher or equal to 0.");
+
     double balance = getBalance(player);
+    boolean isAffordable = price <= balance;
+
+    logger.debug(
+        "Is economy price affordable for a player: playerName={}, playerBalance={}, price={},"
+            + " isAffordable={}",
+        player.getName(),
+        balance,
+        price,
+        isAffordable);
+
     return price <= balance;
   }
 }

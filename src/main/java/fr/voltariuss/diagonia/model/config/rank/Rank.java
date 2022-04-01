@@ -8,7 +8,6 @@ import org.jetbrains.annotations.Nullable;
 
 @Data
 @Builder
-// TODO: add a rank config verification at plugin enabling
 public class Rank {
 
   private final String id;
