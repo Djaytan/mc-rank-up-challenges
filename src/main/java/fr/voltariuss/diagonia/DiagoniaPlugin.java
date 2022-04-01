@@ -21,44 +21,45 @@ public class DiagoniaPlugin extends JavaPlugin {
   @SneakyThrows
   @Override
   public void onEnable() {
-    // TODO: Early instanciation of DiagoniaLogger here
     getSLF4JLogger().info("This plugin has been developed by Voltariuss");
 
-    // Configuration initialization
+    // General plugin config init
     PluginConfigService.init(getConfig());
     getConfig().options().copyDefaults(true);
     saveConfig();
     PluginConfig pluginConfig = PluginConfigService.loadConfig(getConfig());
     getSLF4JLogger().info("Configuration loaded");
 
+    // Rank config init
     RankConfigInitializer rankConfigInitializer =
         new RankConfigInitializer(
             getDataFolder(), this, getSLF4JLogger(), new RankConfigDeserializer());
     rankConfigInitializer.init();
     RankConfig rankConfig = rankConfigInitializer.readRankConfig();
 
-    if (pluginConfig.getDatabaseConfig().isEnabled()) {
-      // Guice setup
-      DiagoniaPlayerShopsInjector.inject(this, pluginConfig, rankConfig);
-
-      // Additional setup
-      prerequisitesValidation.validate();
-      commandRegister.registerCommands();
-
-      getSLF4JLogger().info("Plugin successfully enabled");
+    if (!pluginConfig.getDatabaseConfig().isEnabled()) {
+      getSLF4JLogger()
+          .error("Database disabled. Please configure and activate it through config.yml file");
+      getServer().getPluginManager().disablePlugin(this);
       return;
     }
-    getSLF4JLogger()
-        .error("Database disabled. Please configure and activate it through config.yml file");
-    getServer().getPluginManager().disablePlugin(this);
+
+    // Guice setup
+    DiagoniaPlayerShopsInjector.inject(this, pluginConfig, rankConfig);
+
+    // Additional setup
+    prerequisitesValidation.validate();
+    commandRegister.registerCommands();
+
+    getSLF4JLogger().info("Plugin successfully enabled");
   }
 
   @Override
   public void onDisable() {
     if (sessionFactory != null) {
       sessionFactory.close();
+      getSLF4JLogger().info("Database connection closed");
     }
-    getSLF4JLogger().info("Database connection closed");
     getSLF4JLogger().info("Plugin successfully disabled");
   }
 }
