@@ -70,14 +70,11 @@ public class ConsultPlayerShopItem {
       return null;
     }
 
-    String ownerName =
-        ownerPlayer.getName(); // TODO: manage case where binding UUID-Name is missing
+    String ownerName = ownerPlayer.getName();
 
     if (ownerName == null) {
-      logger.error(
-          "The UUID {} isn't associated to any existing user on the server.",
-          playerShop.getOwnerUuid());
-      return null;
+      logger.warn("The UUID {} isn't associated to any player name.", playerShop.getOwnerUuid());
+      ownerName = resourceBundle.getString("default_player_name");
     }
 
     Component psName =
