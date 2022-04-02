@@ -74,14 +74,15 @@ public class ConsultPlayerShopItem {
 
     if (ownerName == null) {
       logger.warn("The UUID {} isn't associated to any player name.", playerShop.getOwnerUuid());
-      ownerName = resourceBundle.getString("default_player_name");
+      ownerName = resourceBundle.getString("diagonia.playershop.consult.default_player_name");
     }
 
     Component psName =
         miniMessage
             .deserialize(
                 resourceBundle.getString("diagonia.playershop.consult.name"),
-                TemplateResolver.templates(Template.template("diag_player_name", ownerName)))
+                TemplateResolver.templates(
+                    Template.template("diag_player_name", miniMessage.deserialize(ownerName))))
             .decoration(TextDecoration.ITALIC, false);
 
     List<Component> psDescLore =
