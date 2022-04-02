@@ -24,6 +24,7 @@ import fr.voltariuss.diagonia.model.dto.RankUpProgression;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -86,8 +87,14 @@ public class RankLuckPermsService implements RankService {
     Preconditions.checkNotNull(player);
 
     User user = userManager.getUser(player.getUniqueId());
-    Objects.requireNonNull(user);
 
+    if (user == null) {
+      throw new IllegalStateException(
+          "Failed to found LuckPerms' user from an online player. This isn't supposed to happen.");
+    }
+
+    // A user have only one group of the track at once: the current rank of the player
+    // (even if it can have staff groups or other ones which will be ignored tho)
     Group currentGroup =
         user.getInheritedGroups(QueryOptions.nonContextual()).stream()
             .filter(track::containsGroup)
@@ -95,17 +102,26 @@ public class RankLuckPermsService implements RankService {
             .orElse(null);
 
     if (currentGroup == null) {
-      logger.debug("The player don't have any rank yet: player={}", player.getName());
+      logger.debug("The player don't have any rank yet: playerName={}", player.getName());
       return null;
     }
 
-    Rank currentRank = rankConfigService.findById(currentGroup.getName()).orElseThrow();
+    Optional<Rank> currentRank = rankConfigService.findById(currentGroup.getName());
+
+    if (currentRank.isEmpty()) {
+      throw new IllegalStateException(
+          String.format(
+              "Failed to found the rank '%1$s' from configurations: make sure that all defined"
+                  + " ranks in configs are well bound with LuckPerms' track ranks.",
+              currentGroup.getName()));
+    }
 
     logger.debug(
-        "Current player rank: player={}, currentRank={}",
+        "Current player rank: playerName={}, currentRankName={}",
         player.getName(),
-        currentRank != null ? currentRank.getName() : null);
+        currentRank.get().getName());
 
+    // TODO: this isn't clear why we return currentGroup instead of currentRank
     return currentGroup;
   }
 
@@ -123,7 +139,7 @@ public class RankLuckPermsService implements RankService {
     }
 
     logger.debug(
-        "Unlockable player rank: player={}, unlockableRank={}",
+        "Unlockable player rank: playerName={}, unlockableRankName={}",
         player.getName(),
         unlockableRank != null ? unlockableRank.getName() : null);
 
@@ -135,7 +151,7 @@ public class RankLuckPermsService implements RankService {
     List<Group> ownedRanks = getOwnedRanks(getCurrentRank(player));
 
     logger.debug(
-        "Owned player ranks: player={}, ownedRanks={}",
+        "Owned player ranks: playerName={}, ownedRanksNames={}",
         player.getName(),
         ownedRanks.stream().map(Group::getName).toList());
 
@@ -158,7 +174,7 @@ public class RankLuckPermsService implements RankService {
     }
 
     logger.debug(
-        "Is rank owned by player: player={}, rankId={}, isRankOwned={}",
+        "Is rank owned by player: playerName={}, rankId={}, isRankOwned={}",
         player.getName(),
         rankId,
         isRankOwned);
