@@ -40,7 +40,6 @@ import org.jetbrains.annotations.NotNull;
 @Singleton
 public class BuyPlayerShopItem {
 
-  // TODO: make it configurable through config file
   private static final Material BUY_ITEM_MATERIAL = Material.EMERALD;
 
   private final EconomyFormatter economyFormatter;

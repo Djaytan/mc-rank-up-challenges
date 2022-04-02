@@ -148,7 +148,6 @@ public class RankItem {
   }
 
   public @NotNull GuiAction<InventoryClickEvent> onClick(Rank rank) {
-    // TODO: create a real event with Observer pattern or Bukkit API
     return event -> {
       Player player = (Player) event.getWhoClicked();
       rankUpController.openRankUpGui(player, rank);

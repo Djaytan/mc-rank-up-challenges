@@ -42,7 +42,6 @@ import org.jetbrains.annotations.NotNull;
 @Singleton
 public class MainPlayerShopGui {
 
-  // TODO: make it configurable
   private static final int NB_COLUMNS_PER_LINE = 9;
   private static final int NB_ROW_PER_PAGE = 4;
   private static final Material DECORATION_MATERIAL = Material.GRAY_STAINED_GLASS_PANE;
@@ -113,7 +112,6 @@ public class MainPlayerShopGui {
     gui.setItem(6, 5, configItem);
 
     if (playerShopList.size() > pageSize) {
-      // TODO: setup a reel page management system
       gui.setItem(5, 3, paginatedItem.createPreviousPageItem(gui));
       gui.setItem(5, 7, paginatedItem.createNextPageItem(gui));
     }

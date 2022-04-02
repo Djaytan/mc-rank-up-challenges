@@ -34,7 +34,6 @@ import org.jetbrains.annotations.NotNull;
 @Singleton
 public class ConfigPlayerShopItem {
 
-  // TODO: make it configurable through config file
   private static final Material MANAGE_ITEM_MATERIAL = Material.COMPARATOR;
 
   private final MiniMessage miniMessage;
@@ -66,7 +65,6 @@ public class ConfigPlayerShopItem {
   }
 
   public @NotNull GuiAction<InventoryClickEvent> onClick() {
-    // TODO: create a real event with Observer pattern or Bukkit API
     return event -> playerShopController.openConfigPlayerShopView((Player) event.getWhoClicked());
   }
 }

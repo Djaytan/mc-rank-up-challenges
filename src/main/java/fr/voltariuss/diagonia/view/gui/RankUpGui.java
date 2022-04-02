@@ -121,7 +121,6 @@ public class RankUpGui {
                     .deserialize(resourceBundle.getString("diagonia.gui.go_to_previous"))
                     .decoration(TextDecoration.ITALIC, false))
             .asGuiItem(event -> rankUpController.openRankListGui((Player) event.getWhoClicked())));
-    // TODO: create a real event with Observer pattern or Bukkit API
 
     gui.setDefaultClickAction(event -> event.setCancelled(true));
 

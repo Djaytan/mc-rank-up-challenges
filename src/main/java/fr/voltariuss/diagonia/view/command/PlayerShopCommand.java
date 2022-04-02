@@ -41,7 +41,6 @@ public class PlayerShopCommand extends BaseCommand {
   @Default
   public void onOpen(@NotNull Player player) {
     logger.debug("/playershop command executed by {}", player.getName());
-    // TODO: create a real event with Observer pattern or Bukkit API
     playerShopController.openPlayerShopListView(player);
   }
 }

@@ -18,7 +18,6 @@ package fr.voltariuss.diagonia.model.service;
 
 import com.google.common.base.Preconditions;
 import fr.voltariuss.diagonia.DiagoniaLogger;
-import fr.voltariuss.diagonia.DiagoniaRuntimeException;
 import fr.voltariuss.diagonia.model.config.rank.Rank;
 import fr.voltariuss.diagonia.model.config.rank.RankUpPrerequisites;
 import fr.voltariuss.diagonia.model.dto.RankUpProgression;
@@ -26,7 +25,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.concurrent.ExecutionException;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.luckperms.api.context.ImmutableContextSet;
@@ -117,7 +115,6 @@ public class RankLuckPermsService implements RankService {
         player.getName(),
         currentRank.get().getName());
 
-    // TODO: this isn't clear why we return currentGroup instead of currentRank
     return currentGroup;
   }
 

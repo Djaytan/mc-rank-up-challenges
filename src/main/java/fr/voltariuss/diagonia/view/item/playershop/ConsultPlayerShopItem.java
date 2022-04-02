@@ -60,7 +60,6 @@ public class ConsultPlayerShopItem {
     this.resourceBundle = resourceBundle;
   }
 
-  // TODO: return a wrapper of GuiItem and an active state (better readability)
   public @Nullable GuiItem createItem(
       @NotNull OfflinePlayer ownerPlayer, @NotNull PlayerShop playerShop) {
     Preconditions.checkState(

@@ -81,7 +81,6 @@ public class RankListGui {
 
     gui.setDefaultClickAction(event -> event.setCancelled(true));
 
-    // TODO: move open actions to controller view
     gui.open(whoOpen);
   }
 }

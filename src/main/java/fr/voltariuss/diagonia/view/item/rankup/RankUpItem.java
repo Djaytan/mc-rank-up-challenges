@@ -150,7 +150,6 @@ public class RankUpItem {
 
   public @NotNull GuiAction<InventoryClickEvent> onClick(
       @NotNull RankUpProgression rankUpProgression) {
-    // TODO: create a real event with Observer pattern or Bukkit API
     return event -> {
       Player player = (Player) event.getWhoClicked();
       rankUpController.onRankUpRequested(player, rankUpProgression);

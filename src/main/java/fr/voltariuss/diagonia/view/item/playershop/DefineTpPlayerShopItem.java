@@ -35,7 +35,6 @@ import org.jetbrains.annotations.NotNull;
 @Singleton
 public class DefineTpPlayerShopItem {
 
-  // TODO: make it configurable through config file
   private static final Material DEFINE_TP_ITEM_MATERIAL = Material.ENDER_PEARL;
 
   private final MiniMessage miniMessage;

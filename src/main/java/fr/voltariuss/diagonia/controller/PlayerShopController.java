@@ -114,7 +114,7 @@ public class PlayerShopController {
           player.getName(),
           player.getUniqueId(),
           economyResponse.getModifiedAmount(),
-          economyResponse.getNewBalance()); // TODO: format economy values
+          economyResponse.getNewBalance());
     } catch (EconomyException e) {
       logger.error(
           "Failed to withdraw money from the player's balance: playerShopPrice={}, playerName={},"
