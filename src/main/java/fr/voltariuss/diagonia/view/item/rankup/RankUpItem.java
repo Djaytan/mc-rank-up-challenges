@@ -27,11 +27,11 @@ import fr.voltariuss.diagonia.model.dto.RankUpProgression;
 import fr.voltariuss.diagonia.view.EconomyFormatter;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.ResourceBundle;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.Template;
@@ -43,6 +43,8 @@ import org.jetbrains.annotations.NotNull;
 
 @Singleton
 public class RankUpItem {
+
+  private static final Material RANK_UP_MATERIAL = Material.WRITABLE_BOOK;
 
   private final EconomyFormatter economyFormatter;
   private final MiniMessage miniMessage;
@@ -63,89 +65,87 @@ public class RankUpItem {
 
   public @NotNull GuiItem createItem(
       @NotNull Rank rank, @NotNull RankUpProgression rankUpProgression) {
-    Preconditions.checkNotNull(rank.getRankUpPrerequisites());
+    Preconditions.checkNotNull(
+        rank.getRankUpPrerequisites(), "Rankup prerequisites shouldn't be null here.");
+
     RankUpPrerequisites rankUpPrerequisites = rank.getRankUpPrerequisites();
 
-    // TODO: simplify instructions
-    ItemBuilder itemBuilder =
-        ItemBuilder.from(Material.WRITABLE_BOOK)
-            .name(
-                rankUpProgression.isRankOwned()
-                    ? miniMessage
-                        .deserialize(
-                            resourceBundle.getString(
-                                "diagonia.rankup.rankup.name.already_unlocked"))
-                        .decoration(TextDecoration.ITALIC, false)
-                    : miniMessage
-                        .deserialize(resourceBundle.getString("diagonia.rankup.rankup.name"))
-                        .decoration(TextDecoration.ITALIC, false))
-            .lore(
-                rankUpProgression.isRankOwned()
-                    ? Collections.emptyList()
-                    : Arrays.asList(
-                        miniMessage
-                            .deserialize(
-                                resourceBundle.getString(
-                                    "diagonia.rankup.rankup.cost.minecraft_xp"),
-                                TemplateResolver.templates(
-                                    Template.template(
-                                        "diag_current_level",
-                                        Component.text(
-                                            String.valueOf(rankUpProgression.getCurrentXpLevel()),
-                                            rankUpProgression.isXpLevelPrerequisiteDone()
-                                                ? NamedTextColor
-                                                    .GREEN // TODO: transfer it into resourceBundle
-                                                : NamedTextColor.GRAY)),
-                                    Template.template(
-                                        "diag_required_level",
-                                        String.valueOf(rankUpPrerequisites.getTotalMcExpLevels()))))
-                            .decoration(TextDecoration.ITALIC, false),
-                        miniMessage
-                            .deserialize(
-                                resourceBundle.getString("diagonia.rankup.rankup.cost.jobs_levels"),
-                                TemplateResolver.templates(
-                                    Template.template(
-                                        "diag_current_level",
-                                        Component.text(
-                                            String.valueOf(rankUpProgression.getTotalJobsLevels()),
-                                            rankUpProgression.isTotalJobsLevelsPrerequisiteDone()
-                                                ? NamedTextColor.GREEN
-                                                : NamedTextColor.GRAY)),
-                                    Template.template(
-                                        "diag_required_level",
-                                        String.valueOf(rankUpPrerequisites.getTotalJobsLevel()))))
-                            .decoration(TextDecoration.ITALIC, false),
-                        miniMessage
-                            .deserialize(
-                                resourceBundle.getString("diagonia.rankup.rankup.cost.money"),
-                                TemplateResolver.templates(
-                                    Template.template(
-                                        "diag_current_balance",
-                                        Component.text(
-                                            economyFormatter.format(
-                                                rankUpProgression.getCurrentBalance()),
-                                            rankUpProgression.isMoneyPrerequisiteDone()
-                                                ? NamedTextColor.GREEN
-                                                : NamedTextColor.GRAY)),
-                                    Template.template(
-                                        "diag_rankup_price",
-                                        economyFormatter.format(
-                                            rankUpPrerequisites.getMoneyPrice()))))
-                            .decoration(TextDecoration.ITALIC, false),
-                        Component.empty(),
-                        rankUpProgression.canRankUp()
-                            ? miniMessage
-                                .deserialize(
-                                    resourceBundle.getString("diagonia.rankup.rankup.unlock_rank"))
-                                .decoration(TextDecoration.ITALIC, false)
-                            : miniMessage
-                                .deserialize(
-                                    resourceBundle.getString(
-                                        "diagonia.rankup.rankup.prerequisites_required"))
-                                .decoration(TextDecoration.ITALIC, false)));
+    Component itemName = getName(rankUpProgression.isRankOwned());
+    List<Component> itemLore = getLore(rankUpProgression, rankUpPrerequisites);
+
+    ItemBuilder itemBuilder = ItemBuilder.from(RANK_UP_MATERIAL).name(itemName).lore(itemLore);
+
     return rankUpProgression.isRankOwned()
         ? itemBuilder.asGuiItem()
         : itemBuilder.asGuiItem(onClick(rankUpProgression));
+  }
+
+  public @NotNull Component getName(boolean isRankOwned) {
+    return isRankOwned
+        ? miniMessage
+            .deserialize(resourceBundle.getString("diagonia.rankup.rankup.name.already_unlocked"))
+            .decoration(TextDecoration.ITALIC, false)
+        : miniMessage
+            .deserialize(resourceBundle.getString("diagonia.rankup.rankup.name"))
+            .decoration(TextDecoration.ITALIC, false);
+  }
+
+  public @NotNull List<Component> getLore(
+      @NotNull RankUpProgression rankUpProgression,
+      @NotNull RankUpPrerequisites rankUpPrerequisites) {
+
+    if (rankUpProgression.isRankOwned()) {
+      return Collections.emptyList();
+    }
+
+    return Arrays.asList(
+        miniMessage
+            .deserialize(
+                resourceBundle.getString("diagonia.rankup.rankup.cost.minecraft_xp"),
+                TemplateResolver.templates(
+                    getPrerequisiteStateColorTemplate(
+                        rankUpProgression.isXpLevelPrerequisiteDone()),
+                    Template.template(
+                        "diag_current_level",
+                        String.valueOf(rankUpProgression.getCurrentXpLevel())),
+                    Template.template(
+                        "diag_required_level",
+                        String.valueOf(rankUpPrerequisites.getTotalMcExpLevels()))))
+            .decoration(TextDecoration.ITALIC, false),
+        miniMessage
+            .deserialize(
+                resourceBundle.getString("diagonia.rankup.rankup.cost.jobs_levels"),
+                TemplateResolver.templates(
+                    getPrerequisiteStateColorTemplate(
+                        rankUpProgression.isTotalJobsLevelsPrerequisiteDone()),
+                    Template.template(
+                        "diag_current_level",
+                        String.valueOf(rankUpProgression.getTotalJobsLevels())),
+                    Template.template(
+                        "diag_required_level",
+                        String.valueOf(rankUpPrerequisites.getTotalJobsLevel()))))
+            .decoration(TextDecoration.ITALIC, false),
+        miniMessage
+            .deserialize(
+                resourceBundle.getString("diagonia.rankup.rankup.cost.money"),
+                TemplateResolver.templates(
+                    getPrerequisiteStateColorTemplate(rankUpProgression.isMoneyPrerequisiteDone()),
+                    Template.template(
+                        "diag_current_balance",
+                        economyFormatter.format(rankUpProgression.getCurrentBalance())),
+                    Template.template(
+                        "diag_rankup_price",
+                        economyFormatter.format(rankUpPrerequisites.getMoneyPrice()))))
+            .decoration(TextDecoration.ITALIC, false),
+        Component.empty(),
+        rankUpProgression.canRankUp()
+            ? miniMessage
+                .deserialize(resourceBundle.getString("diagonia.rankup.rankup.unlock_rank"))
+                .decoration(TextDecoration.ITALIC, false)
+            : miniMessage
+                .deserialize(
+                    resourceBundle.getString("diagonia.rankup.rankup.prerequisites_required"))
+                .decoration(TextDecoration.ITALIC, false));
   }
 
   public @NotNull GuiAction<InventoryClickEvent> onClick(
@@ -154,5 +154,22 @@ public class RankUpItem {
       Player player = (Player) event.getWhoClicked();
       rankUpController.onRankUpRequested(player, rankUpProgression);
     };
+  }
+
+  private @NotNull Template getPrerequisiteStateColorTemplate(boolean isPrerequisiteValidated) {
+    Component prerequisiteStateColor;
+
+    if (isPrerequisiteValidated) {
+      prerequisiteStateColor =
+          miniMessage.deserialize(
+              resourceBundle.getString(
+                  "diagonia.rankup.rankup.prerequisite.state.validated.color"));
+    } else {
+      prerequisiteStateColor =
+          miniMessage.deserialize(
+              resourceBundle.getString("diagonia.rankup.rankup.prerequisite.state.required.color"));
+    }
+
+    return Template.template("diag_prerequisite_state_color", prerequisiteStateColor);
   }
 }
