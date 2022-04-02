@@ -18,6 +18,7 @@ package fr.voltariuss.diagonia.model.service;
 
 import com.google.common.base.Preconditions;
 import fr.voltariuss.diagonia.DiagoniaLogger;
+import fr.voltariuss.diagonia.DiagoniaRuntimeException;
 import fr.voltariuss.diagonia.model.config.rank.Rank;
 import fr.voltariuss.diagonia.model.config.rank.RankUpPrerequisites;
 import fr.voltariuss.diagonia.model.dto.RankUpProgression;
@@ -86,12 +87,7 @@ public class RankLuckPermsService implements RankService {
   public @Nullable Group getCurrentRank(@NotNull Player player) {
     Preconditions.checkNotNull(player);
 
-    User user = userManager.getUser(player.getUniqueId());
-
-    if (user == null) {
-      throw new IllegalStateException(
-          "Failed to found LuckPerms' user from an online player. This isn't supposed to happen.");
-    }
+    User user = getUser(player);
 
     // A user have only one group of the track at once: the current rank of the player
     // (even if it can have staff groups or other ones which will be ignored tho)
@@ -212,18 +208,10 @@ public class RankLuckPermsService implements RankService {
 
   @Override
   public @NotNull PromotionResult promote(@NotNull Player player) {
-    User user = Objects.requireNonNull(userManager.getUser(player.getUniqueId()));
+    User user = getUser(player);
     PromotionResult promotionResult = track.promote(user, ImmutableContextSet.empty());
-    try {
-      userManager.saveUser(user).get();
-    } catch (InterruptedException | ExecutionException e) {
-      logger.error(
-          "Failed to save promoted rank '{}' for the player '{}'",
-          promotionResult.getGroupTo().orElse(null),
-          player.getName());
-    }
+    userManager.saveUser(user);
     return promotionResult;
-    // TODO: manage status and raise errors if needed
   }
 
   @Override
@@ -279,6 +267,17 @@ public class RankLuckPermsService implements RankService {
         .isChallengesPrerequisiteDone(isChallengesPrerequisiteDone)
         .isRankOwned(isRankOwned)
         .build();
+  }
+
+  private @NotNull User getUser(@NotNull Player player) {
+    User user = userManager.getUser(player.getUniqueId());
+
+    if (user == null) {
+      throw new IllegalStateException(
+          "Failed to found LuckPerms' user from an online player. This isn't supposed to happen.");
+    }
+
+    return user;
   }
 
   private @NotNull List<Group> getOwnedRanks(@Nullable Group currentRank) {
