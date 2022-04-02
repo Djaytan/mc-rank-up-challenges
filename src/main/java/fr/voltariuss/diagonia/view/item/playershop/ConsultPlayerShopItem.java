@@ -66,46 +66,51 @@ public class ConsultPlayerShopItem {
         ownerPlayer.getUniqueId().equals(playerShop.getOwnerUuid()),
         "The owner player specified isn't the same than the one of the playershop.");
 
-    String ownerName = ownerPlayer.getName();
+    if (!playerShop.isActive()) {
+      return null;
+    }
 
-    if (playerShop.isActive()) {
-      // TODO: refactor if-else
-      // TODO: is ownerName can really be null?
-      if (ownerName != null) {
-        Component psName =
-            miniMessage
-                .deserialize(
-                    resourceBundle.getString("diagonia.playershop.consult.name"),
-                    TemplateResolver.templates(Template.template("diag_player_name", ownerName)))
-                .decoration(TextDecoration.ITALIC, false);
-        List<Component> psDescLore =
-            Collections.singletonList(
-                (playerShop.getDescription() != null
-                        ? Component.text(playerShop.getDescription())
-                            .color(TextColor.fromCSSHexString("gray"))
-                        : miniMessage.deserialize(
-                            resourceBundle.getString(
-                                "diagonia.playershop.consult.description.no_description_set")))
-                    .decoration(TextDecoration.ITALIC, false));
+    String ownerName =
+        ownerPlayer.getName(); // TODO: manage case where binding UUID-Name is missing
 
-        if (playerShop.hasItemIcon()) {
-          return ItemBuilder.from(playerShop.getItemIcon())
-              .name(psName)
-              .lore(psDescLore)
-              .asGuiItem();
-        }
-        return ItemBuilder.skull()
-            .owner(ownerPlayer)
-            .name(psName)
-            .lore(psDescLore)
-            .asGuiItem(getClickEvent(playerShop));
-      }
+    if (ownerName == null) {
       logger.error(
           "The UUID {} isn't associated to any existing user on the server.",
           playerShop.getOwnerUuid());
+      return null;
     }
 
-    return null;
+    Component psName =
+        miniMessage
+            .deserialize(
+                resourceBundle.getString("diagonia.playershop.consult.name"),
+                TemplateResolver.templates(Template.template("diag_player_name", ownerName)))
+            .decoration(TextDecoration.ITALIC, false);
+
+    List<Component> psDescLore =
+        Collections.singletonList(
+            (playerShop.getDescription() != null
+                    ? Component.text(playerShop.getDescription())
+                        .color(TextColor.fromCSSHexString("gray"))
+                    : miniMessage.deserialize(
+                        resourceBundle.getString(
+                            "diagonia.playershop.consult.description.no_description_set")))
+                .decoration(TextDecoration.ITALIC, false));
+
+    GuiItem psItem;
+
+    if (playerShop.hasItemIcon()) {
+      psItem = ItemBuilder.from(playerShop.getItemIcon()).name(psName).lore(psDescLore).asGuiItem();
+    } else {
+      psItem =
+          ItemBuilder.skull()
+              .owner(ownerPlayer)
+              .name(psName)
+              .lore(psDescLore)
+              .asGuiItem(getClickEvent(playerShop));
+    }
+
+    return psItem;
   }
 
   public @NotNull GuiAction<InventoryClickEvent> getClickEvent(@NotNull PlayerShop playerShop) {
