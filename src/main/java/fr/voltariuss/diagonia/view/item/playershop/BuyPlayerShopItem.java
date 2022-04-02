@@ -64,8 +64,8 @@ public class BuyPlayerShopItem {
 
   public @NotNull GuiItem createItem() {
     Component itemName = getName();
-    List<Component> lore = getLore();
-    return ItemBuilder.from(BUY_ITEM_MATERIAL).name(itemName).lore(lore).asGuiItem(onClick());
+    List<Component> itemLore = getLore();
+    return ItemBuilder.from(BUY_ITEM_MATERIAL).name(itemName).lore(itemLore).asGuiItem(onClick());
   }
 
   private @NotNull GuiAction<InventoryClickEvent> onClick() {
