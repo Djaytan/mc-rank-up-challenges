@@ -18,7 +18,6 @@ package fr.voltariuss.diagonia.model.service;
 
 import com.google.common.base.Preconditions;
 import fr.voltariuss.diagonia.DiagoniaLogger;
-import fr.voltariuss.diagonia.model.config.PluginConfig;
 import fr.voltariuss.diagonia.model.config.rank.Rank;
 import fr.voltariuss.diagonia.model.config.rank.RankUpPrerequisites;
 import fr.voltariuss.diagonia.model.dto.RankUpProgression;
@@ -36,7 +35,6 @@ import net.luckperms.api.model.user.UserManager;
 import net.luckperms.api.query.QueryOptions;
 import net.luckperms.api.track.PromotionResult;
 import net.luckperms.api.track.Track;
-import net.luckperms.api.track.TrackManager;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -54,9 +52,8 @@ public class RankLuckPermsService implements RankService {
   private final GroupManager groupManager;
   private final RankChallengeProgressionService rankChallengeProgressionService;
   private final RankConfigService rankConfigService;
-  private final UserManager userManager;
-
   private final Track track;
+  private final UserManager userManager;
 
   /**
    * Constructor.
@@ -65,29 +62,23 @@ public class RankLuckPermsService implements RankService {
    * @param groupManager The group manager of LuckPerms API.
    * @param rankChallengeProgressionService The rank challenge progression service.
    * @param rankConfigService The rank config service.
-   * @param trackManager The track manager of LuckPerms API.
+   * @param track The LuckPerms' track for ranks.
    * @param userManager The user manager of LuckPerms API.
    */
   @Inject
   public RankLuckPermsService(
       @NotNull DiagoniaLogger logger,
       @NotNull GroupManager groupManager,
-      @NotNull PluginConfig pluginConfig,
       @NotNull RankChallengeProgressionService rankChallengeProgressionService,
       @NotNull RankConfigService rankConfigService,
-      @NotNull TrackManager trackManager,
+      @NotNull Track track,
       @NotNull UserManager userManager) {
     this.logger = logger;
     this.groupManager = groupManager;
     this.rankChallengeProgressionService = rankChallengeProgressionService;
     this.rankConfigService = rankConfigService;
+    this.track = track;
     this.userManager = userManager;
-
-    this.track =
-        trackManager.getTrack(
-            pluginConfig
-                .getRankUpConfig()
-                .getLuckPermsTrackName()); // TODO: delegate creation to Guice
   }
 
   @Override

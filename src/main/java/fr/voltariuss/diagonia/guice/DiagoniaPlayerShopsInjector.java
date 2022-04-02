@@ -44,7 +44,7 @@ public final class DiagoniaPlayerShopsInjector {
             new GuiceGeneralModule(plugin.getSLF4JLogger(), plugin, pluginConfig, rankConfig),
             new GuiceBukkitModule(plugin),
             new GuiceBukkitLibsModule(plugin),
-            new GuiceLuckPermsModule());
+            new GuiceLuckPermsModule(pluginConfig));
     injector.injectMembers(plugin);
   }
 }

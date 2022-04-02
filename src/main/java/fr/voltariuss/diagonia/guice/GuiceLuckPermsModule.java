@@ -19,18 +19,24 @@ package fr.voltariuss.diagonia.guice;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
+import fr.voltariuss.diagonia.DiagoniaException;
+import fr.voltariuss.diagonia.model.config.PluginConfig;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
 import net.luckperms.api.model.group.GroupManager;
 import net.luckperms.api.model.user.UserManager;
+import net.luckperms.api.track.Track;
 import net.luckperms.api.track.TrackManager;
 import org.jetbrains.annotations.NotNull;
 
 public class GuiceLuckPermsModule extends AbstractModule {
 
   private final LuckPerms luckPerms;
+  private final PluginConfig pluginConfig;
 
-  public GuiceLuckPermsModule() {
+  public GuiceLuckPermsModule(@NotNull PluginConfig pluginConfig) {
+    this.pluginConfig = pluginConfig;
+
     luckPerms = LuckPermsProvider.get();
   }
 
@@ -56,5 +62,20 @@ public class GuiceLuckPermsModule extends AbstractModule {
   @Singleton
   public @NotNull TrackManager provideTrackManager() {
     return luckPerms.getTrackManager();
+  }
+
+  @Provides
+  @Singleton
+  public @NotNull Track provideTrack() throws DiagoniaException {
+    String trackName = pluginConfig.getRankUpConfig().getLuckPermsTrackName();
+    Track track = luckPerms.getTrackManager().getTrack(trackName);
+
+    if (track == null) {
+      throw new DiagoniaException(
+          String.format(
+              "Failed to found the LuckPerms' track '%1$s': is it the right name?", trackName));
+    }
+
+    return track;
   }
 }
