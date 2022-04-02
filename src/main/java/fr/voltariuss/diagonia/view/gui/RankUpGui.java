@@ -118,7 +118,7 @@ public class RankUpGui {
         ItemBuilder.from(PREVIOUS_GUI_MATERIAL)
             .name(
                 miniMessage
-                    .deserialize(resourceBundle.getString("diagonia.gui.go_to_previous"))
+                    .deserialize(resourceBundle.getString("diagonia.gui.go_to_previous_menu"))
                     .decoration(TextDecoration.ITALIC, false))
             .asGuiItem(event -> rankUpController.openRankListGui((Player) event.getWhoClicked())));
 
