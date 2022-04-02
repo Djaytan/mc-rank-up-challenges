@@ -39,6 +39,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+// TODO: rename
 @Singleton
 public class MainPlayerShopGui {
 
@@ -79,7 +80,7 @@ public class MainPlayerShopGui {
         Gui.paginated()
             .title(
                 miniMessage.deserialize(
-                    resourceBundle.getString("diagonia.playershop.consult.gui.title")))
+                    resourceBundle.getString("diagonia.playershop.list.gui.title")))
             .rows(6)
             .pageSize(pageSize)
             .create();

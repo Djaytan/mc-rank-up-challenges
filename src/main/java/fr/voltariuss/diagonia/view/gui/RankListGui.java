@@ -63,7 +63,7 @@ public class RankListGui {
         Gui.gui()
             .title(
                 miniMessage.deserialize(
-                    resourceBundle.getString("diagonia.rankup.rank_list.title")))
+                    resourceBundle.getString("diagonia.rankup.ranks.gui.title")))
             .rows(nbRows)
             .create();
 

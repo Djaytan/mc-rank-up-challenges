@@ -91,10 +91,11 @@ public class RankUpItem {
   private @NotNull Component getName(boolean isRankOwned) {
     return isRankOwned
         ? miniMessage
-            .deserialize(resourceBundle.getString("diagonia.rankup.rankup.name.already_unlocked"))
+            .deserialize(
+                resourceBundle.getString("diagonia.rankup.rankup.item.name.already_unlocked"))
             .decoration(TextDecoration.ITALIC, false)
         : miniMessage
-            .deserialize(resourceBundle.getString("diagonia.rankup.rankup.name"))
+            .deserialize(resourceBundle.getString("diagonia.rankup.rankup.item.name.unlockable"))
             .decoration(TextDecoration.ITALIC, false);
   }
 
@@ -109,7 +110,8 @@ public class RankUpItem {
     return Arrays.asList(
         miniMessage
             .deserialize(
-                resourceBundle.getString("diagonia.rankup.rankup.cost.minecraft_xp"),
+                resourceBundle.getString(
+                    "diagonia.rankup.rankup.item.lore.prerequisite.required.minecraft_xp"),
                 TemplateResolver.templates(
                     Template.template(
                         "diag_current_level",
@@ -122,7 +124,8 @@ public class RankUpItem {
             .decoration(TextDecoration.ITALIC, false),
         miniMessage
             .deserialize(
-                resourceBundle.getString("diagonia.rankup.rankup.cost.jobs_levels"),
+                resourceBundle.getString(
+                    "diagonia.rankup.rankup.item.lore.prerequisite.required.jobs_levels"),
                 TemplateResolver.templates(
                     Template.template(
                         "diag_current_level",
@@ -135,7 +138,8 @@ public class RankUpItem {
             .decoration(TextDecoration.ITALIC, false),
         miniMessage
             .deserialize(
-                resourceBundle.getString("diagonia.rankup.rankup.cost.money"),
+                resourceBundle.getString(
+                    "diagonia.rankup.rankup.item.lore.prerequisite.required.money"),
                 TemplateResolver.templates(
                     Template.template(
                         "diag_current_balance",
@@ -149,11 +153,13 @@ public class RankUpItem {
         Component.empty(),
         rankUpProgression.canRankUp()
             ? miniMessage
-                .deserialize(resourceBundle.getString("diagonia.rankup.rankup.unlock_rank"))
+                .deserialize(
+                    resourceBundle.getString("diagonia.rankup.rankup.item.lore.unlock_rank"))
                 .decoration(TextDecoration.ITALIC, false)
             : miniMessage
                 .deserialize(
-                    resourceBundle.getString("diagonia.rankup.rankup.prerequisites_required"))
+                    resourceBundle.getString(
+                        "diagonia.rankup.rankup.item.lore.prerequisites_not_respected"))
                 .decoration(TextDecoration.ITALIC, false));
   }
 
@@ -163,10 +169,12 @@ public class RankUpItem {
 
     if (isPrerequisiteValidated) {
       templateMessage =
-          resourceBundle.getString("diagonia.rankup.rankup.prerequisite.progression.validated");
+          resourceBundle.getString(
+              "diagonia.rankup.rankup.item.lore.prerequisite.progression.sufficient");
     } else {
       templateMessage =
-          resourceBundle.getString("diagonia.rankup.rankup.prerequisite.progression.insufficient");
+          resourceBundle.getString(
+              "diagonia.rankup.rankup.item.lore.prerequisite.progression.insufficient");
     }
 
     return miniMessage.deserialize(

@@ -42,7 +42,7 @@ public class RankUpMessage {
 
   public @NotNull Component rankUpFailure() {
     return miniMessage
-        .deserialize(resourceBundle.getString("diagonia.rankup.rankup.failure"))
+        .deserialize(resourceBundle.getString("diagonia.rankup.rankup.fail.unknown_error"))
         .decoration(TextDecoration.ITALIC, false);
   }
 
@@ -60,7 +60,7 @@ public class RankUpMessage {
   public @NotNull Component prerequisitesNotRespected() {
     return miniMessage
         .deserialize(
-            resourceBundle.getString("diagonia.rankup.rankup.cost.prerequisites_not_respected"))
+            resourceBundle.getString("diagonia.rankup.rankup.fail.prerequisites_not_respected"))
         .decoration(TextDecoration.ITALIC, false);
   }
 }

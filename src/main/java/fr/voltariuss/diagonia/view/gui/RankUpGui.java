@@ -88,7 +88,7 @@ public class RankUpGui {
             .rows(6)
             .title(
                 miniMessage.deserialize(
-                    resourceBundle.getString("diagonia.rankup.rankup.challenge.title"),
+                    resourceBundle.getString("diagonia.rankup.challenges.gui.title"),
                     TemplateResolver.templates(Template.template("diag_rank", rank.getName()))))
             .create();
 

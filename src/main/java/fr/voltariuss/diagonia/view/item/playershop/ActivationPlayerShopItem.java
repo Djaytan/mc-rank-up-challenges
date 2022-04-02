@@ -80,9 +80,10 @@ public class ActivationPlayerShopItem {
   private @NotNull Component getName(boolean isPlayerShopActive) {
     return miniMessage
         .deserialize(
-            isPlayerShopActive
-                ? resourceBundle.getString("diagonia.playershop.config.activation.disabling.name")
-                : resourceBundle.getString("diagonia.playershop.config.activation.enabling.name"))
+            resourceBundle.getString(
+                isPlayerShopActive
+                    ? "diagonia.playershop.config.activation.item.disabling.name"
+                    : "diagonia.playershop.config.activation.item.enabling.name"))
         .decoration(TextDecoration.ITALIC, false);
   }
 
@@ -90,11 +91,10 @@ public class ActivationPlayerShopItem {
     return Collections.singletonList(
         miniMessage
             .deserialize(
-                isPlayerShopActive
-                    ? resourceBundle.getString(
-                        "diagonia.playershop.config.activation.disabling.description")
-                    : resourceBundle.getString(
-                        "diagonia.playershop.config.activation.enabling.description"))
+                resourceBundle.getString(
+                    isPlayerShopActive
+                        ? "diagonia.playershop.config.activation.item.disabling.description"
+                        : "diagonia.playershop.config.activation.item.enabling.description"))
             .decoration(TextDecoration.ITALIC, false));
   }
 }

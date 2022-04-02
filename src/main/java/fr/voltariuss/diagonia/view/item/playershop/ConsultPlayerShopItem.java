@@ -73,7 +73,8 @@ public class ConsultPlayerShopItem {
 
     if (ownerName == null) {
       logger.warn("The UUID {} isn't associated to any player name.", playerShop.getOwnerUuid());
-      ownerName = resourceBundle.getString("diagonia.playershop.consult.default_player_name");
+      ownerName =
+          resourceBundle.getString("diagonia.playershop.list.shop.name.default_player_name");
     }
 
     Component itemName = getName(ownerName);
@@ -105,7 +106,7 @@ public class ConsultPlayerShopItem {
   private @NotNull Component getName(@NotNull String ownerName) {
     return miniMessage
         .deserialize(
-            resourceBundle.getString("diagonia.playershop.consult.name"),
+            resourceBundle.getString("diagonia.playershop.list.shop.name"),
             TemplateResolver.templates(
                 Template.template("diag_player_name", miniMessage.deserialize(ownerName))))
         .decoration(TextDecoration.ITALIC, false);
@@ -115,11 +116,10 @@ public class ConsultPlayerShopItem {
     return Collections.singletonList(
         (psDesc != null
                 ? miniMessage.deserialize(
-                    resourceBundle.getString("diagonia.playershop.consult.description"),
+                    resourceBundle.getString("diagonia.playershop.list.shop.description"),
                     TemplateResolver.templates(Template.template("diag_ps_description", psDesc)))
                 : miniMessage.deserialize(
-                    resourceBundle.getString(
-                        "diagonia.playershop.consult.description.no_description_set")))
+                    resourceBundle.getString("diagonia.playershop.list.shop.description.default")))
             .decoration(TextDecoration.ITALIC, false));
   }
 }

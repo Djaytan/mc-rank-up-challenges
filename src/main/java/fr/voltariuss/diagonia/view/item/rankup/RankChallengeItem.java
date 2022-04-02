@@ -81,7 +81,7 @@ public class RankChallengeItem {
           .name(
               miniMessage
                   .deserialize(
-                      resourceBundle.getString("diagonia.rankup.rankup.challenge.name"),
+                      resourceBundle.getString("diagonia.rankup.challenges.item.name.incomplete"),
                       TemplateResolver.templates(
                           Template.template(
                               "diag_challenge_name",
@@ -93,7 +93,7 @@ public class RankChallengeItem {
                           miniMessage
                               .deserialize(
                                   resourceBundle.getString(
-                                      "diagonia.rankup.rankup.challenge.progress"),
+                                      "diagonia.rankup.challenges.item.lore.progress"),
                                   TemplateResolver.templates(
                                       Template.template(
                                           "diag_amount_given",
@@ -108,31 +108,32 @@ public class RankChallengeItem {
                           miniMessage
                               .deserialize(
                                   resourceBundle.getString(
-                                      "diagonia.rankup.rankup.challenge.left_click"))
+                                      "diagonia.rankup.challenges.item.lore.action.left_click"))
                               .decoration(TextDecoration.ITALIC, false),
                           miniMessage
                               .deserialize(
                                   resourceBundle.getString(
-                                      "diagonia.rankup.rankup.challenge.right_click"))
+                                      "diagonia.rankup.challenges.item.lore.action.right_click"))
                               .decoration(TextDecoration.ITALIC, false),
                           miniMessage
                               .deserialize(
                                   resourceBundle.getString(
-                                      "diagonia.rankup.rankup.challenge.shift_right_click.1"))
+                                      "diagonia.rankup.challenges.item.lore.action.shift_right_click.1"))
                               .decoration(TextDecoration.ITALIC, false),
                           miniMessage
                               .deserialize(
                                   resourceBundle.getString(
-                                      "diagonia.rankup.rankup.challenge.shift_right_click.2"))
+                                      "diagonia.rankup.challenges.item.lore.action.shift_right_click.2"))
                               .decoration(TextDecoration.ITALIC, false)))
                   .toList())
           .asGuiItem(onClick(rank, rankChallenge));
     }
+    // TODO: feat - keep trace of amount asked even when challenge is completed
     return ItemBuilder.from(rankChallenge.getChallengeItemMaterial())
         .name(
             miniMessage
                 .deserialize(
-                    resourceBundle.getString("diagonia.rankup.rankup.challenge.name"),
+                    resourceBundle.getString("diagonia.rankup.challenges.item.name.completed"),
                     TemplateResolver.templates(
                         Template.template(
                             "diag_challenge_name",
@@ -195,7 +196,8 @@ public class RankChallengeItem {
             }
             whoClicked.sendMessage(
                 miniMessage.deserialize(
-                    resourceBundle.getString("diagonia.rankup.rankup.challenge.success_give"),
+                    resourceBundle.getString(
+                        "diagonia.rankup.challenges.give.success.amount_given"),
                     TemplateResolver.templates(
                         Template.template(
                             "diag_amount_given", String.valueOf(effectiveGivenAmount)),
@@ -207,7 +209,8 @@ public class RankChallengeItem {
             if (rcp.getChallengeAmountGiven() == rankChallenge.getChallengeItemAmount()) {
               whoClicked.sendMessage(
                   miniMessage.deserialize(
-                      resourceBundle.getString("diagonia.rankup.rankup.challenge.now_completed"),
+                      resourceBundle.getString(
+                          "diagonia.rankup.challenges.give.success.now_completed"),
                       TemplateResolver.templates(
                           Template.template(
                               "diag_challenge_name",
@@ -218,7 +221,7 @@ public class RankChallengeItem {
             whoClicked.sendMessage(
                 miniMessage.deserialize(
                     resourceBundle.getString(
-                        "diagonia.rankup.rankup.challenge.challenge_already_completed")));
+                        "diagonia.rankup.challenges.give.fail.challenge_already_completed")));
           }
           return;
         }
@@ -227,14 +230,15 @@ public class RankChallengeItem {
               miniMessage
                   .deserialize(
                       resourceBundle.getString(
-                          "diagonia.rankup.rankup.challenge.no_item_in_inventory"))
+                          "diagonia.rankup.challenges.give.fail.no_item_in_inventory"))
                   .decoration(TextDecoration.ITALIC, false));
           return;
         }
         whoClicked.sendMessage(
             miniMessage
                 .deserialize(
-                    resourceBundle.getString("diagonia.rankup.rankup.challenge.not_enough_item"))
+                    resourceBundle.getString(
+                        "diagonia.rankup.challenges.give.fail.not_enough_item"))
                 .decoration(TextDecoration.ITALIC, false));
       }
     };

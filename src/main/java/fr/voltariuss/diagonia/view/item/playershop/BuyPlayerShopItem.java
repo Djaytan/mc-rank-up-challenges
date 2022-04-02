@@ -77,7 +77,7 @@ public class BuyPlayerShopItem {
 
   private @NotNull Component getName() {
     return miniMessage
-        .deserialize(resourceBundle.getString("diagonia.playershop.buy.name"))
+        .deserialize(resourceBundle.getString("diagonia.playershop.buy.item.name"))
         .decoration(TextDecoration.ITALIC, false);
   }
 
@@ -85,7 +85,7 @@ public class BuyPlayerShopItem {
     return Arrays.asList(
         miniMessage
             .deserialize(
-                resourceBundle.getString("diagonia.playershop.buy.description"),
+                resourceBundle.getString("diagonia.playershop.buy.item.description"),
                 TemplateResolver.templates(
                     Template.template(
                         "diag_buy_price",
@@ -93,7 +93,8 @@ public class BuyPlayerShopItem {
             .decoration(TextDecoration.ITALIC, false),
         Component.empty(),
         miniMessage
-            .deserialize(resourceBundle.getString("diagonia.playershop.buy.description.action"))
+            .deserialize(
+                resourceBundle.getString("diagonia.playershop.buy.item.description.action"))
             .decoration(TextDecoration.ITALIC, false));
   }
 }

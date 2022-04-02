@@ -47,7 +47,7 @@ public class PlayerShopMessage {
 
   public @NotNull Component buySuccess(@NotNull EconomyResponse economyResponse) {
     return miniMessage.deserialize(
-        resourceBundle.getString("diagonia.playershop.buy.successfully_bought"),
+        resourceBundle.getString("diagonia.playershop.buy.success"),
         TemplateResolver.templates(
             Template.template(
                 "diag_price", economyFormatter.format(economyResponse.getModifiedAmount())),
@@ -57,7 +57,7 @@ public class PlayerShopMessage {
 
   public @NotNull Component teleportPointDefined(@NotNull LocationDto locationDto) {
     return miniMessage.deserialize(
-        resourceBundle.getString("diagonia.playershop.config.define_teleport.defined"),
+        resourceBundle.getString("diagonia.playershop.config.teleportation.defined"),
         TemplateResolver.templates(
             Template.template("diag_teleport_point", locationDto.toString())));
     // TODO: more user-friendly message by preventing usage of LocationDto#toString()
@@ -79,21 +79,21 @@ public class PlayerShopMessage {
   public @NotNull Component shopActivationRequireTeleportPointFirst() {
     return miniMessage.deserialize(
         resourceBundle.getString(
-            "diagonia.playershop.config.activation.enabling.teleport_point_definition_required"));
+            "diagonia.playershop.config.activation.enabling.fail.teleport_point_definition_required"));
   }
 
   public @NotNull Component insufficientFunds() {
     return miniMessage.deserialize(
-        resourceBundle.getString("diagonia.playershop.buy.insufficient_funds"));
+        resourceBundle.getString("diagonia.playershop.buy.fail.insufficient_funds"));
   }
 
   public @NotNull Component transactionFailed() {
     return miniMessage.deserialize(
-        resourceBundle.getString("diagonia.playershop.buy.transaction_failed"));
+        resourceBundle.getString("diagonia.playershop.buy.fail.transaction_failed"));
   }
 
   public @NotNull Component noTeleportPointDefined() {
     return miniMessage.deserialize(
-        resourceBundle.getString("diagonia.playershop.teleport.no_tp_defined_error"));
+        resourceBundle.getString("diagonia.playershop.teleportation.fail.no_tp_defined_error"));
   }
 }

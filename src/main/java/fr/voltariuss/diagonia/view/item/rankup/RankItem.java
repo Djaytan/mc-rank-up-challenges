@@ -64,7 +64,7 @@ public class RankItem {
     introProfits.add(Component.empty());
     introProfits.add(
         miniMessage
-            .deserialize(resourceBundle.getString("diagonia.rankup.rank_list.profits"))
+            .deserialize(resourceBundle.getString("diagonia.rankup.ranks.item.lore.profits"))
             .decoration(TextDecoration.ITALIC, false));
 
     List<Component> endRank = new ArrayList<>();
@@ -73,19 +73,18 @@ public class RankItem {
       if (isRankOwned || isUnlockableRank) {
         endRank.add(
             miniMessage
-                .deserialize(resourceBundle.getString("diagonia.rankup.rank_list.rankup_activated"))
+                .deserialize(resourceBundle.getString("diagonia.rankup.ranks.item.lore.unlocked"))
                 .decoration(TextDecoration.ITALIC, false));
       } else {
         endRank.add(
             miniMessage
-                .deserialize(
-                    resourceBundle.getString("diagonia.rankup.rank_list.previous_ranks_required"))
+                .deserialize(resourceBundle.getString("diagonia.rankup.ranks.item.lore.locked"))
                 .decoration(TextDecoration.ITALIC, false));
       }
     } else {
       endRank.add(
           miniMessage
-              .deserialize(resourceBundle.getString("diagonia.rankup.rank_list.rankup_deactivated"))
+              .deserialize(resourceBundle.getString("diagonia.rankup.ranks.item.lore.deactivated"))
               .decoration(TextDecoration.ITALIC, false));
     }
 
@@ -106,10 +105,11 @@ public class RankItem {
                                 miniMessage.deserialize(
                                     resourceBundle.getString(
                                         isUnlockableRank
-                                            ? "diagonia.rankup.rank_list.rankable"
+                                            ? "diagonia.rankup.ranks.item.name.rankable" // TODO:
+                                            // refactor
                                             : (isRankOwned
-                                                ? "diagonia.rankup.rank_list.owned"
-                                                : "diagonia.rankup.rank_list.locked"))))))
+                                                ? "diagonia.rankup.ranks.item.name.owned"
+                                                : "diagonia.rankup.ranks.item.name.locked"))))))
             .lore(
                 Stream.concat(
                         rank.getDescription().stream()
@@ -128,7 +128,7 @@ public class RankItem {
                                             miniMessage
                                                 .deserialize(
                                                     resourceBundle.getString(
-                                                        "diagonia.rankup.rank_list.profit"),
+                                                        "diagonia.rankup.ranks.item.lore.profit"),
                                                     TemplateResolver.templates(
                                                         Template.template(
                                                             "diag_profit", profitDescLine)))
