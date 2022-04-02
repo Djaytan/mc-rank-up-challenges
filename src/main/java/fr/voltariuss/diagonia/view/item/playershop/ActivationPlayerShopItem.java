@@ -38,6 +38,9 @@ import org.jetbrains.annotations.NotNull;
 @Singleton
 public class ActivationPlayerShopItem {
 
+  private static final Material ACTIVATED_PLAYER_SHOP_MATERIAL = Material.LIME_DYE;
+  private static final Material DEACTIVATED_PLAYER_SHOP_MATERIAL = Material.GRAY_DYE;
+
   private final MiniMessage miniMessage;
   private final PlayerShopController playerShopController;
   private final ResourceBundle resourceBundle;
@@ -58,7 +61,10 @@ public class ActivationPlayerShopItem {
     Component itemName = getName(playerShop.isActive());
     List<Component> itemLore = getLore(playerShop.isActive());
 
-    return ItemBuilder.from(playerShop.isActive() ? Material.LIME_DYE : Material.GRAY_DYE)
+    return ItemBuilder.from(
+            playerShop.isActive()
+                ? ACTIVATED_PLAYER_SHOP_MATERIAL
+                : DEACTIVATED_PLAYER_SHOP_MATERIAL)
         .name(itemName)
         .lore(itemLore)
         .asGuiItem(onClick(playerShop));

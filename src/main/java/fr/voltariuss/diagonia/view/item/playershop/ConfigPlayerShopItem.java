@@ -21,9 +21,11 @@ import dev.triumphteam.gui.components.GuiAction;
 import dev.triumphteam.gui.guis.GuiItem;
 import fr.voltariuss.diagonia.controller.PlayerShopController;
 import java.util.Collections;
+import java.util.List;
 import java.util.ResourceBundle;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Material;
@@ -34,7 +36,7 @@ import org.jetbrains.annotations.NotNull;
 @Singleton
 public class ConfigPlayerShopItem {
 
-  private static final Material MANAGE_ITEM_MATERIAL = Material.COMPARATOR;
+  private static final Material CONFIG_MATERIAL = Material.COMPARATOR;
 
   private final MiniMessage miniMessage;
   private final PlayerShopController playerShopController;
@@ -51,20 +53,25 @@ public class ConfigPlayerShopItem {
   }
 
   public @NotNull GuiItem createItem() {
-    return ItemBuilder.from(MANAGE_ITEM_MATERIAL)
-        .name(
-            miniMessage
-                .deserialize(resourceBundle.getString("diagonia.playershop.config.name"))
-                .decoration(TextDecoration.ITALIC, false))
-        .lore(
-            Collections.singletonList(
-                miniMessage
-                    .deserialize(resourceBundle.getString("diagonia.playershop.config.description"))
-                    .decoration(TextDecoration.ITALIC, false)))
-        .asGuiItem(onClick());
+    Component itemName = getName();
+    List<Component> itemLore = getLore();
+    return ItemBuilder.from(CONFIG_MATERIAL).name(itemName).lore(itemLore).asGuiItem(onClick());
   }
 
-  public @NotNull GuiAction<InventoryClickEvent> onClick() {
+  private @NotNull GuiAction<InventoryClickEvent> onClick() {
     return event -> playerShopController.openConfigPlayerShopView((Player) event.getWhoClicked());
+  }
+
+  private @NotNull Component getName() {
+    return miniMessage
+        .deserialize(resourceBundle.getString("diagonia.playershop.config.name"))
+        .decoration(TextDecoration.ITALIC, false);
+  }
+
+  private @NotNull List<Component> getLore() {
+    return Collections.singletonList(
+        miniMessage
+            .deserialize(resourceBundle.getString("diagonia.playershop.config.description"))
+            .decoration(TextDecoration.ITALIC, false));
   }
 }

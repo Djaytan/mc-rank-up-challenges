@@ -29,7 +29,6 @@ import java.util.ResourceBundle;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.Template;
@@ -77,44 +76,50 @@ public class ConsultPlayerShopItem {
       ownerName = resourceBundle.getString("diagonia.playershop.consult.default_player_name");
     }
 
-    Component psName =
-        miniMessage
-            .deserialize(
-                resourceBundle.getString("diagonia.playershop.consult.name"),
-                TemplateResolver.templates(
-                    Template.template("diag_player_name", miniMessage.deserialize(ownerName))))
-            .decoration(TextDecoration.ITALIC, false);
-
-    List<Component> psDescLore =
-        Collections.singletonList(
-            (playerShop.getDescription() != null
-                    ? Component.text(playerShop.getDescription())
-                        .color(TextColor.fromCSSHexString("gray"))
-                    : miniMessage.deserialize(
-                        resourceBundle.getString(
-                            "diagonia.playershop.consult.description.no_description_set")))
-                .decoration(TextDecoration.ITALIC, false));
+    Component itemName = getName(ownerName);
+    List<Component> itemLore = getLore(playerShop.getDescription());
 
     GuiItem psItem;
 
     if (playerShop.hasItemIcon()) {
-      psItem = ItemBuilder.from(playerShop.getItemIcon()).name(psName).lore(psDescLore).asGuiItem();
+      psItem = ItemBuilder.from(playerShop.getItemIcon()).name(itemName).lore(itemLore).asGuiItem();
     } else {
       psItem =
           ItemBuilder.skull()
               .owner(ownerPlayer)
-              .name(psName)
-              .lore(psDescLore)
-              .asGuiItem(getClickEvent(playerShop));
+              .name(itemName)
+              .lore(itemLore)
+              .asGuiItem(onClick(playerShop));
     }
 
     return psItem;
   }
 
-  public @NotNull GuiAction<InventoryClickEvent> getClickEvent(@NotNull PlayerShop playerShop) {
+  private @NotNull GuiAction<InventoryClickEvent> onClick(@NotNull PlayerShop playerShop) {
     return event -> {
       Player player = (Player) event.getWhoClicked();
       playerShopController.teleportToPlayerShop(player, playerShop);
     };
+  }
+
+  private @NotNull Component getName(@NotNull String ownerName) {
+    return miniMessage
+        .deserialize(
+            resourceBundle.getString("diagonia.playershop.consult.name"),
+            TemplateResolver.templates(
+                Template.template("diag_player_name", miniMessage.deserialize(ownerName))))
+        .decoration(TextDecoration.ITALIC, false);
+  }
+
+  private @NotNull List<Component> getLore(@Nullable String psDesc) {
+    return Collections.singletonList(
+        (psDesc != null
+                ? miniMessage.deserialize(
+                    resourceBundle.getString("diagonia.playershop.consult.description"),
+                    TemplateResolver.templates(Template.template("diag_ps_description", psDesc)))
+                : miniMessage.deserialize(
+                    resourceBundle.getString(
+                        "diagonia.playershop.consult.description.no_description_set")))
+            .decoration(TextDecoration.ITALIC, false));
   }
 }

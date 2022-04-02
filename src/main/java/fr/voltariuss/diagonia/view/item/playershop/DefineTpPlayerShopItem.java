@@ -16,15 +16,17 @@
 
 package fr.voltariuss.diagonia.view.item.playershop;
 
-import com.google.common.collect.Lists;
 import dev.triumphteam.gui.builder.item.ItemBuilder;
 import dev.triumphteam.gui.components.GuiAction;
 import dev.triumphteam.gui.guis.GuiItem;
 import fr.voltariuss.diagonia.controller.PlayerShopController;
 import fr.voltariuss.diagonia.model.entity.PlayerShop;
+import java.util.Collections;
+import java.util.List;
 import java.util.ResourceBundle;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Material;
@@ -52,31 +54,32 @@ public class DefineTpPlayerShopItem {
   }
 
   public @NotNull GuiItem createItem(@NotNull PlayerShop playerShop) {
+    Component itemName = getName();
+    List<Component> itemLore = getLore();
     return ItemBuilder.from(DEFINE_TP_ITEM_MATERIAL)
-        .name(
-            miniMessage
-                .deserialize(
-                    resourceBundle.getString("diagonia.playershop.config.define_teleport.name"))
-                .decoration(TextDecoration.ITALIC, false))
-        .lore(
-            Lists.newArrayList(
-                miniMessage
-                    .deserialize(
-                        resourceBundle.getString(
-                            "diagonia.playershop.config.define_teleport.description.1"))
-                    .decoration(TextDecoration.ITALIC, false),
-                miniMessage
-                    .deserialize(
-                        resourceBundle.getString(
-                            "diagonia.playershop.config.define_teleport.description.2"))
-                    .decoration(TextDecoration.ITALIC, false)))
+        .name(itemName)
+        .lore(itemLore)
         .asGuiItem(onClick(playerShop));
   }
 
-  public @NotNull GuiAction<InventoryClickEvent> onClick(@NotNull PlayerShop playerShop) {
+  private @NotNull GuiAction<InventoryClickEvent> onClick(@NotNull PlayerShop playerShop) {
     return event -> {
       Player player = (Player) event.getWhoClicked();
       playerShopController.defineTeleportPoint(player, playerShop, player.getLocation());
     };
+  }
+
+  private @NotNull Component getName() {
+    return miniMessage
+        .deserialize(resourceBundle.getString("diagonia.playershop.config.define_teleport.name"))
+        .decoration(TextDecoration.ITALIC, false);
+  }
+
+  private @NotNull List<Component> getLore() {
+    return Collections.singletonList(
+        miniMessage
+            .deserialize(
+                resourceBundle.getString("diagonia.playershop.config.define_teleport.description"))
+            .decoration(TextDecoration.ITALIC, false));
   }
 }
