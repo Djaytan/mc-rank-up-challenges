@@ -22,7 +22,7 @@ import dev.triumphteam.gui.guis.GuiItem;
 import fr.voltariuss.diagonia.controller.PlayerShopController;
 import fr.voltariuss.diagonia.model.config.PluginConfig;
 import fr.voltariuss.diagonia.view.EconomyFormatter;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 import javax.inject.Inject;
@@ -63,27 +63,9 @@ public class BuyPlayerShopItem {
   }
 
   public @NotNull GuiItem createItem() {
-    String name = resourceBundle.getString("diagonia.playershop.buy.name");
-    List<Component> lore = new ArrayList<>(2);
-    lore.add(
-        miniMessage
-            .deserialize(
-                resourceBundle.getString("diagonia.playershop.buy.description.1"),
-                TemplateResolver.templates(
-                    Template.template(
-                        "diag_buy_price",
-                        economyFormatter.format(pluginConfig.getPlayerShopConfig().getBuyCost()))))
-            .decoration(TextDecoration.ITALIC, false));
-    // TODO: merge this lore with TemplateResolver
-    lore.add(Component.empty());
-    lore.add(
-        miniMessage
-            .deserialize(resourceBundle.getString("diagonia.playershop.buy.description.2"))
-            .decoration(TextDecoration.ITALIC, false));
-    return ItemBuilder.from(BUY_ITEM_MATERIAL)
-        .name(MiniMessage.miniMessage().deserialize(name).decoration(TextDecoration.ITALIC, false))
-        .lore(lore)
-        .asGuiItem(onClick());
+    Component itemName = getName();
+    List<Component> lore = getLore();
+    return ItemBuilder.from(BUY_ITEM_MATERIAL).name(itemName).lore(lore).asGuiItem(onClick());
   }
 
   private @NotNull GuiAction<InventoryClickEvent> onClick() {
@@ -91,5 +73,27 @@ public class BuyPlayerShopItem {
       Player player = (Player) event.getWhoClicked();
       playerShopController.buyPlayerShop(player);
     };
+  }
+
+  private @NotNull Component getName() {
+    return miniMessage
+        .deserialize(resourceBundle.getString("diagonia.playershop.buy.name"))
+        .decoration(TextDecoration.ITALIC, false);
+  }
+
+  private @NotNull List<Component> getLore() {
+    return Arrays.asList(
+        miniMessage
+            .deserialize(
+                resourceBundle.getString("diagonia.playershop.buy.description"),
+                TemplateResolver.templates(
+                    Template.template(
+                        "diag_buy_price",
+                        economyFormatter.format(pluginConfig.getPlayerShopConfig().getBuyCost()))))
+            .decoration(TextDecoration.ITALIC, false),
+        Component.empty(),
+        miniMessage
+            .deserialize(resourceBundle.getString("diagonia.playershop.buy.description.action"))
+            .decoration(TextDecoration.ITALIC, false));
   }
 }
