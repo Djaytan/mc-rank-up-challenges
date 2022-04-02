@@ -32,7 +32,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 @Singleton
-public class ConfigPlayerShopGui {
+public class PlayerShopConfigGui {
 
   private static final Material PREVIOUS_GUI_MATERIAL = Material.ARROW;
 
@@ -43,7 +43,7 @@ public class ConfigPlayerShopGui {
   private final ResourceBundle resourceBundle;
 
   @Inject
-  public ConfigPlayerShopGui(
+  public PlayerShopConfigGui(
       @NotNull ActivationPlayerShopItem activationPlayerShopItem,
       @NotNull DefineTpPlayerShopItem defineTpPlayerShopItem,
       @NotNull MiniMessage miniMessage,
@@ -78,7 +78,7 @@ public class ConfigPlayerShopGui {
                     .decoration(TextDecoration.ITALIC, false))
             .asGuiItem(
                 event ->
-                    playerShopController.openPlayerShopListView((Player) event.getWhoClicked())));
+                    playerShopController.openPlayerShopListGui((Player) event.getWhoClicked())));
 
     gui.setDefaultClickAction(event -> event.setCancelled(true));
 

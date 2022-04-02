@@ -150,7 +150,7 @@ public class RankItem {
   public @NotNull GuiAction<InventoryClickEvent> onClick(Rank rank) {
     return event -> {
       Player player = (Player) event.getWhoClicked();
-      rankUpController.openRankUpGui(player, rank);
+      rankUpController.openRankUpChallengesGui(player, rank);
     };
   }
 }

@@ -40,7 +40,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 @Singleton
-public class RankUpGui {
+public class RankUpChallengesGui {
 
   private static final Material PREVIOUS_GUI_MATERIAL = Material.ARROW;
   private static final Material DECORATION_MATERIAL = Material.GRAY_STAINED_GLASS_PANE;
@@ -55,7 +55,7 @@ public class RankUpGui {
   private final ResourceBundle resourceBundle;
 
   @Inject
-  public RankUpGui(
+  public RankUpChallengesGui(
       @NotNull DiagoniaLogger logger,
       @NotNull MiniMessage miniMessage,
       @NotNull PaginatedItem paginatedItem,
@@ -120,7 +120,8 @@ public class RankUpGui {
                 miniMessage
                     .deserialize(resourceBundle.getString("diagonia.gui.go_to_previous_menu"))
                     .decoration(TextDecoration.ITALIC, false))
-            .asGuiItem(event -> rankUpController.openRankListGui((Player) event.getWhoClicked())));
+            .asGuiItem(
+                event -> rankUpController.openRankUpListGui((Player) event.getWhoClicked())));
 
     gui.setDefaultClickAction(event -> event.setCancelled(true));
 

@@ -216,7 +216,7 @@ public class RankChallengeItem {
                               "diag_challenge_name",
                               rankChallenge.getChallengeItemMaterial().name()))));
             }
-            rankUpController.openRankUpGui(whoClicked, rank);
+            rankUpController.openRankUpChallengesGui(whoClicked, rank);
           } else if (effectiveGivenAmount == 0) {
             whoClicked.sendMessage(
                 miniMessage.deserialize(

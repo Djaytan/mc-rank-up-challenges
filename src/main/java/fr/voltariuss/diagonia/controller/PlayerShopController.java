@@ -25,8 +25,8 @@ import fr.voltariuss.diagonia.model.entity.PlayerShop;
 import fr.voltariuss.diagonia.model.service.EconomyException;
 import fr.voltariuss.diagonia.model.service.EconomyService;
 import fr.voltariuss.diagonia.model.service.PlayerShopService;
-import fr.voltariuss.diagonia.view.gui.ConfigPlayerShopGui;
-import fr.voltariuss.diagonia.view.gui.MainPlayerShopGui;
+import fr.voltariuss.diagonia.view.gui.PlayerShopConfigGui;
+import fr.voltariuss.diagonia.view.gui.PlayerShopListGui;
 import fr.voltariuss.diagonia.view.message.PlayerShopMessage;
 import java.util.List;
 import java.util.Optional;
@@ -39,6 +39,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.jetbrains.annotations.NotNull;
 
+// TODO: one controller per GUI
 @Singleton
 public class PlayerShopController {
 
@@ -50,8 +51,8 @@ public class PlayerShopController {
   private final PlayerShopService playerShopService;
   private final PluginConfig pluginConfig;
 
-  private final Provider<ConfigPlayerShopGui> configPlayerShopGui;
-  private final Provider<MainPlayerShopGui> mainPlayerShopGui;
+  private final Provider<PlayerShopConfigGui> playerShopConfigGui;
+  private final Provider<PlayerShopListGui> playerShopListGui;
 
   @Inject
   public PlayerShopController(
@@ -62,8 +63,8 @@ public class PlayerShopController {
       @NotNull PlayerShopMessage playerShopMessage,
       @NotNull PlayerShopService playerShopService,
       @NotNull PluginConfig pluginConfig,
-      @NotNull Provider<ConfigPlayerShopGui> configPlayerShopGui,
-      @NotNull Provider<MainPlayerShopGui> mainPlayerShopGui) {
+      @NotNull Provider<PlayerShopConfigGui> playerShopConfigGui,
+      @NotNull Provider<PlayerShopListGui> playerShopListGui) {
     this.economyService = economyService;
     this.locationMapper = locationMapper;
     this.logger = logger;
@@ -71,21 +72,21 @@ public class PlayerShopController {
     this.playerShopMessage = playerShopMessage;
     this.playerShopService = playerShopService;
     this.pluginConfig = pluginConfig;
-    this.configPlayerShopGui = configPlayerShopGui;
-    this.mainPlayerShopGui = mainPlayerShopGui;
+    this.playerShopConfigGui = playerShopConfigGui;
+    this.playerShopListGui = playerShopListGui;
   }
 
-  public void openPlayerShopListView(@NotNull Player whoOpen) {
-    logger.debug("Open MainPlayerShop GUI for a player: playerName={}", whoOpen.getName());
+  public void openPlayerShopListGui(@NotNull Player whoOpen) {
+    logger.debug("Open PlayerShopList GUI for a player: playerName={}", whoOpen.getName());
     Optional<PlayerShop> playerShopOwned = playerShopService.findByUuid(whoOpen.getUniqueId());
     List<PlayerShop> playerShopList = playerShopService.findAll();
-    mainPlayerShopGui.get().open(whoOpen, playerShopList, playerShopOwned.isPresent());
+    playerShopListGui.get().open(whoOpen, playerShopList, playerShopOwned.isPresent());
   }
 
-  public void openConfigPlayerShopView(@NotNull Player whoOpen) {
-    logger.debug("Open ConfigPlayerShop GUI for player {}", whoOpen.getName());
+  public void openPlayerShopConfigGui(@NotNull Player whoOpen) {
+    logger.debug("Open PlayerShopConfig GUI for player {}", whoOpen.getName());
     PlayerShop playerShop = playerShopService.findByUuid(whoOpen.getUniqueId()).orElseThrow();
-    configPlayerShopGui.get().open(whoOpen, playerShop);
+    playerShopConfigGui.get().open(whoOpen, playerShop);
   }
 
   public void buyPlayerShop(@NotNull Player player) {
@@ -108,7 +109,7 @@ public class PlayerShopController {
       PlayerShop ps = new PlayerShop(player.getUniqueId());
       playerShopService.persist(ps);
       controllerHelper.sendSystemMessage(player, playerShopMessage.buySuccess(economyResponse));
-      openPlayerShopListView(player);
+      openPlayerShopListGui(player);
       logger.info(
           "Purchase of a playershop for the player {} ({}) for the price of {}. New solde: {}",
           player.getName(),
@@ -187,7 +188,7 @@ public class PlayerShopController {
         playerShop.isActive());
 
     controllerHelper.sendSystemMessage(sender, playerShopMessage.toggleShop(playerShop.isActive()));
-    openConfigPlayerShopView(sender);
+    openPlayerShopConfigGui(sender);
   }
 
   public void teleportToPlayerShop(

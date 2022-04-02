@@ -37,7 +37,7 @@ public class RanksCommand extends BaseCommand {
   }
 
   @Default
-  public void onExec(@NotNull Player player) {
-    rankUpController.openRankListGui(player);
+  public void onExecute(@NotNull Player player) {
+    rankUpController.openRankUpListGui(player);
   }
 }

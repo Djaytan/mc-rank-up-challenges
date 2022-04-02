@@ -31,7 +31,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 @Singleton
-public class RankListGui {
+public class RankUpListGui {
 
   private final GoToMainMenuItem goToMainMenuItem;
   private final MiniMessage miniMessage;
@@ -41,7 +41,7 @@ public class RankListGui {
   private final ResourceBundle resourceBundle;
 
   @Inject
-  public RankListGui(
+  public RankUpListGui(
       @NotNull GoToMainMenuItem goToMainMenuItem,
       @NotNull MiniMessage miniMessage,
       @NotNull RankConfig rankConfig,

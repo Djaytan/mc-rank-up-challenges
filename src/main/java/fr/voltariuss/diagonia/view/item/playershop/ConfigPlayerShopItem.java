@@ -59,7 +59,7 @@ public class ConfigPlayerShopItem {
   }
 
   private @NotNull GuiAction<InventoryClickEvent> onClick() {
-    return event -> playerShopController.openConfigPlayerShopView((Player) event.getWhoClicked());
+    return event -> playerShopController.openPlayerShopConfigGui((Player) event.getWhoClicked());
   }
 
   private @NotNull Component getName() {

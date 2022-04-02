@@ -39,9 +39,8 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-// TODO: rename
 @Singleton
-public class MainPlayerShopGui {
+public class PlayerShopListGui {
 
   private static final int NB_COLUMNS_PER_LINE = 9;
   private static final int NB_ROW_PER_PAGE = 4;
@@ -56,7 +55,7 @@ public class MainPlayerShopGui {
   private final ResourceBundle resourceBundle;
 
   @Inject
-  public MainPlayerShopGui(
+  public PlayerShopListGui(
       @NotNull BuyPlayerShopItem buyPlayerShopItem,
       @NotNull ConfigPlayerShopItem configPlayerShopItem,
       @NotNull ConsultPlayerShopItem consultPlayerShopItem,

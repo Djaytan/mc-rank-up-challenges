@@ -39,8 +39,8 @@ public class PlayerShopCommand extends BaseCommand {
   }
 
   @Default
-  public void onOpen(@NotNull Player player) {
+  public void onExecute(@NotNull Player player) {
     logger.debug("/playershop command executed by {}", player.getName());
-    playerShopController.openPlayerShopListView(player);
+    playerShopController.openPlayerShopListGui(player);
   }
 }

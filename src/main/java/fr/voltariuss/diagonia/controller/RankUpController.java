@@ -25,8 +25,8 @@ import fr.voltariuss.diagonia.model.service.JobsService;
 import fr.voltariuss.diagonia.model.service.RankChallengeProgressionService;
 import fr.voltariuss.diagonia.model.service.RankConfigService;
 import fr.voltariuss.diagonia.model.service.RankService;
-import fr.voltariuss.diagonia.view.gui.RankListGui;
-import fr.voltariuss.diagonia.view.gui.RankUpGui;
+import fr.voltariuss.diagonia.view.gui.RankUpChallengesGui;
+import fr.voltariuss.diagonia.view.gui.RankUpListGui;
 import fr.voltariuss.diagonia.view.message.RankUpMessage;
 import java.util.List;
 import java.util.Optional;
@@ -52,8 +52,8 @@ public class RankUpController {
   private final RankService rankService;
   private final RankUpMessage rankUpMessage;
 
-  private final Provider<RankListGui> rankListGuiProvider;
-  private final Provider<RankUpGui> rankUpGuiProvider;
+  private final Provider<RankUpListGui> rankUpListGui;
+  private final Provider<RankUpChallengesGui> rankUpChallengesGui;
 
   @Inject
   public RankUpController(
@@ -65,8 +65,8 @@ public class RankUpController {
       @NotNull RankConfigService rankConfigService,
       @NotNull RankService rankService,
       @NotNull RankUpMessage rankUpMessage,
-      @NotNull Provider<RankListGui> rankListGuiProvider,
-      @NotNull Provider<RankUpGui> rankUpGuiProvider) {
+      @NotNull Provider<RankUpListGui> rankUpListGui,
+      @NotNull Provider<RankUpChallengesGui> rankUpChallengesGui) {
     this.logger = logger;
     this.economyService = economyService;
     this.jobsService = jobsService;
@@ -75,17 +75,18 @@ public class RankUpController {
     this.rankConfigService = rankConfigService;
     this.rankService = rankService;
     this.rankUpMessage = rankUpMessage;
-    this.rankListGuiProvider = rankListGuiProvider;
-    this.rankUpGuiProvider = rankUpGuiProvider;
+    this.rankUpListGui = rankUpListGui;
+    this.rankUpChallengesGui = rankUpChallengesGui;
   }
 
-  public void openRankListGui(@NotNull Player whoOpen) {
-    logger.debug("Open RankList GUI for player {}", whoOpen.getName());
-    rankListGuiProvider.get().open(whoOpen);
+  public void openRankUpListGui(@NotNull Player whoOpen) {
+    logger.debug("Open RankUpList GUI for player '{}'", whoOpen.getName());
+    rankUpListGui.get().open(whoOpen);
   }
 
-  public void openRankUpGui(@NotNull Player whoOpen, @NotNull Rank rank) {
-    logger.debug("Open RankUp GUI {} for player {}", rank.getId(), whoOpen.getName());
+  public void openRankUpChallengesGui(@NotNull Player whoOpen, @NotNull Rank rank) {
+    logger.debug(
+        "Open RankUpChallenges GUI of rank '{}' for player '{}'", rank.getId(), whoOpen.getName());
 
     int totalJobsLevels = jobsService.getTotalLevels(whoOpen);
     double currentBalance = economyService.getBalance(whoOpen);
@@ -93,7 +94,7 @@ public class RankUpController {
     RankUpProgression rankUpProgression =
         rankService.getRankUpProgression(whoOpen, rank, totalJobsLevels, currentBalance);
 
-    rankUpGuiProvider.get().open(whoOpen, rank, rankUpProgression);
+    rankUpChallengesGui.get().open(whoOpen, rank, rankUpProgression);
   }
 
   public int giveItemChallenge(
@@ -137,7 +138,7 @@ public class RankUpController {
       if (!promotionResult.wasSuccessful()) {
         controllerHelper.sendSystemMessage(player, rankUpMessage.rankUpFailure());
         logger.error(
-            "Player promotion failed: player={}, promotionResult={}",
+            "Player promotion failed: playerName={}, promotionResult={}",
             player.getName(),
             promotionResult);
         return;

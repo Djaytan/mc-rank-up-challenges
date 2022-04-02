@@ -23,6 +23,7 @@ import fr.voltariuss.diagonia.controller.MainController;
 import java.util.ResourceBundle;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Material;
@@ -50,18 +51,20 @@ public class GoToMainMenuItem {
   }
 
   public @NotNull GuiItem createItem() {
-    return ItemBuilder.from(GO_TO_MAIN_MENU_MATERIAL)
-        .name(
-            miniMessage
-                .deserialize(resourceBundle.getString("diagonia.gui.go_to_main_menu"))
-                .decoration(TextDecoration.ITALIC, false))
-        .asGuiItem(onClick());
+    Component itemName = getName();
+    return ItemBuilder.from(GO_TO_MAIN_MENU_MATERIAL).name(itemName).asGuiItem(onClick());
   }
 
-  public @NotNull GuiAction<InventoryClickEvent> onClick() {
+  private @NotNull GuiAction<InventoryClickEvent> onClick() {
     return event -> {
       Player player = (Player) event.getWhoClicked();
       mainController.openMainMenu(player);
     };
+  }
+
+  private @NotNull Component getName() {
+    return miniMessage
+        .deserialize(resourceBundle.getString("diagonia.gui.go_to_main_menu"))
+        .decoration(TextDecoration.ITALIC, false);
   }
 }
