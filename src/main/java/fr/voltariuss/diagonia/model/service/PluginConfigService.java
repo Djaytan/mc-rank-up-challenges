@@ -79,7 +79,7 @@ public final class PluginConfigService {
                 .build())
         .rankUpConfig(
             PluginConfig.RankUpConfig.builder()
-                .luckPermsTrackName(RANKUP_LUCKPERMS_TRACK_NAME)
+                .luckPermsTrackName(config.getString(RANKUP_LUCKPERMS_TRACK_NAME))
                 .build())
         .debugMode(config.getBoolean(DEBUG_MODE))
         .build();
