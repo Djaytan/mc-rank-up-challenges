@@ -19,7 +19,7 @@ package fr.voltariuss.diagonia.view.item.playershop;
 import dev.triumphteam.gui.builder.item.ItemBuilder;
 import dev.triumphteam.gui.components.GuiAction;
 import dev.triumphteam.gui.guis.GuiItem;
-import fr.voltariuss.diagonia.controller.PlayerShopController;
+import fr.voltariuss.diagonia.controller.playershop.PlayerShopConfigController;
 import fr.voltariuss.diagonia.model.entity.PlayerShop;
 import java.util.Arrays;
 import java.util.List;
@@ -40,16 +40,16 @@ public class DefineTpPlayerShopItem {
   private static final Material DEFINE_TP_ITEM_MATERIAL = Material.ENDER_PEARL;
 
   private final MiniMessage miniMessage;
-  private final PlayerShopController playerShopController;
+  private final PlayerShopConfigController playerShopConfigController;
   private final ResourceBundle resourceBundle;
 
   @Inject
   public DefineTpPlayerShopItem(
       @NotNull MiniMessage miniMessage,
-      @NotNull PlayerShopController playerShopController,
+      @NotNull PlayerShopConfigController playerShopConfigController,
       @NotNull ResourceBundle resourceBundle) {
     this.miniMessage = miniMessage;
-    this.playerShopController = playerShopController;
+    this.playerShopConfigController = playerShopConfigController;
     this.resourceBundle = resourceBundle;
   }
 
@@ -65,7 +65,7 @@ public class DefineTpPlayerShopItem {
   private @NotNull GuiAction<InventoryClickEvent> onClick(@NotNull PlayerShop playerShop) {
     return event -> {
       Player player = (Player) event.getWhoClicked();
-      playerShopController.defineTeleportPoint(player, playerShop, player.getLocation());
+      playerShopConfigController.defineTeleportPoint(player, playerShop, player.getLocation());
     };
   }
 

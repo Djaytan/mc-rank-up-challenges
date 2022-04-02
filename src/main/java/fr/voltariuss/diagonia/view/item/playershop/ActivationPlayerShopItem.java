@@ -20,7 +20,7 @@ import com.google.common.base.Preconditions;
 import dev.triumphteam.gui.builder.item.ItemBuilder;
 import dev.triumphteam.gui.components.GuiAction;
 import dev.triumphteam.gui.guis.GuiItem;
-import fr.voltariuss.diagonia.controller.PlayerShopController;
+import fr.voltariuss.diagonia.controller.playershop.PlayerShopConfigController;
 import fr.voltariuss.diagonia.model.entity.PlayerShop;
 import java.util.Collections;
 import java.util.List;
@@ -42,16 +42,16 @@ public class ActivationPlayerShopItem {
   private static final Material DEACTIVATED_PLAYER_SHOP_MATERIAL = Material.GRAY_DYE;
 
   private final MiniMessage miniMessage;
-  private final PlayerShopController playerShopController;
+  private final PlayerShopConfigController playerShopConfigController;
   private final ResourceBundle resourceBundle;
 
   @Inject
   public ActivationPlayerShopItem(
       @NotNull MiniMessage miniMessage,
-      @NotNull PlayerShopController playerShopController,
+      @NotNull PlayerShopConfigController playerShopConfigController,
       @NotNull ResourceBundle resourceBundle) {
     this.miniMessage = miniMessage;
-    this.playerShopController = playerShopController;
+    this.playerShopConfigController = playerShopConfigController;
     this.resourceBundle = resourceBundle;
   }
 
@@ -73,7 +73,7 @@ public class ActivationPlayerShopItem {
   private @NotNull GuiAction<InventoryClickEvent> onClick(@NotNull PlayerShop playerShop) {
     return event -> {
       Player player = (Player) event.getWhoClicked();
-      playerShopController.togglePlayerShop(player, playerShop);
+      playerShopConfigController.togglePlayerShop(player, playerShop);
     };
   }
 

@@ -23,6 +23,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent.Reason;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
+// TODO: rename it RootController
 @Singleton
 public class MainController {
 

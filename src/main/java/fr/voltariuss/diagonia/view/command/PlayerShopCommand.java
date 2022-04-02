@@ -20,7 +20,7 @@ import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.Default;
 import fr.voltariuss.diagonia.DiagoniaLogger;
-import fr.voltariuss.diagonia.controller.PlayerShopController;
+import fr.voltariuss.diagonia.controller.playershop.PlayerShopController;
 import javax.inject.Inject;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;

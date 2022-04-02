@@ -21,7 +21,7 @@ import dev.triumphteam.gui.builder.item.ItemBuilder;
 import dev.triumphteam.gui.components.GuiAction;
 import dev.triumphteam.gui.guis.GuiItem;
 import fr.voltariuss.diagonia.DiagoniaLogger;
-import fr.voltariuss.diagonia.controller.PlayerShopController;
+import fr.voltariuss.diagonia.controller.playershop.PlayerShopListController;
 import fr.voltariuss.diagonia.model.entity.PlayerShop;
 import java.util.Collections;
 import java.util.List;
@@ -44,18 +44,18 @@ public class ConsultPlayerShopItem {
 
   private final DiagoniaLogger logger;
   private final MiniMessage miniMessage;
-  private final PlayerShopController playerShopController;
+  private final PlayerShopListController playerShopListController;
   private final ResourceBundle resourceBundle;
 
   @Inject
   public ConsultPlayerShopItem(
       @NotNull DiagoniaLogger logger,
       @NotNull MiniMessage miniMessage,
-      @NotNull PlayerShopController playerShopController,
+      @NotNull PlayerShopListController playerShopListController,
       @NotNull ResourceBundle resourceBundle) {
     this.logger = logger;
     this.miniMessage = miniMessage;
-    this.playerShopController = playerShopController;
+    this.playerShopListController = playerShopListController;
     this.resourceBundle = resourceBundle;
   }
 
@@ -99,7 +99,7 @@ public class ConsultPlayerShopItem {
   private @NotNull GuiAction<InventoryClickEvent> onClick(@NotNull PlayerShop playerShop) {
     return event -> {
       Player player = (Player) event.getWhoClicked();
-      playerShopController.teleportToPlayerShop(player, playerShop);
+      playerShopListController.teleportToPlayerShop(player, playerShop);
     };
   }
 

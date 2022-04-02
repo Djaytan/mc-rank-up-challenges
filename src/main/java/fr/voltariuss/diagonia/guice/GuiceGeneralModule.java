@@ -20,6 +20,12 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import fr.voltariuss.diagonia.CriticalErrorHandler;
+import fr.voltariuss.diagonia.controller.playershop.PlayerShopConfigController;
+import fr.voltariuss.diagonia.controller.playershop.PlayerShopConfigControllerImpl;
+import fr.voltariuss.diagonia.controller.playershop.PlayerShopController;
+import fr.voltariuss.diagonia.controller.playershop.PlayerShopControllerImpl;
+import fr.voltariuss.diagonia.controller.playershop.PlayerShopListController;
+import fr.voltariuss.diagonia.controller.playershop.PlayerShopListControllerImpl;
 import fr.voltariuss.diagonia.model.config.PluginConfig;
 import fr.voltariuss.diagonia.model.config.rank.RankConfig;
 import fr.voltariuss.diagonia.model.dao.PlayerShopDao;
@@ -71,9 +77,13 @@ public class GuiceGeneralModule extends AbstractModule {
 
   @Override
   public void configure() {
+    // TODO: verify asEagerSingleton permit well to define singleton instance of classes
     bind(EconomyService.class).to(EconomyVaultService.class);
     bind(JobsService.class).to(JobsRebornService.class);
+    bind(PlayerShopController.class).to(PlayerShopControllerImpl.class);
+    bind(PlayerShopConfigController.class).to(PlayerShopConfigControllerImpl.class);
     bind(PlayerShopDao.class).to(PlayerShopDaoImpl.class);
+    bind(PlayerShopListController.class).to(PlayerShopListControllerImpl.class);
     bind(RankService.class).to(RankLuckPermsService.class);
   }
 

@@ -19,7 +19,7 @@ package fr.voltariuss.diagonia.view.item.playershop;
 import dev.triumphteam.gui.builder.item.ItemBuilder;
 import dev.triumphteam.gui.components.GuiAction;
 import dev.triumphteam.gui.guis.GuiItem;
-import fr.voltariuss.diagonia.controller.PlayerShopController;
+import fr.voltariuss.diagonia.controller.playershop.PlayerShopListController;
 import fr.voltariuss.diagonia.model.config.PluginConfig;
 import fr.voltariuss.diagonia.view.EconomyFormatter;
 import java.util.Arrays;
@@ -44,7 +44,7 @@ public class BuyPlayerShopItem {
 
   private final EconomyFormatter economyFormatter;
   private final MiniMessage miniMessage;
-  private final PlayerShopController playerShopController;
+  private final PlayerShopListController playerShopListController;
   private final PluginConfig pluginConfig;
   private final ResourceBundle resourceBundle;
 
@@ -52,12 +52,12 @@ public class BuyPlayerShopItem {
   public BuyPlayerShopItem(
       @NotNull EconomyFormatter economyFormatter,
       @NotNull MiniMessage miniMessage,
-      @NotNull PlayerShopController playerShopController,
+      @NotNull PlayerShopListController playerShopListController,
       @NotNull PluginConfig pluginConfig,
       @NotNull ResourceBundle resourceBundle) {
     this.economyFormatter = economyFormatter;
     this.miniMessage = miniMessage;
-    this.playerShopController = playerShopController;
+    this.playerShopListController = playerShopListController;
     this.pluginConfig = pluginConfig;
     this.resourceBundle = resourceBundle;
   }
@@ -71,7 +71,7 @@ public class BuyPlayerShopItem {
   private @NotNull GuiAction<InventoryClickEvent> onClick() {
     return event -> {
       Player player = (Player) event.getWhoClicked();
-      playerShopController.buyPlayerShop(player);
+      playerShopListController.buyPlayerShop(player);
     };
   }
 
