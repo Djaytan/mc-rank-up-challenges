@@ -34,11 +34,12 @@ public final class PluginConfigService {
   public static final String PLAYERSHOP_INACTIVITY_DELAY = "playershop.inactivity_delay";
   public static final String PLAYERSHOP_PREMIUM_SLOT_DURATION = "playershop.premium_slot.duration";
   public static final String PLAYERSHOP_PREMIUM_SLOT_BUY_COST = "playershop.premium_slot.buy_cost";
+  public static final String RANKUP_LUCKPERMS_TRACK_NAME = "rankup.luckperms.track.name";
 
   public static void init(@NotNull FileConfiguration config) {
-    // Database information
     config.addDefault(DEBUG_MODE, false);
 
+    // Database information
     config.addDefault(DATABASE_IS_ENABLED, false);
     config.addDefault(DATABASE_HOST, "localhost");
     config.addDefault(DATABASE_PORT, 3306);
@@ -46,11 +47,15 @@ public final class PluginConfigService {
     config.addDefault(DATABASE_USERNAME, "username");
     config.addDefault(DATABASE_PASSWORD, "password");
 
+    // Playershop feature
     config.addDefault(PLAYERSHOP_BUY_COST, 20000D);
     config.addDefault(PLAYERSHOP_DESCRIPTION_MAX_SIZE, 150);
     config.addDefault(PLAYERSHOP_INACTIVITY_DELAY, 30);
     config.addDefault(PLAYERSHOP_PREMIUM_SLOT_DURATION, 72);
     config.addDefault(PLAYERSHOP_PREMIUM_SLOT_BUY_COST, 10000D);
+
+    // Rankup feature
+    config.addDefault(RANKUP_LUCKPERMS_TRACK_NAME, "ranks");
   }
 
   public static @NotNull PluginConfig loadConfig(@NotNull FileConfiguration config) {
@@ -71,6 +76,10 @@ public final class PluginConfigService {
                 .inactivityDelay(config.getInt(PLAYERSHOP_INACTIVITY_DELAY))
                 .premiumSlotDuration(config.getInt(PLAYERSHOP_PREMIUM_SLOT_DURATION))
                 .premiumSlotBuyCost(config.getLong(PLAYERSHOP_PREMIUM_SLOT_BUY_COST))
+                .build())
+        .rankUpConfig(
+            PluginConfig.RankUpConfig.builder()
+                .luckPermsTrackName(RANKUP_LUCKPERMS_TRACK_NAME)
                 .build())
         .debugMode(config.getBoolean(DEBUG_MODE))
         .build();

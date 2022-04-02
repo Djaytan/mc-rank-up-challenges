@@ -25,6 +25,7 @@ public class PluginConfig {
 
   private final DatabaseConfig databaseConfig;
   private final PlayerShopConfig playerShopConfig;
+  private final RankUpConfig rankUpConfig;
   private final boolean debugMode;
 
   @Data
@@ -48,5 +49,12 @@ public class PluginConfig {
     private final int inactivityDelay;
     private final int premiumSlotDuration;
     private final double premiumSlotBuyCost;
+  }
+
+  @Data
+  @Builder
+  public static class RankUpConfig {
+
+    private final String luckPermsTrackName;
   }
 }

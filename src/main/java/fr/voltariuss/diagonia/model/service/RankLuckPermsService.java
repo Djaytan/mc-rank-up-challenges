@@ -18,6 +18,7 @@ package fr.voltariuss.diagonia.model.service;
 
 import com.google.common.base.Preconditions;
 import fr.voltariuss.diagonia.DiagoniaLogger;
+import fr.voltariuss.diagonia.model.config.PluginConfig;
 import fr.voltariuss.diagonia.model.config.rank.Rank;
 import fr.voltariuss.diagonia.model.config.rank.RankUpPrerequisites;
 import fr.voltariuss.diagonia.model.dto.RankUpProgression;
@@ -49,15 +50,13 @@ import org.jetbrains.annotations.Nullable;
 @Singleton
 public class RankLuckPermsService implements RankService {
 
-  private static final String TRACK_NAME = "ranks"; // TODO: make it configurable
-
   private final DiagoniaLogger logger;
   private final GroupManager groupManager;
   private final RankChallengeProgressionService rankChallengeProgressionService;
   private final RankConfigService rankConfigService;
   private final UserManager userManager;
 
-  private Track track;
+  private final Track track;
 
   /**
    * Constructor.
@@ -73,6 +72,7 @@ public class RankLuckPermsService implements RankService {
   public RankLuckPermsService(
       @NotNull DiagoniaLogger logger,
       @NotNull GroupManager groupManager,
+      @NotNull PluginConfig pluginConfig,
       @NotNull RankChallengeProgressionService rankChallengeProgressionService,
       @NotNull RankConfigService rankConfigService,
       @NotNull TrackManager trackManager,
@@ -83,7 +83,11 @@ public class RankLuckPermsService implements RankService {
     this.rankConfigService = rankConfigService;
     this.userManager = userManager;
 
-    this.track = trackManager.getTrack(TRACK_NAME);
+    this.track =
+        trackManager.getTrack(
+            pluginConfig
+                .getRankUpConfig()
+                .getLuckPermsTrackName()); // TODO: delegate creation to Guice
   }
 
   @Override
