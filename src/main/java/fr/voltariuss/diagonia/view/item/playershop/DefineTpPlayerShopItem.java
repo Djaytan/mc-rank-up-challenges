@@ -21,7 +21,7 @@ import dev.triumphteam.gui.components.GuiAction;
 import dev.triumphteam.gui.guis.GuiItem;
 import fr.voltariuss.diagonia.controller.PlayerShopController;
 import fr.voltariuss.diagonia.model.entity.PlayerShop;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 import javax.inject.Inject;
@@ -76,10 +76,16 @@ public class DefineTpPlayerShopItem {
   }
 
   private @NotNull List<Component> getLore() {
-    return Collections.singletonList(
+    return Arrays.asList(
         miniMessage
             .deserialize(
-                resourceBundle.getString("diagonia.playershop.config.define_teleport.description"))
+                resourceBundle.getString(
+                    "diagonia.playershop.config.define_teleport.description.1"))
+            .decoration(TextDecoration.ITALIC, false),
+        miniMessage
+            .deserialize(
+                resourceBundle.getString(
+                    "diagonia.playershop.config.define_teleport.description.2"))
             .decoration(TextDecoration.ITALIC, false));
   }
 }
