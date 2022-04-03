@@ -115,10 +115,7 @@ public class RankUpChallengesGui {
 
               gui.addItem(
                   rankChallengeItem.createItem(
-                      whoOpen.getUniqueId(),
-                      rank,
-                      rankChallenge,
-                      rankChallengeProgression.orElse(null)));
+                      rank, rankChallenge, rankChallengeProgression.orElse(null)));
             });
 
     gui.setItem(6, 5, rankUpItem.createItem(rank, rankUpProgression));

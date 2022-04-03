@@ -27,11 +27,11 @@ import fr.voltariuss.diagonia.model.config.rank.RankChallenge;
 import fr.voltariuss.diagonia.model.entity.RankChallengeProgression;
 import fr.voltariuss.diagonia.view.GiveActionTypeConverter;
 import fr.voltariuss.diagonia.view.message.RankUpMessage;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.UUID;
-import java.util.stream.Stream;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.kyori.adventure.text.Component;
@@ -46,6 +46,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnmodifiableView;
 
 @Singleton
 public class RankChallengeItem {
@@ -71,7 +72,6 @@ public class RankChallengeItem {
   }
 
   public @NotNull GuiItem createItem(
-      @NotNull UUID playerUuid,
       @NotNull Rank rank,
       @NotNull RankChallenge rankChallenge,
       @Nullable RankChallengeProgression rankChallengeProgression) {
@@ -83,80 +83,14 @@ public class RankChallengeItem {
 
     boolean isChallengeCompleted = isChallengeCompleted(rankChallenge, rankChallengeProgression);
 
-    // TODO: refactoring - remove duplication
-    if (!isChallengeCompleted) {
-      return ItemBuilder.from(rankChallenge.getChallengeItemMaterial())
-          .name(
-              miniMessage
-                  .deserialize(
-                      resourceBundle.getString("diagonia.rankup.challenges.item.name.incomplete"),
-                      TemplateResolver.templates(
-                          Template.template(
-                              "diag_challenge_name",
-                              rankChallenge.getChallengeItemMaterial().name())))
-                  .decoration(TextDecoration.ITALIC, false))
-          .lore(
-              Stream.concat(
-                      Stream.of(
-                          miniMessage
-                              .deserialize(
-                                  resourceBundle.getString(
-                                      "diagonia.rankup.challenges.item.lore.progress"),
-                                  TemplateResolver.templates(
-                                      Template.template(
-                                          "diag_amount_given",
-                                          String.valueOf(
-                                              rankChallengeProgression != null
-                                                  ? rankChallengeProgression
-                                                      .getChallengeAmountGiven()
-                                                  : 0)),
-                                      Template.template(
-                                          "diag_amount_required",
-                                          String.valueOf(rankChallenge.getChallengeItemAmount()))))
-                              .decoration(TextDecoration.ITALIC, false),
-                          Component.empty()),
-                      Stream.of(
-                          miniMessage
-                              .deserialize(
-                                  resourceBundle.getString(
-                                      "diagonia.rankup.challenges.item.lore.action.left_click"))
-                              .decoration(TextDecoration.ITALIC, false),
-                          miniMessage
-                              .deserialize(
-                                  resourceBundle.getString(
-                                      "diagonia.rankup.challenges.item.lore.action.right_click"))
-                              .decoration(TextDecoration.ITALIC, false),
-                          miniMessage
-                              .deserialize(
-                                  resourceBundle.getString(
-                                      "diagonia.rankup.challenges.item.lore.action.shift_right_click.1"))
-                              .decoration(TextDecoration.ITALIC, false),
-                          miniMessage
-                              .deserialize(
-                                  resourceBundle.getString(
-                                      "diagonia.rankup.challenges.item.lore.action.shift_right_click.2"))
-                              .decoration(TextDecoration.ITALIC, false)))
-                  .toList())
-          .asGuiItem(onClick(rank, rankChallenge, isChallengeCompleted));
-    }
-    // TODO: feat - keep trace of amount asked even when challenge is completed
+    Component itemName = getName(rankChallenge);
+    List<Component> itemLore =
+        getLore(rankChallenge, rankChallengeProgression, isChallengeCompleted);
+
     return ItemBuilder.from(rankChallenge.getChallengeItemMaterial())
-        .name(
-            miniMessage
-                .deserialize(
-                    resourceBundle.getString("diagonia.rankup.challenges.item.name.completed"),
-                    TemplateResolver.templates(
-                        Template.template(
-                            "diag_challenge_name",
-                            rankChallenge.getChallengeItemMaterial().name())))
-                .decoration(TextDecoration.ITALIC, false))
-        .lore(
-            List.of(
-                miniMessage
-                    .deserialize(
-                        resourceBundle.getString("diagonia.rankup.rankup.challenge.completed"))
-                    .decoration(TextDecoration.ITALIC, false)))
-        .asGuiItem();
+        .name(itemName)
+        .lore(itemLore)
+        .asGuiItem(onClick(rank, rankChallenge, isChallengeCompleted));
   }
 
   private @NotNull GuiAction<InventoryClickEvent> onClick(
@@ -207,5 +141,89 @@ public class RankChallengeItem {
         .filter(item -> item != null && item.getType().equals(material))
         .mapToInt(ItemStack::getAmount)
         .sum();
+  }
+
+  private @NotNull Component getName(@NotNull RankChallenge rankChallenge) {
+    return miniMessage
+        .deserialize(
+            resourceBundle.getString("diagonia.rankup.challenges.item.name"),
+            TemplateResolver.templates(
+                Template.template(
+                    "diag_challenge_name", rankChallenge.getChallengeItemMaterial().name())))
+        .decoration(TextDecoration.ITALIC, false);
+  }
+
+  private @NotNull @UnmodifiableView List<Component> getLore(
+      @NotNull RankChallenge rankChallenge,
+      @Nullable RankChallengeProgression rankChallengeProgression,
+      boolean isChallengeCompleted) {
+    List<Component> lore = new ArrayList<>();
+    lore.addAll(getProgressLorePart(rankChallenge, rankChallengeProgression, isChallengeCompleted));
+    lore.add(Component.empty());
+    lore.addAll(isChallengeCompleted ? getCompletedLorePart() : getActionLorePart());
+    return Collections.unmodifiableList(lore);
+  }
+
+  private @NotNull @UnmodifiableView List<Component> getProgressLorePart(
+      @NotNull RankChallenge rankChallenge,
+      @Nullable RankChallengeProgression rankChallengeProgression,
+      boolean isChallengeCompleted) {
+    int amountGiven =
+        rankChallengeProgression != null ? rankChallengeProgression.getChallengeAmountGiven() : 0;
+
+    return List.of(
+        miniMessage
+            .deserialize(
+                resourceBundle.getString("diagonia.rankup.challenges.item.lore.progress"),
+                TemplateResolver.templates(
+                    Template.template(
+                        "diag_amount_given",
+                        getCurrentProgression(isChallengeCompleted, String.valueOf(amountGiven))),
+                    Template.template(
+                        "diag_amount_required",
+                        String.valueOf(rankChallenge.getChallengeItemAmount()))))
+            .decoration(TextDecoration.ITALIC, false));
+  }
+
+  private @NotNull Component getCurrentProgression(
+      boolean isChallengeCompleted, @NotNull String value) {
+    String templateMessageKey = "diagonia.rankup.challenges.item.lore.progress.incomplete";
+
+    if (isChallengeCompleted) {
+      templateMessageKey = "diagonia.rankup.challenges.item.lore.progress.completed";
+    }
+
+    return miniMessage.deserialize(
+        resourceBundle.getString(templateMessageKey),
+        TemplateResolver.templates(Template.template("diag_current_progression", value)));
+  }
+
+  private @NotNull @UnmodifiableView List<Component> getActionLorePart() {
+    return List.of(
+        miniMessage
+            .deserialize(
+                resourceBundle.getString("diagonia.rankup.challenges.item.lore.action.left_click"))
+            .decoration(TextDecoration.ITALIC, false),
+        miniMessage
+            .deserialize(
+                resourceBundle.getString("diagonia.rankup.challenges.item.lore.action.right_click"))
+            .decoration(TextDecoration.ITALIC, false),
+        miniMessage
+            .deserialize(
+                resourceBundle.getString(
+                    "diagonia.rankup.challenges.item.lore.action.shift_right_click.1"))
+            .decoration(TextDecoration.ITALIC, false),
+        miniMessage
+            .deserialize(
+                resourceBundle.getString(
+                    "diagonia.rankup.challenges.item.lore.action.shift_right_click.2"))
+            .decoration(TextDecoration.ITALIC, false));
+  }
+
+  private @NotNull @UnmodifiableView List<Component> getCompletedLorePart() {
+    return List.of(
+        miniMessage
+            .deserialize(resourceBundle.getString("diagonia.rankup.challenges.item.lore.completed"))
+            .decoration(TextDecoration.ITALIC, false));
   }
 }

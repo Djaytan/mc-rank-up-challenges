@@ -179,20 +179,15 @@ public class RankUpItem {
 
   private @NotNull Component getCurrentProgression(
       boolean isPrerequisiteValidated, @NotNull String value) {
-    String templateMessage;
+    String templateMessageKey =
+        "diagonia.rankup.rankup.item.lore.prerequisite.progression.insufficient";
 
     if (isPrerequisiteValidated) {
-      templateMessage =
-          resourceBundle.getString(
-              "diagonia.rankup.rankup.item.lore.prerequisite.progression.sufficient");
-    } else {
-      templateMessage =
-          resourceBundle.getString(
-              "diagonia.rankup.rankup.item.lore.prerequisite.progression.insufficient");
+      templateMessageKey = "diagonia.rankup.rankup.item.lore.prerequisite.progression.sufficient";
     }
 
     return miniMessage.deserialize(
-        templateMessage,
+        resourceBundle.getString(templateMessageKey),
         TemplateResolver.templates(Template.template("diag_current_progression", value)));
   }
 }
