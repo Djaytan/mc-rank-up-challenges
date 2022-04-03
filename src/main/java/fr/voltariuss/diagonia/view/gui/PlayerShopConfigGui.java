@@ -75,7 +75,7 @@ public class PlayerShopConfigGui {
             .name(
                 miniMessage
                     .deserialize(resourceBundle.getString("diagonia.gui.go_to_previous_menu"))
-                    .decoration(TextDecoration.ITALIC, false)) // TODO: remove ITALIC usage in code
+                    .decoration(TextDecoration.ITALIC, false))
             .asGuiItem(
                 event ->
                     playerShopController.openPlayerShopListGui((Player) event.getWhoClicked())));

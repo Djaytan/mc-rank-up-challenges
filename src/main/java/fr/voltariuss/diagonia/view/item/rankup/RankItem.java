@@ -120,14 +120,16 @@ public class RankItem {
       rankStatusKey = "diagonia.rankup.ranks.item.name.deactivated";
     }
 
-    return miniMessage.deserialize(
-        resourceBundle.getString("diagonia.rankup.ranks.item.name"),
-        TemplateResolver.templates(
-            Template.template(
-                "diag_rank_name", Component.text(rank.getName()).color(rank.getColor())),
-            Template.template(
-                "diag_rank_status",
-                miniMessage.deserialize(resourceBundle.getString(rankStatusKey)))));
+    return miniMessage
+        .deserialize(
+            resourceBundle.getString("diagonia.rankup.ranks.item.name"),
+            TemplateResolver.templates(
+                Template.template(
+                    "diag_rank_name", Component.text(rank.getName()).color(rank.getColor())),
+                Template.template(
+                    "diag_rank_status",
+                    miniMessage.deserialize(resourceBundle.getString(rankStatusKey)))))
+        .decoration(TextDecoration.ITALIC, false);
   }
 
   private @NotNull @UnmodifiableView List<Component> getLore(
