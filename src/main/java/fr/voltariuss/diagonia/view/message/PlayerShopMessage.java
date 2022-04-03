@@ -96,4 +96,10 @@ public class PlayerShopMessage {
     return miniMessage.deserialize(
         resourceBundle.getString("diagonia.playershop.teleportation.fail.no_tp_defined_error"));
   }
+
+  public @NotNull Component successTeleport(@NotNull String ownerName) {
+    return miniMessage.deserialize(
+        resourceBundle.getString("diagonia.playershop.teleportation.success"),
+        TemplateResolver.templates(Template.template("diag_owner_name", ownerName)));
+  }
 }

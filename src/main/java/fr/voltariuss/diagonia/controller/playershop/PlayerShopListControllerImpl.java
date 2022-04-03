@@ -29,6 +29,8 @@ import fr.voltariuss.diagonia.view.message.PlayerShopMessage;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.jetbrains.annotations.NotNull;
@@ -44,6 +46,7 @@ public class PlayerShopListControllerImpl implements PlayerShopListController {
   private final PlayerShopMessage playerShopMessage;
   private final PlayerShopService playerShopService;
   private final PluginConfig pluginConfig;
+  private final Server server;
 
   @Inject
   public PlayerShopListControllerImpl(
@@ -54,7 +57,8 @@ public class PlayerShopListControllerImpl implements PlayerShopListController {
       @NotNull PlayerShopController playerShopController,
       @NotNull PlayerShopMessage playerShopMessage,
       @NotNull PlayerShopService playerShopService,
-      @NotNull PluginConfig pluginConfig) {
+      @NotNull PluginConfig pluginConfig,
+      @NotNull Server server) {
     this.controllerHelper = controllerHelper;
     this.economyService = economyService;
     this.logger = logger;
@@ -63,6 +67,7 @@ public class PlayerShopListControllerImpl implements PlayerShopListController {
     this.playerShopMessage = playerShopMessage;
     this.playerShopService = playerShopService;
     this.pluginConfig = pluginConfig;
+    this.server = server;
   }
 
   @Override
@@ -88,7 +93,10 @@ public class PlayerShopListControllerImpl implements PlayerShopListController {
     }
 
     playerToTp.teleport(tpLocation, PlayerTeleportEvent.TeleportCause.PLUGIN);
-    // TODO: send message to player when teleportation occurs
+
+    OfflinePlayer psOwner = server.getOfflinePlayer(playerShopDestination.getOwnerUuid());
+    String psOwnerName = controllerHelper.getOfflinePlayerName(psOwner);
+    playerShopMessage.successTeleport(psOwnerName);
 
     logger.debug(
         "Teleportation of a player to a playershop: playerToTpUuid={}, playerShopId={}",

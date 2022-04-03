@@ -20,7 +20,7 @@ import com.google.common.base.Preconditions;
 import dev.triumphteam.gui.builder.item.ItemBuilder;
 import dev.triumphteam.gui.components.GuiAction;
 import dev.triumphteam.gui.guis.GuiItem;
-import fr.voltariuss.diagonia.DiagoniaLogger;
+import fr.voltariuss.diagonia.controller.ControllerHelper;
 import fr.voltariuss.diagonia.controller.playershop.PlayerShopListController;
 import fr.voltariuss.diagonia.model.entity.PlayerShop;
 import java.util.Collections;
@@ -42,18 +42,18 @@ import org.jetbrains.annotations.Nullable;
 @Singleton
 public class ConsultPlayerShopItem {
 
-  private final DiagoniaLogger logger;
+  private final ControllerHelper controllerHelper;
   private final MiniMessage miniMessage;
   private final PlayerShopListController playerShopListController;
   private final ResourceBundle resourceBundle;
 
   @Inject
   public ConsultPlayerShopItem(
-      @NotNull DiagoniaLogger logger,
+      @NotNull ControllerHelper controllerHelper,
       @NotNull MiniMessage miniMessage,
       @NotNull PlayerShopListController playerShopListController,
       @NotNull ResourceBundle resourceBundle) {
-    this.logger = logger;
+    this.controllerHelper = controllerHelper;
     this.miniMessage = miniMessage;
     this.playerShopListController = playerShopListController;
     this.resourceBundle = resourceBundle;
@@ -69,13 +69,7 @@ public class ConsultPlayerShopItem {
       return null;
     }
 
-    String ownerName = ownerPlayer.getName();
-
-    if (ownerName == null) {
-      logger.warn("The UUID {} isn't associated to any player name.", playerShop.getOwnerUuid());
-      ownerName =
-          resourceBundle.getString("diagonia.playershop.list.shop.name.default_player_name");
-    }
+    String ownerName = controllerHelper.getOfflinePlayerName(ownerPlayer);
 
     Component itemName = getName(ownerName);
     List<Component> itemLore = getLore(playerShop.getDescription());
