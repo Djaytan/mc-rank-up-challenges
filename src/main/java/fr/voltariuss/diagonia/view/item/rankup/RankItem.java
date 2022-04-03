@@ -16,15 +16,16 @@
 
 package fr.voltariuss.diagonia.view.item.rankup;
 
+import com.google.common.base.Preconditions;
 import dev.triumphteam.gui.builder.item.ItemBuilder;
 import dev.triumphteam.gui.components.GuiAction;
 import dev.triumphteam.gui.guis.GuiItem;
 import fr.voltariuss.diagonia.controller.RankUpController;
 import fr.voltariuss.diagonia.model.config.rank.Rank;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.stream.Stream;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.kyori.adventure.text.Component;
@@ -40,6 +41,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
+import org.jetbrains.annotations.UnmodifiableView;
 
 @Singleton
 public class RankItem {
@@ -60,97 +63,133 @@ public class RankItem {
 
   public @NotNull GuiItem createItem(
       @NotNull Rank rank, boolean isRankOwned, boolean isCurrentRank, boolean isUnlockableRank) {
-    List<Component> introProfits = new ArrayList<>();
-    introProfits.add(Component.empty());
-    introProfits.add(
-        miniMessage
-            .deserialize(resourceBundle.getString("diagonia.rankup.ranks.item.lore.profits"))
-            .decoration(TextDecoration.ITALIC, false));
+    Preconditions.checkState(
+        !(isUnlockableRank && isRankOwned),
+        "A rank can't be unlockable and owned at the same time.");
+    Preconditions.checkState(
+        !(isUnlockableRank && isCurrentRank),
+        "A rank can't be unlockable and be the current rank of the player at the same time.");
 
-    List<Component> endRank = new ArrayList<>();
-    endRank.add(Component.empty());
-    if (rank.isRankUpActivated()) {
-      if (isRankOwned || isUnlockableRank) {
-        endRank.add(
-            miniMessage
-                .deserialize(resourceBundle.getString("diagonia.rankup.ranks.item.lore.unlocked"))
-                .decoration(TextDecoration.ITALIC, false));
-      } else {
-        endRank.add(
-            miniMessage
-                .deserialize(resourceBundle.getString("diagonia.rankup.ranks.item.lore.locked"))
-                .decoration(TextDecoration.ITALIC, false));
-      }
-    } else {
-      endRank.add(
-          miniMessage
-              .deserialize(resourceBundle.getString("diagonia.rankup.ranks.item.lore.deactivated"))
-              .decoration(TextDecoration.ITALIC, false));
-    }
+    Component itemName = getName(rank, isUnlockableRank, isRankOwned);
+    List<Component> itemLore = getLore(rank, isUnlockableRank, isRankOwned);
 
-    // TODO: simplify instruction and reorganize
     ItemBuilder itemBuilder =
         ItemBuilder.from(Material.LEATHER_CHESTPLATE)
             .color(
                 Color.fromRGB(
                     rank.getColor().red(), rank.getColor().green(), rank.getColor().blue()))
-            .name(
-                Component.text(rank.getName())
-                    .color(rank.getColor())
-                    .decoration(TextDecoration.ITALIC, false)
-                    .decoration(TextDecoration.BOLD, true)
-                    .append(
-                        Component.text(" ")
-                            .append(
-                                miniMessage.deserialize(
-                                    resourceBundle.getString(
-                                        isUnlockableRank
-                                            ? "diagonia.rankup.ranks.item.name.rankable" // TODO:
-                                            // refactor
-                                            : (isRankOwned
-                                                ? "diagonia.rankup.ranks.item.name.owned"
-                                                : "diagonia.rankup.ranks.item.name.locked"))))))
-            .lore(
-                Stream.concat(
-                        rank.getDescription().stream()
-                            .map(
-                                descLine ->
-                                    miniMessage
-                                        .deserialize(descLine)
-                                        .color(TextColor.color(Color.GRAY.asRGB()))
-                                        .decoration(TextDecoration.ITALIC, false)),
-                        Stream.concat(
-                            introProfits.stream(),
-                            Stream.concat(
-                                rank.getProfits().stream()
-                                    .map(
-                                        profitDescLine ->
-                                            miniMessage
-                                                .deserialize(
-                                                    resourceBundle.getString(
-                                                        "diagonia.rankup.ranks.item.lore.profit"),
-                                                    TemplateResolver.templates(
-                                                        Template.template(
-                                                            "diag_profit", profitDescLine)))
-                                                .decoration(TextDecoration.ITALIC, false)),
-                                endRank.stream())))
-                    .toList())
+            .name(itemName)
+            .lore(itemLore)
             .flags(ItemFlag.HIDE_DYE, ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS);
 
     if (isCurrentRank) {
       itemBuilder.enchant(Enchantment.DURABILITY);
     }
 
-    if (!rank.isRankUpActivated() || !isRankOwned && !isUnlockableRank) {
+    if (isClickable(rank.isRankUpActivated(), isRankOwned, isUnlockableRank)) {
       return itemBuilder.asGuiItem();
     }
     return itemBuilder.asGuiItem(onClick(rank));
   }
 
-  public @NotNull GuiAction<InventoryClickEvent> onClick(Rank rank) {
+  private @NotNull GuiAction<InventoryClickEvent> onClick(Rank rank) {
     return event -> {
       Player player = (Player) event.getWhoClicked();
       rankUpController.openRankUpChallengesGui(player, rank);
     };
+  }
+
+  private boolean isClickable(
+      boolean isRankUpActivated, boolean isRankOwned, boolean isUnlockableRank) {
+    return !isRankUpActivated || !isRankOwned && !isUnlockableRank;
+  }
+
+  private @NotNull Component getName(
+      @NotNull Rank rank, boolean isUnlockableRank, boolean isRankOwned) {
+    String rankStatusKey = "diagonia.rankup.ranks.item.name.locked";
+
+    if (isUnlockableRank) {
+      rankStatusKey = "diagonia.rankup.ranks.item.name.unlocked";
+    }
+    if (isRankOwned) {
+      rankStatusKey = "diagonia.rankup.ranks.item.name.owned";
+    }
+
+    // Override previous assignment by having the final word
+    if (!rank.isRankUpActivated()) {
+      rankStatusKey = "diagonia.rankup.ranks.item.name.deactivated";
+    }
+
+    return miniMessage.deserialize(
+        resourceBundle.getString("diagonia.rankup.ranks.item.name"),
+        TemplateResolver.templates(
+            Template.template(
+                "diag_rank_name", Component.text(rank.getName()).color(rank.getColor())),
+            Template.template(
+                "diag_rank_status",
+                miniMessage.deserialize(resourceBundle.getString(rankStatusKey)))));
+  }
+
+  private @NotNull @UnmodifiableView List<Component> getLore(
+      @NotNull Rank rank, boolean isUnlockableRank, boolean isRankOwned) {
+    List<Component> lore = new ArrayList<>();
+    lore.addAll(getDescriptionLorePart(rank));
+    lore.add(Component.empty());
+    lore.addAll(getProfitsLorePart(rank));
+    lore.add(Component.empty());
+    lore.addAll(getEndLorePart(rank.isRankUpActivated(), isUnlockableRank, isRankOwned));
+    return Collections.unmodifiableList(lore);
+  }
+
+  private @NotNull @UnmodifiableView List<Component> getDescriptionLorePart(@NotNull Rank rank) {
+    return Collections.unmodifiableList(
+        rank.getDescription().stream()
+            .map(
+                descLine ->
+                    miniMessage
+                        .deserialize(descLine)
+                        .color(TextColor.color(Color.GRAY.asRGB()))
+                        .decoration(TextDecoration.ITALIC, false))
+            .toList());
+  }
+
+  private @NotNull @UnmodifiableView List<Component> getProfitsLorePart(@NotNull Rank rank) {
+    List<Component> profitsLore = new ArrayList<>();
+    profitsLore.add(
+        miniMessage
+            .deserialize(resourceBundle.getString("diagonia.rankup.ranks.item.lore.profits"))
+            .decoration(TextDecoration.ITALIC, false));
+
+    rank.getProfits()
+        .forEach(
+            profitDescLine ->
+                profitsLore.add(
+                    miniMessage
+                        .deserialize(
+                            resourceBundle.getString("diagonia.rankup.ranks.item.lore.profit"),
+                            TemplateResolver.templates(
+                                Template.template("diag_profit", profitDescLine)))
+                        .decoration(TextDecoration.ITALIC, false)));
+
+    return Collections.unmodifiableList(profitsLore);
+  }
+
+  private @NotNull @Unmodifiable List<Component> getEndLorePart(
+      boolean isRankActivated, boolean isUnlockableRank, boolean isRankOwned) {
+    String endLoreKey = "diagonia.rankup.ranks.item.lore.locked";
+
+    if (isUnlockableRank || isRankOwned) {
+      endLoreKey = "diagonia.rankup.ranks.item.lore.unlocked";
+    }
+
+    // Override previous assignment by having the final word
+    if (!isRankActivated) {
+      endLoreKey = "diagonia.rankup.ranks.item.lore.deactivated";
+    }
+
+    return List.of(
+        miniMessage
+            .deserialize(resourceBundle.getString(endLoreKey))
+            .decoration(TextDecoration.ITALIC, false));
   }
 }
