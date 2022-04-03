@@ -28,6 +28,7 @@ import fr.voltariuss.diagonia.model.entity.RankChallengeProgression;
 import fr.voltariuss.diagonia.view.item.PaginatedItem;
 import fr.voltariuss.diagonia.view.item.rankup.RankChallengeItem;
 import fr.voltariuss.diagonia.view.item.rankup.RankUpItem;
+import fr.voltariuss.diagonia.view.message.CommonMessage;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import javax.inject.Inject;
@@ -48,6 +49,7 @@ public class RankUpChallengesGui {
   private static final Material DECORATION_MATERIAL = Material.GRAY_STAINED_GLASS_PANE;
   private static final int PAGE_SIZE = 36;
 
+  private final CommonMessage commonMessage;
   private final DiagoniaLogger logger;
   private final MiniMessage miniMessage;
   private final PaginatedItem paginatedItem;
@@ -58,6 +60,7 @@ public class RankUpChallengesGui {
 
   @Inject
   public RankUpChallengesGui(
+      @NotNull CommonMessage commonMessage,
       @NotNull DiagoniaLogger logger,
       @NotNull MiniMessage miniMessage,
       @NotNull PaginatedItem paginatedItem,
@@ -65,6 +68,7 @@ public class RankUpChallengesGui {
       @NotNull RankUpController rankUpController,
       @NotNull RankUpItem rankUpItem,
       @NotNull ResourceBundle resourceBundle) {
+    this.commonMessage = commonMessage;
     this.logger = logger;
     this.miniMessage = miniMessage;
     this.paginatedItem = paginatedItem;
@@ -74,13 +78,12 @@ public class RankUpChallengesGui {
     this.resourceBundle = resourceBundle;
   }
 
-  // TODO: return a response object to controller with status, and eventually the created Gui
   public void open(
       @NotNull Player whoOpen, @NotNull Rank rank, @NotNull RankUpProgression rankUpProgression) {
 
     if (rank.getRankUpChallenges() == null) {
       logger.error("No challenge is associated with the rank {}", rank.getId());
-      // TODO: feedback player (unexpected error) + move this part to controller
+      whoOpen.sendMessage(commonMessage.unknownError());
       return;
     }
 
