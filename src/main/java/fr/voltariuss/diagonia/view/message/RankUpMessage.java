@@ -42,7 +42,7 @@ public class RankUpMessage {
 
   public @NotNull Component rankUpFailure() {
     return miniMessage
-        .deserialize(resourceBundle.getString("diagonia.rankup.rankup.fail.unknown_error"))
+        .deserialize(resourceBundle.getString("diagonia.common.fail.unknown_error"))
         .decoration(TextDecoration.ITALIC, false);
   }
 
@@ -61,6 +61,39 @@ public class RankUpMessage {
     return miniMessage
         .deserialize(
             resourceBundle.getString("diagonia.rankup.rankup.fail.prerequisites_not_respected"))
+        .decoration(TextDecoration.ITALIC, false);
+  }
+
+  public @NotNull Component noItemInInventory() {
+    return miniMessage
+        .deserialize(
+            resourceBundle.getString("diagonia.rankup.challenges.give.fail.no_item_in_inventory"))
+        .decoration(TextDecoration.ITALIC, false);
+  }
+
+  public @NotNull Component challengeAlreadyCompleted() {
+    return miniMessage
+        .deserialize(
+            resourceBundle.getString(
+                "diagonia.rankup.challenges.give.fail.challenge_already_completed"))
+        .decoration(TextDecoration.ITALIC, false);
+  }
+
+  public @NotNull Component successAmountGiven(int amountGiven, String itemsGivenName) {
+    return miniMessage
+        .deserialize(
+            resourceBundle.getString("diagonia.rankup.challenges.give.success.amount_given"),
+            TemplateResolver.templates(
+                Template.template("diag_amount_given", String.valueOf(amountGiven)),
+                Template.template("diag_item_name", itemsGivenName)))
+        .decoration(TextDecoration.ITALIC, false);
+  }
+
+  public @NotNull Component challengeCompleted(@NotNull String challengeName) {
+    return miniMessage
+        .deserialize(
+            resourceBundle.getString("diagonia.rankup.challenges.give.success.now_completed"),
+            TemplateResolver.templates(Template.template("diag_challenge_name", challengeName)))
         .decoration(TextDecoration.ITALIC, false);
   }
 }

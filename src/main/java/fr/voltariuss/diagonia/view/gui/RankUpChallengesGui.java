@@ -24,9 +24,11 @@ import fr.voltariuss.diagonia.DiagoniaLogger;
 import fr.voltariuss.diagonia.controller.RankUpController;
 import fr.voltariuss.diagonia.model.config.rank.Rank;
 import fr.voltariuss.diagonia.model.dto.RankUpProgression;
+import fr.voltariuss.diagonia.model.entity.RankChallengeProgression;
 import fr.voltariuss.diagonia.view.item.PaginatedItem;
 import fr.voltariuss.diagonia.view.item.rankup.RankChallengeItem;
 import fr.voltariuss.diagonia.view.item.rankup.RankUpItem;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -101,9 +103,20 @@ public class RankUpChallengesGui {
 
     rank.getRankUpChallenges()
         .forEach(
-            rankChallenge ->
-                gui.addItem(
-                    rankChallengeItem.createItem(whoOpen.getUniqueId(), rank, rankChallenge)));
+            rankChallenge -> {
+              Optional<RankChallengeProgression> rankChallengeProgression =
+                  rankUpController.findChallenge(
+                      whoOpen.getUniqueId(),
+                      rank.getId(),
+                      rankChallenge.getChallengeItemMaterial());
+
+              gui.addItem(
+                  rankChallengeItem.createItem(
+                      whoOpen.getUniqueId(),
+                      rank,
+                      rankChallenge,
+                      rankChallengeProgression.orElse(null)));
+            });
 
     gui.setItem(6, 5, rankUpItem.createItem(rank, rankUpProgression));
 

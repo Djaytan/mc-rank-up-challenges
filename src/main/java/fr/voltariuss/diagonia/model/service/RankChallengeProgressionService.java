@@ -18,6 +18,7 @@ package fr.voltariuss.diagonia.model.service;
 
 import com.google.common.base.Preconditions;
 import fr.voltariuss.diagonia.DiagoniaLogger;
+import fr.voltariuss.diagonia.model.GiveActionType;
 import fr.voltariuss.diagonia.model.JpaDaoException;
 import fr.voltariuss.diagonia.model.config.rank.Rank;
 import fr.voltariuss.diagonia.model.config.rank.RankChallenge;
@@ -25,7 +26,6 @@ import fr.voltariuss.diagonia.model.config.rank.RankConfig;
 import fr.voltariuss.diagonia.model.dao.RankChallengeProgressionDao;
 import fr.voltariuss.diagonia.model.entity.RankChallengeProgression;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import javax.inject.Inject;
@@ -196,42 +196,42 @@ public class RankChallengeProgressionService {
 
   public int giveItemChallenge(
       @NotNull UUID playerUuid,
-      @NotNull String rankId,
-      @NotNull Material material,
-      int givenAmount) {
-    int effectiveGivenAmount = 0;
-    Rank rank =
-        rankConfig.getRanks().stream()
-            .filter(r -> r.getId().equals(rankId))
-            .findFirst()
-            .orElseThrow();
-    RankChallenge rankChallenge =
-        Objects.requireNonNull(rank.getRankUpChallenges()).stream()
-            .filter(challenge -> challenge.getChallengeItemMaterial().equals(material))
-            .findFirst()
-            .orElseThrow();
-
+      @NotNull Rank rank,
+      @NotNull RankChallenge rankChallenge,
+      @NotNull GiveActionType giveActionType,
+      int nbItemsInInventory) {
+    int effectiveGivenAmount;
     rankChallengeProgressionDao.openSession();
     Transaction tx = rankChallengeProgressionDao.beginTransaction();
     try {
       RankChallengeProgression rankChallengeProgression =
-          rankChallengeProgressionDao.find(playerUuid, rankId, material).orElse(null);
+          rankChallengeProgressionDao
+              .find(playerUuid, rank.getId(), rankChallenge.getChallengeItemMaterial())
+              .orElse(null);
+
       if (rankChallengeProgression == null) {
         logger.debug("RankChallengeProgression not found.");
-        rankChallengeProgression = new RankChallengeProgression(playerUuid, rankId, material);
+        rankChallengeProgression =
+            new RankChallengeProgression(
+                playerUuid, rank.getId(), rankChallenge.getChallengeItemMaterial());
         rankChallengeProgressionDao.persist(rankChallengeProgression);
         logger.debug("RankChallengeProgression persisted.");
       }
 
-      int remainingToGiveAmount =
+      int remainingItemsToGive =
           rankChallenge.getChallengeItemAmount()
               - rankChallengeProgression.getChallengeAmountGiven();
-      logger.debug(String.format("remainingToGiveAmount=%d", remainingToGiveAmount));
-      effectiveGivenAmount = Math.min(givenAmount, remainingToGiveAmount);
-      logger.debug(String.format("effectiveGivenAmount=%d", effectiveGivenAmount));
-      int newAmount = rankChallengeProgression.getChallengeAmountGiven() + effectiveGivenAmount;
-      rankChallengeProgression.setChallengeAmountGiven(newAmount);
-      logger.debug(String.format("newAmount=%d", newAmount));
+
+      int maxItemsToGiveAsked = giveActionType.getNbItemsToGive();
+      int maxItemsToGive =
+          maxItemsToGiveAsked == -1
+              ? nbItemsInInventory
+              : Math.min(nbItemsInInventory, maxItemsToGiveAsked);
+
+      effectiveGivenAmount = Math.min(maxItemsToGive, remainingItemsToGive);
+      int newAmountGiven =
+          rankChallengeProgression.getChallengeAmountGiven() + effectiveGivenAmount;
+      rankChallengeProgression.setChallengeAmountGiven(newAmountGiven);
       rankChallengeProgressionDao.update(rankChallengeProgression);
       tx.commit();
       logger.debug("RankChallengeProgression updated: {}", rankChallengeProgression);
@@ -246,5 +246,18 @@ public class RankChallengeProgressionService {
       rankChallengeProgressionDao.destroySession();
     }
     return effectiveGivenAmount;
+  }
+
+  public boolean isChallengeCompleted(
+      @NotNull UUID uuid, @NotNull String rankId, @NotNull RankChallenge rankChallenge) {
+    Optional<RankChallengeProgression> rankChallengeProgression =
+        rankChallengeProgressionDao.find(uuid, rankId, rankChallenge.getChallengeItemMaterial());
+
+    if (rankChallengeProgression.isEmpty()) {
+      return false;
+    }
+
+    return rankChallengeProgression.get().getChallengeAmountGiven()
+        >= rankChallenge.getChallengeItemAmount();
   }
 }

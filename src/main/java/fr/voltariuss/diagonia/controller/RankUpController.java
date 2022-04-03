@@ -17,7 +17,9 @@
 package fr.voltariuss.diagonia.controller;
 
 import fr.voltariuss.diagonia.DiagoniaLogger;
+import fr.voltariuss.diagonia.model.GiveActionType;
 import fr.voltariuss.diagonia.model.config.rank.Rank;
+import fr.voltariuss.diagonia.model.config.rank.RankChallenge;
 import fr.voltariuss.diagonia.model.dto.RankUpProgression;
 import fr.voltariuss.diagonia.model.entity.RankChallengeProgression;
 import fr.voltariuss.diagonia.model.service.EconomyService;
@@ -29,6 +31,7 @@ import fr.voltariuss.diagonia.view.gui.RankUpChallengesGui;
 import fr.voltariuss.diagonia.view.gui.RankUpListGui;
 import fr.voltariuss.diagonia.view.message.RankUpMessage;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import javax.inject.Inject;
@@ -38,6 +41,7 @@ import net.luckperms.api.track.PromotionResult;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryCloseEvent.Reason;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 @Singleton
@@ -97,13 +101,41 @@ public class RankUpController {
     rankUpChallengesGui.get().open(whoOpen, rank, rankUpProgression);
   }
 
-  public int giveItemChallenge(
+  public void giveItemChallenge(
       @NotNull Player targetPlayer,
-      @NotNull String rankId,
-      @NotNull Material material,
-      int givenAmount) {
-    return rankChallengeProgressionService.giveItemChallenge(
-        targetPlayer.getUniqueId(), rankId, material, givenAmount);
+      @NotNull Rank rank,
+      @NotNull RankChallenge rankChallenge,
+      @NotNull GiveActionType giveActionType,
+      int nbItemsInInventory) {
+    // TODO: again... Transaction!
+    int nbItemsGiven =
+        rankChallengeProgressionService.giveItemChallenge(
+            targetPlayer.getUniqueId(), rank, rankChallenge, giveActionType, nbItemsInInventory);
+
+    Map<Integer, ItemStack> notRemovedItems =
+        targetPlayer
+            .getInventory()
+            .removeItem(new ItemStack(rankChallenge.getChallengeItemMaterial(), nbItemsGiven));
+
+    if (!notRemovedItems.isEmpty()) {
+      logger.error(
+          "Some items failed to be removed from the {}'s inventory: {}",
+          targetPlayer.getName(),
+          notRemovedItems);
+      // TODO: feedback player
+      return;
+    }
+
+    String challengeName = rankChallenge.getChallengeItemMaterial().name();
+
+    targetPlayer.sendMessage(rankUpMessage.successAmountGiven(nbItemsGiven, challengeName));
+
+    if (rankChallengeProgressionService.isChallengeCompleted(
+        targetPlayer.getUniqueId(), rank.getId(), rankChallenge)) {
+      rankUpMessage.challengeCompleted(challengeName);
+    }
+
+    openRankUpChallengesGui(targetPlayer, rank);
   }
 
   public @NotNull Optional<RankChallengeProgression> findChallenge(

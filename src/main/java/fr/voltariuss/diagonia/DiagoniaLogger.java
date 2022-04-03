@@ -38,6 +38,7 @@ import org.slf4j.Marker;
  *
  * @author Voltariuss
  */
+// TODO: rename RemakeLogger
 @Singleton
 public final class DiagoniaLogger implements Logger {
 
