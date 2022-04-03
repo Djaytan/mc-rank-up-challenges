@@ -96,7 +96,7 @@ public class PlayerShopListControllerImpl implements PlayerShopListController {
 
     OfflinePlayer psOwner = server.getOfflinePlayer(playerShopDestination.getOwnerUuid());
     String psOwnerName = controllerHelper.getOfflinePlayerName(psOwner);
-    playerShopMessage.successTeleport(psOwnerName);
+    playerToTp.sendMessage(playerShopMessage.successTeleport(psOwnerName));
 
     logger.debug(
         "Teleportation of a player to a playershop: playerToTpUuid={}, playerShopId={}",
