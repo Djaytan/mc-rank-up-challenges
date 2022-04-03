@@ -20,7 +20,7 @@ import com.google.common.base.Preconditions;
 import dev.triumphteam.gui.builder.item.ItemBuilder;
 import dev.triumphteam.gui.components.GuiAction;
 import dev.triumphteam.gui.guis.GuiItem;
-import fr.voltariuss.diagonia.controller.RankUpController;
+import fr.voltariuss.diagonia.controller.rankup.RankUpChallengesController;
 import fr.voltariuss.diagonia.model.GiveActionType;
 import fr.voltariuss.diagonia.model.config.rank.Rank;
 import fr.voltariuss.diagonia.model.config.rank.RankChallenge;
@@ -53,7 +53,7 @@ public class RankChallengeItem {
 
   private final GiveActionTypeConverter giveActionTypeConverter;
   private final MiniMessage miniMessage;
-  private final RankUpController rankUpController;
+  private final RankUpChallengesController rankUpChallengesController;
   private final RankUpMessage rankUpMessage;
   private final ResourceBundle resourceBundle;
 
@@ -61,12 +61,12 @@ public class RankChallengeItem {
   public RankChallengeItem(
       @NotNull GiveActionTypeConverter giveActionTypeConverter,
       @NotNull MiniMessage miniMessage,
-      @NotNull RankUpController rankUpController,
+      @NotNull RankUpChallengesController rankUpChallengesController,
       @NotNull RankUpMessage rankUpMessage,
       @NotNull ResourceBundle resourceBundle) {
     this.giveActionTypeConverter = giveActionTypeConverter;
     this.miniMessage = miniMessage;
-    this.rankUpController = rankUpController;
+    this.rankUpChallengesController = rankUpChallengesController;
     this.rankUpMessage = rankUpMessage;
     this.resourceBundle = resourceBundle;
   }
@@ -120,7 +120,7 @@ public class RankChallengeItem {
         return;
       }
 
-      rankUpController.giveItemChallenge(
+      rankUpChallengesController.giveItemChallenge(
           whoClicked, rank, rankChallenge, giveActionType, nbItemsInInventory);
     };
   }

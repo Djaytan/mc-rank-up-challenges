@@ -20,7 +20,7 @@ import com.google.common.base.Preconditions;
 import dev.triumphteam.gui.builder.item.ItemBuilder;
 import dev.triumphteam.gui.components.GuiAction;
 import dev.triumphteam.gui.guis.GuiItem;
-import fr.voltariuss.diagonia.controller.RankUpController;
+import fr.voltariuss.diagonia.controller.rankup.RankUpController;
 import fr.voltariuss.diagonia.model.config.rank.Rank;
 import java.util.ArrayList;
 import java.util.Collections;

@@ -14,28 +14,23 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.controller;
+package fr.voltariuss.diagonia.controller.rankup;
 
 import fr.voltariuss.diagonia.DiagoniaLogger;
+import fr.voltariuss.diagonia.controller.ControllerHelper;
 import fr.voltariuss.diagonia.model.GiveActionType;
 import fr.voltariuss.diagonia.model.config.rank.Rank;
 import fr.voltariuss.diagonia.model.config.rank.RankChallenge;
 import fr.voltariuss.diagonia.model.dto.RankUpProgression;
 import fr.voltariuss.diagonia.model.entity.RankChallengeProgression;
-import fr.voltariuss.diagonia.model.service.EconomyService;
-import fr.voltariuss.diagonia.model.service.JobsService;
 import fr.voltariuss.diagonia.model.service.RankChallengeProgressionService;
 import fr.voltariuss.diagonia.model.service.RankConfigService;
 import fr.voltariuss.diagonia.model.service.RankService;
-import fr.voltariuss.diagonia.view.gui.RankUpChallengesGui;
-import fr.voltariuss.diagonia.view.gui.RankUpListGui;
 import fr.voltariuss.diagonia.view.message.RankUpMessage;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import javax.inject.Inject;
-import javax.inject.Provider;
 import javax.inject.Singleton;
 import net.luckperms.api.track.PromotionResult;
 import org.bukkit.Material;
@@ -45,62 +40,35 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 @Singleton
-public class RankUpController {
+public class RankUpChallengesControllerImpl implements RankUpChallengesController {
 
-  private final DiagoniaLogger logger;
-  private final EconomyService economyService;
-  private final JobsService jobsService;
   private final ControllerHelper controllerHelper;
+  private final DiagoniaLogger logger;
   private final RankChallengeProgressionService rankChallengeProgressionService;
   private final RankConfigService rankConfigService;
   private final RankService rankService;
+  private final RankUpController rankUpController;
   private final RankUpMessage rankUpMessage;
 
-  private final Provider<RankUpListGui> rankUpListGui;
-  private final Provider<RankUpChallengesGui> rankUpChallengesGui;
-
   @Inject
-  public RankUpController(
-      @NotNull DiagoniaLogger logger,
-      @NotNull EconomyService economyService,
-      @NotNull JobsService jobsService,
+  public RankUpChallengesControllerImpl(
       @NotNull ControllerHelper controllerHelper,
+      @NotNull DiagoniaLogger logger,
       @NotNull RankChallengeProgressionService rankChallengeProgressionService,
       @NotNull RankConfigService rankConfigService,
       @NotNull RankService rankService,
-      @NotNull RankUpMessage rankUpMessage,
-      @NotNull Provider<RankUpListGui> rankUpListGui,
-      @NotNull Provider<RankUpChallengesGui> rankUpChallengesGui) {
-    this.logger = logger;
-    this.economyService = economyService;
-    this.jobsService = jobsService;
+      @NotNull RankUpController rankUpController,
+      @NotNull RankUpMessage rankUpMessage) {
     this.controllerHelper = controllerHelper;
+    this.logger = logger;
     this.rankChallengeProgressionService = rankChallengeProgressionService;
     this.rankConfigService = rankConfigService;
     this.rankService = rankService;
+    this.rankUpController = rankUpController;
     this.rankUpMessage = rankUpMessage;
-    this.rankUpListGui = rankUpListGui;
-    this.rankUpChallengesGui = rankUpChallengesGui;
   }
 
-  public void openRankUpListGui(@NotNull Player whoOpen) {
-    logger.debug("Open RankUpList GUI for player '{}'", whoOpen.getName());
-    rankUpListGui.get().open(whoOpen);
-  }
-
-  public void openRankUpChallengesGui(@NotNull Player whoOpen, @NotNull Rank rank) {
-    logger.debug(
-        "Open RankUpChallenges GUI of rank '{}' for player '{}'", rank.getId(), whoOpen.getName());
-
-    int totalJobsLevels = jobsService.getTotalLevels(whoOpen);
-    double currentBalance = economyService.getBalance(whoOpen);
-
-    RankUpProgression rankUpProgression =
-        rankService.getRankUpProgression(whoOpen, rank, totalJobsLevels, currentBalance);
-
-    rankUpChallengesGui.get().open(whoOpen, rank, rankUpProgression);
-  }
-
+  @Override
   public void giveItemChallenge(
       @NotNull Player targetPlayer,
       @NotNull Rank rank,
@@ -135,32 +103,16 @@ public class RankUpController {
       rankUpMessage.challengeCompleted(challengeName);
     }
 
-    openRankUpChallengesGui(targetPlayer, rank);
+    rankUpController.openRankUpChallengesGui(targetPlayer, rank);
   }
 
+  @Override
   public @NotNull Optional<RankChallengeProgression> findChallenge(
       @NotNull UUID playerUuid, @NotNull String rankId, @NotNull Material material) {
     return rankChallengeProgressionService.find(playerUuid, rankId, material);
   }
 
-  public @NotNull List<RankChallengeProgression> getRankUpProgression(
-      @NotNull Player targetPlayer, @NotNull String rankId) {
-    return rankChallengeProgressionService.find(targetPlayer.getUniqueId(), rankId);
-  }
-
-  // TODO: remove these three following methods
-  public boolean isRankOwned(@NotNull Player player, @NotNull String rankId) {
-    return rankService.isRankOwned(player, rankId);
-  }
-
-  public boolean isCurrentRank(@NotNull Player player, @NotNull String rankId) {
-    return rankService.isCurrentRank(player, rankId);
-  }
-
-  public boolean isUnlockableRank(@NotNull Player player, @NotNull String rankId) {
-    return rankService.isUnlockableRank(player, rankId);
-  }
-
+  @Override
   public void onRankUpRequested(
       @NotNull Player player, @NotNull RankUpProgression rankUpProgression) {
 

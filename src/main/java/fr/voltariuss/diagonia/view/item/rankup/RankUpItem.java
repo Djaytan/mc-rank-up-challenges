@@ -20,7 +20,7 @@ import com.google.common.base.Preconditions;
 import dev.triumphteam.gui.builder.item.ItemBuilder;
 import dev.triumphteam.gui.components.GuiAction;
 import dev.triumphteam.gui.guis.GuiItem;
-import fr.voltariuss.diagonia.controller.RankUpController;
+import fr.voltariuss.diagonia.controller.rankup.RankUpChallengesController;
 import fr.voltariuss.diagonia.model.config.rank.Rank;
 import fr.voltariuss.diagonia.model.config.rank.RankUpPrerequisites;
 import fr.voltariuss.diagonia.model.dto.RankUpProgression;
@@ -49,18 +49,18 @@ public class RankUpItem {
 
   private final EconomyFormatter economyFormatter;
   private final MiniMessage miniMessage;
-  private final RankUpController rankUpController;
+  private final RankUpChallengesController rankUpChallengesController;
   private final ResourceBundle resourceBundle;
 
   @Inject
   public RankUpItem(
       @NotNull EconomyFormatter economyFormatter,
       @NotNull MiniMessage miniMessage,
-      @NotNull RankUpController rankUpController,
+      @NotNull RankUpChallengesController rankUpChallengesController,
       @NotNull ResourceBundle resourceBundle) {
     this.economyFormatter = economyFormatter;
     this.miniMessage = miniMessage;
-    this.rankUpController = rankUpController;
+    this.rankUpChallengesController = rankUpChallengesController;
     this.resourceBundle = resourceBundle;
   }
 
@@ -85,7 +85,7 @@ public class RankUpItem {
       @NotNull RankUpProgression rankUpProgression) {
     return event -> {
       Player player = (Player) event.getWhoClicked();
-      rankUpController.onRankUpRequested(player, rankUpProgression);
+      rankUpChallengesController.onRankUpRequested(player, rankUpProgression);
     };
   }
 

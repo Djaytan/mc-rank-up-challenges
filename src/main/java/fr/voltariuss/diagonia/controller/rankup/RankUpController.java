@@ -14,30 +14,15 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.view.command;
+package fr.voltariuss.diagonia.controller.rankup;
 
-import co.aikar.commands.BaseCommand;
-import co.aikar.commands.annotation.CommandAlias;
-import co.aikar.commands.annotation.Default;
-import fr.voltariuss.diagonia.controller.rankup.RankUpController;
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import fr.voltariuss.diagonia.model.config.rank.Rank;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-@CommandAlias("ranks")
-@Singleton
-public class RanksCommand extends BaseCommand {
+public interface RankUpController {
 
-  private final RankUpController rankUpController;
+  void openRankUpListGui(@NotNull Player whoOpen);
 
-  @Inject
-  public RanksCommand(@NotNull RankUpController rankUpController) {
-    this.rankUpController = rankUpController;
-  }
-
-  @Default
-  public void onExecute(@NotNull Player player) {
-    rankUpController.openRankUpListGui(player);
-  }
+  void openRankUpChallengesGui(@NotNull Player whoOpen, @NotNull Rank rank);
 }

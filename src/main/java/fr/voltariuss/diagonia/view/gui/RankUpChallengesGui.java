@@ -21,7 +21,8 @@ import dev.triumphteam.gui.guis.Gui;
 import dev.triumphteam.gui.guis.GuiItem;
 import dev.triumphteam.gui.guis.PaginatedGui;
 import fr.voltariuss.diagonia.DiagoniaLogger;
-import fr.voltariuss.diagonia.controller.RankUpController;
+import fr.voltariuss.diagonia.controller.rankup.RankUpChallengesController;
+import fr.voltariuss.diagonia.controller.rankup.RankUpController;
 import fr.voltariuss.diagonia.model.config.rank.Rank;
 import fr.voltariuss.diagonia.model.dto.RankUpProgression;
 import fr.voltariuss.diagonia.model.entity.RankChallengeProgression;
@@ -54,6 +55,7 @@ public class RankUpChallengesGui {
   private final MiniMessage miniMessage;
   private final PaginatedItem paginatedItem;
   private final RankChallengeItem rankChallengeItem;
+  private final RankUpChallengesController rankUpChallengesController;
   private final RankUpController rankUpController;
   private final RankUpItem rankUpItem;
   private final ResourceBundle resourceBundle;
@@ -65,6 +67,7 @@ public class RankUpChallengesGui {
       @NotNull MiniMessage miniMessage,
       @NotNull PaginatedItem paginatedItem,
       @NotNull RankChallengeItem rankChallengeItem,
+      @NotNull RankUpChallengesController rankUpChallengesController,
       @NotNull RankUpController rankUpController,
       @NotNull RankUpItem rankUpItem,
       @NotNull ResourceBundle resourceBundle) {
@@ -73,6 +76,7 @@ public class RankUpChallengesGui {
     this.miniMessage = miniMessage;
     this.paginatedItem = paginatedItem;
     this.rankChallengeItem = rankChallengeItem;
+    this.rankUpChallengesController = rankUpChallengesController;
     this.rankUpController = rankUpController;
     this.rankUpItem = rankUpItem;
     this.resourceBundle = resourceBundle;
@@ -80,7 +84,6 @@ public class RankUpChallengesGui {
 
   public void open(
       @NotNull Player whoOpen, @NotNull Rank rank, @NotNull RankUpProgression rankUpProgression) {
-
     if (rank.getRankUpChallenges() == null) {
       logger.error("No challenge is associated with the rank {}", rank.getId());
       whoOpen.sendMessage(commonMessage.unknownError());
@@ -108,7 +111,7 @@ public class RankUpChallengesGui {
         .forEach(
             rankChallenge -> {
               Optional<RankChallengeProgression> rankChallengeProgression =
-                  rankUpController.findChallenge(
+                  rankUpChallengesController.findChallenge(
                       whoOpen.getUniqueId(),
                       rank.getId(),
                       rankChallenge.getChallengeItemMaterial());

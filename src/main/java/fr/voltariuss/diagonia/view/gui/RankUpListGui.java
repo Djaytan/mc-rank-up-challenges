@@ -18,7 +18,7 @@ package fr.voltariuss.diagonia.view.gui;
 
 import dev.triumphteam.gui.guis.Gui;
 import dev.triumphteam.gui.guis.GuiItem;
-import fr.voltariuss.diagonia.controller.RankUpController;
+import fr.voltariuss.diagonia.controller.rankup.RankUpListController;
 import fr.voltariuss.diagonia.model.config.rank.Rank;
 import fr.voltariuss.diagonia.model.config.rank.RankConfig;
 import fr.voltariuss.diagonia.view.item.GoToMainMenuItem;
@@ -37,7 +37,7 @@ public class RankUpListGui {
   private final MiniMessage miniMessage;
   private final RankConfig rankConfig;
   private final RankItem rankItem;
-  private final RankUpController rankUpController;
+  private final RankUpListController rankUpListController;
   private final ResourceBundle resourceBundle;
 
   @Inject
@@ -46,13 +46,13 @@ public class RankUpListGui {
       @NotNull MiniMessage miniMessage,
       @NotNull RankConfig rankConfig,
       @NotNull RankItem rankItem,
-      @NotNull RankUpController rankUpController,
+      @NotNull RankUpListController rankUpListController,
       @NotNull ResourceBundle resourceBundle) {
     this.goToMainMenuItem = goToMainMenuItem;
     this.miniMessage = miniMessage;
     this.rankConfig = rankConfig;
     this.rankItem = rankItem;
-    this.rankUpController = rankUpController;
+    this.rankUpListController = rankUpListController;
     this.resourceBundle = resourceBundle;
   }
 
@@ -69,9 +69,9 @@ public class RankUpListGui {
 
     for (Rank rank : rankConfig.getRanks()) {
       // TODO: remove use of controller in view
-      boolean isRankOwned = rankUpController.isRankOwned(whoOpen, rank.getId());
-      boolean isCurrentRank = rankUpController.isCurrentRank(whoOpen, rank.getId());
-      boolean isUnlockableRank = rankUpController.isUnlockableRank(whoOpen, rank.getId());
+      boolean isRankOwned = rankUpListController.isRankOwned(whoOpen, rank.getId());
+      boolean isCurrentRank = rankUpListController.isCurrentRank(whoOpen, rank.getId());
+      boolean isUnlockableRank = rankUpListController.isUnlockableRank(whoOpen, rank.getId());
 
       GuiItem rankGuiItem = rankItem.createItem(rank, isRankOwned, isCurrentRank, isUnlockableRank);
       gui.addItem(rankGuiItem);
