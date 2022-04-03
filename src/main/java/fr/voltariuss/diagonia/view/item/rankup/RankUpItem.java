@@ -25,7 +25,7 @@ import fr.voltariuss.diagonia.model.config.rank.Rank;
 import fr.voltariuss.diagonia.model.config.rank.RankUpPrerequisites;
 import fr.voltariuss.diagonia.model.dto.RankUpProgression;
 import fr.voltariuss.diagonia.view.EconomyFormatter;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -40,6 +40,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.UnmodifiableView;
 
 @Singleton
 public class RankUpItem {
@@ -76,7 +77,7 @@ public class RankUpItem {
     ItemBuilder itemBuilder = ItemBuilder.from(RANK_UP_MATERIAL).name(itemName).lore(itemLore);
 
     return rankUpProgression.isRankOwned()
-        ? itemBuilder.asGuiItem()
+        ? itemBuilder.asGuiItem() // TODO: give feedback to player
         : itemBuilder.asGuiItem(onClick(rankUpProgression));
   }
 
@@ -89,25 +90,36 @@ public class RankUpItem {
   }
 
   private @NotNull Component getName(boolean isRankOwned) {
-    return isRankOwned
-        ? miniMessage
-            .deserialize(
-                resourceBundle.getString("diagonia.rankup.rankup.item.name.already_unlocked"))
-            .decoration(TextDecoration.ITALIC, false)
-        : miniMessage
-            .deserialize(resourceBundle.getString("diagonia.rankup.rankup.item.name.unlockable"))
-            .decoration(TextDecoration.ITALIC, false);
+    String nameKey = "diagonia.rankup.rankup.item.name.unlockable";
+
+    if (isRankOwned) {
+      nameKey = "diagonia.rankup.rankup.item.name.already_unlocked";
+    }
+
+    return miniMessage
+        .deserialize(resourceBundle.getString(nameKey))
+        .decoration(TextDecoration.ITALIC, false);
   }
 
-  private @NotNull List<Component> getLore(
+  private @NotNull @UnmodifiableView List<Component> getLore(
       @NotNull RankUpProgression rankUpProgression,
       @NotNull RankUpPrerequisites rankUpPrerequisites) {
-
     if (rankUpProgression.isRankOwned()) {
       return Collections.emptyList();
     }
 
-    return Arrays.asList(
+    List<Component> lore = new ArrayList<>();
+    lore.addAll(getPrerequisitesLorePart(rankUpProgression, rankUpPrerequisites));
+    lore.add(Component.empty());
+    lore.addAll(getEndLorePart(rankUpProgression.canRankUp()));
+
+    return Collections.unmodifiableList(lore);
+  }
+
+  private @NotNull @UnmodifiableView List<Component> getPrerequisitesLorePart(
+      @NotNull RankUpProgression rankUpProgression,
+      @NotNull RankUpPrerequisites rankUpPrerequisites) {
+    return List.of(
         miniMessage
             .deserialize(
                 resourceBundle.getString(
@@ -149,18 +161,20 @@ public class RankUpItem {
                     Template.template(
                         "diag_rankup_price",
                         economyFormatter.format(rankUpPrerequisites.getMoneyPrice()))))
-            .decoration(TextDecoration.ITALIC, false),
-        Component.empty(),
-        rankUpProgression.canRankUp()
-            ? miniMessage
-                .deserialize(
-                    resourceBundle.getString("diagonia.rankup.rankup.item.lore.unlock_rank"))
-                .decoration(TextDecoration.ITALIC, false)
-            : miniMessage
-                .deserialize(
-                    resourceBundle.getString(
-                        "diagonia.rankup.rankup.item.lore.prerequisites_not_respected"))
-                .decoration(TextDecoration.ITALIC, false));
+            .decoration(TextDecoration.ITALIC, false));
+  }
+
+  private @NotNull @UnmodifiableView List<Component> getEndLorePart(boolean canRankUp) {
+    String canRankUpKey = "diagonia.rankup.rankup.item.lore.prerequisites_not_respected";
+
+    if (canRankUp) {
+      canRankUpKey = "diagonia.rankup.rankup.item.lore.unlock_rank";
+    }
+
+    return List.of(
+        miniMessage
+            .deserialize(resourceBundle.getString(canRankUpKey))
+            .decoration(TextDecoration.ITALIC, false));
   }
 
   private @NotNull Component getCurrentProgression(
