@@ -36,9 +36,9 @@ public class CommonMessage {
     this.resourceBundle = resourceBundle;
   }
 
-  public @NotNull Component unknownError() {
+  public @NotNull Component unexpectedError() {
     return miniMessage
-        .deserialize(resourceBundle.getString("diagonia.common.fail.unknown_error"))
+        .deserialize(resourceBundle.getString("diagonia.common.fail.unexpected_error"))
         .decoration(TextDecoration.ITALIC, false);
   }
 }

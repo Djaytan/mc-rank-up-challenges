@@ -26,6 +26,7 @@ import fr.voltariuss.diagonia.model.entity.RankChallengeProgression;
 import fr.voltariuss.diagonia.model.service.RankChallengeProgressionService;
 import fr.voltariuss.diagonia.model.service.RankConfigService;
 import fr.voltariuss.diagonia.model.service.RankService;
+import fr.voltariuss.diagonia.view.message.CommonMessage;
 import fr.voltariuss.diagonia.view.message.RankUpMessage;
 import java.util.Map;
 import java.util.Optional;
@@ -42,6 +43,7 @@ import org.jetbrains.annotations.NotNull;
 @Singleton
 public class RankUpChallengesControllerImpl implements RankUpChallengesController {
 
+  private final CommonMessage commonMessage;
   private final ControllerHelper controllerHelper;
   private final DiagoniaLogger logger;
   private final RankChallengeProgressionService rankChallengeProgressionService;
@@ -52,6 +54,7 @@ public class RankUpChallengesControllerImpl implements RankUpChallengesControlle
 
   @Inject
   public RankUpChallengesControllerImpl(
+      @NotNull CommonMessage commonMessage,
       @NotNull ControllerHelper controllerHelper,
       @NotNull DiagoniaLogger logger,
       @NotNull RankChallengeProgressionService rankChallengeProgressionService,
@@ -59,6 +62,7 @@ public class RankUpChallengesControllerImpl implements RankUpChallengesControlle
       @NotNull RankService rankService,
       @NotNull RankUpController rankUpController,
       @NotNull RankUpMessage rankUpMessage) {
+    this.commonMessage = commonMessage;
     this.controllerHelper = controllerHelper;
     this.logger = logger;
     this.rankChallengeProgressionService = rankChallengeProgressionService;
@@ -90,7 +94,7 @@ public class RankUpChallengesControllerImpl implements RankUpChallengesControlle
           "Some items failed to be removed from the {}'s inventory: {}",
           targetPlayer.getName(),
           notRemovedItems);
-      // TODO: feedback player
+      targetPlayer.sendMessage(commonMessage.unexpectedError());
       return;
     }
 
