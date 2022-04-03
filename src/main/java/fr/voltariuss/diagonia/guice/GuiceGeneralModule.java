@@ -77,7 +77,6 @@ public class GuiceGeneralModule extends AbstractModule {
 
   @Override
   public void configure() {
-    // TODO: verify asEagerSingleton permit well to define singleton instance of classes
     bind(EconomyService.class).to(EconomyVaultService.class);
     bind(JobsService.class).to(JobsRebornService.class);
     bind(PlayerShopController.class).to(PlayerShopControllerImpl.class);

@@ -46,7 +46,6 @@
         <sonar.organization>voltariuss</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
 
-        <!-- TODO: Setup Renovate: https://github.com/renovatebot/renovate -->
         <minecraft.api.version>1.18</minecraft.api.version>
         <papermc.version>1.18.1-R0.1-SNAPSHOT</papermc.version>
         <acf.version>0.5.1-SNAPSHOT</acf.version>
