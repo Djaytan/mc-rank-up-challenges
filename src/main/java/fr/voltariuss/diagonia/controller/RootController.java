@@ -23,14 +23,13 @@ import org.bukkit.event.inventory.InventoryCloseEvent.Reason;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
-// TODO: rename it RootController
 @Singleton
-public class MainController {
+public class RootController {
 
   private final Logger logger;
 
   @Inject
-  public MainController(@NotNull Logger logger) {
+  public RootController(@NotNull Logger logger) {
     this.logger = logger;
   }
 
