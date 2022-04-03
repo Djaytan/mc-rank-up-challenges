@@ -22,7 +22,6 @@ import fr.voltariuss.diagonia.model.GiveActionType;
 import fr.voltariuss.diagonia.model.JpaDaoException;
 import fr.voltariuss.diagonia.model.config.rank.Rank;
 import fr.voltariuss.diagonia.model.config.rank.RankChallenge;
-import fr.voltariuss.diagonia.model.config.rank.RankConfig;
 import fr.voltariuss.diagonia.model.dao.RankChallengeProgressionDao;
 import fr.voltariuss.diagonia.model.entity.RankChallengeProgression;
 import java.util.List;
@@ -43,16 +42,13 @@ public class RankChallengeProgressionService {
 
   private final DiagoniaLogger logger;
   private final RankChallengeProgressionDao rankChallengeProgressionDao;
-  private final RankConfig rankConfig;
 
   @Inject
   public RankChallengeProgressionService(
       @NotNull DiagoniaLogger logger,
-      @NotNull RankChallengeProgressionDao rankChallengeProgressionDao,
-      @NotNull RankConfig rankConfig) {
+      @NotNull RankChallengeProgressionDao rankChallengeProgressionDao) {
     this.logger = logger;
     this.rankChallengeProgressionDao = rankChallengeProgressionDao;
-    this.rankConfig = rankConfig;
   }
 
   public void persist(@NotNull RankChallengeProgression rankChallengeProgression) {
@@ -250,8 +246,16 @@ public class RankChallengeProgressionService {
 
   public boolean isChallengeCompleted(
       @NotNull UUID uuid, @NotNull String rankId, @NotNull RankChallenge rankChallenge) {
-    Optional<RankChallengeProgression> rankChallengeProgression =
-        rankChallengeProgressionDao.find(uuid, rankId, rankChallenge.getChallengeItemMaterial());
+    rankChallengeProgressionDao.openSession();
+
+    Optional<RankChallengeProgression> rankChallengeProgression;
+
+    try {
+      rankChallengeProgression =
+          rankChallengeProgressionDao.find(uuid, rankId, rankChallenge.getChallengeItemMaterial());
+    } finally {
+      rankChallengeProgressionDao.destroySession();
+    }
 
     if (rankChallengeProgression.isEmpty()) {
       return false;
