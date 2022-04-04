@@ -23,39 +23,54 @@ import javax.inject.Singleton;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.MessageType;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.Template;
+import net.kyori.adventure.text.minimessage.template.TemplateResolver;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
-// TODO: maybe the name and place in code is not the best
+// TODO: rename it MessageController + split interface and implementation
 @Singleton
 public class ControllerHelper {
 
   private final DiagoniaLogger logger;
+  private final MiniMessage miniMessage;
   private final ResourceBundle resourceBundle;
   private final Server server;
 
   @Inject
   public ControllerHelper(
       @NotNull DiagoniaLogger logger,
+      @NotNull MiniMessage miniMessage,
       @NotNull ResourceBundle resourceBundle,
       @NotNull Server server) {
     this.logger = logger;
+    this.miniMessage = miniMessage;
     this.resourceBundle = resourceBundle;
     this.server = server;
   }
 
-  public void sendSystemMessage(
-      @NotNull CommandSender commandSender, @NotNull Component component) {
-    Audience.audience(commandSender).sendMessage(component, MessageType.SYSTEM);
+  public void sendSystemMessage(@NotNull CommandSender commandSender, @NotNull Component message) {
+    sendMessage(commandSender, Prefix.DEFAULT, message);
+  }
+
+  public void sendWarningMessage(@NotNull CommandSender commandSender, @NotNull Component message) {
+    sendMessage(commandSender, Prefix.WARNING, message);
+  }
+
+  public void sendErrorMessage(@NotNull CommandSender commandSender, @NotNull Component message) {
+    sendMessage(commandSender, Prefix.ERROR, message);
   }
 
   public void broadcastMessage(@NotNull Component component) {
-    Audience.audience(server.getOnlinePlayers()).sendMessage(component);
+    sendMessage(Audience.audience(server.getOnlinePlayers()), Prefix.BROADCAST, component);
   }
 
   public @NotNull String getOfflinePlayerName(@NotNull OfflinePlayer offlinePlayer) {
+    // TODO: move to PlayerUtils class
     String offlinePlayerName = offlinePlayer.getName();
 
     if (offlinePlayerName == null) {
@@ -64,5 +79,37 @@ public class ControllerHelper {
     }
 
     return offlinePlayerName;
+  }
+
+  private void sendMessage(
+      @NotNull Audience audience, @NotNull Prefix prefix, @NotNull Component message) {
+    Component prefixCpnt = getPrefix(prefix);
+    Component messageFormat = getMessageFormat(prefixCpnt, message);
+    Audience.audience(audience).sendMessage(messageFormat, MessageType.SYSTEM);
+  }
+
+  private @NotNull Component getMessageFormat(
+      @NotNull Component prefixCpnt, @NotNull Component message) {
+    return miniMessage
+        .deserialize(
+            resourceBundle.getString("diagonia.common.message.format"),
+            TemplateResolver.templates(
+                Template.template("diag_message_prefix", prefixCpnt),
+                Template.template("diag_message_content", message)))
+        .decoration(TextDecoration.ITALIC, false);
+  }
+
+  private @NotNull Component getPrefix(@NotNull Prefix prefix) {
+    String prefixStrKey =
+        switch (prefix) {
+          case BROADCAST -> "diagonia.common.prefix.broadcast";
+          case WARNING -> "diagonia.common.prefix.warning";
+          case ERROR -> "diagonia.common.prefix.error";
+          default -> "diagonia.common.prefix.default";
+        };
+
+    return miniMessage
+        .deserialize(resourceBundle.getString(prefixStrKey))
+        .decoration(TextDecoration.ITALIC, false);
   }
 }
