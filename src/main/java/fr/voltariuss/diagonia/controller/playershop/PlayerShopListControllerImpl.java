@@ -16,7 +16,7 @@
 
 package fr.voltariuss.diagonia.controller.playershop;
 
-import fr.voltariuss.diagonia.DiagoniaLogger;
+import fr.voltariuss.diagonia.RemakeBukkitLogger;
 import fr.voltariuss.diagonia.controller.BukkitUtils;
 import fr.voltariuss.diagonia.controller.MessageController;
 import fr.voltariuss.diagonia.model.LocationMapper;
@@ -42,7 +42,7 @@ public class PlayerShopListControllerImpl implements PlayerShopListController {
   private final BukkitUtils bukkitUtils;
   private final EconomyService economyService;
   private final LocationMapper locationMapper;
-  private final DiagoniaLogger logger;
+  private final RemakeBukkitLogger logger;
   private final MessageController messageController;
   private final PlayerShopController playerShopController;
   private final PlayerShopMessage playerShopMessage;
@@ -55,7 +55,7 @@ public class PlayerShopListControllerImpl implements PlayerShopListController {
       @NotNull BukkitUtils bukkitUtils,
       @NotNull EconomyService economyService,
       @NotNull LocationMapper locationMapper,
-      @NotNull DiagoniaLogger logger,
+      @NotNull RemakeBukkitLogger logger,
       @NotNull MessageController messageController,
       @NotNull PlayerShopController playerShopController,
       @NotNull PlayerShopMessage playerShopMessage,

@@ -17,7 +17,7 @@
 package fr.voltariuss.diagonia.model.service;
 
 import com.google.common.base.Preconditions;
-import fr.voltariuss.diagonia.DiagoniaLogger;
+import fr.voltariuss.diagonia.RemakeBukkitLogger;
 import fr.voltariuss.diagonia.model.dto.response.EconomyResponse;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -29,11 +29,11 @@ import org.jetbrains.annotations.NotNull;
 @Singleton
 public class EconomyVaultService implements EconomyService {
 
-  private final DiagoniaLogger logger;
+  private final RemakeBukkitLogger logger;
   private final Economy economy;
 
   @Inject
-  public EconomyVaultService(@NotNull DiagoniaLogger logger, @NotNull Economy economy) {
+  public EconomyVaultService(@NotNull RemakeBukkitLogger logger, @NotNull Economy economy) {
     this.logger = logger;
     this.economy = economy;
   }

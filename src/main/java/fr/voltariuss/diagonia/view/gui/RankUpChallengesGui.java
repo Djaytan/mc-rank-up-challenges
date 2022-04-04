@@ -20,7 +20,7 @@ import dev.triumphteam.gui.builder.item.ItemBuilder;
 import dev.triumphteam.gui.guis.Gui;
 import dev.triumphteam.gui.guis.GuiItem;
 import dev.triumphteam.gui.guis.PaginatedGui;
-import fr.voltariuss.diagonia.DiagoniaLogger;
+import fr.voltariuss.diagonia.RemakeBukkitLogger;
 import fr.voltariuss.diagonia.controller.rankup.RankUpChallengesController;
 import fr.voltariuss.diagonia.controller.rankup.RankUpController;
 import fr.voltariuss.diagonia.model.config.rank.Rank;
@@ -51,7 +51,7 @@ public class RankUpChallengesGui {
   private static final int PAGE_SIZE = 36;
 
   private final CommonMessage commonMessage;
-  private final DiagoniaLogger logger;
+  private final RemakeBukkitLogger logger;
   private final MiniMessage miniMessage;
   private final PaginatedItem paginatedItem;
   private final RankChallengeItem rankChallengeItem;
@@ -63,7 +63,7 @@ public class RankUpChallengesGui {
   @Inject
   public RankUpChallengesGui(
       @NotNull CommonMessage commonMessage,
-      @NotNull DiagoniaLogger logger,
+      @NotNull RemakeBukkitLogger logger,
       @NotNull MiniMessage miniMessage,
       @NotNull PaginatedItem paginatedItem,
       @NotNull RankChallengeItem rankChallengeItem,

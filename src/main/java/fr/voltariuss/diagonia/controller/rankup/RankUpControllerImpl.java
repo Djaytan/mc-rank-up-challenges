@@ -16,7 +16,7 @@
 
 package fr.voltariuss.diagonia.controller.rankup;
 
-import fr.voltariuss.diagonia.DiagoniaLogger;
+import fr.voltariuss.diagonia.RemakeBukkitLogger;
 import fr.voltariuss.diagonia.controller.MessageController;
 import fr.voltariuss.diagonia.model.config.rank.Rank;
 import fr.voltariuss.diagonia.model.dto.RankUpProgression;
@@ -38,7 +38,7 @@ public class RankUpControllerImpl implements RankUpController {
   private final CommonMessage commonMessage;
   private final EconomyService economyService;
   private final JobsService jobsService;
-  private final DiagoniaLogger logger;
+  private final RemakeBukkitLogger logger;
   private final MessageController messageController;
   private final RankService rankService;
 
@@ -50,7 +50,7 @@ public class RankUpControllerImpl implements RankUpController {
       @NotNull CommonMessage commonMessage,
       @NotNull EconomyService economyService,
       @NotNull JobsService jobsService,
-      @NotNull DiagoniaLogger logger,
+      @NotNull RemakeBukkitLogger logger,
       @NotNull MessageController messageController,
       @NotNull RankService rankService,
       @NotNull Provider<RankUpListGui> rankUpListGui,

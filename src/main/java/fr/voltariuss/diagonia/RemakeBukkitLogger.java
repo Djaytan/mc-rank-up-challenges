@@ -40,7 +40,7 @@ import org.slf4j.Marker;
  */
 // TODO: rename RemakeLogger
 @Singleton
-public final class DiagoniaLogger implements Logger {
+public final class RemakeBukkitLogger implements Logger {
 
   private static final String DEBUG_MODE_PREFIX = "[DEBUG]";
 
@@ -54,7 +54,7 @@ public final class DiagoniaLogger implements Logger {
    * @param debugMode <code>true</code> if the debug mode is enabled, <code>false</code> otherwise.
    */
   @Inject
-  public DiagoniaLogger(@NotNull final Logger logger, @Named("debugMode") final boolean debugMode) {
+  public RemakeBukkitLogger(@NotNull final Logger logger, @Named("debugMode") final boolean debugMode) {
     this.logger = logger;
     this.debugMode = debugMode;
   }

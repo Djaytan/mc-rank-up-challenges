@@ -17,7 +17,7 @@
 package fr.voltariuss.diagonia.model.service;
 
 import com.google.common.base.Preconditions;
-import fr.voltariuss.diagonia.DiagoniaLogger;
+import fr.voltariuss.diagonia.RemakeBukkitLogger;
 import fr.voltariuss.diagonia.model.config.rank.Rank;
 import fr.voltariuss.diagonia.model.config.rank.RankUpPrerequisites;
 import fr.voltariuss.diagonia.model.dto.RankUpProgression;
@@ -48,7 +48,7 @@ import org.jetbrains.annotations.Nullable;
 @Singleton
 public class RankLuckPermsService implements RankService {
 
-  private final DiagoniaLogger logger;
+  private final RemakeBukkitLogger logger;
   private final GroupManager groupManager;
   private final RankChallengeProgressionService rankChallengeProgressionService;
   private final RankConfigService rankConfigService;
@@ -67,7 +67,7 @@ public class RankLuckPermsService implements RankService {
    */
   @Inject
   public RankLuckPermsService(
-      @NotNull DiagoniaLogger logger,
+      @NotNull RemakeBukkitLogger logger,
       @NotNull GroupManager groupManager,
       @NotNull RankChallengeProgressionService rankChallengeProgressionService,
       @NotNull RankConfigService rankConfigService,

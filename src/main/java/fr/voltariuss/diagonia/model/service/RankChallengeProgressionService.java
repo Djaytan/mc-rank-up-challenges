@@ -17,7 +17,7 @@
 package fr.voltariuss.diagonia.model.service;
 
 import com.google.common.base.Preconditions;
-import fr.voltariuss.diagonia.DiagoniaLogger;
+import fr.voltariuss.diagonia.RemakeBukkitLogger;
 import fr.voltariuss.diagonia.model.GiveActionType;
 import fr.voltariuss.diagonia.model.JpaDaoException;
 import fr.voltariuss.diagonia.model.config.rank.Rank;
@@ -40,12 +40,12 @@ public class RankChallengeProgressionService {
 
   private static final String TRANSACTION_ROLLBACK_FAIL_MESSAGE = "Failed to rollback transaction";
 
-  private final DiagoniaLogger logger;
+  private final RemakeBukkitLogger logger;
   private final RankChallengeProgressionDao rankChallengeProgressionDao;
 
   @Inject
   public RankChallengeProgressionService(
-      @NotNull DiagoniaLogger logger,
+      @NotNull RemakeBukkitLogger logger,
       @NotNull RankChallengeProgressionDao rankChallengeProgressionDao) {
     this.logger = logger;
     this.rankChallengeProgressionDao = rankChallengeProgressionDao;

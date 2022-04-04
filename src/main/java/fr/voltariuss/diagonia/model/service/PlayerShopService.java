@@ -16,7 +16,7 @@
 
 package fr.voltariuss.diagonia.model.service;
 
-import fr.voltariuss.diagonia.DiagoniaLogger;
+import fr.voltariuss.diagonia.RemakeBukkitLogger;
 import fr.voltariuss.diagonia.model.JpaDaoException;
 import fr.voltariuss.diagonia.model.dao.PlayerShopDao;
 import fr.voltariuss.diagonia.model.entity.PlayerShop;
@@ -34,11 +34,11 @@ public class PlayerShopService {
 
   private static final String TRANSACTION_ROLLBACK_FAIL_MESSAGE = "Failed to rollback transaction";
 
-  private final DiagoniaLogger logger;
+  private final RemakeBukkitLogger logger;
   private final PlayerShopDao playerShopDao;
 
   @Inject
-  public PlayerShopService(@NotNull DiagoniaLogger logger, @NotNull PlayerShopDao playerShopDao) {
+  public PlayerShopService(@NotNull RemakeBukkitLogger logger, @NotNull PlayerShopDao playerShopDao) {
     this.logger = logger;
     this.playerShopDao = playerShopDao;
   }

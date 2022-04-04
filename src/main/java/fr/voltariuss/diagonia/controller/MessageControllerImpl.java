@@ -16,7 +16,7 @@
 
 package fr.voltariuss.diagonia.controller;
 
-import fr.voltariuss.diagonia.DiagoniaLogger;
+import fr.voltariuss.diagonia.RemakeBukkitLogger;
 import java.util.ResourceBundle;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -27,7 +27,6 @@ import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.Template;
 import net.kyori.adventure.text.minimessage.template.TemplateResolver;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
@@ -35,14 +34,14 @@ import org.jetbrains.annotations.NotNull;
 @Singleton
 public class MessageControllerImpl implements MessageController {
 
-  private final DiagoniaLogger logger;
+  private final RemakeBukkitLogger logger;
   private final MiniMessage miniMessage;
   private final ResourceBundle resourceBundle;
   private final Server server;
 
   @Inject
   public MessageControllerImpl(
-      @NotNull DiagoniaLogger logger,
+      @NotNull RemakeBukkitLogger logger,
       @NotNull MiniMessage miniMessage,
       @NotNull ResourceBundle resourceBundle,
       @NotNull Server server) {

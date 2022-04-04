@@ -16,7 +16,7 @@
 
 package fr.voltariuss.diagonia.controller;
 
-import fr.voltariuss.diagonia.DiagoniaLogger;
+import fr.voltariuss.diagonia.RemakeBukkitLogger;
 import java.util.ResourceBundle;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -26,11 +26,11 @@ import org.jetbrains.annotations.NotNull;
 @Singleton
 public class BukkitUtils {
 
-  private final DiagoniaLogger logger;
+  private final RemakeBukkitLogger logger;
   private final ResourceBundle resourceBundle;
 
   @Inject
-  public BukkitUtils(@NotNull DiagoniaLogger logger, @NotNull ResourceBundle resourceBundle) {
+  public BukkitUtils(@NotNull RemakeBukkitLogger logger, @NotNull ResourceBundle resourceBundle) {
     this.logger = logger;
     this.resourceBundle = resourceBundle;
   }

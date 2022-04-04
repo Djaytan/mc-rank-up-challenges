@@ -16,7 +16,7 @@
 
 package fr.voltariuss.diagonia.controller.rankup;
 
-import fr.voltariuss.diagonia.DiagoniaLogger;
+import fr.voltariuss.diagonia.RemakeBukkitLogger;
 import fr.voltariuss.diagonia.controller.MessageController;
 import fr.voltariuss.diagonia.model.GiveActionType;
 import fr.voltariuss.diagonia.model.config.rank.Rank;
@@ -44,7 +44,7 @@ import org.jetbrains.annotations.NotNull;
 public class RankUpChallengesControllerImpl implements RankUpChallengesController {
 
   private final CommonMessage commonMessage;
-  private final DiagoniaLogger logger;
+  private final RemakeBukkitLogger logger;
   private final MessageController messageController;
   private final RankChallengeProgressionService rankChallengeProgressionService;
   private final RankConfigService rankConfigService;
@@ -55,7 +55,7 @@ public class RankUpChallengesControllerImpl implements RankUpChallengesControlle
   @Inject
   public RankUpChallengesControllerImpl(
       @NotNull CommonMessage commonMessage,
-      @NotNull DiagoniaLogger logger,
+      @NotNull RemakeBukkitLogger logger,
       @NotNull MessageController messageController,
       @NotNull RankChallengeProgressionService rankChallengeProgressionService,
       @NotNull RankConfigService rankConfigService,

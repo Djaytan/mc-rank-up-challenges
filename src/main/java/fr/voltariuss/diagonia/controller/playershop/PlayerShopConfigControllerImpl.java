@@ -16,7 +16,7 @@
 
 package fr.voltariuss.diagonia.controller.playershop;
 
-import fr.voltariuss.diagonia.DiagoniaLogger;
+import fr.voltariuss.diagonia.RemakeBukkitLogger;
 import fr.voltariuss.diagonia.controller.MessageController;
 import fr.voltariuss.diagonia.model.LocationMapper;
 import fr.voltariuss.diagonia.model.dto.LocationDto;
@@ -33,7 +33,7 @@ import org.jetbrains.annotations.NotNull;
 @Singleton
 public class PlayerShopConfigControllerImpl implements PlayerShopConfigController {
 
-  private final DiagoniaLogger logger;
+  private final RemakeBukkitLogger logger;
   private final LocationMapper locationMapper;
   private final MessageController messageController;
   private final PlayerShopController playerShopController;
@@ -42,7 +42,7 @@ public class PlayerShopConfigControllerImpl implements PlayerShopConfigControlle
 
   @Inject
   public PlayerShopConfigControllerImpl(
-      @NotNull DiagoniaLogger logger,
+      @NotNull RemakeBukkitLogger logger,
       @NotNull LocationMapper locationMapper,
       @NotNull MessageController messageController,
       @NotNull PlayerShopController playerShopController,
