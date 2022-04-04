@@ -17,6 +17,7 @@
 package fr.voltariuss.diagonia.controller.rankup;
 
 import fr.voltariuss.diagonia.DiagoniaLogger;
+import fr.voltariuss.diagonia.controller.MessageController;
 import fr.voltariuss.diagonia.model.config.rank.Rank;
 import fr.voltariuss.diagonia.model.dto.RankUpProgression;
 import fr.voltariuss.diagonia.model.service.EconomyService;
@@ -24,6 +25,7 @@ import fr.voltariuss.diagonia.model.service.JobsService;
 import fr.voltariuss.diagonia.model.service.RankService;
 import fr.voltariuss.diagonia.view.gui.RankUpChallengesGui;
 import fr.voltariuss.diagonia.view.gui.RankUpListGui;
+import fr.voltariuss.diagonia.view.message.CommonMessage;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.inject.Singleton;
@@ -33,9 +35,11 @@ import org.jetbrains.annotations.NotNull;
 @Singleton
 public class RankUpControllerImpl implements RankUpController {
 
-  private final DiagoniaLogger logger;
+  private final CommonMessage commonMessage;
   private final EconomyService economyService;
   private final JobsService jobsService;
+  private final DiagoniaLogger logger;
+  private final MessageController messageController;
   private final RankService rankService;
 
   private final Provider<RankUpListGui> rankUpListGui;
@@ -43,15 +47,19 @@ public class RankUpControllerImpl implements RankUpController {
 
   @Inject
   public RankUpControllerImpl(
-      @NotNull DiagoniaLogger logger,
+      @NotNull CommonMessage commonMessage,
       @NotNull EconomyService economyService,
       @NotNull JobsService jobsService,
+      @NotNull DiagoniaLogger logger,
+      @NotNull MessageController messageController,
       @NotNull RankService rankService,
       @NotNull Provider<RankUpListGui> rankUpListGui,
       @NotNull Provider<RankUpChallengesGui> rankUpChallengesGui) {
-    this.logger = logger;
+    this.commonMessage = commonMessage;
     this.economyService = economyService;
     this.jobsService = jobsService;
+    this.logger = logger;
+    this.messageController = messageController;
     this.rankService = rankService;
     this.rankUpListGui = rankUpListGui;
     this.rankUpChallengesGui = rankUpChallengesGui;
@@ -67,6 +75,12 @@ public class RankUpControllerImpl implements RankUpController {
   public void openRankUpChallengesGui(@NotNull Player whoOpen, @NotNull Rank rank) {
     logger.debug(
         "Open RankUpChallenges GUI of rank '{}' for player '{}'", rank.getId(), whoOpen.getName());
+
+    if (rank.getRankUpChallenges() == null) {
+      logger.error("No challenge is associated with the rank {}", rank.getId());
+      messageController.sendErrorMessage(whoOpen, commonMessage.unexpectedError());
+      return;
+    }
 
     int totalJobsLevels = jobsService.getTotalLevels(whoOpen);
     double currentBalance = economyService.getBalance(whoOpen);

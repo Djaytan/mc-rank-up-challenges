@@ -17,7 +17,8 @@
 package fr.voltariuss.diagonia.controller.playershop;
 
 import fr.voltariuss.diagonia.DiagoniaLogger;
-import fr.voltariuss.diagonia.controller.ControllerHelper;
+import fr.voltariuss.diagonia.controller.BukkitUtils;
+import fr.voltariuss.diagonia.controller.MessageController;
 import fr.voltariuss.diagonia.model.LocationMapper;
 import fr.voltariuss.diagonia.model.config.PluginConfig;
 import fr.voltariuss.diagonia.model.dto.response.EconomyResponse;
@@ -38,10 +39,11 @@ import org.jetbrains.annotations.NotNull;
 @Singleton
 public class PlayerShopListControllerImpl implements PlayerShopListController {
 
-  private final ControllerHelper controllerHelper;
+  private final BukkitUtils bukkitUtils;
   private final EconomyService economyService;
   private final LocationMapper locationMapper;
   private final DiagoniaLogger logger;
+  private final MessageController messageController;
   private final PlayerShopController playerShopController;
   private final PlayerShopMessage playerShopMessage;
   private final PlayerShopService playerShopService;
@@ -50,19 +52,21 @@ public class PlayerShopListControllerImpl implements PlayerShopListController {
 
   @Inject
   public PlayerShopListControllerImpl(
-      @NotNull ControllerHelper controllerHelper,
+      @NotNull BukkitUtils bukkitUtils,
       @NotNull EconomyService economyService,
       @NotNull LocationMapper locationMapper,
       @NotNull DiagoniaLogger logger,
+      @NotNull MessageController messageController,
       @NotNull PlayerShopController playerShopController,
       @NotNull PlayerShopMessage playerShopMessage,
       @NotNull PlayerShopService playerShopService,
       @NotNull PluginConfig pluginConfig,
       @NotNull Server server) {
-    this.controllerHelper = controllerHelper;
+    this.bukkitUtils = bukkitUtils;
     this.economyService = economyService;
-    this.logger = logger;
     this.locationMapper = locationMapper;
+    this.logger = logger;
+    this.messageController = messageController;
     this.playerShopController = playerShopController;
     this.playerShopMessage = playerShopMessage;
     this.playerShopService = playerShopService;
@@ -88,15 +92,15 @@ public class PlayerShopListControllerImpl implements PlayerShopListController {
               + " teleport point defined: playerToTpUuid={}, playerShopId={}",
           playerToTp.getUniqueId(),
           playerShopDestination.getId());
-      controllerHelper.sendSystemMessage(playerToTp, playerShopMessage.noTeleportPointDefined());
+      messageController.sendSystemMessage(playerToTp, playerShopMessage.noTeleportPointDefined());
       return;
     }
 
     playerToTp.teleport(tpLocation, PlayerTeleportEvent.TeleportCause.PLUGIN);
 
     OfflinePlayer psOwner = server.getOfflinePlayer(playerShopDestination.getOwnerUuid());
-    String psOwnerName = controllerHelper.getOfflinePlayerName(psOwner);
-    playerToTp.sendMessage(playerShopMessage.successTeleport(psOwnerName));
+    String psOwnerName = bukkitUtils.getOfflinePlayerName(psOwner);
+    messageController.sendSystemMessage(playerToTp, playerShopMessage.successTeleport(psOwnerName));
 
     logger.debug(
         "Teleportation of a player to a playershop: playerToTpUuid={}, playerShopId={}",
@@ -112,7 +116,7 @@ public class PlayerShopListControllerImpl implements PlayerShopListController {
     double playerShopPrice = pluginConfig.getPlayerShopConfig().getBuyCost();
 
     if (!economyService.isAffordable(player, playerShopPrice)) {
-      controllerHelper.sendSystemMessage(player, playerShopMessage.insufficientFunds());
+      messageController.sendSystemMessage(player, playerShopMessage.insufficientFunds());
       logger.debug(
           "The player can't afford a playershop: playerName={}, playerShopPrice={}",
           player.getName(),
@@ -124,7 +128,7 @@ public class PlayerShopListControllerImpl implements PlayerShopListController {
       EconomyResponse economyResponse = economyService.withdraw(player, playerShopPrice);
       PlayerShop ps = new PlayerShop(player.getUniqueId());
       playerShopService.persist(ps);
-      controllerHelper.sendSystemMessage(player, playerShopMessage.buySuccess(economyResponse));
+      messageController.sendSystemMessage(player, playerShopMessage.buySuccess(economyResponse));
       playerShopController.openPlayerShopListGui(player);
       logger.info(
           "Purchase of a playershop for the player {} ({}) for the price of {}. New solde: {}",
@@ -139,7 +143,7 @@ public class PlayerShopListControllerImpl implements PlayerShopListController {
           playerShopPrice,
           player.getName(),
           e.getMessage());
-      controllerHelper.sendSystemMessage(player, playerShopMessage.transactionFailed());
+      messageController.sendSystemMessage(player, playerShopMessage.transactionFailed());
     }
   }
 }

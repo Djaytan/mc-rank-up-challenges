@@ -20,6 +20,8 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import fr.voltariuss.diagonia.CriticalErrorHandler;
+import fr.voltariuss.diagonia.controller.MessageController;
+import fr.voltariuss.diagonia.controller.MessageControllerImpl;
 import fr.voltariuss.diagonia.controller.playershop.PlayerShopConfigController;
 import fr.voltariuss.diagonia.controller.playershop.PlayerShopConfigControllerImpl;
 import fr.voltariuss.diagonia.controller.playershop.PlayerShopController;
@@ -85,6 +87,7 @@ public class GuiceGeneralModule extends AbstractModule {
   public void configure() {
     bind(EconomyService.class).to(EconomyVaultService.class);
     bind(JobsService.class).to(JobsRebornService.class);
+    bind(MessageController.class).to(MessageControllerImpl.class);
     bind(PlayerShopController.class).to(PlayerShopControllerImpl.class);
     bind(PlayerShopConfigController.class).to(PlayerShopConfigControllerImpl.class);
     bind(PlayerShopDao.class).to(PlayerShopDaoImpl.class);

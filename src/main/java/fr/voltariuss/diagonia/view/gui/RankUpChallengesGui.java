@@ -84,12 +84,6 @@ public class RankUpChallengesGui {
 
   public void open(
       @NotNull Player whoOpen, @NotNull Rank rank, @NotNull RankUpProgression rankUpProgression) {
-    if (rank.getRankUpChallenges() == null) {
-      logger.error("No challenge is associated with the rank {}", rank.getId());
-      whoOpen.sendMessage(commonMessage.unexpectedError());
-      return;
-    }
-
     PaginatedGui gui =
         Gui.paginated()
             .pageSize(PAGE_SIZE)

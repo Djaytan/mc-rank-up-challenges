@@ -17,7 +17,7 @@
 package fr.voltariuss.diagonia.controller.rankup;
 
 import fr.voltariuss.diagonia.DiagoniaLogger;
-import fr.voltariuss.diagonia.controller.ControllerHelper;
+import fr.voltariuss.diagonia.controller.MessageController;
 import fr.voltariuss.diagonia.model.GiveActionType;
 import fr.voltariuss.diagonia.model.config.rank.Rank;
 import fr.voltariuss.diagonia.model.config.rank.RankChallenge;
@@ -44,8 +44,8 @@ import org.jetbrains.annotations.NotNull;
 public class RankUpChallengesControllerImpl implements RankUpChallengesController {
 
   private final CommonMessage commonMessage;
-  private final ControllerHelper controllerHelper;
   private final DiagoniaLogger logger;
+  private final MessageController messageController;
   private final RankChallengeProgressionService rankChallengeProgressionService;
   private final RankConfigService rankConfigService;
   private final RankService rankService;
@@ -55,16 +55,16 @@ public class RankUpChallengesControllerImpl implements RankUpChallengesControlle
   @Inject
   public RankUpChallengesControllerImpl(
       @NotNull CommonMessage commonMessage,
-      @NotNull ControllerHelper controllerHelper,
       @NotNull DiagoniaLogger logger,
+      @NotNull MessageController messageController,
       @NotNull RankChallengeProgressionService rankChallengeProgressionService,
       @NotNull RankConfigService rankConfigService,
       @NotNull RankService rankService,
       @NotNull RankUpController rankUpController,
       @NotNull RankUpMessage rankUpMessage) {
     this.commonMessage = commonMessage;
-    this.controllerHelper = controllerHelper;
     this.logger = logger;
+    this.messageController = messageController;
     this.rankChallengeProgressionService = rankChallengeProgressionService;
     this.rankConfigService = rankConfigService;
     this.rankService = rankService;
@@ -79,6 +79,17 @@ public class RankUpChallengesControllerImpl implements RankUpChallengesControlle
       @NotNull RankChallenge rankChallenge,
       @NotNull GiveActionType giveActionType,
       int nbItemsInInventory) {
+    if (nbItemsInInventory == 0) {
+      messageController.sendWarningMessage(targetPlayer, rankUpMessage.noItemInInventory());
+      return;
+    }
+
+    if (rankChallengeProgressionService.isChallengeCompleted(
+        targetPlayer.getUniqueId(), rank.getId(), rankChallenge)) {
+      messageController.sendWarningMessage(targetPlayer, rankUpMessage.challengeAlreadyCompleted());
+      return;
+    }
+
     // TODO: again... Transaction!
     int nbItemsGiven =
         rankChallengeProgressionService.giveItemChallenge(
@@ -94,17 +105,19 @@ public class RankUpChallengesControllerImpl implements RankUpChallengesControlle
           "Some items failed to be removed from the {}'s inventory: {}",
           targetPlayer.getName(),
           notRemovedItems);
-      targetPlayer.sendMessage(commonMessage.unexpectedError());
+      messageController.sendErrorMessage(targetPlayer, commonMessage.unexpectedError());
       return;
     }
 
     String challengeName = rankChallenge.getChallengeItemMaterial().name();
 
-    targetPlayer.sendMessage(rankUpMessage.successAmountGiven(nbItemsGiven, challengeName));
+    messageController.sendSystemMessage(
+        targetPlayer, rankUpMessage.successAmountGiven(nbItemsGiven, challengeName));
 
     if (rankChallengeProgressionService.isChallengeCompleted(
         targetPlayer.getUniqueId(), rank.getId(), rankChallenge)) {
-      rankUpMessage.challengeCompleted(challengeName);
+      messageController.sendSystemMessage(
+          targetPlayer, rankUpMessage.challengeCompleted(challengeName));
     }
 
     rankUpController.openRankUpChallengesGui(targetPlayer, rank);
@@ -120,26 +133,26 @@ public class RankUpChallengesControllerImpl implements RankUpChallengesControlle
   public void onRankUpRequested(
       @NotNull Player player, @NotNull RankUpProgression rankUpProgression) {
 
-    if (rankUpProgression.canRankUp()) {
-      PromotionResult promotionResult = rankService.promote(player);
-
-      if (!promotionResult.wasSuccessful()) {
-        controllerHelper.sendSystemMessage(player, rankUpMessage.rankUpFailure());
-        logger.error(
-            "Player promotion failed: playerName={}, promotionResult={}",
-            player.getName(),
-            promotionResult);
-        return;
-      }
-
-      Rank newRank =
-          rankConfigService.findById(promotionResult.getGroupTo().orElseThrow()).orElseThrow();
-
-      player.closeInventory(Reason.PLUGIN);
-      controllerHelper.broadcastMessage(rankUpMessage.rankUpSuccess(player, newRank));
+    if (!rankUpProgression.canRankUp()) {
+      messageController.sendWarningMessage(player, rankUpMessage.prerequisitesNotRespected());
       return;
     }
 
-    controllerHelper.sendSystemMessage(player, rankUpMessage.prerequisitesNotRespected());
+    PromotionResult promotionResult = rankService.promote(player);
+
+    if (!promotionResult.wasSuccessful()) {
+      messageController.sendErrorMessage(player, rankUpMessage.rankUpFailure());
+      logger.error(
+          "Player promotion failed: playerName={}, promotionResult={}",
+          player.getName(),
+          promotionResult);
+      return;
+    }
+
+    Rank newRank =
+        rankConfigService.findById(promotionResult.getGroupTo().orElseThrow()).orElseThrow();
+
+    player.closeInventory(Reason.PLUGIN);
+    messageController.broadcastMessage(rankUpMessage.rankUpSuccess(player, newRank));
   }
 }

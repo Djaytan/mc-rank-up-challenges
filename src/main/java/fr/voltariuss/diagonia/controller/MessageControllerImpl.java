@@ -32,9 +32,8 @@ import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
-// TODO: rename it MessageController + split interface and implementation
 @Singleton
-public class ControllerHelper {
+public class MessageControllerImpl implements MessageController {
 
   private final DiagoniaLogger logger;
   private final MiniMessage miniMessage;
@@ -42,7 +41,7 @@ public class ControllerHelper {
   private final Server server;
 
   @Inject
-  public ControllerHelper(
+  public MessageControllerImpl(
       @NotNull DiagoniaLogger logger,
       @NotNull MiniMessage miniMessage,
       @NotNull ResourceBundle resourceBundle,
@@ -53,32 +52,24 @@ public class ControllerHelper {
     this.server = server;
   }
 
+  @Override
   public void sendSystemMessage(@NotNull CommandSender commandSender, @NotNull Component message) {
     sendMessage(commandSender, Prefix.DEFAULT, message);
   }
 
+  @Override
   public void sendWarningMessage(@NotNull CommandSender commandSender, @NotNull Component message) {
     sendMessage(commandSender, Prefix.WARNING, message);
   }
 
+  @Override
   public void sendErrorMessage(@NotNull CommandSender commandSender, @NotNull Component message) {
     sendMessage(commandSender, Prefix.ERROR, message);
   }
 
+  @Override
   public void broadcastMessage(@NotNull Component component) {
     sendMessage(Audience.audience(server.getOnlinePlayers()), Prefix.BROADCAST, component);
-  }
-
-  public @NotNull String getOfflinePlayerName(@NotNull OfflinePlayer offlinePlayer) {
-    // TODO: move to PlayerUtils class
-    String offlinePlayerName = offlinePlayer.getName();
-
-    if (offlinePlayerName == null) {
-      logger.warn("The UUID {} isn't associated to any player name.", offlinePlayer.getUniqueId());
-      offlinePlayerName = resourceBundle.getString("diagonia.common.default_player_name");
-    }
-
-    return offlinePlayerName;
   }
 
   private void sendMessage(

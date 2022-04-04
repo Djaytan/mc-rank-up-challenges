@@ -100,25 +100,16 @@ public class RankChallengeItem {
       ItemStack clickedItem = event.getCurrentItem();
       GiveActionType giveActionType = giveActionTypeConverter.convert(event.getClick());
 
-      if (clickedItem == null) {
-        throw new NullPointerException(
-            "The current item involved in the InventoryClickEvent can't be null.");
-      }
       if (giveActionType == null) {
         return;
       }
 
-      if (isChallengeCompleted) {
-        whoClicked.sendMessage(rankUpMessage.challengeAlreadyCompleted());
-        return;
+      if (clickedItem == null) {
+        throw new NullPointerException(
+            "The current item involved in the InventoryClickEvent can't be null.");
       }
 
       int nbItemsInInventory = countItem(whoClicked.getInventory(), clickedItem.getType());
-
-      if (nbItemsInInventory == 0) {
-        whoClicked.sendMessage(rankUpMessage.noItemInInventory());
-        return;
-      }
 
       rankUpChallengesController.giveItemChallenge(
           whoClicked, rank, rankChallenge, giveActionType, nbItemsInInventory);

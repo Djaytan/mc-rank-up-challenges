@@ -17,7 +17,7 @@
 package fr.voltariuss.diagonia.controller.playershop;
 
 import fr.voltariuss.diagonia.DiagoniaLogger;
-import fr.voltariuss.diagonia.controller.ControllerHelper;
+import fr.voltariuss.diagonia.controller.MessageController;
 import fr.voltariuss.diagonia.model.LocationMapper;
 import fr.voltariuss.diagonia.model.dto.LocationDto;
 import fr.voltariuss.diagonia.model.entity.PlayerShop;
@@ -33,24 +33,24 @@ import org.jetbrains.annotations.NotNull;
 @Singleton
 public class PlayerShopConfigControllerImpl implements PlayerShopConfigController {
 
-  private final ControllerHelper controllerHelper;
   private final DiagoniaLogger logger;
   private final LocationMapper locationMapper;
+  private final MessageController messageController;
   private final PlayerShopController playerShopController;
   private final PlayerShopMessage playerShopMessage;
   private final PlayerShopService playerShopService;
 
   @Inject
   public PlayerShopConfigControllerImpl(
-      @NotNull ControllerHelper controllerHelper,
       @NotNull DiagoniaLogger logger,
       @NotNull LocationMapper locationMapper,
+      @NotNull MessageController messageController,
       @NotNull PlayerShopController playerShopController,
       @NotNull PlayerShopMessage playerShopMessage,
       @NotNull PlayerShopService playerShopService) {
-    this.controllerHelper = controllerHelper;
     this.logger = logger;
     this.locationMapper = locationMapper;
+    this.messageController = messageController;
     this.playerShopController = playerShopController;
     this.playerShopMessage = playerShopMessage;
     this.playerShopService = playerShopService;
@@ -81,7 +81,7 @@ public class PlayerShopConfigControllerImpl implements PlayerShopConfigControlle
         playerShop.getId(),
         playerShop.getTpLocationDto());
 
-    controllerHelper.sendSystemMessage(
+    messageController.sendSystemMessage(
         sender, playerShopMessage.teleportPointDefined(newLocationDto));
   }
 
@@ -103,7 +103,7 @@ public class PlayerShopConfigControllerImpl implements PlayerShopConfigControlle
     if (playerShop.getTpLocationDto() == null) {
       logger.debug("Failed to toggle playershop: tp location must be defined.");
 
-      controllerHelper.sendSystemMessage(
+      messageController.sendSystemMessage(
           sender, playerShopMessage.shopActivationRequireTeleportPointFirst());
 
       return;
@@ -118,7 +118,8 @@ public class PlayerShopConfigControllerImpl implements PlayerShopConfigControlle
         playerShop.getId(),
         playerShop.isActive());
 
-    controllerHelper.sendSystemMessage(sender, playerShopMessage.toggleShop(playerShop.isActive()));
+    messageController.sendSystemMessage(
+        sender, playerShopMessage.toggleShop(playerShop.isActive()));
     playerShopController.openPlayerShopConfigGui(sender);
   }
 }
