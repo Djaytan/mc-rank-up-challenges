@@ -69,6 +69,8 @@ public class PlayerShopConfigControllerImpl implements PlayerShopConfigControlle
         playerShop.getTpLocationDto(),
         newLocation);
 
+    // TODO: only possible in world "world" (configurable)
+
     LocationDto newLocationDto = locationMapper.toDto(newLocation);
 
     playerShop.setTpLocationDto(newLocationDto);
