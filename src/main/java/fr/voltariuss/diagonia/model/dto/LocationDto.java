@@ -28,6 +28,6 @@ public class LocationDto {
   @NonNull private Double x;
   @NonNull private Double y;
   @NonNull private Double z;
-  @NonNull private Float pitch;
   @NonNull private Float yaw;
+  @NonNull private Float pitch;
 }

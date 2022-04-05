@@ -46,8 +46,8 @@ public class LocationMapper {
               .x(location.getX())
               .y(location.getY())
               .z(location.getZ())
-              .pitch(location.getPitch())
               .yaw(location.getYaw())
+              .pitch(location.getPitch())
               .build();
     }
     return locationDto;
@@ -64,8 +64,8 @@ public class LocationMapper {
               locationDto.getX(),
               locationDto.getY(),
               locationDto.getZ(),
-              locationDto.getPitch(),
-              locationDto.getYaw());
+              locationDto.getYaw(),
+              locationDto.getPitch());
     }
     return location;
   }
