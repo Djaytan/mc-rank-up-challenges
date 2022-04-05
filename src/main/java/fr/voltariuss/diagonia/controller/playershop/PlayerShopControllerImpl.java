@@ -21,6 +21,7 @@ import fr.voltariuss.diagonia.model.entity.PlayerShop;
 import fr.voltariuss.diagonia.model.service.PlayerShopService;
 import fr.voltariuss.diagonia.view.gui.PlayerShopConfigGui;
 import fr.voltariuss.diagonia.view.gui.PlayerShopListGui;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import javax.inject.Inject;
@@ -55,6 +56,7 @@ public class PlayerShopControllerImpl implements PlayerShopController {
     logger.debug("Open PlayerShopList GUI for a player: playerName={}", whoOpen.getName());
     Optional<PlayerShop> playerShopOwned = playerShopService.findByUuid(whoOpen.getUniqueId());
     List<PlayerShop> playerShopList = playerShopService.findAll();
+    Collections.shuffle(playerShopList);
     playerShopListGui.get().open(whoOpen, playerShopList, playerShopOwned.isPresent());
   }
 
