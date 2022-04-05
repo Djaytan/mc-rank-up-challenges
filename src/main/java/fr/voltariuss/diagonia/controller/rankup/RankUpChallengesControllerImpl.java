@@ -91,20 +91,23 @@ public class RankUpChallengesControllerImpl implements RankUpChallengesControlle
     }
 
     // TODO: again... Transaction!
-    int nbItemsGiven =
+    int nbItemsEffectivelyGiven =
         rankChallengeProgressionService.giveItemChallenge(
             targetPlayer.getUniqueId(), rank, rankChallenge, giveActionType, nbItemsInInventory);
 
-    Map<Integer, ItemStack> notRemovedItems =
-        targetPlayer
-            .getInventory()
-            .removeItem(new ItemStack(rankChallenge.getChallengeItemMaterial(), nbItemsGiven));
+    int nbItemsNotRemoved =
+        bukkitUtils.removeItemsInInventory(
+            targetPlayer.getInventory(),
+            rankChallenge.getChallengeItemMaterial(),
+            nbItemsEffectivelyGiven);
 
-    if (!notRemovedItems.isEmpty()) {
+    if (nbItemsNotRemoved > 0) {
       logger.error(
-          "Some items failed to be removed from the {}'s inventory: {}",
+          "Something went wrong during the removing of items in the targeted player's inventory:"
+              + " playerName={}, challengeMaterialName={}, nbItemsNotRemoved={}",
           targetPlayer.getName(),
-          notRemovedItems);
+          rankChallenge.getChallengeItemMaterial(),
+          nbItemsNotRemoved);
       messageController.sendErrorMessage(targetPlayer, commonMessage.unexpectedError());
       return;
     }

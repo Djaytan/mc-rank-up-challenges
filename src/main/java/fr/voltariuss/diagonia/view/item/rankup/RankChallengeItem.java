@@ -108,6 +108,7 @@ public class RankChallengeItem {
         throw new NullPointerException(
             "The current item involved in the InventoryClickEvent can't be null.");
       }
+      // TODO: move controller logic... in controller!
 
       int nbItemsInInventory = countItem(whoClicked.getInventory(), clickedItem.getType());
 
