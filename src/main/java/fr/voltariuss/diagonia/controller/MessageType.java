@@ -16,9 +16,12 @@
 
 package fr.voltariuss.diagonia.controller;
 
-public enum Prefix {
-  DEFAULT,
-  BROADCAST,
+public enum MessageType {
+  INFO,
+  SUCCESS,
+  FAILURE,
   WARNING,
-  ERROR
+  ERROR,
+  BROADCAST,
+  DEBUG
 }

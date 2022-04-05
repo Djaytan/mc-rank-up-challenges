@@ -17,6 +17,7 @@
 package fr.voltariuss.diagonia.controller.rankup;
 
 import fr.voltariuss.diagonia.RemakeBukkitLogger;
+import fr.voltariuss.diagonia.controller.BukkitUtils;
 import fr.voltariuss.diagonia.controller.MessageController;
 import fr.voltariuss.diagonia.model.GiveActionType;
 import fr.voltariuss.diagonia.model.config.rank.Rank;
@@ -28,7 +29,6 @@ import fr.voltariuss.diagonia.model.service.RankConfigService;
 import fr.voltariuss.diagonia.model.service.RankService;
 import fr.voltariuss.diagonia.view.message.CommonMessage;
 import fr.voltariuss.diagonia.view.message.RankUpMessage;
-import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import javax.inject.Inject;
@@ -37,12 +37,12 @@ import net.luckperms.api.track.PromotionResult;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryCloseEvent.Reason;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 @Singleton
 public class RankUpChallengesControllerImpl implements RankUpChallengesController {
 
+  private final BukkitUtils bukkitUtils;
   private final CommonMessage commonMessage;
   private final RemakeBukkitLogger logger;
   private final MessageController messageController;
@@ -54,6 +54,7 @@ public class RankUpChallengesControllerImpl implements RankUpChallengesControlle
 
   @Inject
   public RankUpChallengesControllerImpl(
+      @NotNull BukkitUtils bukkitUtils,
       @NotNull CommonMessage commonMessage,
       @NotNull RemakeBukkitLogger logger,
       @NotNull MessageController messageController,
@@ -62,6 +63,7 @@ public class RankUpChallengesControllerImpl implements RankUpChallengesControlle
       @NotNull RankService rankService,
       @NotNull RankUpController rankUpController,
       @NotNull RankUpMessage rankUpMessage) {
+    this.bukkitUtils = bukkitUtils;
     this.commonMessage = commonMessage;
     this.logger = logger;
     this.messageController = messageController;
@@ -81,12 +83,20 @@ public class RankUpChallengesControllerImpl implements RankUpChallengesControlle
       int nbItemsInInventory) {
     if (nbItemsInInventory == 0) {
       messageController.sendWarningMessage(targetPlayer, rankUpMessage.noItemInInventory());
+      logger.warn(
+          "Attempt to give items whereas no item in inventory is detected for a player: this isn't"
+              + " supposed to happen. playerName={}",
+          targetPlayer.getName());
       return;
     }
 
     if (rankChallengeProgressionService.isChallengeCompleted(
         targetPlayer.getUniqueId(), rank.getId(), rankChallenge)) {
       messageController.sendWarningMessage(targetPlayer, rankUpMessage.challengeAlreadyCompleted());
+      logger.warn(
+          "Attempt to give items detected when challenge already completed: this isn't supposed to"
+              + " happen. playerName={}",
+          targetPlayer.getName());
       return;
     }
 
@@ -114,12 +124,12 @@ public class RankUpChallengesControllerImpl implements RankUpChallengesControlle
 
     String challengeName = rankChallenge.getChallengeItemMaterial().name();
 
-    messageController.sendSystemMessage(
-        targetPlayer, rankUpMessage.successAmountGiven(nbItemsGiven, challengeName));
+    messageController.sendInfoMessage(
+        targetPlayer, rankUpMessage.successAmountGiven(nbItemsEffectivelyGiven, challengeName));
 
     if (rankChallengeProgressionService.isChallengeCompleted(
         targetPlayer.getUniqueId(), rank.getId(), rankChallenge)) {
-      messageController.sendSystemMessage(
+      messageController.sendSuccessMessage(
           targetPlayer, rankUpMessage.challengeCompleted(challengeName));
     }
 
@@ -137,7 +147,7 @@ public class RankUpChallengesControllerImpl implements RankUpChallengesControlle
       @NotNull Player player, @NotNull RankUpProgression rankUpProgression) {
 
     if (!rankUpProgression.canRankUp()) {
-      messageController.sendWarningMessage(player, rankUpMessage.prerequisitesNotRespected());
+      messageController.sendFailureMessage(player, rankUpMessage.prerequisitesNotRespected());
       return;
     }
 

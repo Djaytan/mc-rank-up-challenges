@@ -92,7 +92,7 @@ public class PlayerShopListControllerImpl implements PlayerShopListController {
               + " teleport point defined: playerToTpUuid={}, playerShopId={}",
           playerToTp.getUniqueId(),
           playerShopDestination.getId());
-      messageController.sendSystemMessage(playerToTp, playerShopMessage.noTeleportPointDefined());
+      messageController.sendFailureMessage(playerToTp, playerShopMessage.noTeleportPointDefined());
       return;
     }
 
@@ -100,7 +100,7 @@ public class PlayerShopListControllerImpl implements PlayerShopListController {
 
     OfflinePlayer psOwner = server.getOfflinePlayer(playerShopDestination.getOwnerUuid());
     String psOwnerName = bukkitUtils.getOfflinePlayerName(psOwner);
-    messageController.sendSystemMessage(playerToTp, playerShopMessage.successTeleport(psOwnerName));
+    messageController.sendInfoMessage(playerToTp, playerShopMessage.successTeleport(psOwnerName));
 
     logger.debug(
         "Teleportation of a player to a playershop: playerToTpUuid={}, playerShopId={}",
@@ -116,7 +116,7 @@ public class PlayerShopListControllerImpl implements PlayerShopListController {
     double playerShopPrice = pluginConfig.getPlayerShopConfig().getBuyCost();
 
     if (!economyService.isAffordable(player, playerShopPrice)) {
-      messageController.sendSystemMessage(player, playerShopMessage.insufficientFunds());
+      messageController.sendFailureMessage(player, playerShopMessage.insufficientFunds());
       logger.debug(
           "The player can't afford a playershop: playerName={}, playerShopPrice={}",
           player.getName(),
@@ -128,7 +128,7 @@ public class PlayerShopListControllerImpl implements PlayerShopListController {
       EconomyResponse economyResponse = economyService.withdraw(player, playerShopPrice);
       PlayerShop ps = new PlayerShop(player.getUniqueId());
       playerShopService.persist(ps);
-      messageController.sendSystemMessage(player, playerShopMessage.buySuccess(economyResponse));
+      messageController.sendSuccessMessage(player, playerShopMessage.buySuccess(economyResponse));
       playerShopController.openPlayerShopListGui(player);
       logger.info(
           "Purchase of a playershop for the player {} ({}) for the price of {}. New solde: {}",
@@ -143,7 +143,7 @@ public class PlayerShopListControllerImpl implements PlayerShopListController {
           playerShopPrice,
           player.getName(),
           e.getMessage());
-      messageController.sendSystemMessage(player, playerShopMessage.transactionFailed());
+      messageController.sendErrorMessage(player, playerShopMessage.transactionFailed());
     }
   }
 }

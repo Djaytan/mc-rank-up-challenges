@@ -22,7 +22,11 @@ import org.jetbrains.annotations.NotNull;
 
 public interface MessageController {
 
-  void sendSystemMessage(@NotNull CommandSender commandSender, @NotNull Component message);
+  void sendInfoMessage(@NotNull CommandSender commandSender, @NotNull Component message);
+
+  void sendSuccessMessage(@NotNull CommandSender commandSender, @NotNull Component message);
+
+  void sendFailureMessage(@NotNull CommandSender commandSender, @NotNull Component message);
 
   void sendWarningMessage(@NotNull CommandSender commandSender, @NotNull Component message);
 

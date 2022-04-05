@@ -16,12 +16,10 @@
 
 package fr.voltariuss.diagonia.controller;
 
-import fr.voltariuss.diagonia.RemakeBukkitLogger;
 import java.util.ResourceBundle;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.kyori.adventure.audience.Audience;
-import net.kyori.adventure.audience.MessageType;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -34,72 +32,74 @@ import org.jetbrains.annotations.NotNull;
 @Singleton
 public class MessageControllerImpl implements MessageController {
 
-  private final RemakeBukkitLogger logger;
   private final MiniMessage miniMessage;
   private final ResourceBundle resourceBundle;
   private final Server server;
 
   @Inject
   public MessageControllerImpl(
-      @NotNull RemakeBukkitLogger logger,
       @NotNull MiniMessage miniMessage,
       @NotNull ResourceBundle resourceBundle,
       @NotNull Server server) {
-    this.logger = logger;
     this.miniMessage = miniMessage;
     this.resourceBundle = resourceBundle;
     this.server = server;
   }
 
   @Override
-  public void sendSystemMessage(@NotNull CommandSender commandSender, @NotNull Component message) {
-    sendMessage(commandSender, Prefix.DEFAULT, message);
+  public void sendInfoMessage(@NotNull CommandSender commandSender, @NotNull Component message) {
+    sendMessage(commandSender, MessageType.INFO, message);
+  }
+
+  @Override
+  public void sendSuccessMessage(@NotNull CommandSender commandSender, @NotNull Component message) {
+    sendMessage(commandSender, MessageType.SUCCESS, message);
+  }
+
+  @Override
+  public void sendFailureMessage(@NotNull CommandSender commandSender, @NotNull Component message) {
+    sendMessage(commandSender, MessageType.FAILURE, message);
   }
 
   @Override
   public void sendWarningMessage(@NotNull CommandSender commandSender, @NotNull Component message) {
-    sendMessage(commandSender, Prefix.WARNING, message);
+    sendMessage(commandSender, MessageType.WARNING, message);
   }
 
   @Override
   public void sendErrorMessage(@NotNull CommandSender commandSender, @NotNull Component message) {
-    sendMessage(commandSender, Prefix.ERROR, message);
+    sendMessage(commandSender, MessageType.ERROR, message);
   }
 
   @Override
   public void broadcastMessage(@NotNull Component component) {
-    sendMessage(Audience.audience(server.getOnlinePlayers()), Prefix.BROADCAST, component);
+    sendMessage(Audience.audience(server.getOnlinePlayers()), MessageType.BROADCAST, component);
   }
 
   private void sendMessage(
-      @NotNull Audience audience, @NotNull Prefix prefix, @NotNull Component message) {
-    Component prefixCpnt = getPrefix(prefix);
-    Component messageFormat = getMessageFormat(prefixCpnt, message);
-    Audience.audience(audience).sendMessage(messageFormat, MessageType.SYSTEM);
+      @NotNull Audience audience, @NotNull MessageType messageType, @NotNull Component message) {
+    Component messageFormat = getMessageFormat(messageType, message);
+    Audience.audience(audience)
+        .sendMessage(messageFormat, net.kyori.adventure.audience.MessageType.SYSTEM);
   }
 
   private @NotNull Component getMessageFormat(
-      @NotNull Component prefixCpnt, @NotNull Component message) {
-    return miniMessage
-        .deserialize(
-            resourceBundle.getString("diagonia.common.message.format"),
-            TemplateResolver.templates(
-                Template.template("diag_message_prefix", prefixCpnt),
-                Template.template("diag_message_content", message)))
-        .decoration(TextDecoration.ITALIC, false);
-  }
-
-  private @NotNull Component getPrefix(@NotNull Prefix prefix) {
-    String prefixStrKey =
-        switch (prefix) {
-          case BROADCAST -> "diagonia.common.prefix.broadcast";
-          case WARNING -> "diagonia.common.prefix.warning";
-          case ERROR -> "diagonia.common.prefix.error";
-          default -> "diagonia.common.prefix.default";
+      @NotNull MessageType messageType, @NotNull Component message) {
+    String messageFormatKey =
+        switch (messageType) {
+          case INFO -> "diagonia.common.message.format.info";
+          case SUCCESS -> "diagonia.common.message.format.success";
+          case FAILURE -> "diagonia.common.message.format.failure";
+          case WARNING -> "diagonia.common.message.format.warning";
+          case ERROR -> "diagonia.common.message.format.error";
+          case BROADCAST -> "diagonia.common.message.format.broadcast";
+          case DEBUG -> "diagonia.common.message.format.debug";
         };
 
     return miniMessage
-        .deserialize(resourceBundle.getString(prefixStrKey))
+        .deserialize(
+            resourceBundle.getString(messageFormatKey),
+            TemplateResolver.templates(Template.template("diag_message_content", message)))
         .decoration(TextDecoration.ITALIC, false);
   }
 }

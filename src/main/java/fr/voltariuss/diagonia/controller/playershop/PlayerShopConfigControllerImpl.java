@@ -81,7 +81,7 @@ public class PlayerShopConfigControllerImpl implements PlayerShopConfigControlle
         playerShop.getId(),
         playerShop.getTpLocationDto());
 
-    messageController.sendSystemMessage(
+    messageController.sendInfoMessage(
         sender, playerShopMessage.teleportPointDefined(newLocationDto));
   }
 
@@ -103,7 +103,7 @@ public class PlayerShopConfigControllerImpl implements PlayerShopConfigControlle
     if (playerShop.getTpLocationDto() == null) {
       logger.debug("Failed to toggle playershop: tp location must be defined.");
 
-      messageController.sendSystemMessage(
+      messageController.sendFailureMessage(
           sender, playerShopMessage.shopActivationRequireTeleportPointFirst());
 
       return;
@@ -118,7 +118,7 @@ public class PlayerShopConfigControllerImpl implements PlayerShopConfigControlle
         playerShop.getId(),
         playerShop.isActive());
 
-    messageController.sendSystemMessage(
+    messageController.sendInfoMessage(
         sender, playerShopMessage.toggleShop(playerShop.isActive()));
     playerShopController.openPlayerShopConfigGui(sender);
   }
