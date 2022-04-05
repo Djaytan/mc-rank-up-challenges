@@ -34,6 +34,8 @@ public final class PluginConfigService {
   public static final String PLAYERSHOP_INACTIVITY_DELAY = "playershop.inactivity_delay";
   public static final String PLAYERSHOP_PREMIUM_SLOT_DURATION = "playershop.premium_slot.duration";
   public static final String PLAYERSHOP_PREMIUM_SLOT_BUY_COST = "playershop.premium_slot.buy_cost";
+  public static final String PLAYERSHOP_TP_CREATION_ALLOWED_WORLD =
+      "playershop.tp.creation.allowed_world";
   public static final String RANKUP_LUCKPERMS_TRACK_NAME = "rankup.luckperms.track.name";
 
   public static void init(@NotNull FileConfiguration config) {
@@ -53,6 +55,7 @@ public final class PluginConfigService {
     config.addDefault(PLAYERSHOP_INACTIVITY_DELAY, 30);
     config.addDefault(PLAYERSHOP_PREMIUM_SLOT_DURATION, 72);
     config.addDefault(PLAYERSHOP_PREMIUM_SLOT_BUY_COST, 10000D);
+    config.addDefault(PLAYERSHOP_TP_CREATION_ALLOWED_WORLD, "world");
 
     // Rankup feature
     config.addDefault(RANKUP_LUCKPERMS_TRACK_NAME, "ranks");
@@ -76,6 +79,7 @@ public final class PluginConfigService {
                 .inactivityDelay(config.getInt(PLAYERSHOP_INACTIVITY_DELAY))
                 .premiumSlotDuration(config.getInt(PLAYERSHOP_PREMIUM_SLOT_DURATION))
                 .premiumSlotBuyCost(config.getLong(PLAYERSHOP_PREMIUM_SLOT_BUY_COST))
+                .tpCreationAllowedWorld(config.getString(PLAYERSHOP_TP_CREATION_ALLOWED_WORLD))
                 .build())
         .rankUpConfig(
             PluginConfig.RankUpConfig.builder()

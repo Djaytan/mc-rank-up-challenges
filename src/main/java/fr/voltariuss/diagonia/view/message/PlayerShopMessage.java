@@ -23,6 +23,7 @@ import java.util.ResourceBundle;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.Template;
 import net.kyori.adventure.text.minimessage.template.TemplateResolver;
@@ -110,6 +111,14 @@ public class PlayerShopMessage {
   public @NotNull Component noTeleportPointDefined() {
     return miniMessage.deserialize(
         resourceBundle.getString("diagonia.playershop.teleportation.fail.no_tp_defined_error"));
+  }
+
+  public @NotNull Component tpCreationImpossibleInThisWorld() {
+    return miniMessage
+        .deserialize(
+            resourceBundle.getString(
+                "diagonia.playershop.teleportation.fail.tp_creation_impossible_in_this_world"))
+        .decoration(TextDecoration.ITALIC, false);
   }
 
   public @NotNull Component successTeleport(@NotNull String ownerName) {

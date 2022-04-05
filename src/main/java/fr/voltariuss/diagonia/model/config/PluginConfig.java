@@ -49,6 +49,7 @@ public class PluginConfig {
     private final int inactivityDelay;
     private final int premiumSlotDuration;
     private final double premiumSlotBuyCost;
+    private final String tpCreationAllowedWorld;
   }
 
   @Data

@@ -19,6 +19,7 @@ package fr.voltariuss.diagonia.controller.playershop;
 import fr.voltariuss.diagonia.RemakeBukkitLogger;
 import fr.voltariuss.diagonia.controller.MessageController;
 import fr.voltariuss.diagonia.model.LocationMapper;
+import fr.voltariuss.diagonia.model.config.PluginConfig;
 import fr.voltariuss.diagonia.model.dto.LocationDto;
 import fr.voltariuss.diagonia.model.entity.PlayerShop;
 import fr.voltariuss.diagonia.model.service.PlayerShopService;
@@ -39,6 +40,7 @@ public class PlayerShopConfigControllerImpl implements PlayerShopConfigControlle
   private final PlayerShopController playerShopController;
   private final PlayerShopMessage playerShopMessage;
   private final PlayerShopService playerShopService;
+  private final PluginConfig pluginConfig;
 
   @Inject
   public PlayerShopConfigControllerImpl(
@@ -47,13 +49,15 @@ public class PlayerShopConfigControllerImpl implements PlayerShopConfigControlle
       @NotNull MessageController messageController,
       @NotNull PlayerShopController playerShopController,
       @NotNull PlayerShopMessage playerShopMessage,
-      @NotNull PlayerShopService playerShopService) {
+      @NotNull PlayerShopService playerShopService,
+      @NotNull PluginConfig pluginConfig) {
     this.logger = logger;
     this.locationMapper = locationMapper;
     this.messageController = messageController;
     this.playerShopController = playerShopController;
     this.playerShopMessage = playerShopMessage;
     this.playerShopService = playerShopService;
+    this.pluginConfig = pluginConfig;
   }
 
   @Override
@@ -69,7 +73,14 @@ public class PlayerShopConfigControllerImpl implements PlayerShopConfigControlle
         playerShop.getTpLocationDto(),
         newLocation);
 
-    // TODO: only possible in world "world" (configurable)
+    if (!newLocation
+        .getWorld()
+        .getName()
+        .equals(pluginConfig.getPlayerShopConfig().getTpCreationAllowedWorld())) {
+      messageController.sendFailureMessage(
+          sender, playerShopMessage.tpCreationImpossibleInThisWorld());
+      return;
+    }
 
     LocationDto newLocationDto = locationMapper.toDto(newLocation);
 
@@ -120,8 +131,7 @@ public class PlayerShopConfigControllerImpl implements PlayerShopConfigControlle
         playerShop.getId(),
         playerShop.isActive());
 
-    messageController.sendInfoMessage(
-        sender, playerShopMessage.toggleShop(playerShop.isActive()));
+    messageController.sendInfoMessage(sender, playerShopMessage.toggleShop(playerShop.isActive()));
     playerShopController.openPlayerShopConfigGui(sender);
   }
 }
