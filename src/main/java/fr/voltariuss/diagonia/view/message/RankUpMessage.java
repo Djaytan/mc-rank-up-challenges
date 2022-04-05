@@ -79,6 +79,13 @@ public class RankUpMessage {
         .decoration(TextDecoration.ITALIC, false);
   }
 
+  public @NotNull Component rankAlreadyOwned() {
+    return miniMessage
+        .deserialize(
+            resourceBundle.getString("diagonia.rankup.challenges.give.failure.rank_already_owned"))
+        .decoration(TextDecoration.ITALIC, false);
+  }
+
   public @NotNull Component successAmountGiven(int amountGiven, String itemsGivenName) {
     return miniMessage
         .deserialize(

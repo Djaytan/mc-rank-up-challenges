@@ -76,9 +76,7 @@ public class RankUpItem {
 
     ItemBuilder itemBuilder = ItemBuilder.from(RANK_UP_MATERIAL).name(itemName).lore(itemLore);
 
-    return rankUpProgression.isRankOwned()
-        ? itemBuilder.asGuiItem() // TODO: give feedback to player
-        : itemBuilder.asGuiItem(onClick(rankUpProgression));
+    return itemBuilder.asGuiItem(onClick(rankUpProgression));
   }
 
   private @NotNull GuiAction<InventoryClickEvent> onClick(

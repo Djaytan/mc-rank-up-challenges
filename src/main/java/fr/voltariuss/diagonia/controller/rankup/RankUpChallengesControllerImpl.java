@@ -107,9 +107,7 @@ public class RankUpChallengesControllerImpl implements RankUpChallengesControlle
 
     int nbItemsNotRemoved =
         bukkitUtils.removeItemsInInventory(
-            targetPlayer.getInventory(),
-            rankChallenge.getMaterial(),
-            nbItemsEffectivelyGiven);
+            targetPlayer.getInventory(), rankChallenge.getMaterial(), nbItemsEffectivelyGiven);
 
     if (nbItemsNotRemoved > 0) {
       logger.error(
@@ -145,6 +143,10 @@ public class RankUpChallengesControllerImpl implements RankUpChallengesControlle
   @Override
   public void onRankUpRequested(
       @NotNull Player player, @NotNull RankUpProgression rankUpProgression) {
+    if (rankUpProgression.isRankOwned()) {
+      messageController.sendFailureMessage(player, rankUpMessage.rankAlreadyOwned());
+      return;
+    }
 
     if (!rankUpProgression.canRankUp()) {
       messageController.sendFailureMessage(player, rankUpMessage.prerequisitesNotRespected());
