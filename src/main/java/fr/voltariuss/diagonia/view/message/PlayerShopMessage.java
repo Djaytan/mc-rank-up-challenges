@@ -65,13 +65,17 @@ public class PlayerShopMessage {
                     resourceBundle.getString(
                         "diagonia.playershop.config.teleportation.defined.location"),
                     TemplateResolver.templates(
-                        Template.template("diag_location_x", String.valueOf(locationDto.getX())),
-                        Template.template("diag_location_y", String.valueOf(locationDto.getY())),
-                        Template.template("diag_location_z", String.valueOf(locationDto.getZ())),
                         Template.template(
-                            "diag_location_yaw", String.valueOf(locationDto.getYaw())),
+                            "diag_location_x", String.format("%.2f", locationDto.getX())),
                         Template.template(
-                            "diag_location_pitch", String.valueOf(locationDto.getPitch())))))));
+                            "diag_location_y", String.format("%.2f", locationDto.getY())),
+                        Template.template(
+                            "diag_location_z", String.format("%.2f", locationDto.getZ())),
+                        Template.template(
+                            "diag_location_yaw", String.format("%.2f", locationDto.getYaw())),
+                        Template.template(
+                            "diag_location_pitch",
+                            String.format("%.2f", locationDto.getPitch())))))));
   }
 
   public @NotNull Component toggleShop(boolean isPlayerShopActive) {
