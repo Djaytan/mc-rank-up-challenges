@@ -169,7 +169,7 @@ public class RankChallengeProgressionService {
             .filter(
                 rcp ->
                     rank.getRankUpChallenges().stream()
-                        .map(RankChallenge::getChallengeItemMaterial)
+                        .map(RankChallenge::getMaterial)
                         .toList()
                         .contains(rcp.getChallengeMaterial()))
             .toList();
@@ -178,10 +178,10 @@ public class RankChallengeProgressionService {
       int amount =
           playerProgression.stream()
               .filter(
-                  pp -> rankChallenge.getChallengeItemMaterial().equals(pp.getChallengeMaterial()))
+                  pp -> rankChallenge.getMaterial().equals(pp.getChallengeMaterial()))
               .mapToInt(RankChallengeProgression::getChallengeAmountGiven)
               .sum();
-      if (amount < rankChallenge.getChallengeItemAmount()) {
+      if (amount < rankChallenge.getAmount()) {
         areChallengesCompleted = false;
         break;
       }
@@ -202,20 +202,20 @@ public class RankChallengeProgressionService {
     try {
       RankChallengeProgression rankChallengeProgression =
           rankChallengeProgressionDao
-              .find(playerUuid, rank.getId(), rankChallenge.getChallengeItemMaterial())
+              .find(playerUuid, rank.getId(), rankChallenge.getMaterial())
               .orElse(null);
 
       if (rankChallengeProgression == null) {
         logger.debug("RankChallengeProgression not found.");
         rankChallengeProgression =
             new RankChallengeProgression(
-                playerUuid, rank.getId(), rankChallenge.getChallengeItemMaterial());
+                playerUuid, rank.getId(), rankChallenge.getMaterial());
         rankChallengeProgressionDao.persist(rankChallengeProgression);
         logger.debug("RankChallengeProgression persisted.");
       }
 
       int remainingItemsToGive =
-          rankChallenge.getChallengeItemAmount()
+          rankChallenge.getAmount()
               - rankChallengeProgression.getChallengeAmountGiven();
 
       int maxItemsToGiveAsked = giveActionType.getNbItemsToGive();
@@ -252,7 +252,7 @@ public class RankChallengeProgressionService {
 
     try {
       rankChallengeProgression =
-          rankChallengeProgressionDao.find(uuid, rankId, rankChallenge.getChallengeItemMaterial());
+          rankChallengeProgressionDao.find(uuid, rankId, rankChallenge.getMaterial());
     } finally {
       rankChallengeProgressionDao.destroySession();
     }
@@ -262,6 +262,6 @@ public class RankChallengeProgressionService {
     }
 
     return rankChallengeProgression.get().getChallengeAmountGiven()
-        >= rankChallenge.getChallengeItemAmount();
+        >= rankChallenge.getAmount();
   }
 }

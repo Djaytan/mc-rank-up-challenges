@@ -75,10 +75,10 @@ public class RankConfigDeserializer implements JsonDeserializer<RankConfig> {
                       JsonObject challengeObject = challengeElem.getAsJsonObject();
                       challenges.add(
                           RankChallenge.builder()
-                              .challengeItemMaterial(
+                              .material(
                                   Material.matchMaterial(
                                       challengeObject.get("challengeItemMaterial").getAsString()))
-                              .challengeItemAmount(
+                              .amount(
                                   challengeObject.get("challengeItemAmount").getAsInt())
                               .build());
                     });

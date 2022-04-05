@@ -24,7 +24,6 @@ import org.bukkit.Material;
 @Builder
 public class RankChallenge {
 
-  // TODO: rename to shorten
-  private final Material challengeItemMaterial;
-  private final int challengeItemAmount;
+  private final Material material;
+  private final int amount;
 }

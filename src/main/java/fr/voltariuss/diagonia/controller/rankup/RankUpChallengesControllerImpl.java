@@ -108,7 +108,7 @@ public class RankUpChallengesControllerImpl implements RankUpChallengesControlle
     int nbItemsNotRemoved =
         bukkitUtils.removeItemsInInventory(
             targetPlayer.getInventory(),
-            rankChallenge.getChallengeItemMaterial(),
+            rankChallenge.getMaterial(),
             nbItemsEffectivelyGiven);
 
     if (nbItemsNotRemoved > 0) {
@@ -116,13 +116,13 @@ public class RankUpChallengesControllerImpl implements RankUpChallengesControlle
           "Something went wrong during the removing of items in the targeted player's inventory:"
               + " playerName={}, challengeMaterialName={}, nbItemsNotRemoved={}",
           targetPlayer.getName(),
-          rankChallenge.getChallengeItemMaterial(),
+          rankChallenge.getMaterial(),
           nbItemsNotRemoved);
       messageController.sendErrorMessage(targetPlayer, commonMessage.unexpectedError());
       return;
     }
 
-    String challengeName = rankChallenge.getChallengeItemMaterial().name();
+    String challengeName = rankChallenge.getMaterial().name();
 
     messageController.sendInfoMessage(
         targetPlayer, rankUpMessage.successAmountGiven(nbItemsEffectivelyGiven, challengeName));

@@ -77,7 +77,7 @@ public class RankChallengeItem {
       @Nullable RankChallengeProgression rankChallengeProgression) {
     Preconditions.checkState(
         rankChallengeProgression == null
-            || rankChallenge.getChallengeItemMaterial()
+            || rankChallenge.getMaterial()
                 == rankChallengeProgression.getChallengeMaterial(),
         "The challenge and the associated progression must both concern a same item.");
 
@@ -87,7 +87,7 @@ public class RankChallengeItem {
     List<Component> itemLore =
         getLore(rankChallenge, rankChallengeProgression, isChallengeCompleted);
 
-    return ItemBuilder.from(rankChallenge.getChallengeItemMaterial())
+    return ItemBuilder.from(rankChallenge.getMaterial())
         .name(itemName)
         .lore(itemLore)
         .asGuiItem(onClick(rank, rankChallenge, isChallengeCompleted));
@@ -125,7 +125,7 @@ public class RankChallengeItem {
     }
 
     return rankChallengeProgression.getChallengeAmountGiven()
-        >= rankChallenge.getChallengeItemAmount();
+        >= rankChallenge.getAmount();
   }
 
   private int countItem(Inventory inventory, Material material) {
@@ -141,7 +141,7 @@ public class RankChallengeItem {
             resourceBundle.getString("diagonia.rankup.challenges.item.name"),
             TemplateResolver.templates(
                 Template.template(
-                    "diag_challenge_name", rankChallenge.getChallengeItemMaterial().name())))
+                    "diag_challenge_name", rankChallenge.getMaterial().name())))
         .decoration(TextDecoration.ITALIC, false);
   }
 
@@ -173,7 +173,7 @@ public class RankChallengeItem {
                         getCurrentProgression(isChallengeCompleted, String.valueOf(amountGiven))),
                     Template.template(
                         "diag_amount_required",
-                        String.valueOf(rankChallenge.getChallengeItemAmount()))))
+                        String.valueOf(rankChallenge.getAmount()))))
             .decoration(TextDecoration.ITALIC, false));
   }
 

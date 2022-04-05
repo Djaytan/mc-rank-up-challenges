@@ -108,7 +108,7 @@ public class RankUpChallengesGui {
                   rankUpChallengesController.findChallenge(
                       whoOpen.getUniqueId(),
                       rank.getId(),
-                      rankChallenge.getChallengeItemMaterial());
+                      rankChallenge.getMaterial());
 
               gui.addItem(
                   rankChallengeItem.createItem(
