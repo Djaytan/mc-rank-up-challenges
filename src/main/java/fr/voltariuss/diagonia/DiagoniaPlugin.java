@@ -66,6 +66,7 @@ public class DiagoniaPlugin extends JavaPlugin {
     // Additional setup
     prerequisitesValidation.validate();
     commandRegister.registerCommands();
+    commandRegister.registerCommandCompletions();
 
     getSLF4JLogger().info("Plugin successfully enabled");
   }

@@ -20,8 +20,11 @@ import co.aikar.commands.PaperCommandManager;
 import fr.voltariuss.diagonia.view.command.PlayerShopCommand;
 import fr.voltariuss.diagonia.view.command.RankUpCommand;
 import fr.voltariuss.diagonia.view.command.RanksCommand;
+import java.util.Arrays;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.Server;
 import org.jetbrains.annotations.NotNull;
 
 @Singleton
@@ -32,22 +35,39 @@ public class CommandRegister {
   private final PlayerShopCommand playerShopCommand;
   private final RanksCommand ranksCommand;
   private final RankUpCommand rankUpCommand;
+  private final Server server;
 
   @Inject
   public CommandRegister(
       @NotNull PaperCommandManager paperCommandManager,
       @NotNull PlayerShopCommand playerShopCommand,
       @NotNull RanksCommand ranksCommand,
-      @NotNull RankUpCommand rankUpCommand) {
+      @NotNull RankUpCommand rankUpCommand,
+      @NotNull Server server) {
     this.paperCommandManager = paperCommandManager;
     this.playerShopCommand = playerShopCommand;
     this.ranksCommand = ranksCommand;
     this.rankUpCommand = rankUpCommand;
+    this.server = server;
   }
 
   public void registerCommands() {
     paperCommandManager.registerCommand(playerShopCommand);
     paperCommandManager.registerCommand(ranksCommand);
     paperCommandManager.registerCommand(rankUpCommand);
+  }
+
+  public void registerCommandCompletions() {
+    paperCommandManager
+        .getCommandCompletions()
+        .registerAsyncCompletion(
+            "allplayers",
+            context -> {
+              long size = Long.parseLong(context.getConfig("size", "100"));
+              return Arrays.stream(server.getOfflinePlayers())
+                  .limit(size)
+                  .map(OfflinePlayer::getName)
+                  .toList();
+            });
   }
 }

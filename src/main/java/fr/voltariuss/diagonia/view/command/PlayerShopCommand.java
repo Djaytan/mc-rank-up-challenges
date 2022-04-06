@@ -18,6 +18,7 @@ package fr.voltariuss.diagonia.view.command;
 
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
+import co.aikar.commands.annotation.CommandCompletion;
 import co.aikar.commands.annotation.Default;
 import co.aikar.commands.annotation.Subcommand;
 import fr.voltariuss.diagonia.RemakeBukkitLogger;
@@ -52,6 +53,7 @@ public class PlayerShopCommand extends BaseCommand {
   }
 
   @Subcommand("tp")
+  @CommandCompletion("@allplayers")
   public void onTeleport(@NotNull Player player, @NotNull String targetedPlayerName) {
     playerShopListController.teleportToPlayerShop(player, targetedPlayerName);
   }
