@@ -82,21 +82,13 @@ public class RankUpChallengesControllerImpl implements RankUpChallengesControlle
       @NotNull GiveActionType giveActionType,
       int nbItemsInInventory) {
     if (nbItemsInInventory == 0) {
-      messageController.sendWarningMessage(targetPlayer, rankUpMessage.noItemInInventory());
-      logger.warn(
-          "Attempt to give items whereas no item in inventory is detected for a player: this isn't"
-              + " supposed to happen. playerName={}",
-          targetPlayer.getName());
+      messageController.sendFailureMessage(targetPlayer, rankUpMessage.noItemInInventory());
       return;
     }
 
     if (rankChallengeProgressionService.isChallengeCompleted(
         targetPlayer.getUniqueId(), rank.getId(), rankChallenge)) {
-      messageController.sendWarningMessage(targetPlayer, rankUpMessage.challengeAlreadyCompleted());
-      logger.warn(
-          "Attempt to give items detected when challenge already completed: this isn't supposed to"
-              + " happen. playerName={}",
-          targetPlayer.getName());
+      messageController.sendFailureMessage(targetPlayer, rankUpMessage.challengeAlreadyCompleted());
       return;
     }
 
