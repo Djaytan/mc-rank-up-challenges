@@ -82,18 +82,10 @@ public class RankLuckPermsService implements RankService {
   }
 
   @Override
-  public @Nullable Group getCurrentRank(@NotNull Player player) {
+  public @Nullable Rank getCurrentRank(@NotNull Player player) {
     Preconditions.checkNotNull(player);
 
-    User user = getUser(player);
-
-    // A user have only one group of the track at once: the current rank of the player
-    // (even if it can have staff groups or other ones which will be ignored tho)
-    Group currentGroup =
-        user.getInheritedGroups(QueryOptions.nonContextual()).stream()
-            .filter(track::containsGroup)
-            .findFirst()
-            .orElse(null);
+    Group currentGroup = getCurrentGroup(player);
 
     if (currentGroup == null) {
       logger.debug("The player don't have any rank yet: playerName={}", player.getName());
@@ -115,59 +107,53 @@ public class RankLuckPermsService implements RankService {
         player.getName(),
         currentRank.get().getName());
 
-    return currentGroup;
+    return currentRank.get();
   }
 
   @Override
-  public @Nullable Group getUnlockableRank(@NotNull Player player) {
-    Group unlockableRank;
+  public @Nullable Rank getUnlockableRank(@NotNull Player player) {
+    Group currentGroup = getCurrentGroup(player);
 
-    Group currentRank = getCurrentRank(player);
-
-    if (currentRank != null) {
-      String unlockableRankStr = track.getNext(currentRank);
-      unlockableRank = unlockableRankStr != null ? groupManager.getGroup(unlockableRankStr) : null;
-    } else {
-      unlockableRank = getFirstRank();
+    if (currentGroup == null) {
+      return rankConfigService.findById(getFirstGroup().getName()).orElseThrow();
     }
 
-    logger.debug(
-        "Unlockable player rank: playerName={}, unlockableRankName={}",
-        player.getName(),
-        unlockableRank != null ? unlockableRank.getName() : null);
+    String unlockableGroupId = track.getNext(currentGroup);
 
-    return unlockableRank;
+    logger.debug(
+        "Unlockable player group: playerName={}, unlockableGroupId={}",
+        player.getName(),
+        unlockableGroupId);
+
+    return unlockableGroupId != null
+        ? rankConfigService.findById(unlockableGroupId).orElseThrow()
+        : null;
   }
 
   @Override
-  public @NotNull List<Group> getOwnedRanks(@NotNull Player player) {
-    List<Group> ownedRanks = getOwnedRanks(getCurrentRank(player));
+  public @NotNull List<Rank> getOwnedRanks(@NotNull Player player) {
+    List<Group> ownedGroups = getOwnedGroups(getCurrentGroup(player));
 
     logger.debug(
-        "Owned player ranks: playerName={}, ownedRanksNames={}",
+        "Owned player groups: playerName={}, ownedGroupsNames={}",
         player.getName(),
-        ownedRanks.stream().map(Group::getName).toList());
+        ownedGroups.stream().map(Group::getName).toList());
 
-    return ownedRanks;
+    return ownedGroups.stream()
+        .map(Group::getName)
+        .map(rankConfigService::findById)
+        .map(Optional::orElseThrow)
+        .toList();
   }
 
   @Override
   public boolean isRankOwned(@NotNull Player player, @NotNull String rankId) {
-    boolean isRankOwned = false;
+    List<Group> ownedGroups = getOwnedGroups(getCurrentGroup(player));
 
-    Group currentRank = getCurrentRank(player);
-
-    if (currentRank != null) {
-      if (currentRank.getName().equals(rankId)) {
-        isRankOwned = true;
-      } else {
-        List<Group> ownedRanks = getOwnedRanks(player);
-        isRankOwned = ownedRanks.contains(groupManager.getGroup(rankId));
-      }
-    }
+    boolean isRankOwned = ownedGroups.contains(groupManager.getGroup(rankId));
 
     logger.debug(
-        "Is rank owned by player: playerName={}, rankId={}, isRankOwned={}",
+        "Ranks owned by a player: playerName={}, rankId={}, isRankOwned={}",
         player.getName(),
         rankId,
         isRankOwned);
@@ -177,8 +163,8 @@ public class RankLuckPermsService implements RankService {
 
   @Override
   public boolean isCurrentRank(@NotNull Player player, @NotNull String rankId) {
-    Group currentRank = getCurrentRank(player);
-    boolean isCurrentRank = currentRank != null && currentRank.getName().equals(rankId);
+    Group currentGroup = getCurrentGroup(player);
+    boolean isCurrentRank = currentGroup != null && currentGroup.getName().equals(rankId);
 
     logger.debug(
         "Is current player rank: player={}, rankId={}, isCurrentRank={}",
@@ -191,7 +177,7 @@ public class RankLuckPermsService implements RankService {
 
   @Override
   public boolean isUnlockableRank(@NotNull Player player, @NotNull String rankId) {
-    Group unlockableRank = getUnlockableRank(player);
+    Rank unlockableRank = getUnlockableRank(player);
     boolean isUnlockableRank = unlockableRank != null && unlockableRank.getName().equals(rankId);
 
     logger.debug(
@@ -277,7 +263,18 @@ public class RankLuckPermsService implements RankService {
     return user;
   }
 
-  private @NotNull List<Group> getOwnedRanks(@Nullable Group currentRank) {
+  private @Nullable Group getCurrentGroup(@NotNull Player player) {
+    User user = getUser(player);
+
+    // A user have only one group of the track at once: the current rank of the player
+    // (even if it can have staff groups or other ones which will be ignored tho)
+    return user.getInheritedGroups(QueryOptions.nonContextual()).stream()
+        .filter(track::containsGroup)
+        .findFirst()
+        .orElse(null);
+  }
+
+  private @NotNull List<Group> getOwnedGroups(@Nullable Group currentRank) {
     List<Group> ownedGroups = new ArrayList<>();
 
     Group currentGroup = currentRank;
@@ -292,7 +289,7 @@ public class RankLuckPermsService implements RankService {
     return ownedGroups;
   }
 
-  private @NotNull Group getFirstRank() {
+  private @NotNull Group getFirstGroup() {
     return Objects.requireNonNull(groupManager.getGroup(track.getGroups().get(0)));
   }
 }

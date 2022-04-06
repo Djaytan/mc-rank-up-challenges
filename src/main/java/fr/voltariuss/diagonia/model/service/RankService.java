@@ -42,7 +42,7 @@ public interface RankService {
    * @return The current rank of the specified player.
    */
   @Nullable
-  Group getCurrentRank(@NotNull Player player);
+  Rank getCurrentRank(@NotNull Player player);
 
   /**
    * Gets the unlockable rank if the player doesn't have the last rank yet. Otherwise, the returned
@@ -53,7 +53,7 @@ public interface RankService {
    *     returned value will be null.
    */
   @Nullable
-  Group getUnlockableRank(@NotNull Player player);
+  Rank getUnlockableRank(@NotNull Player player);
 
   /**
    * Recovers the owned ranks of the given player.
@@ -64,7 +64,7 @@ public interface RankService {
    * @return The owned ranks of the specified player.
    */
   @NotNull
-  List<Group> getOwnedRanks(@NotNull Player player);
+  List<Rank> getOwnedRanks(@NotNull Player player);
 
   /**
    * Checks if the specified rank correspond to the current one of the given player.
