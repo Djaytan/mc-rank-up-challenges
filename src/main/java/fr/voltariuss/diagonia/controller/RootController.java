@@ -18,6 +18,7 @@ package fr.voltariuss.diagonia.controller;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryCloseEvent.Reason;
 import org.jetbrains.annotations.NotNull;
@@ -27,10 +28,12 @@ import org.slf4j.Logger;
 public class RootController {
 
   private final Logger logger;
+  private final Server server;
 
   @Inject
-  public RootController(@NotNull Logger logger) {
+  public RootController(@NotNull Logger logger, @NotNull Server server) {
     this.logger = logger;
+    this.server = server;
   }
 
   // TODO: redirect all view calls to this controller first
@@ -39,6 +42,6 @@ public class RootController {
   public void openMainMenu(@NotNull Player whoOpen) {
     logger.debug("Open MainMenu GUI for a player: playerName={}", whoOpen.getName());
     whoOpen.closeInventory(Reason.PLUGIN);
-    whoOpen.performCommand("menu");
+    server.dispatchCommand(whoOpen, "dm open advanced_menu");
   }
 }
