@@ -25,7 +25,6 @@ import fr.voltariuss.diagonia.RemakeBukkitLogger;
 import fr.voltariuss.diagonia.controller.playershop.PlayerShopController;
 import fr.voltariuss.diagonia.controller.playershop.PlayerShopListController;
 import javax.inject.Inject;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -53,7 +52,7 @@ public class PlayerShopCommand extends BaseCommand {
   }
 
   @Subcommand("tp")
-  @CommandCompletion("@allplayers")
+  @CommandCompletion("@playershops")
   public void onTeleport(@NotNull Player player, @NotNull String targetedPlayerName) {
     playerShopListController.teleportToPlayerShop(player, targetedPlayerName);
   }

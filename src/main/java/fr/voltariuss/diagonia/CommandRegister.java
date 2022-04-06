@@ -17,10 +17,13 @@
 package fr.voltariuss.diagonia;
 
 import co.aikar.commands.PaperCommandManager;
+import fr.voltariuss.diagonia.model.entity.PlayerShop;
+import fr.voltariuss.diagonia.model.service.PlayerShopService;
 import fr.voltariuss.diagonia.view.command.PlayerShopCommand;
 import fr.voltariuss.diagonia.view.command.RankUpCommand;
 import fr.voltariuss.diagonia.view.command.RanksCommand;
 import java.util.Arrays;
+import java.util.Objects;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.bukkit.OfflinePlayer;
@@ -33,6 +36,7 @@ public class CommandRegister {
   private final PaperCommandManager paperCommandManager;
 
   private final PlayerShopCommand playerShopCommand;
+  private final PlayerShopService playerShopService;
   private final RanksCommand ranksCommand;
   private final RankUpCommand rankUpCommand;
   private final Server server;
@@ -41,11 +45,13 @@ public class CommandRegister {
   public CommandRegister(
       @NotNull PaperCommandManager paperCommandManager,
       @NotNull PlayerShopCommand playerShopCommand,
+      @NotNull PlayerShopService playerShopService,
       @NotNull RanksCommand ranksCommand,
       @NotNull RankUpCommand rankUpCommand,
       @NotNull Server server) {
     this.paperCommandManager = paperCommandManager;
     this.playerShopCommand = playerShopCommand;
+    this.playerShopService = playerShopService;
     this.ranksCommand = ranksCommand;
     this.rankUpCommand = rankUpCommand;
     this.server = server;
@@ -69,5 +75,17 @@ public class CommandRegister {
                   .map(OfflinePlayer::getName)
                   .toList();
             });
+
+    paperCommandManager
+        .getCommandCompletions()
+        .registerAsyncCompletion(
+            "playershops",
+            context ->
+                playerShopService.findAll().stream()
+                    .map(PlayerShop::getOwnerUuid)
+                    .map(server::getOfflinePlayer)
+                    .map(OfflinePlayer::getName)
+                    .map(Objects::requireNonNull)
+                    .toList());
   }
 }
