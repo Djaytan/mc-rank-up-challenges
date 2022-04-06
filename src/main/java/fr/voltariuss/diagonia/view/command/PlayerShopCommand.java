@@ -43,4 +43,6 @@ public class PlayerShopCommand extends BaseCommand {
     logger.debug("/playershop command executed by {}", player.getName());
     playerShopController.openPlayerShopListGui(player);
   }
+
+  // TODO: feat: add /ps <player> for a direct teleport
 }

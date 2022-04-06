@@ -81,6 +81,8 @@ public class RankChallengeItem {
                 == rankChallengeProgression.getChallengeMaterial(),
         "The challenge and the associated progression must both concern a same item.");
 
+    // TODO: feat: translate and better display challenge name
+
     boolean isChallengeCompleted = isChallengeCompleted(rankChallenge, rankChallengeProgression);
 
     Component itemName = getName(rankChallenge);

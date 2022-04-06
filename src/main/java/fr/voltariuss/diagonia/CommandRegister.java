@@ -44,5 +44,6 @@ public class CommandRegister {
   public void registerCommands() {
     paperCommandManager.registerCommand(playerShopCommand);
     paperCommandManager.registerCommand(ranksCommand);
+    // TODO: feat: add /rankup command
   }
 }

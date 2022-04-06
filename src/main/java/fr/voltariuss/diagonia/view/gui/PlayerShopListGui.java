@@ -116,7 +116,7 @@ public class PlayerShopListGui {
       gui.setItem(5, 7, paginatedItem.createNextPageItem(gui));
     }
 
-    gui.setItem(6, 1, goToMainMenuItem.createItem());
+    gui.setItem(6, 1, goToMainMenuItem.createItem()); // TODO: fix: go back to main menu
 
     gui.setDefaultClickAction(event -> event.setCancelled(true));
 

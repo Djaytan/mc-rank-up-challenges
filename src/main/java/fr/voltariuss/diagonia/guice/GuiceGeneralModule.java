@@ -32,8 +32,6 @@ import fr.voltariuss.diagonia.controller.rankup.RankUpChallengesController;
 import fr.voltariuss.diagonia.controller.rankup.RankUpChallengesControllerImpl;
 import fr.voltariuss.diagonia.controller.rankup.RankUpController;
 import fr.voltariuss.diagonia.controller.rankup.RankUpControllerImpl;
-import fr.voltariuss.diagonia.controller.rankup.RankUpListController;
-import fr.voltariuss.diagonia.controller.rankup.RankUpListControllerImpl;
 import fr.voltariuss.diagonia.model.config.PluginConfig;
 import fr.voltariuss.diagonia.model.config.rank.RankConfig;
 import fr.voltariuss.diagonia.model.dao.PlayerShopDao;
@@ -94,7 +92,6 @@ public class GuiceGeneralModule extends AbstractModule {
     bind(PlayerShopListController.class).to(PlayerShopListControllerImpl.class);
     bind(RankService.class).to(RankLuckPermsService.class);
     bind(RankUpController.class).to(RankUpControllerImpl.class);
-    bind(RankUpListController.class).to(RankUpListControllerImpl.class);
     bind(RankUpChallengesController.class).to(RankUpChallengesControllerImpl.class);
   }
 
