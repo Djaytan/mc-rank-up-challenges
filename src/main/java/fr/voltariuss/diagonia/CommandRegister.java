@@ -18,6 +18,7 @@ package fr.voltariuss.diagonia;
 
 import co.aikar.commands.PaperCommandManager;
 import fr.voltariuss.diagonia.view.command.PlayerShopCommand;
+import fr.voltariuss.diagonia.view.command.RankUpCommand;
 import fr.voltariuss.diagonia.view.command.RanksCommand;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -30,20 +31,23 @@ public class CommandRegister {
 
   private final PlayerShopCommand playerShopCommand;
   private final RanksCommand ranksCommand;
+  private final RankUpCommand rankUpCommand;
 
   @Inject
   public CommandRegister(
       @NotNull PaperCommandManager paperCommandManager,
       @NotNull PlayerShopCommand playerShopCommand,
-      @NotNull RanksCommand ranksCommand) {
+      @NotNull RanksCommand ranksCommand,
+      @NotNull RankUpCommand rankUpCommand) {
     this.paperCommandManager = paperCommandManager;
     this.playerShopCommand = playerShopCommand;
     this.ranksCommand = ranksCommand;
+    this.rankUpCommand = rankUpCommand;
   }
 
   public void registerCommands() {
     paperCommandManager.registerCommand(playerShopCommand);
     paperCommandManager.registerCommand(ranksCommand);
-    // TODO: feat: add /rankup command
+    paperCommandManager.registerCommand(rankUpCommand);
   }
 }
