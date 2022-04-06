@@ -97,14 +97,14 @@ public class RankUpControllerImpl implements RankUpController {
 
   @Override
   public void openCurrentRankUpChallengesGui(@NotNull Player whoOpen) {
-    Rank currentRank = rankService.getUnlockableRank(whoOpen);
+    Rank unlockableRank = rankService.getUnlockableRank(whoOpen);
 
-    if (currentRank == null) {
+    if (unlockableRank == null) {
       logger.debug("The player already has the highest rank: playerName={}", whoOpen.getName());
       messageController.sendFailureMessage(whoOpen, rankUpMessage.alreadyHasHighestRank());
       return;
     }
 
-    openRankUpChallengesGui(whoOpen, currentRank);
+    openRankUpChallengesGui(whoOpen, unlockableRank);
   }
 }

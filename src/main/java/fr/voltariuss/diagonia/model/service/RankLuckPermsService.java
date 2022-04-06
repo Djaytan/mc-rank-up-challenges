@@ -103,31 +103,35 @@ public class RankLuckPermsService implements RankService {
     }
 
     logger.debug(
-        "Current player rank: playerName={}, currentRankName={}",
+        "Current player rank: playerName={}, currentRankId={}",
         player.getName(),
-        currentRank.get().getName());
+        currentRank.get().getId());
 
     return currentRank.get();
   }
 
   @Override
   public @Nullable Rank getUnlockableRank(@NotNull Player player) {
+    Rank unlockableRank;
     Group currentGroup = getCurrentGroup(player);
 
     if (currentGroup == null) {
-      return rankConfigService.findById(getFirstGroup().getName()).orElseThrow();
-    }
+      unlockableRank = rankConfigService.findById(getFirstGroup().getName()).orElseThrow();
+    } else {
+      String unlockableGroupId = track.getNext(currentGroup);
 
-    String unlockableGroupId = track.getNext(currentGroup);
+      unlockableRank =
+          unlockableGroupId != null
+              ? rankConfigService.findById(unlockableGroupId).orElseThrow()
+              : null;
+    }
 
     logger.debug(
         "Unlockable player group: playerName={}, unlockableGroupId={}",
         player.getName(),
-        unlockableGroupId);
+        unlockableRank != null ? unlockableRank.getId() : null);
 
-    return unlockableGroupId != null
-        ? rankConfigService.findById(unlockableGroupId).orElseThrow()
-        : null;
+    return unlockableRank;
   }
 
   @Override
@@ -178,7 +182,7 @@ public class RankLuckPermsService implements RankService {
   @Override
   public boolean isUnlockableRank(@NotNull Player player, @NotNull String rankId) {
     Rank unlockableRank = getUnlockableRank(player);
-    boolean isUnlockableRank = unlockableRank != null && unlockableRank.getName().equals(rankId);
+    boolean isUnlockableRank = unlockableRank != null && unlockableRank.getId().equals(rankId);
 
     logger.debug(
         "Is unlockable player rank: player={}, rankId={}, isUnlockableRank={}",
