@@ -26,6 +26,7 @@ import fr.voltariuss.diagonia.model.service.RankService;
 import fr.voltariuss.diagonia.view.gui.RankUpChallengesGui;
 import fr.voltariuss.diagonia.view.gui.RankUpListGui;
 import fr.voltariuss.diagonia.view.message.CommonMessage;
+import fr.voltariuss.diagonia.view.message.RankUpMessage;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.inject.Singleton;
@@ -41,6 +42,7 @@ public class RankUpControllerImpl implements RankUpController {
   private final RemakeBukkitLogger logger;
   private final MessageController messageController;
   private final RankService rankService;
+  private final RankUpMessage rankUpMessage;
 
   private final Provider<RankUpListGui> rankUpListGui;
   private final Provider<RankUpChallengesGui> rankUpChallengesGui;
@@ -53,6 +55,7 @@ public class RankUpControllerImpl implements RankUpController {
       @NotNull RemakeBukkitLogger logger,
       @NotNull MessageController messageController,
       @NotNull RankService rankService,
+      @NotNull RankUpMessage rankUpMessage,
       @NotNull Provider<RankUpListGui> rankUpListGui,
       @NotNull Provider<RankUpChallengesGui> rankUpChallengesGui) {
     this.commonMessage = commonMessage;
@@ -61,6 +64,7 @@ public class RankUpControllerImpl implements RankUpController {
     this.logger = logger;
     this.messageController = messageController;
     this.rankService = rankService;
+    this.rankUpMessage = rankUpMessage;
     this.rankUpListGui = rankUpListGui;
     this.rankUpChallengesGui = rankUpChallengesGui;
   }
@@ -89,5 +93,18 @@ public class RankUpControllerImpl implements RankUpController {
         rankService.getRankUpProgression(whoOpen, rank, totalJobsLevels, currentBalance);
 
     rankUpChallengesGui.get().open(whoOpen, rank, rankUpProgression);
+  }
+
+  @Override
+  public void openCurrentRankUpChallengesGui(@NotNull Player whoOpen) {
+    Rank currentRank = rankService.getUnlockableRank(whoOpen);
+
+    if (currentRank == null) {
+      logger.debug("The player already has the highest rank: playerName={}", whoOpen.getName());
+      messageController.sendFailureMessage(whoOpen, rankUpMessage.alreadyHasHighestRank());
+      return;
+    }
+
+    openRankUpChallengesGui(whoOpen, currentRank);
   }
 }

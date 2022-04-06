@@ -25,4 +25,6 @@ public interface RankUpController {
   void openRankUpListGui(@NotNull Player whoOpen);
 
   void openRankUpChallengesGui(@NotNull Player whoOpen, @NotNull Rank rank);
+
+  void openCurrentRankUpChallengesGui(@NotNull Player whoOpen);
 }

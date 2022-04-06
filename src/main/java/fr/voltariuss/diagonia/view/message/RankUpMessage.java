@@ -64,6 +64,13 @@ public class RankUpMessage {
         .decoration(TextDecoration.ITALIC, false);
   }
 
+  public @NotNull Component alreadyHasHighestRank() {
+    return miniMessage
+        .deserialize(
+            resourceBundle.getString("diagonia.rankup.ranks.failure.already_has_highest_rank"))
+        .decoration(TextDecoration.ITALIC, false);
+  }
+
   public @NotNull Component noItemInInventory() {
     return miniMessage
         .deserialize(
