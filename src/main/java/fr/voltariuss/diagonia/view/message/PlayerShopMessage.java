@@ -108,6 +108,22 @@ public class PlayerShopMessage {
         resourceBundle.getString("diagonia.playershop.buy.fail.transaction_failed"));
   }
 
+  public @NotNull Component noPlayerShopForSpecifiedPlayer() {
+    return miniMessage
+        .deserialize(
+            resourceBundle.getString(
+                "diagonia.playershop.teleportation.fail.no_playershop_for_specified_player"))
+        .decoration(TextDecoration.ITALIC, false);
+  }
+
+  public @NotNull Component playerShopDeactivated() {
+    return miniMessage
+        .deserialize(
+            resourceBundle.getString(
+                "diagonia.playershop.teleportation.fail.playershop_deactivated"))
+        .decoration(TextDecoration.ITALIC, false);
+  }
+
   public @NotNull Component noTeleportPointDefined() {
     return miniMessage.deserialize(
         resourceBundle.getString("diagonia.playershop.teleportation.fail.no_tp_defined_error"));

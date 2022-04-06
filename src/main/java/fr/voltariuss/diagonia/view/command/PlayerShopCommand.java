@@ -19,9 +19,12 @@ package fr.voltariuss.diagonia.view.command;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.Default;
+import co.aikar.commands.annotation.Subcommand;
 import fr.voltariuss.diagonia.RemakeBukkitLogger;
 import fr.voltariuss.diagonia.controller.playershop.PlayerShopController;
+import fr.voltariuss.diagonia.controller.playershop.PlayerShopListController;
 import javax.inject.Inject;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -30,12 +33,16 @@ public class PlayerShopCommand extends BaseCommand {
 
   private final RemakeBukkitLogger logger;
   private final PlayerShopController playerShopController;
+  private final PlayerShopListController playerShopListController;
 
   @Inject
   public PlayerShopCommand(
-      @NotNull RemakeBukkitLogger logger, @NotNull PlayerShopController playerShopController) {
+      @NotNull RemakeBukkitLogger logger,
+      @NotNull PlayerShopController playerShopController,
+      @NotNull PlayerShopListController playerShopListController) {
     this.logger = logger;
     this.playerShopController = playerShopController;
+    this.playerShopListController = playerShopListController;
   }
 
   @Default
@@ -44,5 +51,8 @@ public class PlayerShopCommand extends BaseCommand {
     playerShopController.openPlayerShopListGui(player);
   }
 
-  // TODO: feat: add /ps <player> for a direct teleport
+  @Subcommand("tp")
+  public void onTeleport(@NotNull Player player, @NotNull String targetedPlayerName) {
+    playerShopListController.teleportToPlayerShop(player, targetedPlayerName);
+  }
 }

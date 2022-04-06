@@ -22,6 +22,8 @@ import javax.inject.Singleton;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.Template;
+import net.kyori.adventure.text.minimessage.template.TemplateResolver;
 import org.jetbrains.annotations.NotNull;
 
 @Singleton
@@ -39,6 +41,14 @@ public class CommonMessage {
   public @NotNull Component unexpectedError() {
     return miniMessage
         .deserialize(resourceBundle.getString("diagonia.common.fail.unexpected_error"))
+        .decoration(TextDecoration.ITALIC, false);
+  }
+
+  public @NotNull Component playerNotFound(String playerName) {
+    return miniMessage
+        .deserialize(
+            resourceBundle.getString("diagonia.common.fail.player_not_found"),
+            TemplateResolver.templates(Template.template("diag_player_name", playerName)))
         .decoration(TextDecoration.ITALIC, false);
   }
 }

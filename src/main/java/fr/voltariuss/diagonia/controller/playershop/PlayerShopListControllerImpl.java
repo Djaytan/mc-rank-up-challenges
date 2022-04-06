@@ -26,7 +26,9 @@ import fr.voltariuss.diagonia.model.entity.PlayerShop;
 import fr.voltariuss.diagonia.model.service.EconomyException;
 import fr.voltariuss.diagonia.model.service.EconomyService;
 import fr.voltariuss.diagonia.model.service.PlayerShopService;
+import fr.voltariuss.diagonia.view.message.CommonMessage;
 import fr.voltariuss.diagonia.view.message.PlayerShopMessage;
+import java.util.Optional;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.bukkit.Location;
@@ -40,6 +42,7 @@ import org.jetbrains.annotations.NotNull;
 public class PlayerShopListControllerImpl implements PlayerShopListController {
 
   private final BukkitUtils bukkitUtils;
+  private final CommonMessage commonMessage;
   private final EconomyService economyService;
   private final LocationMapper locationMapper;
   private final RemakeBukkitLogger logger;
@@ -53,6 +56,7 @@ public class PlayerShopListControllerImpl implements PlayerShopListController {
   @Inject
   public PlayerShopListControllerImpl(
       @NotNull BukkitUtils bukkitUtils,
+      @NotNull CommonMessage commonMessage,
       @NotNull EconomyService economyService,
       @NotNull LocationMapper locationMapper,
       @NotNull RemakeBukkitLogger logger,
@@ -63,6 +67,7 @@ public class PlayerShopListControllerImpl implements PlayerShopListController {
       @NotNull PluginConfig pluginConfig,
       @NotNull Server server) {
     this.bukkitUtils = bukkitUtils;
+    this.commonMessage = commonMessage;
     this.economyService = economyService;
     this.locationMapper = locationMapper;
     this.logger = logger;
@@ -106,6 +111,33 @@ public class PlayerShopListControllerImpl implements PlayerShopListController {
         "Teleportation of a player to a playershop: playerToTpUuid={}, playerShopId={}",
         playerToTp.getUniqueId(),
         playerShopDestination.getId());
+  }
+
+  @Override
+  public void teleportToPlayerShop(@NotNull Player playerToTp, @NotNull String targetedPlayerName) {
+    OfflinePlayer targetedOfflinePlayer = server.getOfflinePlayerIfCached(targetedPlayerName);
+
+    if (targetedOfflinePlayer == null) {
+      messageController.sendFailureMessage(
+          playerToTp, commonMessage.playerNotFound(targetedPlayerName));
+      return;
+    }
+
+    Optional<PlayerShop> playerShop =
+        playerShopService.findByUuid(targetedOfflinePlayer.getUniqueId());
+
+    if (playerShop.isEmpty()) {
+      messageController.sendFailureMessage(
+          playerToTp, playerShopMessage.noPlayerShopForSpecifiedPlayer());
+      return;
+    }
+
+    if (!playerShop.get().isActive()) {
+      messageController.sendFailureMessage(playerToTp, playerShopMessage.playerShopDeactivated());
+      return;
+    }
+
+    teleportToPlayerShop(playerToTp, playerShop.get());
   }
 
   @Override

@@ -17,12 +17,15 @@
 package fr.voltariuss.diagonia.controller.playershop;
 
 import fr.voltariuss.diagonia.model.entity.PlayerShop;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 public interface PlayerShopListController {
 
   void teleportToPlayerShop(@NotNull Player playerToTp, @NotNull PlayerShop playerShopDestination);
+
+  void teleportToPlayerShop(@NotNull Player playerToTp, @NotNull String targetedPlayerName);
 
   void buyPlayerShop(@NotNull Player player);
 }
