@@ -93,21 +93,21 @@ public class RankUpMessage {
         .decoration(TextDecoration.ITALIC, false);
   }
 
-  public @NotNull Component successAmountGiven(int amountGiven, String itemsGivenName) {
+  public @NotNull Component successAmountGiven(int amountGiven, Component itemsGivenNameCpnt) {
     return miniMessage
         .deserialize(
             resourceBundle.getString("diagonia.rankup.challenges.give.success.amount_given"),
             TemplateResolver.templates(
                 Template.template("diag_amount_given", String.valueOf(amountGiven)),
-                Template.template("diag_item_name", itemsGivenName)))
+                Template.template("diag_item_name", itemsGivenNameCpnt)))
         .decoration(TextDecoration.ITALIC, false);
   }
 
-  public @NotNull Component challengeCompleted(@NotNull String challengeName) {
+  public @NotNull Component challengeCompleted(@NotNull Component challengeNameCpnt) {
     return miniMessage
         .deserialize(
             resourceBundle.getString("diagonia.rankup.challenges.give.success.now_completed"),
-            TemplateResolver.templates(Template.template("diag_challenge_name", challengeName)))
+            TemplateResolver.templates(Template.template("diag_challenge_name", challengeNameCpnt)))
         .decoration(TextDecoration.ITALIC, false);
   }
 }

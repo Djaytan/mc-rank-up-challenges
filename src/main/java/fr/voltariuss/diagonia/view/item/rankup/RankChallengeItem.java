@@ -77,11 +77,8 @@ public class RankChallengeItem {
       @Nullable RankChallengeProgression rankChallengeProgression) {
     Preconditions.checkState(
         rankChallengeProgression == null
-            || rankChallenge.getMaterial()
-                == rankChallengeProgression.getChallengeMaterial(),
+            || rankChallenge.getMaterial() == rankChallengeProgression.getChallengeMaterial(),
         "The challenge and the associated progression must both concern a same item.");
-
-    // TODO: feat: translate and better display challenge name
 
     boolean isChallengeCompleted = isChallengeCompleted(rankChallenge, rankChallengeProgression);
 
@@ -126,8 +123,7 @@ public class RankChallengeItem {
       return false;
     }
 
-    return rankChallengeProgression.getChallengeAmountGiven()
-        >= rankChallenge.getAmount();
+    return rankChallengeProgression.getChallengeAmountGiven() >= rankChallenge.getAmount();
   }
 
   private int countItem(Inventory inventory, Material material) {
@@ -143,7 +139,8 @@ public class RankChallengeItem {
             resourceBundle.getString("diagonia.rankup.challenges.item.name"),
             TemplateResolver.templates(
                 Template.template(
-                    "diag_challenge_name", rankChallenge.getMaterial().name())))
+                    "diag_challenge_name",
+                    Component.translatable(rankChallenge.getMaterial().translationKey()))))
         .decoration(TextDecoration.ITALIC, false);
   }
 
@@ -174,8 +171,7 @@ public class RankChallengeItem {
                         "diag_amount_given",
                         getCurrentProgression(isChallengeCompleted, String.valueOf(amountGiven))),
                     Template.template(
-                        "diag_amount_required",
-                        String.valueOf(rankChallenge.getAmount()))))
+                        "diag_amount_required", String.valueOf(rankChallenge.getAmount()))))
             .decoration(TextDecoration.ITALIC, false));
   }
 

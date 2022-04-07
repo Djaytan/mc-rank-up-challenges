@@ -33,6 +33,7 @@ import java.util.Optional;
 import java.util.UUID;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import net.kyori.adventure.text.Component;
 import net.luckperms.api.track.PromotionResult;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -112,15 +113,16 @@ public class RankUpChallengesControllerImpl implements RankUpChallengesControlle
       return;
     }
 
-    String challengeName = rankChallenge.getMaterial().name();
+    Component challengeNameCpnt =
+        Component.translatable(rankChallenge.getMaterial().translationKey());
 
     messageController.sendInfoMessage(
-        targetPlayer, rankUpMessage.successAmountGiven(nbItemsEffectivelyGiven, challengeName));
+        targetPlayer, rankUpMessage.successAmountGiven(nbItemsEffectivelyGiven, challengeNameCpnt));
 
     if (rankChallengeProgressionService.isChallengeCompleted(
         targetPlayer.getUniqueId(), rank.getId(), rankChallenge)) {
       messageController.sendSuccessMessage(
-          targetPlayer, rankUpMessage.challengeCompleted(challengeName));
+          targetPlayer, rankUpMessage.challengeCompleted(challengeNameCpnt));
     }
 
     rankUpController.openRankUpChallengesGui(targetPlayer, rank);
