@@ -20,7 +20,6 @@ import dev.triumphteam.gui.builder.item.ItemBuilder;
 import dev.triumphteam.gui.guis.Gui;
 import dev.triumphteam.gui.guis.GuiItem;
 import dev.triumphteam.gui.guis.PaginatedGui;
-import fr.voltariuss.diagonia.RemakeBukkitLogger;
 import fr.voltariuss.diagonia.controller.rankup.RankUpChallengesController;
 import fr.voltariuss.diagonia.controller.rankup.RankUpController;
 import fr.voltariuss.diagonia.model.config.rank.Rank;
@@ -29,7 +28,6 @@ import fr.voltariuss.diagonia.model.entity.RankChallengeProgression;
 import fr.voltariuss.diagonia.view.item.PaginatedItem;
 import fr.voltariuss.diagonia.view.item.rankup.RankChallengeItem;
 import fr.voltariuss.diagonia.view.item.rankup.RankUpItem;
-import fr.voltariuss.diagonia.view.message.CommonMessage;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import javax.inject.Inject;
@@ -50,8 +48,6 @@ public class RankUpChallengesGui {
   private static final Material DECORATION_MATERIAL = Material.GRAY_STAINED_GLASS_PANE;
   private static final int PAGE_SIZE = 36;
 
-  private final CommonMessage commonMessage;
-  private final RemakeBukkitLogger logger;
   private final MiniMessage miniMessage;
   private final PaginatedItem paginatedItem;
   private final RankChallengeItem rankChallengeItem;
@@ -62,8 +58,6 @@ public class RankUpChallengesGui {
 
   @Inject
   public RankUpChallengesGui(
-      @NotNull CommonMessage commonMessage,
-      @NotNull RemakeBukkitLogger logger,
       @NotNull MiniMessage miniMessage,
       @NotNull PaginatedItem paginatedItem,
       @NotNull RankChallengeItem rankChallengeItem,
@@ -71,8 +65,6 @@ public class RankUpChallengesGui {
       @NotNull RankUpController rankUpController,
       @NotNull RankUpItem rankUpItem,
       @NotNull ResourceBundle resourceBundle) {
-    this.commonMessage = commonMessage;
-    this.logger = logger;
     this.miniMessage = miniMessage;
     this.paginatedItem = paginatedItem;
     this.rankChallengeItem = rankChallengeItem;
@@ -101,14 +93,13 @@ public class RankUpChallengesGui {
       gui.setItem(5, i, decorationItem);
     }
 
+    // TODO: take into account null case
     rank.getRankUpChallenges()
         .forEach(
             rankChallenge -> {
               Optional<RankChallengeProgression> rankChallengeProgression =
                   rankUpChallengesController.findChallenge(
-                      whoOpen.getUniqueId(),
-                      rank.getId(),
-                      rankChallenge.getMaterial());
+                      whoOpen.getUniqueId(), rank.getId(), rankChallenge.getMaterial());
 
               gui.addItem(
                   rankChallengeItem.createItem(

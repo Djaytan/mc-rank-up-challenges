@@ -21,7 +21,6 @@ import dev.triumphteam.gui.builder.item.ItemBuilder;
 import dev.triumphteam.gui.components.GuiAction;
 import dev.triumphteam.gui.guis.GuiItem;
 import fr.voltariuss.diagonia.controller.BukkitUtils;
-import fr.voltariuss.diagonia.controller.MessageController;
 import fr.voltariuss.diagonia.controller.playershop.PlayerShopListController;
 import fr.voltariuss.diagonia.model.entity.PlayerShop;
 import java.util.Collections;
@@ -44,7 +43,6 @@ import org.jetbrains.annotations.Nullable;
 public class ConsultPlayerShopItem {
 
   private final BukkitUtils bukkitUtils;
-  private final MessageController messageController;
   private final MiniMessage miniMessage;
   private final PlayerShopListController playerShopListController;
   private final ResourceBundle resourceBundle;
@@ -52,12 +50,10 @@ public class ConsultPlayerShopItem {
   @Inject
   public ConsultPlayerShopItem(
       @NotNull BukkitUtils bukkitUtils,
-      @NotNull MessageController messageController,
       @NotNull MiniMessage miniMessage,
       @NotNull PlayerShopListController playerShopListController,
       @NotNull ResourceBundle resourceBundle) {
     this.bukkitUtils = bukkitUtils;
-    this.messageController = messageController;
     this.miniMessage = miniMessage;
     this.playerShopListController = playerShopListController;
     this.resourceBundle = resourceBundle;

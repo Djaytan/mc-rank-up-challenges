@@ -26,7 +26,6 @@ import fr.voltariuss.diagonia.model.config.rank.Rank;
 import fr.voltariuss.diagonia.model.config.rank.RankChallenge;
 import fr.voltariuss.diagonia.model.entity.RankChallengeProgression;
 import fr.voltariuss.diagonia.view.GiveActionTypeConverter;
-import fr.voltariuss.diagonia.view.message.RankUpMessage;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -54,7 +53,6 @@ public class RankChallengeItem {
   private final GiveActionTypeConverter giveActionTypeConverter;
   private final MiniMessage miniMessage;
   private final RankUpChallengesController rankUpChallengesController;
-  private final RankUpMessage rankUpMessage;
   private final ResourceBundle resourceBundle;
 
   @Inject
@@ -62,12 +60,10 @@ public class RankChallengeItem {
       @NotNull GiveActionTypeConverter giveActionTypeConverter,
       @NotNull MiniMessage miniMessage,
       @NotNull RankUpChallengesController rankUpChallengesController,
-      @NotNull RankUpMessage rankUpMessage,
       @NotNull ResourceBundle resourceBundle) {
     this.giveActionTypeConverter = giveActionTypeConverter;
     this.miniMessage = miniMessage;
     this.rankUpChallengesController = rankUpChallengesController;
-    this.rankUpMessage = rankUpMessage;
     this.resourceBundle = resourceBundle;
   }
 
