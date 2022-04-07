@@ -44,7 +44,6 @@ import org.bukkit.Material;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @RequiredArgsConstructor
-// TODO: create RankChallengeProgressionDto with RankChallenge associated with
 public class RankChallengeProgression {
 
   @Id

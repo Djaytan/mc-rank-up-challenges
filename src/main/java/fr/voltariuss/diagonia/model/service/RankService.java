@@ -19,7 +19,6 @@ package fr.voltariuss.diagonia.model.service;
 import fr.voltariuss.diagonia.model.config.rank.Rank;
 import fr.voltariuss.diagonia.model.dto.RankUpProgression;
 import java.util.List;
-import net.luckperms.api.model.group.Group;
 import net.luckperms.api.track.PromotionResult;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -30,7 +29,6 @@ import org.jetbrains.annotations.Nullable;
  *
  * @author Voltariuss
  */
-// TODO: refactor - make used objects more generic that those of LuckPerms
 public interface RankService {
 
   /**
@@ -102,7 +100,6 @@ public interface RankService {
    * @return The result response about the promotion.
    */
   @NotNull
-  // TODO: custom PromotionResult + include directly the new rank (with check about existence)
   PromotionResult promote(@NotNull Player player);
 
   /**
