@@ -25,19 +25,16 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
 @Singleton
-public class RootController {
+public class MainController {
 
   private final Logger logger;
   private final Server server;
 
   @Inject
-  public RootController(@NotNull Logger logger, @NotNull Server server) {
+  public MainController(@NotNull Logger logger, @NotNull Server server) {
     this.logger = logger;
     this.server = server;
   }
-
-  // TODO: redirect all view calls to this controller first
-  // TODO: setup centralized error management here
 
   public void openMainMenu(@NotNull Player whoOpen) {
     logger.debug("Open MainMenu GUI for a player: playerName={}", whoOpen.getName());
