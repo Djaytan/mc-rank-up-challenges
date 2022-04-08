@@ -33,7 +33,7 @@ public class GuiceGeneralTestModule extends AbstractModule {
 
   @Override
   public void configure() {
-    bind(PlayerShopDao.class).to(PlayerShopDaoImpl.class); // TODO: fix Mock
+    bind(PlayerShopDao.class).to(PlayerShopDaoImpl.class);
   }
 
   @Provides
