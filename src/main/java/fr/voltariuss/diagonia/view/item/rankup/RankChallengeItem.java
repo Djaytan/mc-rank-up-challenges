@@ -85,11 +85,11 @@ public class RankChallengeItem {
     return ItemBuilder.from(rankChallenge.getMaterial())
         .name(itemName)
         .lore(itemLore)
-        .asGuiItem(onClick(rank, rankChallenge, isChallengeCompleted));
+        .asGuiItem(onClick(rank, rankChallenge));
   }
 
   private @NotNull GuiAction<InventoryClickEvent> onClick(
-      @NotNull Rank rank, @NotNull RankChallenge rankChallenge, boolean isChallengeCompleted) {
+      @NotNull Rank rank, @NotNull RankChallenge rankChallenge) {
     return event -> {
       Player whoClicked = (Player) event.getWhoClicked();
       ItemStack clickedItem = event.getCurrentItem();
@@ -103,7 +103,6 @@ public class RankChallengeItem {
         throw new NullPointerException(
             "The current item involved in the InventoryClickEvent can't be null.");
       }
-      // TODO: move controller logic... in controller!
 
       int nbItemsInInventory = countItem(whoClicked.getInventory(), clickedItem.getType());
 

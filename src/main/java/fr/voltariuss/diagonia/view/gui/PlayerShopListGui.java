@@ -33,9 +33,9 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -53,6 +53,7 @@ public class PlayerShopListGui {
   private final MiniMessage miniMessage;
   private final PaginatedItem paginatedItem;
   private final ResourceBundle resourceBundle;
+  private final Server server;
 
   @Inject
   public PlayerShopListGui(
@@ -62,7 +63,8 @@ public class PlayerShopListGui {
       @NotNull GoToMainMenuItem goToMainMenuItem,
       @NotNull MiniMessage miniMessage,
       @NotNull PaginatedItem paginatedItem,
-      @NotNull ResourceBundle resourceBundle) {
+      @NotNull ResourceBundle resourceBundle,
+      @NotNull Server server) {
     this.buyPlayerShopItem = buyPlayerShopItem;
     this.configPlayerShopItem = configPlayerShopItem;
     this.consultPlayerShopItem = consultPlayerShopItem;
@@ -70,6 +72,7 @@ public class PlayerShopListGui {
     this.miniMessage = miniMessage;
     this.paginatedItem = paginatedItem;
     this.resourceBundle = resourceBundle;
+    this.server = server;
   }
 
   public void open(
@@ -95,9 +98,7 @@ public class PlayerShopListGui {
         playerShopList.stream()
             .map(
                 playerShop -> {
-                  OfflinePlayer ownerPlayer =
-                      Bukkit.getOfflinePlayer(
-                          playerShop.getOwnerUuid()); // TODO: move owner recovering out of view
+                  OfflinePlayer ownerPlayer = server.getOfflinePlayer(playerShop.getOwnerUuid());
                   return consultPlayerShopItem.createItem(ownerPlayer, playerShop);
                 })
             .filter(Objects::nonNull)

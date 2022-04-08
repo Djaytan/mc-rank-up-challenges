@@ -16,6 +16,7 @@
 
 package fr.voltariuss.diagonia.view.gui;
 
+import com.google.common.base.Preconditions;
 import dev.triumphteam.gui.builder.item.ItemBuilder;
 import dev.triumphteam.gui.guis.Gui;
 import dev.triumphteam.gui.guis.GuiItem;
@@ -76,6 +77,8 @@ public class RankUpChallengesGui {
 
   public void open(
       @NotNull Player whoOpen, @NotNull Rank rank, @NotNull RankUpProgression rankUpProgression) {
+    Preconditions.checkNotNull(rank.getRankUpChallenges());
+
     PaginatedGui gui =
         Gui.paginated()
             .pageSize(PAGE_SIZE)
@@ -93,7 +96,6 @@ public class RankUpChallengesGui {
       gui.setItem(5, i, decorationItem);
     }
 
-    // TODO: take into account null case
     rank.getRankUpChallenges()
         .forEach(
             rankChallenge -> {
