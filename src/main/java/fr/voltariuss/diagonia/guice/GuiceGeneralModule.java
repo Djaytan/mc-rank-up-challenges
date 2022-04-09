@@ -19,6 +19,7 @@ package fr.voltariuss.diagonia.guice;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
+import com.zaxxer.hikari.HikariConfig;
 import fr.voltariuss.diagonia.CriticalErrorHandler;
 import fr.voltariuss.diagonia.controller.MessageController;
 import fr.voltariuss.diagonia.controller.MessageControllerImpl;
@@ -144,11 +145,15 @@ public class GuiceGeneralModule extends AbstractModule {
       configuration.setProperty(AvailableSettings.FORMAT_SQL, "false");
       configuration.setProperty(AvailableSettings.HBM2DDL_AUTO, "update");
       configuration.setProperty(AvailableSettings.HBM2DDL_CHARSET_NAME, "UTF-8");
-      // TODO: what about isolation level?
       // TODO: cache properties definition
 
       configuration.setProperty("hibernate.hikari.maximumPoolSize", "10");
       configuration.setProperty("hibernate.hikari.minimumIdle", "5");
+      // Because plugin is mono-thread only one SQL request is dispatched at the same time, so there
+      // isn't any concurrency with the database. It's why serializable transaction isolation is
+      // actually the preference to ensure the best isolation as possible.
+      configuration.setProperty(
+          "hibernate.hikari.transactionIsolation", "TRANSACTION_SERIALIZABLE");
 
       configuration.addAnnotatedClass(PlayerShop.class);
       configuration.addAnnotatedClass(RankChallengeProgression.class);
