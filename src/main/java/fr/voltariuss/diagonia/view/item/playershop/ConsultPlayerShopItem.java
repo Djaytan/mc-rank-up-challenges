@@ -31,8 +31,8 @@ import javax.inject.Singleton;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.minimessage.Template;
-import net.kyori.adventure.text.minimessage.template.TemplateResolver;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -101,8 +101,7 @@ public class ConsultPlayerShopItem {
     return miniMessage
         .deserialize(
             resourceBundle.getString("diagonia.playershop.list.shop.name"),
-            TemplateResolver.templates(
-                Template.template("diag_player_name", miniMessage.deserialize(ownerName))))
+            TagResolver.resolver(Placeholder.unparsed("diag_player_name", ownerName)))
         .decoration(TextDecoration.ITALIC, false);
   }
 
@@ -111,7 +110,7 @@ public class ConsultPlayerShopItem {
         (psDesc != null
                 ? miniMessage.deserialize(
                     resourceBundle.getString("diagonia.playershop.list.shop.description"),
-                    TemplateResolver.templates(Template.template("diag_ps_description", psDesc)))
+                    TagResolver.resolver(Placeholder.unparsed("diag_ps_description", psDesc)))
                 : miniMessage.deserialize(
                     resourceBundle.getString("diagonia.playershop.list.shop.description.default")))
             .decoration(TextDecoration.ITALIC, false));

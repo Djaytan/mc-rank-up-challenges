@@ -25,8 +25,8 @@ import javax.inject.Singleton;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.minimessage.Template;
-import net.kyori.adventure.text.minimessage.template.TemplateResolver;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.jetbrains.annotations.NotNull;
 
 @Singleton
@@ -49,32 +49,32 @@ public class PlayerShopMessage {
   public @NotNull Component buySuccess(@NotNull EconomyResponse economyResponse) {
     return miniMessage.deserialize(
         resourceBundle.getString("diagonia.playershop.buy.success"),
-        TemplateResolver.templates(
-            Template.template(
+        TagResolver.resolver(
+            Placeholder.unparsed(
                 "diag_price", economyFormatter.format(economyResponse.getModifiedAmount())),
-            Template.template(
+            Placeholder.unparsed(
                 "diag_new_balance", economyFormatter.format(economyResponse.getNewBalance()))));
   }
 
   public @NotNull Component teleportPointDefined(@NotNull LocationDto locationDto) {
     return miniMessage.deserialize(
         resourceBundle.getString("diagonia.playershop.config.teleportation.defined"),
-        TemplateResolver.templates(
-            Template.template(
+        TagResolver.resolver(
+            Placeholder.component(
                 "diag_teleport_point",
                 miniMessage.deserialize(
                     resourceBundle.getString(
                         "diagonia.playershop.config.teleportation.defined.location"),
-                    TemplateResolver.templates(
-                        Template.template(
+                    TagResolver.resolver(
+                        Placeholder.unparsed(
                             "diag_location_x", String.format("%.2f", locationDto.getX())),
-                        Template.template(
+                        Placeholder.unparsed(
                             "diag_location_y", String.format("%.2f", locationDto.getY())),
-                        Template.template(
+                        Placeholder.unparsed(
                             "diag_location_z", String.format("%.2f", locationDto.getZ())),
-                        Template.template(
+                        Placeholder.unparsed(
                             "diag_location_yaw", String.format("%.2f", locationDto.getYaw())),
-                        Template.template(
+                        Placeholder.unparsed(
                             "diag_location_pitch",
                             String.format("%.2f", locationDto.getPitch())))))));
   }
@@ -82,8 +82,8 @@ public class PlayerShopMessage {
   public @NotNull Component toggleShop(boolean isPlayerShopActive) {
     return miniMessage.deserialize(
         resourceBundle.getString("diagonia.playershop.config.activation.toggled"),
-        TemplateResolver.templates(
-            Template.template(
+        TagResolver.resolver(
+            Placeholder.component(
                 "diag_activation_state",
                 miniMessage.deserialize(
                     resourceBundle.getString(
@@ -140,6 +140,6 @@ public class PlayerShopMessage {
   public @NotNull Component successTeleport(@NotNull String ownerName) {
     return miniMessage.deserialize(
         resourceBundle.getString("diagonia.playershop.teleportation.success"),
-        TemplateResolver.templates(Template.template("diag_owner_name", ownerName)));
+        TagResolver.resolver(Placeholder.unparsed("diag_owner_name", ownerName)));
   }
 }

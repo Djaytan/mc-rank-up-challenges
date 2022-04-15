@@ -36,8 +36,8 @@ import javax.inject.Singleton;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.minimessage.Template;
-import net.kyori.adventure.text.minimessage.template.TemplateResolver;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -132,8 +132,8 @@ public class RankChallengeItem {
     return miniMessage
         .deserialize(
             resourceBundle.getString("diagonia.rankup.challenges.item.name"),
-            TemplateResolver.templates(
-                Template.template(
+            TagResolver.resolver(
+                Placeholder.component(
                     "diag_challenge_name",
                     Component.translatable(rankChallenge.getMaterial().translationKey()))))
         .decoration(TextDecoration.ITALIC, false);
@@ -161,11 +161,11 @@ public class RankChallengeItem {
         miniMessage
             .deserialize(
                 resourceBundle.getString("diagonia.rankup.challenges.item.lore.progress"),
-                TemplateResolver.templates(
-                    Template.template(
+                TagResolver.resolver(
+                    Placeholder.component(
                         "diag_amount_given",
                         getCurrentProgression(isChallengeCompleted, String.valueOf(amountGiven))),
-                    Template.template(
+                    Placeholder.unparsed(
                         "diag_amount_required", String.valueOf(rankChallenge.getAmount()))))
             .decoration(TextDecoration.ITALIC, false));
   }
@@ -180,7 +180,7 @@ public class RankChallengeItem {
 
     return miniMessage.deserialize(
         resourceBundle.getString(templateMessageKey),
-        TemplateResolver.templates(Template.template("diag_current_progression", value)));
+        TagResolver.resolver(Placeholder.unparsed("diag_current_progression", value)));
   }
 
   private @NotNull @UnmodifiableView List<Component> getActionLorePart() {

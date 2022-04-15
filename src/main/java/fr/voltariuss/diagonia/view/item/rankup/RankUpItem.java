@@ -34,8 +34,8 @@ import javax.inject.Singleton;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.minimessage.Template;
-import net.kyori.adventure.text.minimessage.template.TemplateResolver;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -122,13 +122,13 @@ public class RankUpItem {
             .deserialize(
                 resourceBundle.getString(
                     "diagonia.rankup.rankup.item.lore.prerequisite.required.minecraft_xp"),
-                TemplateResolver.templates(
-                    Template.template(
+                TagResolver.resolver(
+                    Placeholder.component(
                         "diag_current_level",
                         getCurrentProgression(
                             rankUpProgression.isXpLevelPrerequisiteDone(),
                             String.valueOf(rankUpProgression.getCurrentXpLevel()))),
-                    Template.template(
+                    Placeholder.unparsed(
                         "diag_required_level",
                         String.valueOf(rankUpPrerequisites.getTotalMcExpLevels()))))
             .decoration(TextDecoration.ITALIC, false),
@@ -136,13 +136,13 @@ public class RankUpItem {
             .deserialize(
                 resourceBundle.getString(
                     "diagonia.rankup.rankup.item.lore.prerequisite.required.jobs_levels"),
-                TemplateResolver.templates(
-                    Template.template(
+                TagResolver.resolver(
+                    Placeholder.component(
                         "diag_current_level",
                         getCurrentProgression(
                             rankUpProgression.isTotalJobsLevelsPrerequisiteDone(),
                             String.valueOf(rankUpProgression.getTotalJobsLevels()))),
-                    Template.template(
+                    Placeholder.unparsed(
                         "diag_required_level",
                         String.valueOf(rankUpPrerequisites.getTotalJobsLevel()))))
             .decoration(TextDecoration.ITALIC, false),
@@ -150,13 +150,13 @@ public class RankUpItem {
             .deserialize(
                 resourceBundle.getString(
                     "diagonia.rankup.rankup.item.lore.prerequisite.required.money"),
-                TemplateResolver.templates(
-                    Template.template(
+                TagResolver.resolver(
+                    Placeholder.component(
                         "diag_current_balance",
                         getCurrentProgression(
                             rankUpProgression.isMoneyPrerequisiteDone(),
                             economyFormatter.format(rankUpProgression.getCurrentBalance()))),
-                    Template.template(
+                    Placeholder.unparsed(
                         "diag_rankup_price",
                         economyFormatter.format(rankUpPrerequisites.getMoneyPrice()))))
             .decoration(TextDecoration.ITALIC, false));
@@ -186,6 +186,6 @@ public class RankUpItem {
 
     return miniMessage.deserialize(
         resourceBundle.getString(templateMessageKey),
-        TemplateResolver.templates(Template.template("diag_current_progression", value)));
+        TagResolver.resolver(Placeholder.unparsed("diag_current_progression", value)));
   }
 }

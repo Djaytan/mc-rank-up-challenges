@@ -23,8 +23,8 @@ import javax.inject.Singleton;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.minimessage.Template;
-import net.kyori.adventure.text.minimessage.template.TemplateResolver;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -50,9 +50,9 @@ public class RankUpMessage {
     return miniMessage
         .deserialize(
             resourceBundle.getString("diagonia.rankup.rankup.success"),
-            TemplateResolver.templates(
-                Template.template("player_name", whoRankUp.getName()),
-                Template.template(
+            TagResolver.resolver(
+                Placeholder.unparsed("player_name", whoRankUp.getName()),
+                Placeholder.component(
                     "rank", Component.text(newRank.getName()).color(newRank.getColor()))))
         .decoration(TextDecoration.ITALIC, false);
   }
@@ -97,9 +97,9 @@ public class RankUpMessage {
     return miniMessage
         .deserialize(
             resourceBundle.getString("diagonia.rankup.challenges.give.success.amount_given"),
-            TemplateResolver.templates(
-                Template.template("diag_amount_given", String.valueOf(amountGiven)),
-                Template.template("diag_item_name", itemsGivenNameCpnt)))
+            TagResolver.resolver(
+                Placeholder.unparsed("diag_amount_given", String.valueOf(amountGiven)),
+                Placeholder.component("diag_item_name", itemsGivenNameCpnt)))
         .decoration(TextDecoration.ITALIC, false);
   }
 
@@ -107,7 +107,7 @@ public class RankUpMessage {
     return miniMessage
         .deserialize(
             resourceBundle.getString("diagonia.rankup.challenges.give.success.now_completed"),
-            TemplateResolver.templates(Template.template("diag_challenge_name", challengeNameCpnt)))
+            TagResolver.resolver(Placeholder.component("diag_challenge_name", challengeNameCpnt)))
         .decoration(TextDecoration.ITALIC, false);
   }
 }

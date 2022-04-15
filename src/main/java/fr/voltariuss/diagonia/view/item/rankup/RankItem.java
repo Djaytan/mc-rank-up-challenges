@@ -32,8 +32,8 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.minimessage.Template;
-import net.kyori.adventure.text.minimessage.template.TemplateResolver;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -123,12 +123,10 @@ public class RankItem {
     return miniMessage
         .deserialize(
             resourceBundle.getString("diagonia.rankup.ranks.item.name"),
-            TemplateResolver.templates(
-                Template.template(
+            TagResolver.resolver(
+                Placeholder.component(
                     "diag_rank_name", Component.text(rank.getName()).color(rank.getColor())),
-                Template.template(
-                    "diag_rank_status",
-                    miniMessage.deserialize(resourceBundle.getString(rankStatusKey)))))
+                Placeholder.parsed("diag_rank_status", resourceBundle.getString(rankStatusKey))))
         .decoration(TextDecoration.ITALIC, false);
   }
 
@@ -144,15 +142,14 @@ public class RankItem {
   }
 
   private @NotNull @UnmodifiableView List<Component> getDescriptionLorePart(@NotNull Rank rank) {
-    return Collections.unmodifiableList(
-        rank.getDescription().stream()
-            .map(
-                descLine ->
-                    miniMessage
-                        .deserialize(descLine)
-                        .color(TextColor.color(Color.GRAY.asRGB()))
-                        .decoration(TextDecoration.ITALIC, false))
-            .toList());
+    return rank.getDescription().stream()
+        .map(
+            descLine ->
+                miniMessage
+                    .deserialize(descLine)
+                    .color(TextColor.color(Color.GRAY.asRGB()))
+                    .decoration(TextDecoration.ITALIC, false))
+        .toList();
   }
 
   private @NotNull @UnmodifiableView List<Component> getProfitsLorePart(@NotNull Rank rank) {
@@ -169,8 +166,8 @@ public class RankItem {
                     miniMessage
                         .deserialize(
                             resourceBundle.getString("diagonia.rankup.ranks.item.lore.profit"),
-                            TemplateResolver.templates(
-                                Template.template("diag_profit", profitDescLine)))
+                            TagResolver.resolver(
+                                Placeholder.unparsed("diag_profit", profitDescLine)))
                         .decoration(TextDecoration.ITALIC, false)));
 
     return Collections.unmodifiableList(profitsLore);

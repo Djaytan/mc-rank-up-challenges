@@ -23,8 +23,8 @@ import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.minimessage.Template;
-import net.kyori.adventure.text.minimessage.template.TemplateResolver;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
@@ -99,7 +99,7 @@ public class MessageControllerImpl implements MessageController {
     return miniMessage
         .deserialize(
             resourceBundle.getString(messageFormatKey),
-            TemplateResolver.templates(Template.template("diag_message_content", message)))
+            TagResolver.resolver(Placeholder.component("diag_message_content", message)))
         .decoration(TextDecoration.ITALIC, false);
   }
 }

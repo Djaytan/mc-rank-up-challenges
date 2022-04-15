@@ -22,8 +22,8 @@ import javax.inject.Singleton;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.minimessage.Template;
-import net.kyori.adventure.text.minimessage.template.TemplateResolver;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.jetbrains.annotations.NotNull;
 
 @Singleton
@@ -48,7 +48,7 @@ public class CommonMessage {
     return miniMessage
         .deserialize(
             resourceBundle.getString("diagonia.common.fail.player_not_found"),
-            TemplateResolver.templates(Template.template("diag_player_name", playerName)))
+            TagResolver.resolver(Placeholder.unparsed("diag_player_name", playerName)))
         .decoration(TextDecoration.ITALIC, false);
   }
 }
