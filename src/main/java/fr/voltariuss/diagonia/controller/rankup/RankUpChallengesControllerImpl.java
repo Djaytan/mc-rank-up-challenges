@@ -82,14 +82,14 @@ public class RankUpChallengesControllerImpl implements RankUpChallengesControlle
       @NotNull RankChallenge rankChallenge,
       @NotNull GiveActionType giveActionType,
       int nbItemsInInventory) {
-    if (nbItemsInInventory == 0) {
-      messageController.sendFailureMessage(targetPlayer, rankUpMessage.noItemInInventory());
+    if (rankChallengeProgressionService.isChallengeCompleted(
+      targetPlayer.getUniqueId(), rank.getId(), rankChallenge)) {
+      messageController.sendFailureMessage(targetPlayer, rankUpMessage.challengeAlreadyCompleted());
       return;
     }
 
-    if (rankChallengeProgressionService.isChallengeCompleted(
-        targetPlayer.getUniqueId(), rank.getId(), rankChallenge)) {
-      messageController.sendFailureMessage(targetPlayer, rankUpMessage.challengeAlreadyCompleted());
+    if (nbItemsInInventory == 0) {
+      messageController.sendFailureMessage(targetPlayer, rankUpMessage.noItemInInventory());
       return;
     }
 
