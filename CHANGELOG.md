@@ -1,5 +1,11 @@
 # Changelog
 
+## Version 1.1.1 (04/15/2022)
+
+### Fixes
+* Make plugin compatible with MiniMessage v4.10.0 and higher (required when using PaperMC 1.18.2 or higher)
+* Only shown message about missing item for rank challenges when it's not completed yet.
+
 ## Version 1.1.0 (04/15/2022)
 
 ### Features
