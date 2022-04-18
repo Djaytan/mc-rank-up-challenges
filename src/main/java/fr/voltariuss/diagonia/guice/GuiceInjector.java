@@ -24,10 +24,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 /** Guice injector for Bukkit plugin. */
-public final class DiagoniaPlayerShopsInjector {
+public final class GuiceInjector {
 
   /** Private constructor. */
-  private DiagoniaPlayerShopsInjector() {}
+  private GuiceInjector() {}
 
   /**
    * Inject already instantiated stuff into Guice (e.g. {@link JavaPlugin}).

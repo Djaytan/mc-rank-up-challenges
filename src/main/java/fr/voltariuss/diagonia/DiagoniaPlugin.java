@@ -16,7 +16,7 @@
 
 package fr.voltariuss.diagonia;
 
-import fr.voltariuss.diagonia.guice.DiagoniaPlayerShopsInjector;
+import fr.voltariuss.diagonia.guice.GuiceInjector;
 import fr.voltariuss.diagonia.model.RankConfigDeserializer;
 import fr.voltariuss.diagonia.model.RankConfigInitializer;
 import fr.voltariuss.diagonia.model.config.PluginConfig;
@@ -61,7 +61,7 @@ public class DiagoniaPlugin extends JavaPlugin {
     }
 
     // Guice setup
-    DiagoniaPlayerShopsInjector.inject(this, pluginConfig, rankConfig);
+    GuiceInjector.inject(this, pluginConfig, rankConfig);
 
     // Additional setup
     prerequisitesValidation.validate();
