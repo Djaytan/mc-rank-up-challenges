@@ -45,6 +45,7 @@ public class DiagoniaPlugin extends JavaPlugin {
 
   @Inject private SessionFactory sessionFactory;
   @Inject private CommandRegister commandRegister;
+  @Inject private ListenerRegister listenerRegister;
   @Inject private PrerequisitesValidation prerequisitesValidation;
 
   @SneakyThrows
@@ -114,6 +115,11 @@ public class DiagoniaPlugin extends JavaPlugin {
 
       messageController.sendConsoleMessage(
           commonMessage.startupBannerProgressionLine("Commands registration"));
+
+      listenerRegister.registerListeners();
+
+      messageController.sendConsoleMessage(
+          commonMessage.startupBannerProgressionLine("Listeners registration"));
 
       messageController.sendConsoleMessage(commonMessage.startupBannerEnablingSuccessLine());
     } catch (Exception e) {
