@@ -22,6 +22,10 @@ import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import fr.voltariuss.diagonia.DiagoniaException;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.luckperms.api.LuckPerms;
+import net.luckperms.api.model.group.GroupManager;
+import net.luckperms.api.model.user.UserManager;
+import net.luckperms.api.track.TrackManager;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -29,16 +33,21 @@ import org.jetbrains.annotations.NotNull;
 
 public class GuiceBukkitLibsModule extends AbstractModule {
 
+  private final LuckPerms luckPerms;
+  private final MiniMessage miniMessage;
   private final JavaPlugin plugin;
 
-  public GuiceBukkitLibsModule(@NotNull JavaPlugin plugin) {
+  public GuiceBukkitLibsModule(
+      @NotNull LuckPerms luckPerms, @NotNull MiniMessage miniMessage, @NotNull JavaPlugin plugin) {
+    this.luckPerms = luckPerms;
+    this.miniMessage = miniMessage;
     this.plugin = plugin;
   }
 
   @Provides
   @Singleton
   public @NotNull MiniMessage provideMiniMessage() {
-    return MiniMessage.miniMessage();
+    return miniMessage;
   }
 
   @Provides
@@ -56,5 +65,29 @@ public class GuiceBukkitLibsModule extends AbstractModule {
       throw new DiagoniaException("Failed to found Economy service of Vault dependency.");
     }
     return rsp.getProvider();
+  }
+
+  @Provides
+  @Singleton
+  public @NotNull LuckPerms provideLuckPerms() {
+    return luckPerms;
+  }
+
+  @Provides
+  @Singleton
+  public @NotNull UserManager provideUserManager() {
+    return luckPerms.getUserManager();
+  }
+
+  @Provides
+  @Singleton
+  public @NotNull GroupManager provideGroupManager() {
+    return luckPerms.getGroupManager();
+  }
+
+  @Provides
+  @Singleton
+  public @NotNull TrackManager provideTrackManager() {
+    return luckPerms.getTrackManager();
   }
 }

@@ -21,6 +21,10 @@ import org.jetbrains.annotations.Nullable;
 
 public class DiagoniaRuntimeException extends RuntimeException {
 
+  public DiagoniaRuntimeException(@NotNull String message) {
+    super(message);
+  }
+
   public DiagoniaRuntimeException(@NotNull String message, @Nullable Throwable cause) {
     super(message, cause);
   }
