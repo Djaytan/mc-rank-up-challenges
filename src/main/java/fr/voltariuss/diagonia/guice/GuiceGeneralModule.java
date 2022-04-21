@@ -172,6 +172,6 @@ public class GuiceGeneralModule extends AbstractModule {
   @Provides
   @Singleton
   public @NotNull ResourceBundle provideResourceBundle() {
-    return ResourceBundle.getBundle("language");
+    return ResourceBundle.getBundle("diagonia", Locale.FRANCE);
   }
 }

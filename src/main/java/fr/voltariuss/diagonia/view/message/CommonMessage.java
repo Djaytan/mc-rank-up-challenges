@@ -24,10 +24,13 @@ import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import org.bukkit.plugin.PluginDescriptionFile;
 import org.jetbrains.annotations.NotNull;
 
 @Singleton
 public class CommonMessage {
+
+  private static final Component STARTUP_BANNER_INDENT = Component.text("      ");
 
   private final MiniMessage miniMessage;
   private final ResourceBundle resourceBundle;
@@ -36,6 +39,40 @@ public class CommonMessage {
   public CommonMessage(@NotNull MiniMessage miniMessage, @NotNull ResourceBundle resourceBundle) {
     this.miniMessage = miniMessage;
     this.resourceBundle = resourceBundle;
+  }
+
+  public @NotNull Component startupBanner() {
+    return miniMessage.deserialize(
+        resourceBundle.getString("diagonia.common.message.startup.banner"),
+        TagResolver.resolver(Placeholder.component("diag_indentation", STARTUP_BANNER_INDENT)));
+  }
+
+  public @NotNull Component startupBannerVersionLine(
+      @NotNull PluginDescriptionFile pluginDescriptionFile) {
+    return STARTUP_BANNER_INDENT.append(
+        miniMessage.deserialize(
+            resourceBundle.getString("diagonia.common.message.startup.current_version"),
+            TagResolver.resolver(
+                Placeholder.unparsed("diag_plugin_version", pluginDescriptionFile.getVersion()))));
+  }
+
+  public @NotNull Component startupBannerProgressionLine(@NotNull String text) {
+    return STARTUP_BANNER_INDENT.append(
+        miniMessage.deserialize(
+            resourceBundle.getString("diagonia.common.message.startup.progression_line.format"),
+            TagResolver.resolver(Placeholder.unparsed("diag_progression_message", text))));
+  }
+
+  public @NotNull Component startupBannerEnablingSuccessLine() {
+    return STARTUP_BANNER_INDENT.append(
+        miniMessage.deserialize(
+            resourceBundle.getString("diagonia.common.message.startup.enabling_successfully")));
+  }
+
+  public @NotNull Component startupBannerEnablingFailureLine() {
+    return STARTUP_BANNER_INDENT.append(
+        miniMessage.deserialize(
+            resourceBundle.getString("diagonia.common.message.startup.enabling_failed")));
   }
 
   public @NotNull Component unexpectedError() {
