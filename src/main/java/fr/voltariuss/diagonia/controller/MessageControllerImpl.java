@@ -27,53 +27,66 @@ import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.jetbrains.annotations.NotNull;
 
 @Singleton
 public class MessageControllerImpl implements MessageController {
 
+  private final ConsoleCommandSender consoleCommandSender;
   private final MiniMessage miniMessage;
   private final ResourceBundle resourceBundle;
   private final Server server;
 
   @Inject
   public MessageControllerImpl(
+      @NotNull ConsoleCommandSender consoleCommandSender,
       @NotNull MiniMessage miniMessage,
       @NotNull ResourceBundle resourceBundle,
       @NotNull Server server) {
+    this.consoleCommandSender = consoleCommandSender;
     this.miniMessage = miniMessage;
     this.resourceBundle = resourceBundle;
     this.server = server;
   }
 
   @Override
-  public void sendInfoMessage(@NotNull CommandSender commandSender, @NotNull Component message) {
-    sendMessage(commandSender, MessageType.INFO, message);
+  public void sendInfoMessage(@NotNull CommandSender receiver, @NotNull Component message) {
+    sendMessage(receiver, MessageType.INFO, message);
   }
 
   @Override
-  public void sendSuccessMessage(@NotNull CommandSender commandSender, @NotNull Component message) {
-    sendMessage(commandSender, MessageType.SUCCESS, message);
+  public void sendSuccessMessage(@NotNull CommandSender receiver, @NotNull Component message) {
+    sendMessage(receiver, MessageType.SUCCESS, message);
   }
 
   @Override
-  public void sendFailureMessage(@NotNull CommandSender commandSender, @NotNull Component message) {
-    sendMessage(commandSender, MessageType.FAILURE, message);
+  public void sendFailureMessage(@NotNull CommandSender receiver, @NotNull Component message) {
+    sendMessage(receiver, MessageType.FAILURE, message);
   }
 
   @Override
-  public void sendWarningMessage(@NotNull CommandSender commandSender, @NotNull Component message) {
-    sendMessage(commandSender, MessageType.WARNING, message);
+  public void sendWarningMessage(@NotNull CommandSender receiver, @NotNull Component message) {
+    sendMessage(receiver, MessageType.WARNING, message);
   }
 
   @Override
-  public void sendErrorMessage(@NotNull CommandSender commandSender, @NotNull Component message) {
-    sendMessage(commandSender, MessageType.ERROR, message);
+  public void sendErrorMessage(@NotNull CommandSender receiver, @NotNull Component message) {
+    sendMessage(receiver, MessageType.ERROR, message);
   }
 
   @Override
-  public void broadcastMessage(@NotNull Component component) {
-    sendMessage(Audience.audience(server.getOnlinePlayers()), MessageType.BROADCAST, component);
+  public void sendRawMessage(@NotNull CommandSender receiver, @NotNull Component message) {
+    receiver.sendMessage(message, net.kyori.adventure.audience.MessageType.SYSTEM);
+  }
+
+  public void sendConsoleMessage(@NotNull Component message) {
+    consoleCommandSender.sendMessage(message, net.kyori.adventure.audience.MessageType.SYSTEM);
+  }
+
+  @Override
+  public void broadcastMessage(@NotNull Component message) {
+    sendMessage(Audience.audience(server.getOnlinePlayers()), MessageType.BROADCAST, message);
   }
 
   private void sendMessage(
