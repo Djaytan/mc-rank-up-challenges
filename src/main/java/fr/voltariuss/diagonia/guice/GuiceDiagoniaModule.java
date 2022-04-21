@@ -25,6 +25,7 @@ import fr.voltariuss.diagonia.model.config.PluginConfig;
 import fr.voltariuss.diagonia.model.config.rank.RankConfig;
 import fr.voltariuss.diagonia.model.entity.PlayerShop;
 import fr.voltariuss.diagonia.model.entity.RankChallengeProgression;
+import fr.voltariuss.diagonia.utils.UrlUtils;
 import java.util.Objects;
 import javax.inject.Named;
 import net.luckperms.api.LuckPerms;
@@ -82,8 +83,7 @@ public class GuiceDiagoniaModule extends AbstractModule {
   public @NotNull SessionFactory provideSessionFactory() {
     SessionFactory sessionFactory = null;
     String connectionUrl =
-        String.format(
-            "jdbc:mariadb://%s:%d/%s",
+        UrlUtils.getDatabaseUrl(
             pluginConfig.getDatabaseConfig().getHost(),
             pluginConfig.getDatabaseConfig().getPort(),
             pluginConfig.getDatabaseConfig().getDatabase());

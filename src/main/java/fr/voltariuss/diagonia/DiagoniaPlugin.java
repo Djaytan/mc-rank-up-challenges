@@ -22,11 +22,15 @@ import fr.voltariuss.diagonia.guice.GuiceInjector;
 import fr.voltariuss.diagonia.model.RankConfigDeserializer;
 import fr.voltariuss.diagonia.model.RankConfigInitializer;
 import fr.voltariuss.diagonia.model.config.PluginConfig;
+import fr.voltariuss.diagonia.model.config.rank.Rank;
 import fr.voltariuss.diagonia.model.config.rank.RankConfig;
 import fr.voltariuss.diagonia.model.service.PluginConfigService;
+import fr.voltariuss.diagonia.utils.UrlUtils;
 import fr.voltariuss.diagonia.view.message.CommonMessage;
 import java.io.IOException;
+import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.ResourceBundle;
 import javax.inject.Inject;
 import lombok.SneakyThrows;
@@ -62,10 +66,40 @@ public class DiagoniaPlugin extends JavaPlugin {
       messageController.sendConsoleMessage(commonMessage.startupBanner());
       messageController.sendConsoleMessage(
           commonMessage.startupBannerVersionLine(getDescription()));
+
       messageController.sendConsoleMessage(
           commonMessage.startupBannerProgressionLine("General config file loading"));
       messageController.sendConsoleMessage(
+          commonMessage.startupBannerStateLine(
+              "Debug Mode", Boolean.toString(pluginConfig.isDebugMode())));
+      messageController.sendConsoleMessage(
+          commonMessage.startupBannerStateLine(
+              "Database connection URL",
+              UrlUtils.getDatabaseUrl(
+                  pluginConfig.getDatabaseConfig().getHost(),
+                  pluginConfig.getDatabaseConfig().getPort(),
+                  pluginConfig.getDatabaseConfig().getDatabase())));
+      messageController.sendConsoleMessage(
+          commonMessage.startupBannerStateLine(
+              "Database username", pluginConfig.getDatabaseConfig().getUsername()));
+      messageController.sendConsoleMessage(
+          commonMessage.startupBannerStateLine(
+              "LuckPerms rank track name", pluginConfig.getRankUpConfig().getLuckPermsTrackName()));
+
+      messageController.sendConsoleMessage(
           commonMessage.startupBannerProgressionLine("Rank config file loading"));
+      messageController.sendConsoleMessage(
+          commonMessage.startupBannerStateLine(
+              "Number of ranks loaded", Integer.toString(rankConfig.getRanks().size())));
+      messageController.sendConsoleMessage(
+          commonMessage.startupBannerStateLine(
+              "Number of challenges loaded",
+              Integer.toString(
+                  rankConfig.getRanks().stream()
+                      .map(Rank::getRankUpChallenges)
+                      .map(Objects::requireNonNull)
+                      .mapToInt(List::size)
+                      .sum())));
 
       messageController.sendConsoleMessage(
           commonMessage.startupBannerProgressionLine("Guice full injection"));

@@ -63,6 +63,15 @@ public class CommonMessage {
             TagResolver.resolver(Placeholder.unparsed("diag_progression_message", text))));
   }
 
+  public @NotNull Component startupBannerStateLine(
+      @NotNull String key, @NotNull String value) {
+    return STARTUP_BANNER_INDENT.append(Component.text("  ")).append(
+        miniMessage.deserialize(
+            resourceBundle.getString("diagonia.common.message.startup.state.format"),
+            TagResolver.resolver(
+                Placeholder.unparsed("diag_key", key), Placeholder.unparsed("diag_value", value))));
+  }
+
   public @NotNull Component startupBannerEnablingSuccessLine() {
     return STARTUP_BANNER_INDENT.append(
         miniMessage.deserialize(
