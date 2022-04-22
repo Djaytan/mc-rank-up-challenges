@@ -17,6 +17,7 @@
 package fr.voltariuss.diagonia.listeners;
 
 import fr.voltariuss.diagonia.RemakeBukkitLogger;
+import fr.voltariuss.diagonia.model.config.PluginConfig;
 import java.util.stream.IntStream;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -31,10 +32,13 @@ import org.jetbrains.annotations.NotNull;
 @Singleton
 public class PrepareItemEnchantListener implements Listener {
 
+  private final PluginConfig pluginConfig;
   private final RemakeBukkitLogger logger;
 
   @Inject
-  public PrepareItemEnchantListener(@NotNull RemakeBukkitLogger logger) {
+  public PrepareItemEnchantListener(
+      @NotNull PluginConfig pluginConfig, @NotNull RemakeBukkitLogger logger) {
+    this.pluginConfig = pluginConfig;
     this.logger = logger;
   }
 
@@ -48,8 +52,9 @@ public class PrepareItemEnchantListener implements Listener {
         .forEach(
             i -> {
               EnchantmentOffer enchantmentOffer = enchantmentOffers[i];
-              if (EnchantItemListener.BLACKLISTED_ENCHANTMENTS.contains(
-                  enchantmentOffer.getEnchantment())) {
+              if (pluginConfig
+                  .getBlacklistedEnchantments()
+                  .contains(enchantmentOffer.getEnchantment())) {
                 logger.info(
                     "Blacklisted enchantment {} detected for an EnchantmentOffer, replacing it by"
                         + " the durability one.",

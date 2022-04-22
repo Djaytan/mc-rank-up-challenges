@@ -16,8 +16,10 @@
 
 package fr.voltariuss.diagonia.model.config;
 
+import java.util.List;
 import lombok.Builder;
 import lombok.Data;
+import org.bukkit.enchantments.Enchantment;
 
 @Data
 @Builder
@@ -26,6 +28,7 @@ public class PluginConfig {
   private final DatabaseConfig databaseConfig;
   private final PlayerShopConfig playerShopConfig;
   private final RankUpConfig rankUpConfig;
+  private List<Enchantment> blacklistedEnchantments;
   private final boolean debugMode;
 
   @Data

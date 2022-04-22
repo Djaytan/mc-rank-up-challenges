@@ -17,8 +17,7 @@
 package fr.voltariuss.diagonia.listeners;
 
 import fr.voltariuss.diagonia.RemakeBukkitLogger;
-import java.util.Arrays;
-import java.util.List;
+import fr.voltariuss.diagonia.model.config.PluginConfig;
 import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -32,14 +31,13 @@ import org.jetbrains.annotations.NotNull;
 @Singleton
 public class EnchantItemListener implements Listener {
 
-  // TODO: use config
-  public static final List<Enchantment> BLACKLISTED_ENCHANTMENTS =
-      Arrays.asList(Enchantment.MENDING, Enchantment.ARROW_INFINITE);
-
+  private final PluginConfig pluginConfig;
   private final RemakeBukkitLogger logger;
 
   @Inject
-  public EnchantItemListener(@NotNull RemakeBukkitLogger logger) {
+  public EnchantItemListener(
+      @NotNull PluginConfig pluginConfig, @NotNull RemakeBukkitLogger logger) {
+    this.pluginConfig = pluginConfig;
     this.logger = logger;
   }
 
@@ -47,14 +45,16 @@ public class EnchantItemListener implements Listener {
   public void onItemEnchant(@NotNull EnchantItemEvent event) {
     Map<Enchantment, Integer> enchantsToAdd = event.getEnchantsToAdd();
 
-    BLACKLISTED_ENCHANTMENTS.forEach(
-        blackListedEnchantment -> {
-          if (enchantsToAdd.containsKey(blackListedEnchantment)) {
-            enchantsToAdd.remove(blackListedEnchantment);
-            logger.info(
-                "Blacklisted enchantment {} detected and deleted at enchantment time.",
-                blackListedEnchantment.getKey().getKey().toUpperCase());
-          }
-        });
+    pluginConfig
+        .getBlacklistedEnchantments()
+        .forEach(
+            blackListedEnchantment -> {
+              if (enchantsToAdd.containsKey(blackListedEnchantment)) {
+                enchantsToAdd.remove(blackListedEnchantment);
+                logger.info(
+                    "Blacklisted enchantment {} detected and deleted at enchantment time.",
+                    blackListedEnchantment.getKey().getKey().toUpperCase());
+              }
+            });
   }
 }
