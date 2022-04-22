@@ -40,7 +40,7 @@ public class PrepareAnvilListener implements Listener {
     this.predefinedItem = predefinedItem;
   }
 
-  @EventHandler(priority = EventPriority.HIGHEST)
+  @EventHandler(priority = EventPriority.LOWEST)
   public void onPrepareAnvil(@NotNull PrepareAnvilEvent event) {
     ItemStack result = event.getResult();
 

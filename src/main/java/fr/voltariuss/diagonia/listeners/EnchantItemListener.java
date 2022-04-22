@@ -35,7 +35,7 @@ public class EnchantItemListener implements Listener {
     this.pluginConfig = pluginConfig;
   }
 
-  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+  @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
   public void onItemEnchant(@NotNull EnchantItemEvent event) {
     pluginConfig.getBlacklistedEnchantments().forEach(event.getEnchantsToAdd()::remove);
   }

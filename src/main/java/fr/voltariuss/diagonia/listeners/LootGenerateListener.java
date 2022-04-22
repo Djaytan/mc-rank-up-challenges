@@ -40,7 +40,7 @@ public class LootGenerateListener implements Listener {
     this.logger = logger;
   }
 
-  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+  @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
   public void onLootGenerate(LootGenerateEvent event) {
     List<ItemStack> lootItems = event.getLoot();
 

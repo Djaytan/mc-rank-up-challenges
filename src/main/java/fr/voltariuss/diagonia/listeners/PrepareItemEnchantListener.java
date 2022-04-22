@@ -39,7 +39,7 @@ public class PrepareItemEnchantListener implements Listener {
     this.pluginConfig = pluginConfig;
   }
 
-  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+  @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
   public void onPrepareItemEnchant(@NotNull PrepareItemEnchantEvent event) {
     EnchantmentOffer[] enchantmentOffers = event.getOffers();
 

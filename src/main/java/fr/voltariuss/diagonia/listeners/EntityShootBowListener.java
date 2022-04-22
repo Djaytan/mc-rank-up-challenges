@@ -36,7 +36,7 @@ public class EntityShootBowListener implements Listener {
     this.pluginConfig = pluginConfig;
   }
 
-  @EventHandler(priority = EventPriority.LOWEST)
+  @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
   public void onEntityShootBow(@NotNull EntityShootBowEvent event) {
     ItemStack bowItem = event.getBow();
 
