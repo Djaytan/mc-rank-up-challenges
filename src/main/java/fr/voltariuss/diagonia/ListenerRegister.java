@@ -17,6 +17,8 @@
 package fr.voltariuss.diagonia;
 
 import fr.voltariuss.diagonia.listeners.EnchantItemListener;
+import fr.voltariuss.diagonia.listeners.InventoryClickListener;
+import fr.voltariuss.diagonia.listeners.PrepareAnvilListener;
 import fr.voltariuss.diagonia.listeners.PrepareItemEnchantListener;
 import javax.inject.Inject;
 import org.bukkit.plugin.PluginManager;
@@ -29,6 +31,8 @@ public class ListenerRegister {
   private final PluginManager pluginManager;
 
   private final EnchantItemListener enchantItemListener;
+  private final InventoryClickListener inventoryClickListener;
+  private final PrepareAnvilListener prepareAnvilListener;
   private final PrepareItemEnchantListener prepareItemEnchantListener;
 
   @Inject
@@ -36,15 +40,21 @@ public class ListenerRegister {
       @NotNull JavaPlugin plugin,
       @NotNull PluginManager pluginManager,
       @NotNull EnchantItemListener enchantItemListener,
+      @NotNull InventoryClickListener inventoryClickListener,
+      @NotNull PrepareAnvilListener prepareAnvilListener,
       @NotNull PrepareItemEnchantListener prepareItemEnchantListener) {
     this.plugin = plugin;
     this.pluginManager = pluginManager;
     this.enchantItemListener = enchantItemListener;
+    this.inventoryClickListener = inventoryClickListener;
+    this.prepareAnvilListener = prepareAnvilListener;
     this.prepareItemEnchantListener = prepareItemEnchantListener;
   }
 
   public void registerListeners() {
     pluginManager.registerEvents(enchantItemListener, plugin);
+    pluginManager.registerEvents(inventoryClickListener, plugin);
+    pluginManager.registerEvents(prepareAnvilListener, plugin);
     pluginManager.registerEvents(prepareItemEnchantListener, plugin);
   }
 }
