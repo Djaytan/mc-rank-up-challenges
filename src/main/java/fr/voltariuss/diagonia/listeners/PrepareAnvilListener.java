@@ -18,15 +18,15 @@ package fr.voltariuss.diagonia.listeners;
 
 import fr.voltariuss.diagonia.model.config.PluginConfig;
 import fr.voltariuss.diagonia.utils.PredefinedItem;
-import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
 @Singleton
@@ -50,14 +50,27 @@ public class PrepareAnvilListener implements Listener {
       return;
     }
 
-    if (hasBlacklistedEnchantment(result)) {
+    ItemMeta resultMeta = result.getItemMeta();
+
+    if (resultMeta == null) {
+      return;
+    }
+
+    if (hasAnyBlacklistedEnchantment(resultMeta)) {
       event.setResult(predefinedItem.resultDeactivated());
     }
   }
 
-  private boolean hasBlacklistedEnchantment(@NotNull ItemStack itemStack) {
-    Map<Enchantment, Integer> resultEnchantments = itemStack.getEnchantments();
-    return resultEnchantments.keySet().stream()
-        .anyMatch(pluginConfig.getBlacklistedEnchantments()::contains);
+  private boolean hasAnyBlacklistedEnchantment(@NotNull ItemMeta itemMeta) {
+    boolean hasAnyBlacklistedEnchantment =
+        pluginConfig.getBlacklistedEnchantments().stream().anyMatch(itemMeta::hasEnchant);
+
+    if (!hasAnyBlacklistedEnchantment
+        && itemMeta instanceof EnchantmentStorageMeta enchantmentStorageMeta) {
+      return pluginConfig.getBlacklistedEnchantments().stream()
+          .anyMatch(enchantmentStorageMeta::hasStoredEnchant);
+    }
+
+    return hasAnyBlacklistedEnchantment;
   }
 }
