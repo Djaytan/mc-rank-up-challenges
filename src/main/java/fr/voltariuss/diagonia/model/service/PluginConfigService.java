@@ -17,10 +17,7 @@
 package fr.voltariuss.diagonia.model.service;
 
 import fr.voltariuss.diagonia.model.config.PluginConfig;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Stream;
-import org.bukkit.NamespacedKey;
+import java.util.Arrays;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.jetbrains.annotations.NotNull;
@@ -43,8 +40,6 @@ public final class PluginConfigService {
       "playershop.tp.creation.allowed_world";
   public static final String RANKUP_LUCKPERMS_TRACK_NAME = "rankup.luckperms.track.name";
 
-  public static final String ENCHANTMENT_BLACKLIST = "enchantment.blacklist";
-
   public static void init(@NotNull FileConfiguration config) {
     config.addDefault(DEBUG_MODE, false);
 
@@ -66,14 +61,6 @@ public final class PluginConfigService {
 
     // Rankup feature
     config.addDefault(RANKUP_LUCKPERMS_TRACK_NAME, "ranks");
-
-    // Enchantment feature
-    config.addDefault(
-        ENCHANTMENT_BLACKLIST,
-        Stream.of(Enchantment.MENDING, Enchantment.ARROW_INFINITE)
-            .map(Enchantment::getKey)
-            .map(NamespacedKey::getKey)
-            .toList());
   }
 
   public static @NotNull PluginConfig loadConfig(@NotNull FileConfiguration config) {
@@ -100,18 +87,9 @@ public final class PluginConfigService {
             PluginConfig.RankUpConfig.builder()
                 .luckPermsTrackName(config.getString(RANKUP_LUCKPERMS_TRACK_NAME))
                 .build())
-        .blacklistedEnchantments(loadBlacklistedEnchantments(config))
+        .blacklistedEnchantments(Arrays.asList(Enchantment.MENDING, Enchantment.ARROW_INFINITE))
         .debugMode(config.getBoolean(DEBUG_MODE))
         .build();
-  }
-
-  private static List<Enchantment> loadBlacklistedEnchantments(@NotNull FileConfiguration config) {
-    return config.getStringList(ENCHANTMENT_BLACKLIST).stream()
-        .map(
-            blacklistedEnchantment ->
-                Objects.requireNonNull(
-                    Enchantment.getByKey(NamespacedKey.minecraft(blacklistedEnchantment))))
-        .toList();
   }
 
   private PluginConfigService() {}

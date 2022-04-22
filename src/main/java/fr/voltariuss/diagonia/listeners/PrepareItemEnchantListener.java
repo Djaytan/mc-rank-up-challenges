@@ -16,9 +16,7 @@
 
 package fr.voltariuss.diagonia.listeners;
 
-import fr.voltariuss.diagonia.RemakeBukkitLogger;
 import fr.voltariuss.diagonia.model.config.PluginConfig;
-import java.util.stream.IntStream;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.bukkit.enchantments.Enchantment;
@@ -32,37 +30,26 @@ import org.jetbrains.annotations.NotNull;
 @Singleton
 public class PrepareItemEnchantListener implements Listener {
 
+  private static final int NB_ENCHANTING_SLOTS = 3;
+
   private final PluginConfig pluginConfig;
-  private final RemakeBukkitLogger logger;
 
   @Inject
-  public PrepareItemEnchantListener(
-      @NotNull PluginConfig pluginConfig, @NotNull RemakeBukkitLogger logger) {
+  public PrepareItemEnchantListener(@NotNull PluginConfig pluginConfig) {
     this.pluginConfig = pluginConfig;
-    this.logger = logger;
   }
-
-  private static final int NB_ENCHANTING_SLOTS = 3;
 
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   public void onPrepareItemEnchant(@NotNull PrepareItemEnchantEvent event) {
     EnchantmentOffer[] enchantmentOffers = event.getOffers();
 
-    IntStream.range(0, NB_ENCHANTING_SLOTS)
-        .forEach(
-            i -> {
-              EnchantmentOffer enchantmentOffer = enchantmentOffers[i];
-              if (pluginConfig
-                  .getBlacklistedEnchantments()
-                  .contains(enchantmentOffer.getEnchantment())) {
-                logger.info(
-                    "Blacklisted enchantment {} detected for an EnchantmentOffer, replacing it by"
-                        + " the durability one.",
-                    enchantmentOffer.getEnchantment().getKey().getKey().toUpperCase());
+    for (int i = 0; i < NB_ENCHANTING_SLOTS; i++) {
+      EnchantmentOffer enchantmentOffer = enchantmentOffers[i];
 
-                enchantmentOffer.setEnchantment(Enchantment.DURABILITY);
-                enchantmentOffer.setEnchantmentLevel(3);
-              }
-            });
+      if (pluginConfig.getBlacklistedEnchantments().contains(enchantmentOffer.getEnchantment())) {
+        enchantmentOffer.setEnchantment(Enchantment.DURABILITY);
+        enchantmentOffer.setEnchantmentLevel(3);
+      }
+    }
   }
 }

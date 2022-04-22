@@ -16,12 +16,9 @@
 
 package fr.voltariuss.diagonia.listeners;
 
-import fr.voltariuss.diagonia.RemakeBukkitLogger;
 import fr.voltariuss.diagonia.model.config.PluginConfig;
-import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -32,29 +29,14 @@ import org.jetbrains.annotations.NotNull;
 public class EnchantItemListener implements Listener {
 
   private final PluginConfig pluginConfig;
-  private final RemakeBukkitLogger logger;
 
   @Inject
-  public EnchantItemListener(
-      @NotNull PluginConfig pluginConfig, @NotNull RemakeBukkitLogger logger) {
+  public EnchantItemListener(@NotNull PluginConfig pluginConfig) {
     this.pluginConfig = pluginConfig;
-    this.logger = logger;
   }
 
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   public void onItemEnchant(@NotNull EnchantItemEvent event) {
-    Map<Enchantment, Integer> enchantsToAdd = event.getEnchantsToAdd();
-
-    pluginConfig
-        .getBlacklistedEnchantments()
-        .forEach(
-            blackListedEnchantment -> {
-              if (enchantsToAdd.containsKey(blackListedEnchantment)) {
-                enchantsToAdd.remove(blackListedEnchantment);
-                logger.info(
-                    "Blacklisted enchantment {} detected and deleted at enchantment time.",
-                    blackListedEnchantment.getKey().getKey().toUpperCase());
-              }
-            });
+    pluginConfig.getBlacklistedEnchantments().forEach(event.getEnchantsToAdd()::remove);
   }
 }
