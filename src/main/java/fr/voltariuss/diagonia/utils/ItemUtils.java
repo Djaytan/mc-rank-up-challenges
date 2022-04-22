@@ -19,9 +19,11 @@ package fr.voltariuss.diagonia.utils;
 import fr.voltariuss.diagonia.model.config.PluginConfig;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 @Singleton
 public class ItemUtils {
@@ -33,7 +35,13 @@ public class ItemUtils {
     this.pluginConfig = pluginConfig;
   }
 
-  public boolean hasAnyBlacklistedEnchantment(@NotNull ItemMeta itemMeta) {
+  public boolean hasAnyBlacklistedEnchantment(@Nullable ItemStack itemStack) {
+    if (itemStack == null || itemStack.getItemMeta() == null) {
+      return false;
+    }
+
+    ItemMeta itemMeta = itemStack.getItemMeta();
+
     boolean hasAnyBlacklistedEnchantment =
         pluginConfig.getBlacklistedEnchantments().stream().anyMatch(itemMeta::hasEnchant);
 

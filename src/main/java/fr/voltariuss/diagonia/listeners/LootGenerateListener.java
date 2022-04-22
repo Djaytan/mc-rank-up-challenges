@@ -26,7 +26,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.LootGenerateEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
 @Singleton
@@ -48,13 +47,7 @@ public class LootGenerateListener implements Listener {
     for (int i = 0; i < lootItems.size(); i++) {
       ItemStack lootItem = lootItems.get(i);
 
-      if (lootItem == null || lootItem.getItemMeta() == null) {
-        continue;
-      }
-
-      ItemMeta lootItemMeta = lootItem.getItemMeta();
-
-      if (itemUtils.hasAnyBlacklistedEnchantment(lootItemMeta)) {
+      if (itemUtils.hasAnyBlacklistedEnchantment(lootItem)) {
         lootItems.set(i, null);
         logger.info("Blacklisted enchantment detected: remove item from loot table.");
       }

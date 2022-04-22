@@ -25,7 +25,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
 @Singleton
@@ -45,17 +44,7 @@ public class PrepareAnvilListener implements Listener {
   public void onPrepareAnvil(@NotNull PrepareAnvilEvent event) {
     ItemStack result = event.getResult();
 
-    if (result == null) {
-      return;
-    }
-
-    ItemMeta resultMeta = result.getItemMeta();
-
-    if (resultMeta == null) {
-      return;
-    }
-
-    if (itemUtils.hasAnyBlacklistedEnchantment(resultMeta)) {
+    if (itemUtils.hasAnyBlacklistedEnchantment(result)) {
       event.setResult(predefinedItem.resultDeactivated());
     }
   }
