@@ -16,47 +16,48 @@
 
 package fr.voltariuss.diagonia.listeners;
 
+import fr.voltariuss.diagonia.RemakeBukkitLogger;
 import fr.voltariuss.diagonia.utils.ItemUtils;
-import fr.voltariuss.diagonia.utils.PredefinedItem;
+import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.PrepareAnvilEvent;
+import org.bukkit.event.world.LootGenerateEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
 @Singleton
-public class PrepareAnvilListener implements Listener {
+public class LootGenerateListener implements Listener {
 
   private final ItemUtils itemUtils;
-  private final PredefinedItem predefinedItem;
+  private final RemakeBukkitLogger logger;
 
   @Inject
-  public PrepareAnvilListener(
-      @NotNull ItemUtils itemUtils, @NotNull PredefinedItem predefinedItem) {
+  public LootGenerateListener(@NotNull ItemUtils itemUtils, @NotNull RemakeBukkitLogger logger) {
     this.itemUtils = itemUtils;
-    this.predefinedItem = predefinedItem;
+    this.logger = logger;
   }
 
-  @EventHandler(priority = EventPriority.HIGHEST)
-  public void onPrepareAnvil(@NotNull PrepareAnvilEvent event) {
-    ItemStack result = event.getResult();
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+  public void onLootGenerate(LootGenerateEvent event) {
+    List<ItemStack> lootItems = event.getLoot();
 
-    if (result == null) {
-      return;
-    }
+    for (int i = 0; i < lootItems.size(); i++) {
+      ItemStack lootItem = lootItems.get(i);
 
-    ItemMeta resultMeta = result.getItemMeta();
+      if (lootItem == null || lootItem.getItemMeta() == null) {
+        continue;
+      }
 
-    if (resultMeta == null) {
-      return;
-    }
+      ItemMeta lootItemMeta = lootItem.getItemMeta();
 
-    if (itemUtils.hasAnyBlacklistedEnchantment(resultMeta)) {
-      event.setResult(predefinedItem.resultDeactivated());
+      if (itemUtils.hasAnyBlacklistedEnchantment(lootItemMeta)) {
+        lootItems.set(i, null);
+        logger.info("Blacklisted enchantment detected: remove item from loot table.");
+      }
     }
   }
 }
