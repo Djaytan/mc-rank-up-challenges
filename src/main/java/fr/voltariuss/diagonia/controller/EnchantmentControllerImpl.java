@@ -16,9 +16,12 @@
 
 package fr.voltariuss.diagonia.controller;
 
+import fr.voltariuss.diagonia.DiagoniaRuntimeException;
 import fr.voltariuss.diagonia.model.config.PluginConfig;
+import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -67,8 +70,41 @@ public class EnchantmentControllerImpl implements EnchantmentController {
 
     if (itemMeta instanceof EnchantmentStorageMeta enchantmentStorageMeta) {
       pluginConfig
-        .getBlacklistedEnchantments()
-        .forEach(enchantmentStorageMeta::removeStoredEnchant);
+          .getBlacklistedEnchantments()
+          .forEach(enchantmentStorageMeta::removeStoredEnchant);
     }
+  }
+
+  @Override
+  public void removeBlacklistedEnchantments(@NotNull Map<Enchantment, Integer> enchantments) {
+    pluginConfig.getBlacklistedEnchantments().forEach(enchantments::remove);
+  }
+
+  @Override
+  public void fillEmptyEnchantedBook(@Nullable ItemStack itemStack) {
+    if (itemStack == null
+        || !(itemStack.getItemMeta() instanceof EnchantmentStorageMeta enchantmentStorageMeta)) {
+      return;
+    }
+
+    /*
+     * According to the interface specifications (see @apiNote), we consider items with
+     * EnchantmentStorageMeta as enchanted books.
+     */
+    if (!enchantmentStorageMeta.hasStoredEnchants()) {
+      boolean hasMetaChanged =
+          enchantmentStorageMeta.addStoredEnchant(Enchantment.DURABILITY, 3, false);
+
+      if (!hasMetaChanged) {
+        throw new DiagoniaRuntimeException(
+            "Failed to add store enchantment in enchanted book. This isn't supposed to ever"
+                + " happen.");
+      }
+    }
+  }
+
+  @Override
+  public boolean isBlacklistedEnchantment(@Nullable Enchantment enchantment) {
+    return pluginConfig.getBlacklistedEnchantments().contains(enchantment);
   }
 }

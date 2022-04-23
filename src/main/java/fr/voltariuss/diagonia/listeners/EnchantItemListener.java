@@ -16,7 +16,7 @@
 
 package fr.voltariuss.diagonia.listeners;
 
-import fr.voltariuss.diagonia.model.config.PluginConfig;
+import fr.voltariuss.diagonia.controller.EnchantmentController;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.bukkit.event.EventHandler;
@@ -28,15 +28,16 @@ import org.jetbrains.annotations.NotNull;
 @Singleton
 public class EnchantItemListener implements Listener {
 
-  private final PluginConfig pluginConfig;
+  private final EnchantmentController enchantmentController;
 
   @Inject
-  public EnchantItemListener(@NotNull PluginConfig pluginConfig) {
-    this.pluginConfig = pluginConfig;
+  public EnchantItemListener(@NotNull EnchantmentController enchantmentController) {
+    this.enchantmentController = enchantmentController;
   }
 
   @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
   public void onItemEnchant(@NotNull EnchantItemEvent event) {
-    pluginConfig.getBlacklistedEnchantments().forEach(event.getEnchantsToAdd()::remove);
+    enchantmentController.removeBlacklistedEnchantments(event.getEnchantsToAdd());
+    // TODO: simply reroll
   }
 }

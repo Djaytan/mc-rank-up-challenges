@@ -16,35 +16,28 @@
 
 package fr.voltariuss.diagonia.listeners;
 
-import fr.voltariuss.diagonia.model.config.PluginConfig;
+import fr.voltariuss.diagonia.controller.EnchantmentController;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityShootBowEvent;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 @Singleton
 public class EntityShootBowListener implements Listener {
 
-  private final PluginConfig pluginConfig;
+  private final EnchantmentController enchantmentController;
 
   @Inject
-  public EntityShootBowListener(@NotNull PluginConfig pluginConfig) {
-    this.pluginConfig = pluginConfig;
+  public EntityShootBowListener(@NotNull EnchantmentController enchantmentController) {
+    this.enchantmentController = enchantmentController;
   }
 
   @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
   public void onEntityShootBow(@NotNull EntityShootBowEvent event) {
-    ItemStack bowItem = event.getBow();
-
-    if (bowItem == null) {
-      return;
-    }
-
     event.setConsumeItem(true);
-    pluginConfig.getBlacklistedEnchantments().forEach(event.getBow()::removeEnchantment);
+    enchantmentController.removeBlacklistedEnchantments(event.getBow());
   }
 }

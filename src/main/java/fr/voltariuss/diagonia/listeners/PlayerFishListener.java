@@ -25,6 +25,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerFishEvent;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 @Singleton
@@ -45,6 +46,9 @@ public class PlayerFishListener implements Listener {
       return;
     }
 
-    enchantmentController.removeBlacklistedEnchantments(caughtItem.getItemStack());
+    ItemStack caughtItemStack = caughtItem.getItemStack();
+
+    enchantmentController.removeBlacklistedEnchantments(caughtItemStack);
+    enchantmentController.fillEmptyEnchantedBook(caughtItemStack);
   }
 }

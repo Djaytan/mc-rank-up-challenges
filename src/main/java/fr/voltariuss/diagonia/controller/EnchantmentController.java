@@ -16,7 +16,10 @@
 
 package fr.voltariuss.diagonia.controller;
 
+import java.util.Map;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public interface EnchantmentController {
@@ -24,4 +27,22 @@ public interface EnchantmentController {
   boolean hasAnyBlacklistedEnchantment(@Nullable ItemStack itemStack);
 
   void removeBlacklistedEnchantments(@Nullable ItemStack itemStack);
+
+  void removeBlacklistedEnchantments(@NotNull Map<Enchantment, Integer> enchantments);
+
+  /**
+   * Fills empty {@link org.bukkit.Material#ENCHANTED_BOOK} with {@link
+   * org.bukkit.enchantments.Enchantment#DURABILITY} at max level as a stored enchantment.
+   *
+   * @param itemStack A mutable item (item other than enchanted books will be ignored).
+   * @apiNote Non-stored enchantments will not be taken into account by this method. Furthermore, we
+   *     consider all items with EnchantmentStorageMeta as enchanted books since the CraftBukkit
+   *     implementation of the Bukkit API has only the
+   *     org.bukkit.craftbukkit.inventory.CraftMetaEnchantedBook implementation for this interface.
+   * @see org.bukkit.inventory.meta.EnchantmentStorageMeta
+   */
+  // TODO: use a rerolled enchantment instead of a static one
+  void fillEmptyEnchantedBook(@Nullable ItemStack itemStack);
+
+  boolean isBlacklistedEnchantment(@Nullable Enchantment enchantment);
 }

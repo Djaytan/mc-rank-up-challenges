@@ -16,7 +16,7 @@
 
 package fr.voltariuss.diagonia.listeners;
 
-import fr.voltariuss.diagonia.model.config.PluginConfig;
+import fr.voltariuss.diagonia.controller.EnchantmentController;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.bukkit.enchantments.Enchantment;
@@ -26,17 +26,18 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.enchantment.PrepareItemEnchantEvent;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 @Singleton
 public class PrepareItemEnchantListener implements Listener {
 
   private static final int NB_ENCHANTING_SLOTS = 3;
 
-  private final PluginConfig pluginConfig;
+  private final EnchantmentController enchantmentController;
 
   @Inject
-  public PrepareItemEnchantListener(@NotNull PluginConfig pluginConfig) {
-    this.pluginConfig = pluginConfig;
+  public PrepareItemEnchantListener(@NotNull EnchantmentController enchantmentController) {
+    this.enchantmentController = enchantmentController;
   }
 
   @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
@@ -44,9 +45,13 @@ public class PrepareItemEnchantListener implements Listener {
     EnchantmentOffer[] enchantmentOffers = event.getOffers();
 
     for (int i = 0; i < NB_ENCHANTING_SLOTS; i++) {
-      EnchantmentOffer enchantmentOffer = enchantmentOffers[i];
+      @Nullable EnchantmentOffer enchantmentOffer = enchantmentOffers[i];
 
-      if (pluginConfig.getBlacklistedEnchantments().contains(enchantmentOffer.getEnchantment())) {
+      if (enchantmentOffer == null) {
+        continue;
+      }
+
+      if (enchantmentController.isBlacklistedEnchantment(enchantmentOffer.getEnchantment())) {
         enchantmentOffer.setEnchantment(Enchantment.DURABILITY);
         enchantmentOffer.setEnchantmentLevel(3);
       }
