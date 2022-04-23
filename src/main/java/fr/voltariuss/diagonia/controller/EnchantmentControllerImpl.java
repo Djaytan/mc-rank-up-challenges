@@ -21,6 +21,7 @@ import fr.voltariuss.diagonia.model.config.PluginConfig;
 import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
@@ -40,7 +41,7 @@ public class EnchantmentControllerImpl implements EnchantmentController {
 
   @Override
   public boolean hasAnyBlacklistedEnchantment(@Nullable ItemStack itemStack) {
-    if (itemStack == null || itemStack.getItemMeta() == null) {
+    if (itemStack == null || itemStack.getType() == Material.AIR || !itemStack.hasItemMeta()) {
       return false;
     }
 
@@ -60,12 +61,13 @@ public class EnchantmentControllerImpl implements EnchantmentController {
 
   @Override
   public void removeBlacklistedEnchantments(@Nullable ItemStack itemStack) {
-    if (itemStack == null || itemStack.getItemMeta() == null) {
+    if (itemStack == null || itemStack.getType() == Material.AIR || !itemStack.hasItemMeta()) {
       return;
     }
 
     ItemMeta itemMeta = itemStack.getItemMeta();
 
+    // TODO: check if itemStack.setItemMeta is required here
     pluginConfig.getBlacklistedEnchantments().forEach(itemMeta::removeEnchant);
 
     if (itemMeta instanceof EnchantmentStorageMeta enchantmentStorageMeta) {
@@ -83,6 +85,7 @@ public class EnchantmentControllerImpl implements EnchantmentController {
   @Override
   public void fillEmptyEnchantedBook(@Nullable ItemStack itemStack) {
     if (itemStack == null
+        || itemStack.getType() == Material.AIR
         || !(itemStack.getItemMeta() instanceof EnchantmentStorageMeta enchantmentStorageMeta)) {
       return;
     }
