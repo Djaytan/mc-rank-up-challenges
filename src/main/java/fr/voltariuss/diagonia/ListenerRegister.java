@@ -20,6 +20,7 @@ import fr.voltariuss.diagonia.listeners.EnchantItemListener;
 import fr.voltariuss.diagonia.listeners.EntityShootBowListener;
 import fr.voltariuss.diagonia.listeners.InventoryClickListener;
 import fr.voltariuss.diagonia.listeners.LootGenerateListener;
+import fr.voltariuss.diagonia.listeners.PlayerFishListener;
 import fr.voltariuss.diagonia.listeners.PlayerItemMendListener;
 import fr.voltariuss.diagonia.listeners.PrepareAnvilListener;
 import fr.voltariuss.diagonia.listeners.PrepareItemEnchantListener;
@@ -37,6 +38,7 @@ public class ListenerRegister {
   private final EntityShootBowListener entityShootBowListener;
   private final InventoryClickListener inventoryClickListener;
   private final LootGenerateListener lootGenerateListener;
+  private final PlayerFishListener playerFishListener;
   private final PlayerItemMendListener playerItemMendListener;
   private final PrepareAnvilListener prepareAnvilListener;
   private final PrepareItemEnchantListener prepareItemEnchantListener;
@@ -49,6 +51,7 @@ public class ListenerRegister {
       @NotNull EntityShootBowListener entityShootBowListener,
       @NotNull InventoryClickListener inventoryClickListener,
       @NotNull LootGenerateListener lootGenerateListener,
+      @NotNull PlayerFishListener playerFishListener,
       @NotNull PlayerItemMendListener playerItemMendListener,
       @NotNull PrepareAnvilListener prepareAnvilListener,
       @NotNull PrepareItemEnchantListener prepareItemEnchantListener) {
@@ -58,6 +61,7 @@ public class ListenerRegister {
     this.entityShootBowListener = entityShootBowListener;
     this.inventoryClickListener = inventoryClickListener;
     this.lootGenerateListener = lootGenerateListener;
+    this.playerFishListener = playerFishListener;
     this.playerItemMendListener = playerItemMendListener;
     this.prepareAnvilListener = prepareAnvilListener;
     this.prepareItemEnchantListener = prepareItemEnchantListener;
@@ -68,6 +72,7 @@ public class ListenerRegister {
     pluginManager.registerEvents(entityShootBowListener, plugin);
     pluginManager.registerEvents(inventoryClickListener, plugin);
     pluginManager.registerEvents(lootGenerateListener, plugin);
+    pluginManager.registerEvents(playerFishListener, plugin);
     pluginManager.registerEvents(playerItemMendListener, plugin);
     pluginManager.registerEvents(prepareAnvilListener, plugin);
     pluginManager.registerEvents(prepareItemEnchantListener, plugin);
