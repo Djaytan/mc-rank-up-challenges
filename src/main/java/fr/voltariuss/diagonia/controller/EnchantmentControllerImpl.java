@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.utils;
+package fr.voltariuss.diagonia.controller;
 
 import fr.voltariuss.diagonia.model.config.PluginConfig;
 import javax.inject.Inject;
@@ -26,15 +26,16 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @Singleton
-public class ItemUtils {
+public class EnchantmentControllerImpl implements EnchantmentController {
 
   private final PluginConfig pluginConfig;
 
   @Inject
-  public ItemUtils(@NotNull PluginConfig pluginConfig) {
+  public EnchantmentControllerImpl(@NotNull PluginConfig pluginConfig) {
     this.pluginConfig = pluginConfig;
   }
 
+  @Override
   public boolean hasAnyBlacklistedEnchantment(@Nullable ItemStack itemStack) {
     if (itemStack == null || itemStack.getItemMeta() == null) {
       return false;
@@ -52,5 +53,22 @@ public class ItemUtils {
     }
 
     return hasAnyBlacklistedEnchantment;
+  }
+
+  @Override
+  public void removeBlacklistedEnchantments(@Nullable ItemStack itemStack) {
+    if (itemStack == null || itemStack.getItemMeta() == null) {
+      return;
+    }
+
+    ItemMeta itemMeta = itemStack.getItemMeta();
+
+    pluginConfig.getBlacklistedEnchantments().forEach(itemMeta::removeEnchant);
+
+    if (itemMeta instanceof EnchantmentStorageMeta enchantmentStorageMeta) {
+      pluginConfig
+        .getBlacklistedEnchantments()
+        .forEach(enchantmentStorageMeta::removeStoredEnchant);
+    }
   }
 }

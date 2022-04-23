@@ -19,6 +19,8 @@ package fr.voltariuss.diagonia.guice;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
+import fr.voltariuss.diagonia.controller.EnchantmentController;
+import fr.voltariuss.diagonia.controller.EnchantmentControllerImpl;
 import fr.voltariuss.diagonia.controller.MessageController;
 import fr.voltariuss.diagonia.controller.MessageControllerImpl;
 import fr.voltariuss.diagonia.controller.playershop.PlayerShopConfigController;
@@ -54,6 +56,7 @@ public class GuiceGeneralModule extends AbstractModule {
   @Override
   public void configure() {
     bind(EconomyService.class).to(EconomyVaultService.class);
+    bind(EnchantmentController.class).to(EnchantmentControllerImpl.class);
     bind(JobsService.class).to(JobsRebornService.class);
     bind(MessageController.class).to(MessageControllerImpl.class);
     bind(PlayerShopController.class).to(PlayerShopControllerImpl.class);

@@ -17,7 +17,7 @@
 package fr.voltariuss.diagonia.listeners;
 
 import fr.voltariuss.diagonia.RemakeBukkitLogger;
-import fr.voltariuss.diagonia.utils.ItemUtils;
+import fr.voltariuss.diagonia.controller.EnchantmentController;
 import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -31,12 +31,13 @@ import org.jetbrains.annotations.NotNull;
 @Singleton
 public class LootGenerateListener implements Listener {
 
-  private final ItemUtils itemUtils;
+  private final EnchantmentController enchantmentController;
   private final RemakeBukkitLogger logger;
 
   @Inject
-  public LootGenerateListener(@NotNull ItemUtils itemUtils, @NotNull RemakeBukkitLogger logger) {
-    this.itemUtils = itemUtils;
+  public LootGenerateListener(
+      @NotNull EnchantmentController enchantmentController, @NotNull RemakeBukkitLogger logger) {
+    this.enchantmentController = enchantmentController;
     this.logger = logger;
   }
 
@@ -47,7 +48,7 @@ public class LootGenerateListener implements Listener {
     for (int i = 0; i < lootItems.size(); i++) {
       ItemStack lootItem = lootItems.get(i);
 
-      if (itemUtils.hasAnyBlacklistedEnchantment(lootItem)) {
+      if (enchantmentController.hasAnyBlacklistedEnchantment(lootItem)) {
         lootItems.set(i, null);
         logger.info("Blacklisted enchantment detected: remove item from loot table.");
       }
