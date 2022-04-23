@@ -16,6 +16,8 @@
 
 package fr.voltariuss.diagonia.listeners;
 
+import fr.voltariuss.diagonia.controller.EnchantmentController;
+import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -26,8 +28,16 @@ import org.jetbrains.annotations.NotNull;
 @Singleton
 public class PlayerItemMendListener implements Listener {
 
-  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-  public void onMending(@NotNull PlayerItemMendEvent event) {
+  private final EnchantmentController enchantmentController;
+
+  @Inject
+  public PlayerItemMendListener(@NotNull EnchantmentController enchantmentController) {
+    this.enchantmentController = enchantmentController;
+  }
+
+  @EventHandler(priority = EventPriority.HIGHEST)
+  public void onPlayerItemMend(@NotNull PlayerItemMendEvent event) {
+    enchantmentController.removeBlacklistedEnchantments(event.getItem());
     event.setCancelled(true);
   }
 }
