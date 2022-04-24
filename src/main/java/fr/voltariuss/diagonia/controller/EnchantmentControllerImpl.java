@@ -67,7 +67,6 @@ public class EnchantmentControllerImpl implements EnchantmentController {
 
     ItemMeta itemMeta = itemStack.getItemMeta();
 
-    // TODO: check if itemStack.setItemMeta is required here
     pluginConfig.getBlacklistedEnchantments().forEach(itemMeta::removeEnchant);
 
     if (itemMeta instanceof EnchantmentStorageMeta enchantmentStorageMeta) {
@@ -75,6 +74,7 @@ public class EnchantmentControllerImpl implements EnchantmentController {
           .getBlacklistedEnchantments()
           .forEach(enchantmentStorageMeta::removeStoredEnchant);
     }
+    itemStack.setItemMeta(itemMeta);
   }
 
   @Override
