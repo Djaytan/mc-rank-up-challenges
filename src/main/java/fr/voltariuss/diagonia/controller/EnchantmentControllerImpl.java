@@ -85,13 +85,15 @@ public class EnchantmentControllerImpl implements EnchantmentController {
 
     itemStack.setItemMeta(itemMeta);
 
-    logger.debug(
+    if (!detectedBlacklistedEnchantments.isEmpty()) {
+      logger.debug(
         "Enchantment(s) {} removed from an item.",
         detectedBlacklistedEnchantments.stream()
-            .map(Enchantment::getKey)
-            .map(NamespacedKey::getKey)
-            .map(String::toUpperCase)
-            .collect(Collectors.toSet()));
+          .map(Enchantment::getKey)
+          .map(NamespacedKey::getKey)
+          .map(String::toUpperCase)
+          .collect(Collectors.toSet()));
+    }
   }
 
   @Override
