@@ -17,7 +17,6 @@
 package fr.voltariuss.diagonia.listeners;
 
 import fr.voltariuss.diagonia.controller.EnchantmentController;
-import fr.voltariuss.diagonia.utils.PredefinedItem;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.bukkit.event.EventHandler;
@@ -31,22 +30,15 @@ import org.jetbrains.annotations.NotNull;
 public class PrepareAnvilListener implements Listener {
 
   private final EnchantmentController enchantmentController;
-  private final PredefinedItem predefinedItem;
 
   @Inject
-  public PrepareAnvilListener(
-      @NotNull EnchantmentController enchantmentController,
-      @NotNull PredefinedItem predefinedItem) {
+  public PrepareAnvilListener(@NotNull EnchantmentController enchantmentController) {
     this.enchantmentController = enchantmentController;
-    this.predefinedItem = predefinedItem;
   }
 
   @EventHandler(priority = EventPriority.LOWEST)
   public void onPrepareAnvil(@NotNull PrepareAnvilEvent event) {
     ItemStack result = event.getResult();
-
-    if (enchantmentController.hasAnyBlacklistedEnchantment(result)) {
-      event.setResult(predefinedItem.resultDeactivated());
-    }
+    enchantmentController.removeBlacklistedEnchantments(result);
   }
 }
