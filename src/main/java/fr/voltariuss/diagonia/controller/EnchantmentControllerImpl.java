@@ -20,10 +20,15 @@ import com.google.common.base.Preconditions;
 import fr.voltariuss.diagonia.DiagoniaRuntimeException;
 import fr.voltariuss.diagonia.RemakeBukkitLogger;
 import fr.voltariuss.diagonia.model.config.PluginConfig;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentOffer;
 import org.bukkit.inventory.ItemStack;
@@ -54,17 +59,39 @@ public class EnchantmentControllerImpl implements EnchantmentController {
     }
 
     ItemMeta itemMeta = itemStack.getItemMeta();
+    List<Enchantment> blacklistedEnchantments = pluginConfig.getBlacklistedEnchantments();
 
-    pluginConfig.getBlacklistedEnchantments().forEach(itemMeta::removeEnchant);
+    Set<Enchantment> detectedBlacklistedEnchantments = new HashSet<>();
+
+    for (Enchantment enchantment : itemMeta.getEnchants().keySet()) {
+      if (!blacklistedEnchantments.contains(enchantment)) {
+        continue;
+      }
+
+      itemMeta.removeEnchant(enchantment);
+      detectedBlacklistedEnchantments.add(enchantment);
+    }
 
     if (itemMeta instanceof EnchantmentStorageMeta enchantmentStorageMeta) {
-      pluginConfig
-          .getBlacklistedEnchantments()
-          .forEach(enchantmentStorageMeta::removeStoredEnchant);
+      for (Enchantment enchantment : enchantmentStorageMeta.getStoredEnchants().keySet()) {
+        if (!blacklistedEnchantments.contains(enchantment)) {
+          continue;
+        }
+
+        enchantmentStorageMeta.removeStoredEnchant(enchantment);
+        detectedBlacklistedEnchantments.add(enchantment);
+      }
     }
+
     itemStack.setItemMeta(itemMeta);
 
-    // TODO: recover removed enchantments, send message to player about the remove and log them
+    logger.debug(
+        "Enchantment(s) {} removed from an item.",
+        detectedBlacklistedEnchantments.stream()
+            .map(Enchantment::getKey)
+            .map(NamespacedKey::getKey)
+            .map(String::toUpperCase)
+            .collect(Collectors.toSet()));
   }
 
   @Override
