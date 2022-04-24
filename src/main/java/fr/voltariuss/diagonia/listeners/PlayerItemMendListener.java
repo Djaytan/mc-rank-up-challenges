@@ -38,6 +38,7 @@ public class PlayerItemMendListener implements Listener {
   @EventHandler(priority = EventPriority.HIGHEST)
   public void onPlayerItemMend(@NotNull PlayerItemMendEvent event) {
     enchantmentController.removeBlacklistedEnchantments(event.getItem());
+    // TODO: send message to player about what happens
     event.setCancelled(true);
   }
 }

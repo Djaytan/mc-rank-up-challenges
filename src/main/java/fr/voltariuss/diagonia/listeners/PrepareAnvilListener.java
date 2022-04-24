@@ -23,7 +23,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.PrepareAnvilEvent;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 @Singleton
@@ -38,7 +37,6 @@ public class PrepareAnvilListener implements Listener {
 
   @EventHandler(priority = EventPriority.LOWEST)
   public void onPrepareAnvil(@NotNull PrepareAnvilEvent event) {
-    ItemStack result = event.getResult();
-    enchantmentController.removeBlacklistedEnchantments(result);
+    enchantmentController.removeBlacklistedEnchantments(event.getResult());
   }
 }

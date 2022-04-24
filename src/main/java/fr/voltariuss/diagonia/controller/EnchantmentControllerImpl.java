@@ -16,13 +16,16 @@
 
 package fr.voltariuss.diagonia.controller;
 
+import com.google.common.base.Preconditions;
 import fr.voltariuss.diagonia.DiagoniaRuntimeException;
+import fr.voltariuss.diagonia.RemakeBukkitLogger;
 import fr.voltariuss.diagonia.model.config.PluginConfig;
 import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.enchantments.EnchantmentOffer;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -32,31 +35,16 @@ import org.jetbrains.annotations.Nullable;
 @Singleton
 public class EnchantmentControllerImpl implements EnchantmentController {
 
+  private static final Enchantment FALLBACK_ENCHANTMENT = Enchantment.DURABILITY;
+
+  private final RemakeBukkitLogger logger;
   private final PluginConfig pluginConfig;
 
   @Inject
-  public EnchantmentControllerImpl(@NotNull PluginConfig pluginConfig) {
+  public EnchantmentControllerImpl(
+      @NotNull RemakeBukkitLogger logger, @NotNull PluginConfig pluginConfig) {
+    this.logger = logger;
     this.pluginConfig = pluginConfig;
-  }
-
-  @Override
-  public boolean hasAnyBlacklistedEnchantment(@Nullable ItemStack itemStack) {
-    if (itemStack == null || itemStack.getType() == Material.AIR || !itemStack.hasItemMeta()) {
-      return false;
-    }
-
-    ItemMeta itemMeta = itemStack.getItemMeta();
-
-    boolean hasAnyBlacklistedEnchantment =
-        pluginConfig.getBlacklistedEnchantments().stream().anyMatch(itemMeta::hasEnchant);
-
-    if (!hasAnyBlacklistedEnchantment
-        && itemMeta instanceof EnchantmentStorageMeta enchantmentStorageMeta) {
-      return pluginConfig.getBlacklistedEnchantments().stream()
-          .anyMatch(enchantmentStorageMeta::hasStoredEnchant);
-    }
-
-    return hasAnyBlacklistedEnchantment;
   }
 
   @Override
@@ -75,10 +63,13 @@ public class EnchantmentControllerImpl implements EnchantmentController {
           .forEach(enchantmentStorageMeta::removeStoredEnchant);
     }
     itemStack.setItemMeta(itemMeta);
+
+    // TODO: recover removed enchantments, send message to player about the remove and log them
   }
 
   @Override
   public void removeBlacklistedEnchantments(@NotNull Map<Enchantment, Integer> enchantments) {
+    Preconditions.checkNotNull(enchantments);
     pluginConfig.getBlacklistedEnchantments().forEach(enchantments::remove);
   }
 
@@ -107,7 +98,36 @@ public class EnchantmentControllerImpl implements EnchantmentController {
   }
 
   @Override
-  public boolean isBlacklistedEnchantment(@Nullable Enchantment enchantment) {
+  public void addFallbackEnchantmentIfEmpty(@NotNull Map<Enchantment, Integer> enchantments) {
+    Preconditions.checkNotNull(enchantments);
+
+    if (enchantments.isEmpty()) {
+      enchantments.put(FALLBACK_ENCHANTMENT, FALLBACK_ENCHANTMENT.getMaxLevel());
+    }
+  }
+
+  @Override
+  public void applyFallbackEnchantmentOffer(@NotNull EnchantmentOffer enchantmentOffer) {
+    Preconditions.checkNotNull(enchantmentOffer);
+
+    Enchantment blacklistedEnchantment = enchantmentOffer.getEnchantment();
+    int blacklistedEnchantmentLevel = enchantmentOffer.getEnchantmentLevel();
+    Enchantment fallbackEnchantment = FALLBACK_ENCHANTMENT;
+
+    enchantmentOffer.setEnchantment(fallbackEnchantment);
+    enchantmentOffer.setEnchantmentLevel(fallbackEnchantment.getMaxLevel());
+
+    logger.debug(
+        "Blacklisted enchantment offer '{}' (level {}) replaced by '{}' (level {})",
+        blacklistedEnchantment.getKey().getKey(),
+        blacklistedEnchantmentLevel,
+        enchantmentOffer.getEnchantment().getKey().getKey(),
+        enchantmentOffer.getEnchantmentLevel());
+  }
+
+  @Override
+  public boolean isBlacklistedEnchantment(@NotNull Enchantment enchantment) {
+    Preconditions.checkNotNull(enchantment);
     return pluginConfig.getBlacklistedEnchantments().contains(enchantment);
   }
 }

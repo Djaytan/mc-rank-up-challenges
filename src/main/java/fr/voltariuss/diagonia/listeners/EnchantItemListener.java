@@ -17,8 +17,10 @@
 package fr.voltariuss.diagonia.listeners;
 
 import fr.voltariuss.diagonia.controller.EnchantmentController;
+import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -37,7 +39,11 @@ public class EnchantItemListener implements Listener {
 
   @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
   public void onItemEnchant(@NotNull EnchantItemEvent event) {
-    enchantmentController.removeBlacklistedEnchantments(event.getEnchantsToAdd());
-    // TODO: simply reroll
+    Map<Enchantment, Integer> enchantsToAdd = event.getEnchantsToAdd();
+
+    enchantmentController.removeBlacklistedEnchantments(enchantsToAdd);
+    // The list of enchants to add mustn't be empty, otherwise things will not work properly
+    // TODO: try to re-roll the enchantments with ContainerEnchantTable from NMS instead
+    enchantmentController.addFallbackEnchantmentIfEmpty(enchantsToAdd);
   }
 }

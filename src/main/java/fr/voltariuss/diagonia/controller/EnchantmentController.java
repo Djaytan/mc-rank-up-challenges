@@ -18,13 +18,12 @@ package fr.voltariuss.diagonia.controller;
 
 import java.util.Map;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.enchantments.EnchantmentOffer;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public interface EnchantmentController {
-
-  boolean hasAnyBlacklistedEnchantment(@Nullable ItemStack itemStack);
 
   void removeBlacklistedEnchantments(@Nullable ItemStack itemStack);
 
@@ -41,8 +40,11 @@ public interface EnchantmentController {
    *     org.bukkit.craftbukkit.inventory.CraftMetaEnchantedBook implementation for this interface.
    * @see org.bukkit.inventory.meta.EnchantmentStorageMeta
    */
-  // TODO: use a rerolled enchantment instead of a static one
   void fillEmptyEnchantedBook(@Nullable ItemStack itemStack);
 
-  boolean isBlacklistedEnchantment(@Nullable Enchantment enchantment);
+  void addFallbackEnchantmentIfEmpty(@NotNull Map<Enchantment, Integer> enchantments);
+
+  void applyFallbackEnchantmentOffer(@NotNull EnchantmentOffer enchantmentOffer);
+
+  boolean isBlacklistedEnchantment(@NotNull Enchantment enchantment);
 }

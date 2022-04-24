@@ -39,5 +39,6 @@ public class EntityShootBowListener implements Listener {
   public void onEntityShootBow(@NotNull EntityShootBowEvent event) {
     event.setConsumeItem(true);
     enchantmentController.removeBlacklistedEnchantments(event.getBow());
+    // TODO: send message to player about what happens
   }
 }
