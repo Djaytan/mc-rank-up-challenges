@@ -81,7 +81,6 @@ public class EnchantmentControllerImpl implements EnchantmentController {
 
     ItemMeta itemMeta = itemStack.getItemMeta();
     List<Enchantment> blacklistedEnchantments = pluginConfig.getBlacklistedEnchantments();
-
     Set<Enchantment> detectedBlacklistedEnchantments = new HashSet<>();
 
     for (Enchantment enchantment : itemMeta.getEnchants().keySet()) {
@@ -160,7 +159,7 @@ public class EnchantmentControllerImpl implements EnchantmentController {
 
       enchantmentStorageMeta.addStoredEnchant(
           FALLBACK_ENCHANTMENT, FALLBACK_ENCHANTMENT.getMaxLevel(), false);
-      itemStack.setItemMeta(enchantmentStorageMeta); // TODO: use editMeta method instead
+      itemStack.setItemMeta(enchantmentStorageMeta);
 
       return;
     }

@@ -24,6 +24,7 @@ import fr.voltariuss.diagonia.listeners.PlayerFishListener;
 import fr.voltariuss.diagonia.listeners.PlayerItemMendListener;
 import fr.voltariuss.diagonia.listeners.PrepareAnvilListener;
 import fr.voltariuss.diagonia.listeners.PrepareItemEnchantListener;
+import fr.voltariuss.diagonia.listeners.VillagerAcquireTradeListener;
 import javax.inject.Inject;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -42,6 +43,7 @@ public class ListenerRegister {
   private final PlayerItemMendListener playerItemMendListener;
   private final PrepareAnvilListener prepareAnvilListener;
   private final PrepareItemEnchantListener prepareItemEnchantListener;
+  private final VillagerAcquireTradeListener villagerAcquireTradeListener;
 
   @Inject
   public ListenerRegister(
@@ -54,7 +56,8 @@ public class ListenerRegister {
       @NotNull PlayerFishListener playerFishListener,
       @NotNull PlayerItemMendListener playerItemMendListener,
       @NotNull PrepareAnvilListener prepareAnvilListener,
-      @NotNull PrepareItemEnchantListener prepareItemEnchantListener) {
+      @NotNull PrepareItemEnchantListener prepareItemEnchantListener,
+      @NotNull VillagerAcquireTradeListener villagerAcquireTradeListener) {
     this.plugin = plugin;
     this.pluginManager = pluginManager;
     this.enchantItemListener = enchantItemListener;
@@ -65,6 +68,7 @@ public class ListenerRegister {
     this.playerItemMendListener = playerItemMendListener;
     this.prepareAnvilListener = prepareAnvilListener;
     this.prepareItemEnchantListener = prepareItemEnchantListener;
+    this.villagerAcquireTradeListener = villagerAcquireTradeListener;
   }
 
   public void registerListeners() {
@@ -76,5 +80,6 @@ public class ListenerRegister {
     pluginManager.registerEvents(playerItemMendListener, plugin);
     pluginManager.registerEvents(prepareAnvilListener, plugin);
     pluginManager.registerEvents(prepareItemEnchantListener, plugin);
+    pluginManager.registerEvents(villagerAcquireTradeListener, plugin);
   }
 }
