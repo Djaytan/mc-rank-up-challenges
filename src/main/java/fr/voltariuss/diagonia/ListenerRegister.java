@@ -19,6 +19,7 @@ package fr.voltariuss.diagonia;
 import fr.voltariuss.diagonia.listeners.EnchantItemListener;
 import fr.voltariuss.diagonia.listeners.EntityShootBowListener;
 import fr.voltariuss.diagonia.listeners.LootGenerateListener;
+import fr.voltariuss.diagonia.listeners.PiglinBarterListener;
 import fr.voltariuss.diagonia.listeners.PlayerFishListener;
 import fr.voltariuss.diagonia.listeners.PlayerItemMendListener;
 import fr.voltariuss.diagonia.listeners.PrepareAnvilListener;
@@ -36,6 +37,7 @@ public class ListenerRegister {
   private final EnchantItemListener enchantItemListener;
   private final EntityShootBowListener entityShootBowListener;
   private final LootGenerateListener lootGenerateListener;
+  private final PiglinBarterListener piglinBarterListener;
   private final PlayerFishListener playerFishListener;
   private final PlayerItemMendListener playerItemMendListener;
   private final PrepareAnvilListener prepareAnvilListener;
@@ -48,6 +50,7 @@ public class ListenerRegister {
       @NotNull EnchantItemListener enchantItemListener,
       @NotNull EntityShootBowListener entityShootBowListener,
       @NotNull LootGenerateListener lootGenerateListener,
+      @NotNull PiglinBarterListener piglinBarterListener,
       @NotNull PlayerFishListener playerFishListener,
       @NotNull PlayerItemMendListener playerItemMendListener,
       @NotNull PrepareAnvilListener prepareAnvilListener,
@@ -57,6 +60,7 @@ public class ListenerRegister {
     this.enchantItemListener = enchantItemListener;
     this.entityShootBowListener = entityShootBowListener;
     this.lootGenerateListener = lootGenerateListener;
+    this.piglinBarterListener = piglinBarterListener;
     this.playerFishListener = playerFishListener;
     this.playerItemMendListener = playerItemMendListener;
     this.prepareAnvilListener = prepareAnvilListener;
@@ -67,6 +71,7 @@ public class ListenerRegister {
     pluginManager.registerEvents(enchantItemListener, plugin);
     pluginManager.registerEvents(entityShootBowListener, plugin);
     pluginManager.registerEvents(lootGenerateListener, plugin);
+    pluginManager.registerEvents(piglinBarterListener, plugin);
     pluginManager.registerEvents(playerFishListener, plugin);
     pluginManager.registerEvents(playerItemMendListener, plugin);
     pluginManager.registerEvents(prepareAnvilListener, plugin);
