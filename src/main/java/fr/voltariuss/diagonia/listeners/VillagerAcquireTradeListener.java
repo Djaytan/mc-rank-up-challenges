@@ -23,6 +23,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.VillagerAcquireTradeEvent;
+import org.bukkit.inventory.MerchantRecipe;
 import org.jetbrains.annotations.NotNull;
 
 @Singleton
@@ -37,6 +38,20 @@ public class VillagerAcquireTradeListener implements Listener {
 
   @EventHandler(priority = EventPriority.LOWEST)
   public void onVillagerAcquireTrade(@NotNull VillagerAcquireTradeEvent event) {
-    enchantmentController.adjustEnchantments(event.getRecipe().getResult());
+    MerchantRecipe initRecipe = event.getRecipe();
+    enchantmentController.adjustEnchantments(initRecipe.getResult());
+    MerchantRecipe adjustedRecipe =
+        new MerchantRecipe(
+            initRecipe.getResult(),
+            initRecipe.getUses(),
+            initRecipe.getMaxUses(),
+            initRecipe.hasExperienceReward(),
+            initRecipe.getVillagerExperience(),
+            initRecipe.getPriceMultiplier(),
+            initRecipe.getDemand(),
+            initRecipe.getSpecialPrice(),
+            initRecipe.shouldIgnoreDiscounts());
+    event.getRecipe().getIngredients().forEach(adjustedRecipe::addIngredient);
+    event.setRecipe(adjustedRecipe);
   }
 }
