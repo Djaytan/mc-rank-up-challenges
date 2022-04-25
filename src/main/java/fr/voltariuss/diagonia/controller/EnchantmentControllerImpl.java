@@ -62,6 +62,18 @@ public class EnchantmentControllerImpl implements EnchantmentController {
   }
 
   @Override
+  public void adjustEnchantments(@Nullable ItemStack itemStack) {
+    Set<Enchantment> removedBlacklistedEnchants =
+      removeBlacklistedEnchantments(itemStack);
+
+    if (removedBlacklistedEnchants.isEmpty()) {
+      return;
+    }
+
+    addFallbackEnchantmentIfEmpty(itemStack);
+  }
+
+  @Override
   public @NotNull Set<Enchantment> removeBlacklistedEnchantments(@Nullable ItemStack itemStack) {
     if (itemStack == null || itemStack.getType() == Material.AIR || !itemStack.hasItemMeta()) {
       return Collections.emptySet();

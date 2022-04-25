@@ -27,6 +27,8 @@ import org.jetbrains.annotations.Nullable;
 
 public interface EnchantmentController {
 
+  void adjustEnchantments(@Nullable ItemStack itemStack);
+
   @NotNull
   Set<Enchantment> removeBlacklistedEnchantments(@Nullable ItemStack itemStack);
 

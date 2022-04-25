@@ -17,18 +17,13 @@
 package fr.voltariuss.diagonia.listeners;
 
 import fr.voltariuss.diagonia.controller.EnchantmentController;
-import java.util.List;
-import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.LootGenerateEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.jetbrains.annotations.NotNull;
 
 @Singleton
@@ -43,17 +38,8 @@ public class LootGenerateListener implements Listener {
 
   @EventHandler(priority = EventPriority.HIGHEST)
   public void onLootGenerate(@NotNull LootGenerateEvent event) {
-    List<ItemStack> lootItems = event.getLoot();
-
-    for (ItemStack lootItem : lootItems) {
-      Set<Enchantment> removedBlacklistedEnchants =
-          enchantmentController.removeBlacklistedEnchantments(lootItem);
-
-      if (removedBlacklistedEnchants.isEmpty()) {
-        continue;
-      }
-
-      enchantmentController.addFallbackEnchantmentIfEmpty(lootItem);
+    for (ItemStack lootItem : event.getLoot()) {
+      enchantmentController.adjustEnchantments(lootItem);
     }
   }
 }
