@@ -17,8 +17,10 @@
 package fr.voltariuss.diagonia.listeners;
 
 import fr.voltariuss.diagonia.controller.EnchantmentController;
+import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
@@ -38,7 +40,7 @@ public class PlayerFishListener implements Listener {
     this.enchantmentController = enchantmentController;
   }
 
-  @EventHandler(priority = EventPriority.LOWEST)
+  @EventHandler(priority = EventPriority.HIGHEST)
   public void onPlayerFish(@NotNull PlayerFishEvent event) {
     Entity caughtEntity = event.getCaught();
 
@@ -48,7 +50,13 @@ public class PlayerFishListener implements Listener {
 
     ItemStack caughtItemStack = caughtItem.getItemStack();
 
-    enchantmentController.removeBlacklistedEnchantments(caughtItemStack);
-    enchantmentController.fillEmptyEnchantedBook(caughtItemStack);
+    Set<Enchantment> removedBlacklistedEnchants =
+        enchantmentController.removeBlacklistedEnchantments(caughtItemStack);
+
+    if (removedBlacklistedEnchants.isEmpty()) {
+      return;
+    }
+
+    enchantmentController.addFallbackEnchantmentIfEmpty(caughtItemStack);
   }
 }

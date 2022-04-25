@@ -17,7 +17,6 @@
 package fr.voltariuss.diagonia.controller;
 
 import com.google.common.base.Preconditions;
-import fr.voltariuss.diagonia.DiagoniaRuntimeException;
 import fr.voltariuss.diagonia.RemakeBukkitLogger;
 import fr.voltariuss.diagonia.model.config.PluginConfig;
 import fr.voltariuss.diagonia.view.message.EnchantsMessage;
@@ -135,27 +134,31 @@ public class EnchantmentControllerImpl implements EnchantmentController {
   }
 
   @Override
-  public void fillEmptyEnchantedBook(@Nullable ItemStack itemStack) {
-    if (itemStack == null
-        || itemStack.getType() == Material.AIR
-        || !(itemStack.getItemMeta() instanceof EnchantmentStorageMeta enchantmentStorageMeta)) {
+  public void addFallbackEnchantmentIfEmpty(@Nullable ItemStack itemStack) {
+    if (itemStack == null || itemStack.getType() == Material.AIR) {
       return;
     }
 
-    /*
-     * According to the interface specifications (see @apiNote), we consider items with
-     * EnchantmentStorageMeta as enchanted books.
-     */
-    if (!enchantmentStorageMeta.hasStoredEnchants()) {
-      boolean hasMetaChanged =
-          enchantmentStorageMeta.addStoredEnchant(Enchantment.DURABILITY, 3, false);
+    ItemMeta itemMeta = itemStack.getItemMeta();
 
-      if (!hasMetaChanged) {
-        throw new DiagoniaRuntimeException(
-            "Failed to add store enchantment in enchanted book. This isn't supposed to ever"
-                + " happen.");
+    if (itemMeta instanceof EnchantmentStorageMeta enchantmentStorageMeta) {
+      if (enchantmentStorageMeta.hasStoredEnchants()) {
+        return;
       }
+
+      enchantmentStorageMeta.addStoredEnchant(
+          FALLBACK_ENCHANTMENT, FALLBACK_ENCHANTMENT.getMaxLevel(), false);
+      itemStack.setItemMeta(enchantmentStorageMeta); // TODO: use editMeta method instead
+
+      return;
     }
+
+    if (itemMeta.hasEnchants()) {
+      return;
+    }
+
+    itemMeta.addEnchant(FALLBACK_ENCHANTMENT, FALLBACK_ENCHANTMENT.getMaxLevel(), false);
+    itemStack.setItemMeta(itemMeta);
   }
 
   @Override

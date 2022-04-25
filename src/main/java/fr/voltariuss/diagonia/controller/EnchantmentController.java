@@ -33,17 +33,19 @@ public interface EnchantmentController {
   void removeBlacklistedEnchantments(@NotNull Map<Enchantment, Integer> enchantments);
 
   /**
-   * Fills empty {@link org.bukkit.Material#ENCHANTED_BOOK} with {@link
-   * org.bukkit.enchantments.Enchantment#DURABILITY} at max level as a stored enchantment.
+   * Add fallback enchantment to the item with {@link
+   * org.bukkit.enchantments.Enchantment#DURABILITY} at max level. The items with meta corresponding
+   * to an {@link org.bukkit.inventory.meta.EnchantmentStorageMeta} are taken into account by this
+   * method.
    *
-   * @param itemStack A mutable item (item other than enchanted books will be ignored).
-   * @apiNote Non-stored enchantments will not be taken into account by this method. Furthermore, we
-   *     consider all items with EnchantmentStorageMeta as enchanted books since the CraftBukkit
-   *     implementation of the Bukkit API has only the
-   *     org.bukkit.craftbukkit.inventory.CraftMetaEnchantedBook implementation for this interface.
-   * @see org.bukkit.inventory.meta.EnchantmentStorageMeta
+   * <p>Note: A fallback enchantment must be added only to items which are no longer enchanted
+   * because of the remove of one or several blacklisted ones.
+   *
+   * <p>If the specified item already have enchantment(s), this method will do nothing.
+   *
+   * @param itemStack A mutable item.
    */
-  void fillEmptyEnchantedBook(@Nullable ItemStack itemStack);
+  void addFallbackEnchantmentIfEmpty(@Nullable ItemStack itemStack);
 
   void addFallbackEnchantmentIfEmpty(@NotNull Map<Enchantment, Integer> enchantments);
 
