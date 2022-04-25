@@ -111,7 +111,27 @@ public class EnchantmentControllerImpl implements EnchantmentController {
   @Override
   public void removeBlacklistedEnchantments(@NotNull Map<Enchantment, Integer> enchantments) {
     Preconditions.checkNotNull(enchantments);
-    pluginConfig.getBlacklistedEnchantments().forEach(enchantments::remove);
+
+    Set<Enchantment> detectedBlacklistedEnchantments = new HashSet<>();
+
+    for (Enchantment enchantment : enchantments.keySet()) {
+      if (!pluginConfig.getBlacklistedEnchantments().contains(enchantment)) {
+        continue;
+      }
+
+      enchantments.remove(enchantment);
+      detectedBlacklistedEnchantments.add(enchantment);
+    }
+
+    if (!detectedBlacklistedEnchantments.isEmpty()) {
+      logger.debug(
+          "Enchantment(s) {} removed at enchant time.",
+          detectedBlacklistedEnchantments.stream()
+              .map(Enchantment::getKey)
+              .map(NamespacedKey::getKey)
+              .map(String::toUpperCase)
+              .collect(Collectors.toSet()));
+    }
   }
 
   @Override
