@@ -17,8 +17,10 @@
 package fr.voltariuss.diagonia.listeners;
 
 import fr.voltariuss.diagonia.controller.EnchantmentController;
+import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -37,8 +39,16 @@ public class PlayerItemMendListener implements Listener {
 
   @EventHandler(priority = EventPriority.HIGHEST)
   public void onPlayerItemMend(@NotNull PlayerItemMendEvent event) {
-    enchantmentController.removeBlacklistedEnchantments(event.getItem());
-    // TODO: send message to player about what happens
     event.setCancelled(true);
+
+    Set<Enchantment> removedBlacklistedEnchantments =
+        enchantmentController.removeBlacklistedEnchantments(event.getItem());
+
+    if (removedBlacklistedEnchantments.isEmpty()) {
+      return;
+    }
+
+    enchantmentController.sendRemovedBlacklistedEnchantmentsMessage(
+        event.getPlayer(), removedBlacklistedEnchantments);
   }
 }

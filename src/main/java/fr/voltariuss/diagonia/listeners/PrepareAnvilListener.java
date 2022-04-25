@@ -38,5 +38,6 @@ public class PrepareAnvilListener implements Listener {
   @EventHandler(priority = EventPriority.LOWEST)
   public void onPrepareAnvil(@NotNull PrepareAnvilEvent event) {
     enchantmentController.removeBlacklistedEnchantments(event.getResult());
+    // TODO: keep color for specific items
   }
 }

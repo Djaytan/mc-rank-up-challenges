@@ -20,6 +20,8 @@ import com.google.common.base.Preconditions;
 import fr.voltariuss.diagonia.DiagoniaRuntimeException;
 import fr.voltariuss.diagonia.RemakeBukkitLogger;
 import fr.voltariuss.diagonia.model.config.PluginConfig;
+import fr.voltariuss.diagonia.view.message.EnchantsMessage;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +29,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import net.kyori.adventure.audience.Audience;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
@@ -42,20 +45,27 @@ public class EnchantmentControllerImpl implements EnchantmentController {
 
   private static final Enchantment FALLBACK_ENCHANTMENT = Enchantment.DURABILITY;
 
+  private final EnchantsMessage enchantsMessage;
+  private final MessageController messageController;
   private final RemakeBukkitLogger logger;
   private final PluginConfig pluginConfig;
 
   @Inject
   public EnchantmentControllerImpl(
-      @NotNull RemakeBukkitLogger logger, @NotNull PluginConfig pluginConfig) {
+      @NotNull EnchantsMessage enchantsMessage,
+      @NotNull MessageController messageController,
+      @NotNull RemakeBukkitLogger logger,
+      @NotNull PluginConfig pluginConfig) {
+    this.enchantsMessage = enchantsMessage;
+    this.messageController = messageController;
     this.logger = logger;
     this.pluginConfig = pluginConfig;
   }
 
   @Override
-  public void removeBlacklistedEnchantments(@Nullable ItemStack itemStack) {
+  public @NotNull Set<Enchantment> removeBlacklistedEnchantments(@Nullable ItemStack itemStack) {
     if (itemStack == null || itemStack.getType() == Material.AIR || !itemStack.hasItemMeta()) {
-      return;
+      return Collections.emptySet();
     }
 
     ItemMeta itemMeta = itemStack.getItemMeta();
@@ -87,13 +97,15 @@ public class EnchantmentControllerImpl implements EnchantmentController {
 
     if (!detectedBlacklistedEnchantments.isEmpty()) {
       logger.debug(
-        "Enchantment(s) {} removed from an item.",
-        detectedBlacklistedEnchantments.stream()
-          .map(Enchantment::getKey)
-          .map(NamespacedKey::getKey)
-          .map(String::toUpperCase)
-          .collect(Collectors.toSet()));
+          "Enchantment(s) {} removed from an item.",
+          detectedBlacklistedEnchantments.stream()
+              .map(Enchantment::getKey)
+              .map(NamespacedKey::getKey)
+              .map(String::toUpperCase)
+              .collect(Collectors.toSet()));
     }
+
+    return detectedBlacklistedEnchantments;
   }
 
   @Override
@@ -158,5 +170,17 @@ public class EnchantmentControllerImpl implements EnchantmentController {
   public boolean isBlacklistedEnchantment(@NotNull Enchantment enchantment) {
     Preconditions.checkNotNull(enchantment);
     return pluginConfig.getBlacklistedEnchantments().contains(enchantment);
+  }
+
+  @Override
+  public void sendRemovedBlacklistedEnchantmentsMessage(
+      @NotNull Audience audience, @NotNull Set<Enchantment> removedBlacklistedEnchantments) {
+    Preconditions.checkNotNull(audience);
+    Preconditions.checkNotNull(removedBlacklistedEnchantments);
+    Preconditions.checkArgument(
+        !removedBlacklistedEnchantments.isEmpty(), "The set mustn't be empty.");
+
+    messageController.sendWarningMessage(
+        audience, enchantsMessage.removedBlacklistedEnchants(removedBlacklistedEnchantments));
   }
 }

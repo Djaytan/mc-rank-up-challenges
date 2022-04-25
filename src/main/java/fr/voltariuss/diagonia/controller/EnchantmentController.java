@@ -17,6 +17,8 @@
 package fr.voltariuss.diagonia.controller;
 
 import java.util.Map;
+import java.util.Set;
+import net.kyori.adventure.audience.Audience;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentOffer;
 import org.bukkit.inventory.ItemStack;
@@ -25,7 +27,8 @@ import org.jetbrains.annotations.Nullable;
 
 public interface EnchantmentController {
 
-  void removeBlacklistedEnchantments(@Nullable ItemStack itemStack);
+  @NotNull
+  Set<Enchantment> removeBlacklistedEnchantments(@Nullable ItemStack itemStack);
 
   void removeBlacklistedEnchantments(@NotNull Map<Enchantment, Integer> enchantments);
 
@@ -47,4 +50,7 @@ public interface EnchantmentController {
   void applyFallbackEnchantmentOffer(@NotNull EnchantmentOffer enchantmentOffer);
 
   boolean isBlacklistedEnchantment(@NotNull Enchantment enchantment);
+
+  void sendRemovedBlacklistedEnchantmentsMessage(
+      @NotNull Audience audience, @NotNull Set<Enchantment> removedBlacklistedEnchantments);
 }

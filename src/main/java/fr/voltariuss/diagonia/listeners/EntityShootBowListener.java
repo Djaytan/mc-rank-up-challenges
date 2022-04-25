@@ -17,8 +17,11 @@
 package fr.voltariuss.diagonia.listeners;
 
 import fr.voltariuss.diagonia.controller.EnchantmentController;
+import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -37,8 +40,20 @@ public class EntityShootBowListener implements Listener {
 
   @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
   public void onEntityShootBow(@NotNull EntityShootBowEvent event) {
+    if (!(event.getEntity() instanceof Player player)) {
+      return;
+    }
+
     event.setConsumeItem(true);
-    enchantmentController.removeBlacklistedEnchantments(event.getBow());
-    // TODO: send message to player about what happens
+
+    Set<Enchantment> removedBlacklistedEnchantments =
+        enchantmentController.removeBlacklistedEnchantments(event.getBow());
+
+    if (removedBlacklistedEnchantments.isEmpty()) {
+      return;
+    }
+
+    enchantmentController.sendRemovedBlacklistedEnchantmentsMessage(
+        player, removedBlacklistedEnchantments);
   }
 }
