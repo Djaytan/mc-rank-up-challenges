@@ -21,12 +21,14 @@ import java.util.List;
 import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.LootGenerateEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.jetbrains.annotations.NotNull;
 
 @Singleton
@@ -39,8 +41,8 @@ public class LootGenerateListener implements Listener {
     this.enchantmentController = enchantmentController;
   }
 
-  @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-  public void onLootGenerate(LootGenerateEvent event) {
+  @EventHandler(priority = EventPriority.HIGHEST)
+  public void onLootGenerate(@NotNull LootGenerateEvent event) {
     List<ItemStack> lootItems = event.getLoot();
 
     for (ItemStack lootItem : lootItems) {

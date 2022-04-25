@@ -36,7 +36,7 @@ public class PrepareItemEnchantListener implements Listener {
     this.enchantmentController = enchantmentController;
   }
 
-  @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+  @EventHandler(priority = EventPriority.LOWEST)
   public void onPrepareItemEnchant(@NotNull PrepareItemEnchantEvent event) {
     for (EnchantmentOffer enchantmentOffer : event.getOffers()) {
       if (enchantmentOffer == null) {

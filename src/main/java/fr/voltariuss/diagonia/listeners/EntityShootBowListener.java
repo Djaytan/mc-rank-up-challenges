@@ -38,7 +38,7 @@ public class EntityShootBowListener implements Listener {
     this.enchantmentController = enchantmentController;
   }
 
-  @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+  @EventHandler(priority = EventPriority.LOWEST)
   public void onEntityShootBow(@NotNull EntityShootBowEvent event) {
     if (!(event.getEntity() instanceof Player player)) {
       return;

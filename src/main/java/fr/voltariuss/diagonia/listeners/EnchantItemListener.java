@@ -37,7 +37,7 @@ public class EnchantItemListener implements Listener {
     this.enchantmentController = enchantmentController;
   }
 
-  @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+  @EventHandler(priority = EventPriority.LOWEST)
   public void onItemEnchant(@NotNull EnchantItemEvent event) {
     Map<Enchantment, Integer> enchantsToAdd = event.getEnchantsToAdd();
 
