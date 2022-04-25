@@ -17,6 +17,7 @@
 package fr.voltariuss.diagonia;
 
 import fr.voltariuss.diagonia.listeners.EnchantItemListener;
+import fr.voltariuss.diagonia.listeners.EntityDeathListener;
 import fr.voltariuss.diagonia.listeners.EntityShootBowListener;
 import fr.voltariuss.diagonia.listeners.LootGenerateListener;
 import fr.voltariuss.diagonia.listeners.PiglinBarterListener;
@@ -36,6 +37,7 @@ public class ListenerRegister {
   private final PluginManager pluginManager;
 
   private final EnchantItemListener enchantItemListener;
+  private final EntityDeathListener entityDeathListener;
   private final EntityShootBowListener entityShootBowListener;
   private final LootGenerateListener lootGenerateListener;
   private final PiglinBarterListener piglinBarterListener;
@@ -50,6 +52,7 @@ public class ListenerRegister {
       @NotNull JavaPlugin plugin,
       @NotNull PluginManager pluginManager,
       @NotNull EnchantItemListener enchantItemListener,
+      @NotNull EntityDeathListener entityDeathListener,
       @NotNull EntityShootBowListener entityShootBowListener,
       @NotNull LootGenerateListener lootGenerateListener,
       @NotNull PiglinBarterListener piglinBarterListener,
@@ -61,6 +64,7 @@ public class ListenerRegister {
     this.plugin = plugin;
     this.pluginManager = pluginManager;
     this.enchantItemListener = enchantItemListener;
+    this.entityDeathListener = entityDeathListener;
     this.entityShootBowListener = entityShootBowListener;
     this.lootGenerateListener = lootGenerateListener;
     this.piglinBarterListener = piglinBarterListener;
@@ -73,6 +77,7 @@ public class ListenerRegister {
 
   public void registerListeners() {
     pluginManager.registerEvents(enchantItemListener, plugin);
+    pluginManager.registerEvents(entityDeathListener, plugin);
     pluginManager.registerEvents(entityShootBowListener, plugin);
     pluginManager.registerEvents(lootGenerateListener, plugin);
     pluginManager.registerEvents(piglinBarterListener, plugin);
