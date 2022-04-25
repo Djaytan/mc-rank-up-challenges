@@ -16,23 +16,24 @@
 
 package fr.voltariuss.diagonia.controller;
 
+import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
 public interface MessageController {
 
-  void sendInfoMessage(@NotNull CommandSender receiver, @NotNull Component message);
+  void sendInfoMessage(@NotNull Audience audience, @NotNull Component message);
 
-  void sendSuccessMessage(@NotNull CommandSender receiver, @NotNull Component message);
+  void sendSuccessMessage(@NotNull Audience audience, @NotNull Component message);
 
-  void sendFailureMessage(@NotNull CommandSender receiver, @NotNull Component message);
+  void sendFailureMessage(@NotNull Audience audience, @NotNull Component message);
 
-  void sendWarningMessage(@NotNull CommandSender receiver, @NotNull Component message);
+  void sendWarningMessage(@NotNull Audience audience, @NotNull Component message);
 
-  void sendErrorMessage(@NotNull CommandSender receiver, @NotNull Component message);
+  void sendErrorMessage(@NotNull Audience audience, @NotNull Component message);
 
-  void sendRawMessage(@NotNull CommandSender receiver, @NotNull Component message);
+  void sendRawMessage(@NotNull Audience audience, @NotNull Component message);
 
   void sendConsoleMessage(@NotNull Component message);
 

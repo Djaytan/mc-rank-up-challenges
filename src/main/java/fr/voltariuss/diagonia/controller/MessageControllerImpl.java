@@ -26,7 +26,6 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.Server;
-import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.jetbrains.annotations.NotNull;
 
@@ -51,33 +50,33 @@ public class MessageControllerImpl implements MessageController {
   }
 
   @Override
-  public void sendInfoMessage(@NotNull CommandSender receiver, @NotNull Component message) {
-    sendMessage(receiver, MessageType.INFO, message);
+  public void sendInfoMessage(@NotNull Audience audience, @NotNull Component message) {
+    sendMessage(audience, MessageType.INFO, message);
   }
 
   @Override
-  public void sendSuccessMessage(@NotNull CommandSender receiver, @NotNull Component message) {
-    sendMessage(receiver, MessageType.SUCCESS, message);
+  public void sendSuccessMessage(@NotNull Audience audience, @NotNull Component message) {
+    sendMessage(audience, MessageType.SUCCESS, message);
   }
 
   @Override
-  public void sendFailureMessage(@NotNull CommandSender receiver, @NotNull Component message) {
-    sendMessage(receiver, MessageType.FAILURE, message);
+  public void sendFailureMessage(@NotNull Audience audience, @NotNull Component message) {
+    sendMessage(audience, MessageType.FAILURE, message);
   }
 
   @Override
-  public void sendWarningMessage(@NotNull CommandSender receiver, @NotNull Component message) {
-    sendMessage(receiver, MessageType.WARNING, message);
+  public void sendWarningMessage(@NotNull Audience audience, @NotNull Component message) {
+    sendMessage(audience, MessageType.WARNING, message);
   }
 
   @Override
-  public void sendErrorMessage(@NotNull CommandSender receiver, @NotNull Component message) {
-    sendMessage(receiver, MessageType.ERROR, message);
+  public void sendErrorMessage(@NotNull Audience audience, @NotNull Component message) {
+    sendMessage(audience, MessageType.ERROR, message);
   }
 
   @Override
-  public void sendRawMessage(@NotNull CommandSender receiver, @NotNull Component message) {
-    receiver.sendMessage(message, net.kyori.adventure.audience.MessageType.SYSTEM);
+  public void sendRawMessage(@NotNull Audience audience, @NotNull Component message) {
+    audience.sendMessage(message, net.kyori.adventure.audience.MessageType.SYSTEM);
   }
 
   public void sendConsoleMessage(@NotNull Component message) {
@@ -91,12 +90,11 @@ public class MessageControllerImpl implements MessageController {
 
   private void sendMessage(
       @NotNull Audience audience, @NotNull MessageType messageType, @NotNull Component message) {
-    Component messageFormat = getMessageFormat(messageType, message);
-    Audience.audience(audience)
-        .sendMessage(messageFormat, net.kyori.adventure.audience.MessageType.SYSTEM);
+    Component formattedMessage = formatMessage(messageType, message);
+    audience.sendMessage(formattedMessage, net.kyori.adventure.audience.MessageType.SYSTEM);
   }
 
-  private @NotNull Component getMessageFormat(
+  private @NotNull Component formatMessage(
       @NotNull MessageType messageType, @NotNull Component message) {
     String messageFormatKey =
         switch (messageType) {
