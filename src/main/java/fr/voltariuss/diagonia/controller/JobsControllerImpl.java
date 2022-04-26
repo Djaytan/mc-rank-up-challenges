@@ -17,13 +17,23 @@
 package fr.voltariuss.diagonia.controller;
 
 import com.gamingmesh.jobs.container.ActionType;
+import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.bukkit.block.Block;
+import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @Singleton
 public class JobsControllerImpl implements JobsController {
+
+  private final JavaPlugin plugin;
+
+  @Inject
+  public JobsControllerImpl(@NotNull JavaPlugin plugin) {
+    this.plugin = plugin;
+  }
 
   @Override
   public boolean isPlaceAndBreakAction(@NotNull ActionType actionType, @Nullable Block block) {
@@ -33,5 +43,10 @@ public class JobsControllerImpl implements JobsController {
     }
 
     return block.hasMetadata(PLAYER_BLOCK_PLACED_METADATA_KEY);
+  }
+
+  @Override
+  public void setPlayerBlockPlacedMetadata(@NotNull Block block) {
+    block.setMetadata(PLAYER_BLOCK_PLACED_METADATA_KEY, new FixedMetadataValue(plugin, true));
   }
 }

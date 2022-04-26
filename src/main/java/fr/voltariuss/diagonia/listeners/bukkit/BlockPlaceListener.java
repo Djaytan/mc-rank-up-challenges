@@ -23,25 +23,20 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 @Singleton
 public class BlockPlaceListener implements Listener {
 
-  private final JavaPlugin plugin;
+  private final JobsController jobsController;
 
   @Inject
-  public BlockPlaceListener(@NotNull JavaPlugin plugin) {
-    this.plugin = plugin;
+  public BlockPlaceListener(@NotNull JobsController jobsController) {
+    this.jobsController = jobsController;
   }
 
   @EventHandler(priority = EventPriority.LOWEST)
   public void onBlockPlace(@NotNull BlockPlaceEvent event) {
-    event
-        .getBlockPlaced()
-        .setMetadata(
-            JobsController.PLAYER_BLOCK_PLACED_METADATA_KEY, new FixedMetadataValue(plugin, true));
+    jobsController.setPlayerBlockPlacedMetadata(event.getBlockPlaced());
   }
 }

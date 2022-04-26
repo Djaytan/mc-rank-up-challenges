@@ -26,4 +26,6 @@ public interface JobsController {
   String PLAYER_BLOCK_PLACED_METADATA_KEY = "diagonia.jobs.is_block_placed_by_player";
 
   boolean isPlaceAndBreakAction(@NotNull ActionType actionType, @Nullable Block block);
+
+  void setPlayerBlockPlacedMetadata(@NotNull Block block);
 }
