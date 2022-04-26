@@ -14,30 +14,31 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.listeners;
+package fr.voltariuss.diagonia.listeners.jobs;
 
-import fr.voltariuss.diagonia.controller.EnchantmentController;
+import com.gamingmesh.jobs.api.JobsExpGainEvent;
+import fr.voltariuss.diagonia.controller.JobsController;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.jetbrains.annotations.NotNull;
 
 @Singleton
-public class PrepareAnvilListener implements Listener {
+public class JobsExpGainListener implements Listener {
 
-  private final EnchantmentController enchantmentController;
+  private final JobsController jobsController;
 
   @Inject
-  public PrepareAnvilListener(@NotNull EnchantmentController enchantmentController) {
-    this.enchantmentController = enchantmentController;
+  public JobsExpGainListener(@NotNull JobsController jobsController) {
+    this.jobsController = jobsController;
   }
 
-  @EventHandler(priority = EventPriority.LOWEST)
-  public void onPrepareAnvil(@NotNull PrepareAnvilEvent event) {
-    enchantmentController.removeBlacklistedEnchantments(event.getResult());
-    // TODO: keep color for specific items
+  @EventHandler(priority = EventPriority.HIGHEST)
+  public void onJobsExpGain(@NotNull JobsExpGainEvent event) {
+    if (jobsController.isPlaceAndBreakAction(event.getActionInfo().getType(), event.getBlock())) {
+      event.setCancelled(true);
+    }
   }
 }

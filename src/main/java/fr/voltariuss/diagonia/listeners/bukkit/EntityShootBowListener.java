@@ -14,36 +14,46 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.listeners;
+package fr.voltariuss.diagonia.listeners.bukkit;
 
 import fr.voltariuss.diagonia.controller.EnchantmentController;
-import java.util.Map;
+import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.enchantment.EnchantItemEvent;
+import org.bukkit.event.entity.EntityShootBowEvent;
 import org.jetbrains.annotations.NotNull;
 
 @Singleton
-public class EnchantItemListener implements Listener {
+public class EntityShootBowListener implements Listener {
 
   private final EnchantmentController enchantmentController;
 
   @Inject
-  public EnchantItemListener(@NotNull EnchantmentController enchantmentController) {
+  public EntityShootBowListener(@NotNull EnchantmentController enchantmentController) {
     this.enchantmentController = enchantmentController;
   }
 
   @EventHandler(priority = EventPriority.LOWEST)
-  public void onItemEnchant(@NotNull EnchantItemEvent event) {
-    Map<Enchantment, Integer> enchantsToAdd = event.getEnchantsToAdd();
+  public void onEntityShootBow(@NotNull EntityShootBowEvent event) {
+    if (!(event.getEntity() instanceof Player player)) {
+      return;
+    }
 
-    enchantmentController.removeBlacklistedEnchantments(enchantsToAdd);
-    // The list of enchants to add mustn't be empty, otherwise things will not work properly
-    // TODO: try to re-roll the enchantments with ContainerEnchantTable from NMS instead
-    enchantmentController.addFallbackEnchantmentIfEmpty(enchantsToAdd);
+    event.setConsumeItem(true);
+
+    Set<Enchantment> removedBlacklistedEnchantments =
+        enchantmentController.removeBlacklistedEnchantments(event.getBow());
+
+    if (removedBlacklistedEnchantments.isEmpty()) {
+      return;
+    }
+
+    enchantmentController.sendRemovedBlacklistedEnchantmentsMessage(
+        player, removedBlacklistedEnchantments);
   }
 }

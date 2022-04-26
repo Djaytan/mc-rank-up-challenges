@@ -14,40 +14,30 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.listeners;
+package fr.voltariuss.diagonia.listeners.bukkit;
 
 import fr.voltariuss.diagonia.controller.EnchantmentController;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerFishEvent;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.jetbrains.annotations.NotNull;
 
 @Singleton
-public class PlayerFishListener implements Listener {
+public class PrepareAnvilListener implements Listener {
 
   private final EnchantmentController enchantmentController;
 
   @Inject
-  public PlayerFishListener(@NotNull EnchantmentController enchantmentController) {
+  public PrepareAnvilListener(@NotNull EnchantmentController enchantmentController) {
     this.enchantmentController = enchantmentController;
   }
 
-  @EventHandler(priority = EventPriority.HIGHEST)
-  public void onPlayerFish(@NotNull PlayerFishEvent event) {
-    Entity caughtEntity = event.getCaught();
-
-    if (!(caughtEntity instanceof Item caughtItem)) {
-      return;
-    }
-
-    ItemStack caughtItemStack = caughtItem.getItemStack();
-
-    enchantmentController.adjustEnchantments(caughtItemStack);
+  @EventHandler(priority = EventPriority.LOWEST)
+  public void onPrepareAnvil(@NotNull PrepareAnvilEvent event) {
+    enchantmentController.removeBlacklistedEnchantments(event.getResult());
+    // TODO: keep color for specific items
   }
 }

@@ -14,38 +14,32 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.listeners;
+package fr.voltariuss.diagonia.listeners.bukkit;
 
 import fr.voltariuss.diagonia.controller.EnchantmentController;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import org.bukkit.enchantments.EnchantmentOffer;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.enchantment.PrepareItemEnchantEvent;
+import org.bukkit.event.world.LootGenerateEvent;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 @Singleton
-public class PrepareItemEnchantListener implements Listener {
+public class LootGenerateListener implements Listener {
 
   private final EnchantmentController enchantmentController;
 
   @Inject
-  public PrepareItemEnchantListener(@NotNull EnchantmentController enchantmentController) {
+  public LootGenerateListener(@NotNull EnchantmentController enchantmentController) {
     this.enchantmentController = enchantmentController;
   }
 
-  @EventHandler(priority = EventPriority.LOWEST)
-  public void onPrepareItemEnchant(@NotNull PrepareItemEnchantEvent event) {
-    for (EnchantmentOffer enchantmentOffer : event.getOffers()) {
-      if (enchantmentOffer == null) {
-        continue;
-      }
-
-      if (enchantmentController.isBlacklistedEnchantment(enchantmentOffer.getEnchantment())) {
-        enchantmentController.applyFallbackEnchantmentOffer(enchantmentOffer);
-      }
+  @EventHandler(priority = EventPriority.HIGHEST)
+  public void onLootGenerate(@NotNull LootGenerateEvent event) {
+    for (ItemStack lootItem : event.getLoot()) {
+      enchantmentController.adjustEnchantments(lootItem);
     }
   }
 }

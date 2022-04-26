@@ -14,41 +14,32 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.listeners;
+package fr.voltariuss.diagonia.listeners.bukkit;
 
 import fr.voltariuss.diagonia.controller.EnchantmentController;
-import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerItemMendEvent;
+import org.bukkit.event.entity.PiglinBarterEvent;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 @Singleton
-public class PlayerItemMendListener implements Listener {
+public class PiglinBarterListener implements Listener {
 
   private final EnchantmentController enchantmentController;
 
   @Inject
-  public PlayerItemMendListener(@NotNull EnchantmentController enchantmentController) {
+  public PiglinBarterListener(@NotNull EnchantmentController enchantmentController) {
     this.enchantmentController = enchantmentController;
   }
 
-  @EventHandler(priority = EventPriority.HIGHEST)
-  public void onPlayerItemMend(@NotNull PlayerItemMendEvent event) {
-    event.setCancelled(true);
-
-    Set<Enchantment> removedBlacklistedEnchantments =
-        enchantmentController.removeBlacklistedEnchantments(event.getItem());
-
-    if (removedBlacklistedEnchantments.isEmpty()) {
-      return;
+  @EventHandler(priority = EventPriority.LOWEST)
+  public void onPiglinBarter(@NotNull PiglinBarterEvent event) {
+    for (ItemStack outcomeItem : event.getOutcome()) {
+      enchantmentController.adjustEnchantments(outcomeItem);
     }
-
-    enchantmentController.sendRemovedBlacklistedEnchantmentsMessage(
-        event.getPlayer(), removedBlacklistedEnchantments);
   }
 }

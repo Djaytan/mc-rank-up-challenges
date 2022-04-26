@@ -14,46 +14,44 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.listeners;
+package fr.voltariuss.diagonia.listeners.bukkit;
 
 import fr.voltariuss.diagonia.controller.EnchantmentController;
-import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityShootBowEvent;
+import org.bukkit.event.entity.VillagerAcquireTradeEvent;
+import org.bukkit.inventory.MerchantRecipe;
 import org.jetbrains.annotations.NotNull;
 
 @Singleton
-public class EntityShootBowListener implements Listener {
+public class VillagerAcquireTradeListener implements Listener {
 
   private final EnchantmentController enchantmentController;
 
   @Inject
-  public EntityShootBowListener(@NotNull EnchantmentController enchantmentController) {
+  public VillagerAcquireTradeListener(@NotNull EnchantmentController enchantmentController) {
     this.enchantmentController = enchantmentController;
   }
 
   @EventHandler(priority = EventPriority.LOWEST)
-  public void onEntityShootBow(@NotNull EntityShootBowEvent event) {
-    if (!(event.getEntity() instanceof Player player)) {
-      return;
-    }
-
-    event.setConsumeItem(true);
-
-    Set<Enchantment> removedBlacklistedEnchantments =
-        enchantmentController.removeBlacklistedEnchantments(event.getBow());
-
-    if (removedBlacklistedEnchantments.isEmpty()) {
-      return;
-    }
-
-    enchantmentController.sendRemovedBlacklistedEnchantmentsMessage(
-        player, removedBlacklistedEnchantments);
+  public void onVillagerAcquireTrade(@NotNull VillagerAcquireTradeEvent event) {
+    MerchantRecipe initRecipe = event.getRecipe();
+    enchantmentController.adjustEnchantments(initRecipe.getResult());
+    MerchantRecipe adjustedRecipe =
+        new MerchantRecipe(
+            initRecipe.getResult(),
+            initRecipe.getUses(),
+            initRecipe.getMaxUses(),
+            initRecipe.hasExperienceReward(),
+            initRecipe.getVillagerExperience(),
+            initRecipe.getPriceMultiplier(),
+            initRecipe.getDemand(),
+            initRecipe.getSpecialPrice(),
+            initRecipe.shouldIgnoreDiscounts());
+    event.getRecipe().getIngredients().forEach(adjustedRecipe::addIngredient);
+    event.setRecipe(adjustedRecipe);
   }
 }

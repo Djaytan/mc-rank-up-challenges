@@ -16,16 +16,19 @@
 
 package fr.voltariuss.diagonia;
 
-import fr.voltariuss.diagonia.listeners.EnchantItemListener;
-import fr.voltariuss.diagonia.listeners.EntityDeathListener;
-import fr.voltariuss.diagonia.listeners.EntityShootBowListener;
-import fr.voltariuss.diagonia.listeners.LootGenerateListener;
-import fr.voltariuss.diagonia.listeners.PiglinBarterListener;
-import fr.voltariuss.diagonia.listeners.PlayerFishListener;
-import fr.voltariuss.diagonia.listeners.PlayerItemMendListener;
-import fr.voltariuss.diagonia.listeners.PrepareAnvilListener;
-import fr.voltariuss.diagonia.listeners.PrepareItemEnchantListener;
-import fr.voltariuss.diagonia.listeners.VillagerAcquireTradeListener;
+import fr.voltariuss.diagonia.listeners.bukkit.BlockPlaceListener;
+import fr.voltariuss.diagonia.listeners.bukkit.EnchantItemListener;
+import fr.voltariuss.diagonia.listeners.bukkit.EntityDeathListener;
+import fr.voltariuss.diagonia.listeners.bukkit.EntityShootBowListener;
+import fr.voltariuss.diagonia.listeners.bukkit.LootGenerateListener;
+import fr.voltariuss.diagonia.listeners.bukkit.PiglinBarterListener;
+import fr.voltariuss.diagonia.listeners.bukkit.PlayerFishListener;
+import fr.voltariuss.diagonia.listeners.bukkit.PlayerItemMendListener;
+import fr.voltariuss.diagonia.listeners.bukkit.PrepareAnvilListener;
+import fr.voltariuss.diagonia.listeners.bukkit.PrepareItemEnchantListener;
+import fr.voltariuss.diagonia.listeners.bukkit.VillagerAcquireTradeListener;
+import fr.voltariuss.diagonia.listeners.jobs.JobsExpGainListener;
+import fr.voltariuss.diagonia.listeners.jobs.JobsPrePaymentListener;
 import javax.inject.Inject;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -36,9 +39,12 @@ public class ListenerRegister {
   private final JavaPlugin plugin;
   private final PluginManager pluginManager;
 
+  private final BlockPlaceListener blockPlaceListener;
   private final EnchantItemListener enchantItemListener;
   private final EntityDeathListener entityDeathListener;
   private final EntityShootBowListener entityShootBowListener;
+  private final JobsExpGainListener jobsExpGainListener;
+  private final JobsPrePaymentListener jobsPrePaymentListener;
   private final LootGenerateListener lootGenerateListener;
   private final PiglinBarterListener piglinBarterListener;
   private final PlayerFishListener playerFishListener;
@@ -51,9 +57,12 @@ public class ListenerRegister {
   public ListenerRegister(
       @NotNull JavaPlugin plugin,
       @NotNull PluginManager pluginManager,
+      @NotNull BlockPlaceListener blockPlaceListener,
       @NotNull EnchantItemListener enchantItemListener,
       @NotNull EntityDeathListener entityDeathListener,
       @NotNull EntityShootBowListener entityShootBowListener,
+      @NotNull JobsExpGainListener jobsExpGainListener,
+      @NotNull JobsPrePaymentListener jobsPrePaymentListener,
       @NotNull LootGenerateListener lootGenerateListener,
       @NotNull PiglinBarterListener piglinBarterListener,
       @NotNull PlayerFishListener playerFishListener,
@@ -63,9 +72,13 @@ public class ListenerRegister {
       @NotNull VillagerAcquireTradeListener villagerAcquireTradeListener) {
     this.plugin = plugin;
     this.pluginManager = pluginManager;
+
+    this.blockPlaceListener = blockPlaceListener;
     this.enchantItemListener = enchantItemListener;
     this.entityDeathListener = entityDeathListener;
     this.entityShootBowListener = entityShootBowListener;
+    this.jobsExpGainListener = jobsExpGainListener;
+    this.jobsPrePaymentListener = jobsPrePaymentListener;
     this.lootGenerateListener = lootGenerateListener;
     this.piglinBarterListener = piglinBarterListener;
     this.playerFishListener = playerFishListener;
@@ -76,9 +89,12 @@ public class ListenerRegister {
   }
 
   public void registerListeners() {
+    pluginManager.registerEvents(blockPlaceListener, plugin);
     pluginManager.registerEvents(enchantItemListener, plugin);
     pluginManager.registerEvents(entityDeathListener, plugin);
     pluginManager.registerEvents(entityShootBowListener, plugin);
+    pluginManager.registerEvents(jobsExpGainListener, plugin);
+    pluginManager.registerEvents(jobsPrePaymentListener, plugin);
     pluginManager.registerEvents(lootGenerateListener, plugin);
     pluginManager.registerEvents(piglinBarterListener, plugin);
     pluginManager.registerEvents(playerFishListener, plugin);
