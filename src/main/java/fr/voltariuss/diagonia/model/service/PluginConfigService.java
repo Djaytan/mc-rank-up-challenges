@@ -87,8 +87,7 @@ public final class PluginConfigService {
             PluginConfig.RankUpConfig.builder()
                 .luckPermsTrackName(config.getString(RANKUP_LUCKPERMS_TRACK_NAME))
                 .build())
-        .blacklistedEnchantments(
-            Arrays.asList(Enchantment.MENDING, Enchantment.ARROW_INFINITE, Enchantment.DAMAGE_ALL))
+        .blacklistedEnchantments(Arrays.asList(Enchantment.MENDING, Enchantment.ARROW_INFINITE))
         .debugMode(config.getBoolean(DEBUG_MODE))
         .build();
   }
