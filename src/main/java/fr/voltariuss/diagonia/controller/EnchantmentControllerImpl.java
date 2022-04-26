@@ -63,8 +63,7 @@ public class EnchantmentControllerImpl implements EnchantmentController {
 
   @Override
   public void adjustEnchantments(@Nullable ItemStack itemStack) {
-    Set<Enchantment> removedBlacklistedEnchants =
-      removeBlacklistedEnchantments(itemStack);
+    Set<Enchantment> removedBlacklistedEnchants = removeBlacklistedEnchantments(itemStack);
 
     if (removedBlacklistedEnchants.isEmpty()) {
       return;
@@ -75,7 +74,10 @@ public class EnchantmentControllerImpl implements EnchantmentController {
 
   @Override
   public @NotNull Set<Enchantment> removeBlacklistedEnchantments(@Nullable ItemStack itemStack) {
-    if (itemStack == null || itemStack.getType() == Material.AIR || !itemStack.hasItemMeta()) {
+    if (itemStack == null
+        || itemStack.getType() == Material.AIR
+        || itemStack.getAmount() <= 0
+        || !itemStack.hasItemMeta()) {
       return Collections.emptySet();
     }
 
@@ -146,7 +148,7 @@ public class EnchantmentControllerImpl implements EnchantmentController {
 
   @Override
   public void addFallbackEnchantmentIfEmpty(@Nullable ItemStack itemStack) {
-    if (itemStack == null || itemStack.getType() == Material.AIR) {
+    if (itemStack == null || itemStack.getType() == Material.AIR || itemStack.getAmount() <= 0) {
       return;
     }
 
