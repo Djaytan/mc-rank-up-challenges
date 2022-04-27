@@ -27,16 +27,16 @@ import net.luckperms.api.model.group.GroupManager;
 import net.luckperms.api.model.user.UserManager;
 import net.luckperms.api.track.TrackManager;
 import net.milkbowl.vault.economy.Economy;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 public class GuiceBukkitLibsModule extends AbstractModule {
 
   private final LuckPerms luckPerms;
-  private final JavaPlugin plugin;
+  private final Plugin plugin;
 
-  public GuiceBukkitLibsModule(@NotNull LuckPerms luckPerms, @NotNull JavaPlugin plugin) {
+  public GuiceBukkitLibsModule(@NotNull LuckPerms luckPerms, @NotNull Plugin plugin) {
     this.luckPerms = luckPerms;
     this.plugin = plugin;
   }

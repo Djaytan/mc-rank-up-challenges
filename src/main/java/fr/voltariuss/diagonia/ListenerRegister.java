@@ -30,13 +30,13 @@ import fr.voltariuss.diagonia.listeners.bukkit.VillagerAcquireTradeListener;
 import fr.voltariuss.diagonia.listeners.jobs.JobsExpGainListener;
 import fr.voltariuss.diagonia.listeners.jobs.JobsPrePaymentListener;
 import javax.inject.Inject;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 public class ListenerRegister {
 
-  private final JavaPlugin plugin;
+  private final Plugin plugin;
   private final PluginManager pluginManager;
 
   private final BlockPlaceListener blockPlaceListener;
@@ -55,7 +55,7 @@ public class ListenerRegister {
 
   @Inject
   public ListenerRegister(
-      @NotNull JavaPlugin plugin,
+      @NotNull Plugin plugin,
       @NotNull PluginManager pluginManager,
       @NotNull BlockPlaceListener blockPlaceListener,
       @NotNull EnchantItemListener enchantItemListener,

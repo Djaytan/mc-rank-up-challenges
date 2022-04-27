@@ -30,7 +30,7 @@ import java.util.Objects;
 import javax.inject.Named;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.track.Track;
-import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.Plugin;
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AvailableSettings;
@@ -42,14 +42,14 @@ public class GuiceDiagoniaModule extends AbstractModule {
 
   private final Logger logger;
   private final LuckPerms luckPerms;
-  private final JavaPlugin plugin;
+  private final Plugin plugin;
   private final PluginConfig pluginConfig;
   private final RankConfig rankConfig;
 
   public GuiceDiagoniaModule(
       @NotNull Logger logger,
       @NotNull LuckPerms luckPerms,
-      @NotNull JavaPlugin plugin,
+      @NotNull Plugin plugin,
       @NotNull PluginConfig pluginConfig,
       @NotNull RankConfig rankConfig) {
     this.logger = logger;

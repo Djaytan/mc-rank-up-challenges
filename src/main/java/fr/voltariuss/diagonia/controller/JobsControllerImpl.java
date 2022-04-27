@@ -22,17 +22,17 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.bukkit.block.Block;
 import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @Singleton
 public class JobsControllerImpl implements JobsController {
 
-  private final JavaPlugin plugin;
+  private final Plugin plugin;
 
   @Inject
-  public JobsControllerImpl(@NotNull JavaPlugin plugin) {
+  public JobsControllerImpl(@NotNull Plugin plugin) {
     this.plugin = plugin;
   }
 

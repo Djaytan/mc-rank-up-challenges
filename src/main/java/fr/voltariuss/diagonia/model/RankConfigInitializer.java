@@ -30,7 +30,7 @@ import java.nio.charset.StandardCharsets;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.apache.logging.log4j.core.util.IOUtils;
-import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
@@ -44,13 +44,13 @@ public class RankConfigInitializer {
    * But since we don't need of debug logs here it's "ok".
    */
   private final Logger logger;
-  private final JavaPlugin plugin;
+  private final Plugin plugin;
   private final RankConfigDeserializer rankConfigDeserializer;
 
   @Inject
   public RankConfigInitializer(
-    @NotNull Logger logger,
-    @NotNull JavaPlugin plugin,
+      @NotNull Logger logger,
+      @NotNull Plugin plugin,
       @NotNull RankConfigDeserializer rankConfigDeserializer) {
     this.logger = logger;
     this.plugin = plugin;

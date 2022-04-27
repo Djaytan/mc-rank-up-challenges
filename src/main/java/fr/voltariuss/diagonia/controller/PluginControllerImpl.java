@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Objects;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.Plugin;
 import org.hibernate.SessionFactory;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -41,7 +41,7 @@ public class PluginControllerImpl implements PluginController {
   private final ListenerRegister listenerRegister;
   private final Logger logger;
   private final MessageController messageController;
-  private final JavaPlugin plugin;
+  private final Plugin plugin;
   private final PluginConfig pluginConfig;
   private final PrerequisitesValidation prerequisitesValidation;
   private final RankConfig rankConfig;
@@ -54,7 +54,7 @@ public class PluginControllerImpl implements PluginController {
       @NotNull ListenerRegister listenerRegister,
       @NotNull Logger logger,
       @NotNull MessageController messageController,
-      @NotNull JavaPlugin plugin,
+      @NotNull Plugin plugin,
       @NotNull PluginConfig pluginConfig,
       @NotNull PrerequisitesValidation prerequisitesValidation,
       @NotNull RankConfig rankConfig,
