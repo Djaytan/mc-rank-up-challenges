@@ -18,10 +18,12 @@ package fr.voltariuss.diagonia.model.service;
 
 import fr.voltariuss.diagonia.model.config.PluginConfig;
 import java.util.Arrays;
+import javax.inject.Singleton;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.jetbrains.annotations.NotNull;
 
+@Singleton
 public final class PluginConfigService {
 
   public static final String DEBUG_MODE = "debug";
@@ -40,7 +42,7 @@ public final class PluginConfigService {
       "playershop.tp.creation.allowed_world";
   public static final String RANKUP_LUCKPERMS_TRACK_NAME = "rankup.luckperms.track.name";
 
-  public static void init(@NotNull FileConfiguration config) {
+  public void init(@NotNull FileConfiguration config) {
     config.addDefault(DEBUG_MODE, false);
 
     // Database information
@@ -63,7 +65,7 @@ public final class PluginConfigService {
     config.addDefault(RANKUP_LUCKPERMS_TRACK_NAME, "ranks");
   }
 
-  public static @NotNull PluginConfig loadConfig(@NotNull FileConfiguration config) {
+  public @NotNull PluginConfig loadConfig(@NotNull FileConfiguration config) {
     return PluginConfig.builder()
         .databaseConfig(
             PluginConfig.DatabaseConfig.builder()
@@ -91,6 +93,4 @@ public final class PluginConfigService {
         .debugMode(config.getBoolean(DEBUG_MODE))
         .build();
   }
-
-  private PluginConfigService() {}
 }

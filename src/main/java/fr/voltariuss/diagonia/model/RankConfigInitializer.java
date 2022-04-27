@@ -28,7 +28,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import javax.inject.Inject;
-import javax.inject.Named;
 import javax.inject.Singleton;
 import org.apache.logging.log4j.core.util.IOUtils;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -40,21 +39,21 @@ public class RankConfigInitializer {
 
   public static final String RANK_JSON_FILE_NAME = "ranks.json";
 
-  private final File dataFolder;
-  private final JavaPlugin plugin;
-  // used instead of DiagoniaLogger because of instanciation before Guice injection
+  /*
+   * Used instead of RemakeBukkitLogger because this class is instantiated before Guice injection...
+   * But since we don't need of debug logs here it's "ok".
+   */
   private final Logger logger;
+  private final JavaPlugin plugin;
   private final RankConfigDeserializer rankConfigDeserializer;
 
   @Inject
   public RankConfigInitializer(
-      @Named("dataFolder") @NotNull File dataFolder,
-      @NotNull JavaPlugin plugin,
-      @NotNull Logger logger,
+    @NotNull Logger logger,
+    @NotNull JavaPlugin plugin,
       @NotNull RankConfigDeserializer rankConfigDeserializer) {
-    this.dataFolder = dataFolder;
-    this.plugin = plugin;
     this.logger = logger;
+    this.plugin = plugin;
     this.rankConfigDeserializer = rankConfigDeserializer;
   }
 
@@ -88,6 +87,6 @@ public class RankConfigInitializer {
   }
 
   private @NotNull File getRankConfigFile() {
-    return new File(dataFolder, RANK_JSON_FILE_NAME);
+    return new File(plugin.getDataFolder(), RANK_JSON_FILE_NAME);
   }
 }

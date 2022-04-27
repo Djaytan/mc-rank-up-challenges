@@ -19,11 +19,10 @@ package fr.voltariuss.diagonia.guice;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
-import java.io.File;
-import javax.inject.Named;
 import org.bukkit.Server;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.inventory.ItemFactory;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.ServicesManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -49,7 +48,13 @@ public class GuiceBukkitModule extends AbstractModule {
 
   @Provides
   @Singleton
-  public @NotNull JavaPlugin providePlugin() {
+  public @NotNull Plugin providePlugin() {
+    return plugin;
+  }
+
+  @Provides
+  @Singleton
+  public @NotNull JavaPlugin provideJavaPlugin() {
     return plugin;
   }
 
@@ -105,12 +110,5 @@ public class GuiceBukkitModule extends AbstractModule {
   @Singleton
   public @NotNull StructureManager provideStructureManager() {
     return plugin.getServer().getStructureManager();
-  }
-
-  @Provides
-  @Named("dataFolder")
-  @Singleton
-  public @NotNull File provideDataFolder() {
-    return plugin.getDataFolder();
   }
 }

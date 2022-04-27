@@ -16,148 +16,47 @@
 
 package fr.voltariuss.diagonia;
 
-import fr.voltariuss.diagonia.controller.MessageController;
-import fr.voltariuss.diagonia.controller.MessageControllerImpl;
+import fr.voltariuss.diagonia.controller.ConfigController;
+import fr.voltariuss.diagonia.controller.ConfigControllerImpl;
+import fr.voltariuss.diagonia.controller.PluginController;
 import fr.voltariuss.diagonia.guice.GuiceInjector;
 import fr.voltariuss.diagonia.model.RankConfigDeserializer;
 import fr.voltariuss.diagonia.model.RankConfigInitializer;
 import fr.voltariuss.diagonia.model.config.PluginConfig;
-import fr.voltariuss.diagonia.model.config.rank.Rank;
 import fr.voltariuss.diagonia.model.config.rank.RankConfig;
 import fr.voltariuss.diagonia.model.service.PluginConfigService;
-import fr.voltariuss.diagonia.utils.UrlUtils;
-import fr.voltariuss.diagonia.view.message.CommonMessage;
-import java.io.IOException;
-import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
-import java.util.ResourceBundle;
 import javax.inject.Inject;
-import lombok.SneakyThrows;
-import net.kyori.adventure.text.minimessage.MiniMessage;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.hibernate.SessionFactory;
 import org.jetbrains.annotations.NotNull;
 
 /** Diagonia plugin */
 public class DiagoniaPlugin extends JavaPlugin {
 
-  @Inject private SessionFactory sessionFactory;
-  @Inject private CommandRegister commandRegister;
-  @Inject private ListenerRegister listenerRegister;
-  @Inject private PrerequisitesValidation prerequisitesValidation;
+  @Inject private PluginController pluginController;
 
-  @SneakyThrows
   @Override
   public void onEnable() {
-    ConsoleCommandSender consoleCommandSender = getServer().getConsoleSender();
-    MiniMessage miniMessage = MiniMessage.miniMessage();
-    ResourceBundle resourceBundle = ResourceBundle.getBundle("diagonia", Locale.FRANCE);
-    MessageController messageController =
-        new MessageControllerImpl(consoleCommandSender, miniMessage, resourceBundle, getServer());
-    CommonMessage commonMessage = new CommonMessage(miniMessage, resourceBundle);
+    // This is tricky at startup, but don't found better way than that...
+    // Perfect startup would inject Guice immediately, but some injections need config values
+    ConfigController configController = createConfigController();
+    PluginConfig pluginConfig = configController.loadPluginConfig();
+    RankConfig rankConfig = configController.loadRankConfig();
 
-    try {
-      PluginConfig pluginConfig = loadPluginConfig();
-      RankConfig rankConfig = loadRankConfig();
+    GuiceInjector.inject(this, pluginConfig, rankConfig);
 
-      GuiceInjector.inject(miniMessage, this, pluginConfig, rankConfig, resourceBundle);
-
-      messageController.sendConsoleMessage(commonMessage.startupBanner());
-      messageController.sendConsoleMessage(
-          commonMessage.startupBannerVersionLine(getDescription()));
-
-      messageController.sendConsoleMessage(
-          commonMessage.startupBannerProgressionLine("General config file loading"));
-      messageController.sendConsoleMessage(
-          commonMessage.startupBannerStateLine(
-              "Debug Mode", Boolean.toString(pluginConfig.isDebugMode())));
-      messageController.sendConsoleMessage(
-          commonMessage.startupBannerStateLine(
-              "Database connection URL",
-              UrlUtils.getDatabaseUrl(
-                  pluginConfig.getDatabaseConfig().getHost(),
-                  pluginConfig.getDatabaseConfig().getPort(),
-                  pluginConfig.getDatabaseConfig().getDatabase())));
-      messageController.sendConsoleMessage(
-          commonMessage.startupBannerStateLine(
-              "Database username", pluginConfig.getDatabaseConfig().getUsername()));
-      messageController.sendConsoleMessage(
-          commonMessage.startupBannerStateLine(
-              "LuckPerms rank track name", pluginConfig.getRankUpConfig().getLuckPermsTrackName()));
-
-      messageController.sendConsoleMessage(
-          commonMessage.startupBannerProgressionLine("Rank config file loading"));
-      messageController.sendConsoleMessage(
-          commonMessage.startupBannerStateLine(
-              "Number of ranks loaded", Integer.toString(rankConfig.getRanks().size())));
-      messageController.sendConsoleMessage(
-          commonMessage.startupBannerStateLine(
-              "Number of challenges loaded",
-              Integer.toString(
-                  rankConfig.getRanks().stream()
-                      .map(Rank::getRankUpChallenges)
-                      .map(Objects::requireNonNull)
-                      .mapToInt(List::size)
-                      .sum())));
-
-      messageController.sendConsoleMessage(
-          commonMessage.startupBannerProgressionLine("Guice full injection"));
-
-      prerequisitesValidation.validate();
-
-      messageController.sendConsoleMessage(
-          commonMessage.startupBannerProgressionLine("Dependencies validation"));
-
-      commandRegister.registerCommands();
-      commandRegister.registerCommandCompletions();
-
-      messageController.sendConsoleMessage(
-          commonMessage.startupBannerProgressionLine("Commands registration"));
-
-      listenerRegister.registerListeners();
-
-      messageController.sendConsoleMessage(
-          commonMessage.startupBannerProgressionLine("Listeners registration"));
-
-      messageController.sendConsoleMessage(commonMessage.startupBannerEnablingSuccessLine());
-    } catch (Exception e) {
-      messageController.sendConsoleMessage(commonMessage.startupBannerEnablingFailureLine());
-      getSLF4JLogger().error("Something went wrong and prevent plugin activation.", e);
-      getSLF4JLogger().error("Disabling plugin...");
-      getServer().getPluginManager().disablePlugin(this);
-    }
+    // The core start of the plugin happens here
+    pluginController.enablePlugin();
   }
 
   @Override
   public void onDisable() {
-    if (sessionFactory != null) {
-      sessionFactory.close();
-      getSLF4JLogger().info("Database connection closed");
-    }
-    getSLF4JLogger().info("Plugin successfully disabled");
+    pluginController.disablePlugin();
   }
 
-  private @NotNull PluginConfig loadPluginConfig() {
-    PluginConfigService.init(getConfig());
-    getConfig().options().copyDefaults(true);
-    saveConfig();
-    PluginConfig pluginConfig = PluginConfigService.loadConfig(getConfig());
-
-    if (!pluginConfig.getDatabaseConfig().isEnabled()) {
-      throw new DiagoniaRuntimeException(
-          "Database disabled. Please configure and activate it through config.yml file.");
-    }
-
-    return pluginConfig;
-  }
-
-  private @NotNull RankConfig loadRankConfig() throws IOException, DiagoniaException {
-    RankConfigInitializer rankConfigInitializer =
-        new RankConfigInitializer(
-            getDataFolder(), this, getSLF4JLogger(), new RankConfigDeserializer());
-    rankConfigInitializer.init();
-    return rankConfigInitializer.readRankConfig();
+  private @NotNull ConfigController createConfigController() {
+    return new ConfigControllerImpl(
+        this,
+        new PluginConfigService(),
+        new RankConfigInitializer(getSLF4JLogger(), this, new RankConfigDeserializer()));
   }
 }

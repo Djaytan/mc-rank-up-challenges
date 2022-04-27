@@ -20,8 +20,6 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import fr.voltariuss.diagonia.model.config.PluginConfig;
 import fr.voltariuss.diagonia.model.config.rank.RankConfig;
-import java.util.ResourceBundle;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -33,17 +31,15 @@ public final class GuiceInjector {
   private GuiceInjector() {}
 
   public static void inject(
-      @NotNull MiniMessage miniMessage,
       @NotNull JavaPlugin plugin,
       @NotNull PluginConfig pluginConfig,
-      @NotNull RankConfig rankConfig,
-      @NotNull ResourceBundle resourceBundle) {
+      @NotNull RankConfig rankConfig) {
     LuckPerms luckPerms = LuckPermsProvider.get();
     Injector injector =
         Guice.createInjector(
             new GuiceBukkitModule(plugin),
-            new GuiceBukkitLibsModule(luckPerms, miniMessage, plugin),
-            new GuiceGeneralModule(resourceBundle),
+            new GuiceBukkitLibsModule(luckPerms, plugin),
+            new GuiceGeneralModule(),
             new GuiceDiagoniaModule(
                 plugin.getSLF4JLogger(), luckPerms, plugin, pluginConfig, rankConfig));
     injector.injectMembers(plugin);

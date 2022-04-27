@@ -34,20 +34,17 @@ import org.jetbrains.annotations.NotNull;
 public class GuiceBukkitLibsModule extends AbstractModule {
 
   private final LuckPerms luckPerms;
-  private final MiniMessage miniMessage;
   private final JavaPlugin plugin;
 
-  public GuiceBukkitLibsModule(
-      @NotNull LuckPerms luckPerms, @NotNull MiniMessage miniMessage, @NotNull JavaPlugin plugin) {
+  public GuiceBukkitLibsModule(@NotNull LuckPerms luckPerms, @NotNull JavaPlugin plugin) {
     this.luckPerms = luckPerms;
-    this.miniMessage = miniMessage;
     this.plugin = plugin;
   }
 
   @Provides
   @Singleton
   public @NotNull MiniMessage provideMiniMessage() {
-    return miniMessage;
+    return MiniMessage.miniMessage();
   }
 
   @Provides
