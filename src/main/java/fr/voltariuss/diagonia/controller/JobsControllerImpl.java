@@ -17,6 +17,7 @@
 package fr.voltariuss.diagonia.controller;
 
 import com.gamingmesh.jobs.container.ActionType;
+import com.google.common.base.Preconditions;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.bukkit.block.Block;
@@ -37,6 +38,8 @@ public class JobsControllerImpl implements JobsController {
 
   @Override
   public boolean isPlaceAndBreakAction(@NotNull ActionType actionType, @Nullable Block block) {
+    Preconditions.checkNotNull(actionType);
+
     if (block == null
         || !actionType.equals(ActionType.BREAK) && !actionType.equals(ActionType.TNTBREAK)) {
       return false;
@@ -47,6 +50,8 @@ public class JobsControllerImpl implements JobsController {
 
   @Override
   public void setPlayerBlockPlacedMetadata(@NotNull Block block) {
+    Preconditions.checkNotNull(block);
+
     block.setMetadata(PLAYER_BLOCK_PLACED_METADATA_KEY, new FixedMetadataValue(plugin, true));
   }
 }

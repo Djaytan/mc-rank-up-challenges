@@ -37,6 +37,10 @@ public class JobsPrePaymentListener implements Listener {
 
   @EventHandler(priority = EventPriority.HIGHEST)
   public void onJobsPayment(@NotNull JobsPrePaymentEvent event) {
+    if (event.getActionInfo() == null || event.getActionInfo().getType() == null) {
+      return;
+    }
+
     if (jobsController.isPlaceAndBreakAction(event.getActionInfo().getType(), event.getBlock())) {
       event.setCancelled(true);
     }
