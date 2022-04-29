@@ -23,8 +23,6 @@ import dev.triumphteam.gui.guis.GuiItem;
 import fr.voltariuss.diagonia.controller.BukkitUtils;
 import fr.voltariuss.diagonia.controller.playershop.PlayerShopListController;
 import fr.voltariuss.diagonia.model.entity.PlayerShop;
-import java.util.Collections;
-import java.util.List;
 import java.util.ResourceBundle;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -72,19 +70,13 @@ public class ConsultPlayerShopItem {
     String ownerName = bukkitUtils.getOfflinePlayerName(ownerPlayer);
 
     Component itemName = getName(ownerName);
-    List<Component> itemLore = getLore(playerShop.getDescription());
 
     GuiItem psItem;
 
     if (playerShop.hasItemIcon()) {
-      psItem = ItemBuilder.from(playerShop.getItemIcon()).name(itemName).lore(itemLore).asGuiItem();
+      psItem = ItemBuilder.from(playerShop.getItemIcon()).name(itemName).asGuiItem();
     } else {
-      psItem =
-          ItemBuilder.skull()
-              .owner(ownerPlayer)
-              .name(itemName)
-              .lore(itemLore)
-              .asGuiItem(onClick(playerShop));
+      psItem = ItemBuilder.skull().owner(ownerPlayer).name(itemName).asGuiItem(onClick(playerShop));
     }
 
     return psItem;
@@ -103,16 +95,5 @@ public class ConsultPlayerShopItem {
             resourceBundle.getString("diagonia.playershop.list.shop.name"),
             TagResolver.resolver(Placeholder.unparsed("diag_player_name", ownerName)))
         .decoration(TextDecoration.ITALIC, false);
-  }
-
-  private @NotNull List<Component> getLore(@Nullable String psDesc) {
-    return Collections.singletonList(
-        (psDesc != null
-                ? miniMessage.deserialize(
-                    resourceBundle.getString("diagonia.playershop.list.shop.description"),
-                    TagResolver.resolver(Placeholder.unparsed("diag_ps_description", psDesc)))
-                : miniMessage.deserialize(
-                    resourceBundle.getString("diagonia.playershop.list.shop.description.default")))
-            .decoration(TextDecoration.ITALIC, false));
   }
 }

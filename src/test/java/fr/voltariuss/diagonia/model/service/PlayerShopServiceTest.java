@@ -33,7 +33,6 @@ class PlayerShopServiceTest extends AbstractBaseTest {
   @Test
   void givenNewPlayerShop_WhenPersisted_ThenShouldBeRegisteredIntoDatabase() {
     PlayerShop ps = new PlayerShop(UUID.randomUUID());
-    ps.setDescription("Test description");
     ps.setItemIcon(Material.NAME_TAG);
     ps.setTpLocationDto(null);
     ps.setActive(true);

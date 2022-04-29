@@ -60,22 +60,22 @@ class PlayerShopDaoTest extends AbstractBaseTest {
 
   @Test
   void givenDefaultInstance_whenUpdated_thenSucceed() {
-    String initialDescription = "one";
-    String updatedDescription = "two";
+    Material initItemIcon = Material.STONE;
+    Material updatedItemIcon = Material.COBBLESTONE;
 
     PlayerShop ps = new PlayerShop(UUID.randomUUID());
-    ps.setDescription(initialDescription);
+    ps.setItemIcon(initItemIcon);
 
     playerShopDao.persist(ps);
 
-    ps.setDescription(updatedDescription);
+    ps.setItemIcon(updatedItemIcon);
 
     Transaction ts = playerShopDao.beginTransaction();
     playerShopDao.update(ps);
     PlayerShop psBis = playerShopDao.findAll().get(0);
     ts.commit();
 
-    Assert.assertEquals(updatedDescription, psBis.getDescription());
+    Assert.assertEquals(updatedItemIcon, psBis.getItemIcon());
   }
 
   @Nested
@@ -92,7 +92,6 @@ class PlayerShopDaoTest extends AbstractBaseTest {
       ts.commit();
 
       Assert.assertEquals(ps.getOwnerUuid(), psBis.getOwnerUuid());
-      Assert.assertEquals(ps.getDescription(), psBis.getDescription());
       Assert.assertEquals(ps.getItemIcon(), psBis.getItemIcon());
       Assert.assertEquals(ps.getTpLocationDto(), psBis.getTpLocationDto());
       Assert.assertEquals(ps.isActive(), psBis.isActive());
@@ -101,7 +100,6 @@ class PlayerShopDaoTest extends AbstractBaseTest {
     @Test
     void givenCustomizedObjectPersisted_whenFindById_thenMatchInitialObject() {
       PlayerShop ps = new PlayerShop(UUID.randomUUID());
-      ps.setDescription("one");
       ps.setItemIcon(Material.NAME_TAG);
       ps.setTpLocationDto(
           LocationDto.builder()
@@ -122,7 +120,6 @@ class PlayerShopDaoTest extends AbstractBaseTest {
       PlayerShop psBis = playerShopList.get(0);
 
       Assert.assertEquals(ps.getOwnerUuid(), psBis.getOwnerUuid());
-      Assert.assertEquals(ps.getDescription(), psBis.getDescription());
       Assert.assertEquals(ps.getItemIcon(), psBis.getItemIcon());
       Assert.assertEquals(ps.getTpLocationDto(), psBis.getTpLocationDto());
       Assert.assertEquals(ps.isActive(), psBis.isActive());

@@ -61,10 +61,6 @@ public class PlayerShop {
   @NonNull
   private UUID ownerUuid;
 
-  @Column(name = "ps_description", length = 150)
-  @Setter
-  private String description;
-
   @Column(name = "ps_item_icon")
   @Enumerated(EnumType.STRING)
   @Setter

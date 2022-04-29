@@ -48,7 +48,6 @@ public class PluginConfig {
   public static class PlayerShopConfig {
 
     private final double buyCost;
-    private final int descriptionMaxSize;
     private final int inactivityDelay;
     private final int premiumSlotDuration;
     private final double premiumSlotBuyCost;
