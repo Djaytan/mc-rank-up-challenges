@@ -40,7 +40,7 @@ public class DiagoniaPlugin extends JavaPlugin {
       // Perfect startup would inject Guice immediately, but some injections need config values
       ConfigController configController = createConfigController();
 
-      configController.saveDefaultConfigs(Arrays.asList("plugin.conf", "ranks.conf"));
+      configController.saveDefaultConfigs("plugin.conf", "ranks.conf");
       PluginConfig pluginConfig = configController.loadPluginConfig();
       RankConfig rankConfig = configController.loadRankConfig();
 

@@ -105,7 +105,7 @@ public class ConfigControllerImpl implements ConfigController {
   }
 
   @Override
-  public void saveDefaultConfigs(@NotNull List<String> configFilesNames) {
+  public void saveDefaultConfigs(@NotNull String... configFilesNames) {
     if (Files.notExists(dataFolder)) {
       try {
         Files.createDirectory(dataFolder);

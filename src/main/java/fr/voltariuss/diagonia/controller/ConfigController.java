@@ -31,5 +31,5 @@ public interface ConfigController {
   @NotNull
   RankConfig loadRankConfig();
 
-  void saveDefaultConfigs(@NotNull List<String> configFilesNames);
+  void saveDefaultConfigs(@NotNull String... configFilesNames);
 }
