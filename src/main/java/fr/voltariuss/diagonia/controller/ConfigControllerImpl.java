@@ -33,6 +33,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import org.spongepowered.configurate.ConfigurateException;
+import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.hocon.HoconConfigurationLoader;
 
 @Singleton
@@ -68,7 +69,7 @@ public class ConfigControllerImpl implements ConfigController {
             .build();
 
     try {
-      CommentedConfigurationNode rootNode = loader.load();
+      ConfigurationNode rootNode = loader.load();
       @Nullable T config = rootNode.get(clazz);
 
       if (config == null) {
