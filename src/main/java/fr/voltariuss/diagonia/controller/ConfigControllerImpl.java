@@ -52,7 +52,8 @@ public class ConfigControllerImpl implements ConfigController {
   }
 
   @Override
-  public <T> @NotNull T loadConfig(@NotNull DiagoniaConfig diagoniaConfig, @NotNull Class<T> clazz) {
+  public <T> @NotNull T loadConfig(
+      @NotNull DiagoniaConfig diagoniaConfig, @NotNull Class<T> clazz) {
     Preconditions.checkNotNull(diagoniaConfig);
     Preconditions.checkNotNull(clazz);
 
@@ -79,9 +80,7 @@ public class ConfigControllerImpl implements ConfigController {
             String.format(
                 "Content of the config '%s' seems to be empty or wrong.", configFileName));
       }
-
-      System.out.println(config);
-
+      
       return config;
     } catch (ConfigurateException e) {
       throw new DiagoniaRuntimeException(

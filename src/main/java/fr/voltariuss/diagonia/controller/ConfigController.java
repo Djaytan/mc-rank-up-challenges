@@ -19,7 +19,6 @@ package fr.voltariuss.diagonia.controller;
 import fr.voltariuss.diagonia.model.config.DiagoniaConfig;
 import fr.voltariuss.diagonia.model.config.PluginConfig;
 import fr.voltariuss.diagonia.model.config.RankConfig;
-import java.util.List;
 import org.jetbrains.annotations.NotNull;
 
 public interface ConfigController {
