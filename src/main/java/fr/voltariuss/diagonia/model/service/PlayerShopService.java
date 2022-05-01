@@ -17,7 +17,7 @@
 package fr.voltariuss.diagonia.model.service;
 
 import fr.voltariuss.diagonia.RemakeBukkitLogger;
-import fr.voltariuss.diagonia.model.JpaDaoException;
+import fr.voltariuss.diagonia.model.dao.JpaDaoException;
 import fr.voltariuss.diagonia.model.dao.PlayerShopDao;
 import fr.voltariuss.diagonia.model.entity.PlayerShop;
 import java.util.List;

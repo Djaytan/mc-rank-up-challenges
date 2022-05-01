@@ -16,7 +16,6 @@
 
 package fr.voltariuss.diagonia.model.dao;
 
-import fr.voltariuss.diagonia.model.JpaDao;
 import fr.voltariuss.diagonia.model.entity.PlayerShop;
 import java.util.Optional;
 import java.util.UUID;

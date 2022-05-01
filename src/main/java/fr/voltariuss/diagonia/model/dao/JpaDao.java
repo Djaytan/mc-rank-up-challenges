@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.model;
+package fr.voltariuss.diagonia.model.dao;
 
 import java.io.Serializable;
 import java.util.List;

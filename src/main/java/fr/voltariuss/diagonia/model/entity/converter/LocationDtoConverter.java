@@ -14,20 +14,25 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.model;
+package fr.voltariuss.diagonia.model.entity.converter;
 
-import java.util.UUID;
+import com.google.gson.Gson;
+import fr.voltariuss.diagonia.model.dto.LocationDto;
+import javax.annotation.Nullable;
 import javax.persistence.AttributeConverter;
+import org.jetbrains.annotations.NotNull;
 
-public class UUIDConverter implements AttributeConverter<UUID, String> {
+public class LocationDtoConverter implements AttributeConverter<LocationDto, String> {
 
   @Override
-  public String convertToDatabaseColumn(UUID uuid) {
-    return uuid.toString();
+  public @NotNull String convertToDatabaseColumn(@Nullable LocationDto locationDto) {
+    Gson gson = new Gson();
+    return gson.toJson(locationDto);
   }
 
   @Override
-  public UUID convertToEntityAttribute(String s) {
-    return UUID.fromString(s);
+  public @Nullable LocationDto convertToEntityAttribute(@Nullable String locationJson) {
+    Gson gson = new Gson();
+    return gson.fromJson(locationJson, LocationDto.class);
   }
 }

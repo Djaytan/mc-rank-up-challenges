@@ -16,8 +16,8 @@
 
 package fr.voltariuss.diagonia.model.entity;
 
-import fr.voltariuss.diagonia.model.LocationDtoConverter;
-import fr.voltariuss.diagonia.model.UUIDConverter;
+import fr.voltariuss.diagonia.model.entity.converter.LocationDtoConverter;
+import fr.voltariuss.diagonia.model.entity.converter.UUIDConverter;
 import fr.voltariuss.diagonia.model.dto.LocationDto;
 import java.util.UUID;
 import javax.persistence.Column;

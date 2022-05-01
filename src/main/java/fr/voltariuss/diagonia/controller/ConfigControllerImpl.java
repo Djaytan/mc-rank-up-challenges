@@ -80,7 +80,7 @@ public class ConfigControllerImpl implements ConfigController {
             String.format(
                 "Content of the config '%s' seems to be empty or wrong.", configFileName));
       }
-      
+
       return config;
     } catch (ConfigurateException e) {
       throw new DiagoniaRuntimeException(

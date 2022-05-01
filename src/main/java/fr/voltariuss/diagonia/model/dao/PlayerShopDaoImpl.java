@@ -17,7 +17,6 @@
 package fr.voltariuss.diagonia.model.dao;
 
 import com.google.common.base.Preconditions;
-import fr.voltariuss.diagonia.model.AbstractJpaDao;
 import fr.voltariuss.diagonia.model.entity.PlayerShop;
 import java.util.Optional;
 import java.util.UUID;

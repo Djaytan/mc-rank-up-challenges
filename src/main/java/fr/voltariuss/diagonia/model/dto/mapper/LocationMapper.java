@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.model;
+package fr.voltariuss.diagonia.model.dto.mapper;
 
 import fr.voltariuss.diagonia.model.dto.LocationDto;
 import javax.inject.Inject;

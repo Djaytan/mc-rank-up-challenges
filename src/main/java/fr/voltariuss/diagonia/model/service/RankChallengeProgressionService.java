@@ -19,7 +19,7 @@ package fr.voltariuss.diagonia.model.service;
 import com.google.common.base.Preconditions;
 import fr.voltariuss.diagonia.RemakeBukkitLogger;
 import fr.voltariuss.diagonia.model.GiveActionType;
-import fr.voltariuss.diagonia.model.JpaDaoException;
+import fr.voltariuss.diagonia.model.dao.JpaDaoException;
 import fr.voltariuss.diagonia.model.config.Rank;
 import fr.voltariuss.diagonia.model.config.RankChallenge;
 import fr.voltariuss.diagonia.model.dao.RankChallengeProgressionDao;

@@ -16,7 +16,7 @@
 
 package fr.voltariuss.diagonia.model.entity;
 
-import fr.voltariuss.diagonia.model.UUIDConverter;
+import fr.voltariuss.diagonia.model.entity.converter.UUIDConverter;
 import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Convert;

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.model;
+package fr.voltariuss.diagonia.model.dao;
 
 import com.google.common.base.Preconditions;
 import org.jetbrains.annotations.NotNull;
