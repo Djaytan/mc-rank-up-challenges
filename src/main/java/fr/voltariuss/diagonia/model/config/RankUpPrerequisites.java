@@ -16,16 +16,24 @@
 
 package fr.voltariuss.diagonia.model.config;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
 @ConfigSerializable
-@Data
+@Getter
+@ToString
+@EqualsAndHashCode
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public final class RankUpPrerequisites {
 
-  private final double moneyCost;
-  private final int enchantingLevelsCost;
-  private final int jobsLevels;
+  private double moneyCost;
+  private int enchantingLevelsCost;
+  private int jobsLevels;
 }

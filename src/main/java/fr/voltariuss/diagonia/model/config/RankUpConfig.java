@@ -16,14 +16,22 @@
 
 package fr.voltariuss.diagonia.model.config;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
 @ConfigSerializable
-@Data
+@Getter
+@ToString
+@EqualsAndHashCode
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public final class RankUpConfig {
 
-  private final String luckPermsTrackName;
+  private String luckPermsTrackName;
 }

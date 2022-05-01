@@ -16,18 +16,26 @@
 
 package fr.voltariuss.diagonia.model.config;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
 @ConfigSerializable
-@Data
+@Getter
+@ToString
+@EqualsAndHashCode
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public final class PlayerShopConfig {
 
-  private final double buyCost;
-  private final int inactivityDelay;
-  private final int premiumSlotDuration;
-  private final double premiumSlotBuyCost;
-  private final String tpCreationAllowedWorld;
+  private double buyCost;
+  private int inactivityDelay;
+  private int premiumSlotDuration;
+  private double premiumSlotBuyCost;
+  private String tpCreationAllowedWorld;
 }

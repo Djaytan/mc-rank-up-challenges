@@ -16,19 +16,27 @@
 
 package fr.voltariuss.diagonia.model.config;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
 @ConfigSerializable
-@Data
+@Getter
+@ToString
+@EqualsAndHashCode
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public final class DatabaseConfig {
 
-  private final boolean isEnabled;
-  private final String host;
-  private final int port;
-  private final String database;
-  private final String username;
-  private final String password;
+  private boolean isEnabled;
+  private String host;
+  private int port;
+  private String database;
+  private String username;
+  private String password;
 }

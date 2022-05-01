@@ -17,21 +17,28 @@
 package fr.voltariuss.diagonia.model.config;
 
 import java.util.List;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
-import lombok.experimental.Accessors;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.bukkit.enchantments.Enchantment;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
 @ConfigSerializable
-@Data
+@Getter
+@ToString
+@EqualsAndHashCode
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 // TODO: use fluent getters and setters (Lombok)
 public final class PluginConfig {
 
-  private final boolean debug;
-  private final DatabaseConfig database;
-  private final PlayerShopConfig playerShop;
-  private final RankUpConfig rankUp;
+  private boolean debug;
+  private DatabaseConfig database;
+  private PlayerShopConfig playerShop;
+  private RankUpConfig rankUp;
   private List<Enchantment> blacklistedEnchantments;
 }

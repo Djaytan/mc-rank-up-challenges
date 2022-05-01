@@ -17,25 +17,33 @@
 package fr.voltariuss.diagonia.model.config;
 
 import java.util.List;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import net.kyori.adventure.text.format.TextColor;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
 @ConfigSerializable
-@Data
+@Getter
+@ToString
+@EqualsAndHashCode
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public final class Rank {
 
-  private final String id;
-  private final String name;
-  private final List<String> description;
-  private final TextColor color;
-  private final List<String> profits;
-  private final boolean rankUpActivated;
-  @Nullable private final List<RankChallenge> rankUpChallenges;
+  private String id;
+  private String name;
+  private List<String> description;
+  private TextColor color;
+  private List<String> profits;
+  private boolean rankUpActivated;
+  @Nullable private List<RankChallenge> rankUpChallenges;
   // TODO: separate costs from prerequisites (currently not clear for players)
-  @Nullable private final RankUpPrerequisites rankUpPrerequisites;
-  @Nullable private final String rankUpTarget; // TODO: deprecated
+  @Nullable private RankUpPrerequisites rankUpPrerequisites;
+  @Nullable private String rankUpTarget; // TODO: deprecated
 }

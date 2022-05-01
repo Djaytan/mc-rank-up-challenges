@@ -33,6 +33,7 @@ import org.jetbrains.annotations.Nullable;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import org.spongepowered.configurate.ConfigurateException;
 import org.spongepowered.configurate.hocon.HoconConfigurationLoader;
+import org.spongepowered.configurate.serialize.TypeSerializerCollection;
 
 @Singleton
 public class ConfigControllerImpl implements ConfigController {
@@ -40,12 +41,14 @@ public class ConfigControllerImpl implements ConfigController {
   private static final String PLUGIN_CONF_FILE_NAME = "plugin.conf";
   private static final String RANK_CONF_FILE_NAME = "rank.conf";
 
+  private final Path dataFolder;
   private final DiagoniaConfigSerializers diagoniaConfigSerializers;
   private final Plugin plugin;
 
   @Inject
   public ConfigControllerImpl(
       @NotNull DiagoniaConfigSerializers diagoniaConfigSerializers, @NotNull Plugin plugin) {
+    this.dataFolder = plugin.getDataFolder().toPath();
     this.diagoniaConfigSerializers = diagoniaConfigSerializers;
     this.plugin = plugin;
   }
@@ -56,8 +59,12 @@ public class ConfigControllerImpl implements ConfigController {
         HoconConfigurationLoader.builder()
             .defaultOptions(
                 configurationOptions ->
-                    configurationOptions.serializers(diagoniaConfigSerializers.collection()))
-            .path(Path.of(configFileName))
+                    configurationOptions.serializers(
+                        TypeSerializerCollection.defaults()
+                            .childBuilder()
+                            .registerAll(diagoniaConfigSerializers.collection())
+                            .build()))
+            .path(dataFolder.resolve(configFileName))
             .build();
 
     try {
@@ -69,6 +76,8 @@ public class ConfigControllerImpl implements ConfigController {
             String.format(
                 "Content of the config '%s' seems to be empty or wrong.", configFileName));
       }
+
+      System.out.println(config);
 
       return config;
     } catch (ConfigurateException e) {
@@ -97,8 +106,6 @@ public class ConfigControllerImpl implements ConfigController {
 
   @Override
   public void saveDefaultConfigs(@NotNull List<String> configFilesNames) {
-    Path dataFolder = plugin.getDataFolder().toPath();
-
     if (Files.notExists(dataFolder)) {
       try {
         Files.createDirectory(dataFolder);
