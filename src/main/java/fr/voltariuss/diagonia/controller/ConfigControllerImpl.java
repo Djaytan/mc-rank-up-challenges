@@ -34,7 +34,6 @@ import org.jetbrains.annotations.Nullable;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import org.spongepowered.configurate.ConfigurateException;
 import org.spongepowered.configurate.hocon.HoconConfigurationLoader;
-import org.spongepowered.configurate.serialize.TypeSerializerCollection;
 
 @Singleton
 public class ConfigControllerImpl implements ConfigController {
@@ -64,10 +63,7 @@ public class ConfigControllerImpl implements ConfigController {
             .defaultOptions(
                 configurationOptions ->
                     configurationOptions.serializers(
-                        TypeSerializerCollection.defaults()
-                            .childBuilder()
-                            .registerAll(diagoniaConfigSerializers.collection())
-                            .build()))
+                        builder -> builder.registerAll(diagoniaConfigSerializers.collection())))
             .path(dataFolder.resolve(configFileName))
             .build();
 
