@@ -20,7 +20,7 @@ import fr.voltariuss.diagonia.RemakeBukkitLogger;
 import fr.voltariuss.diagonia.controller.BukkitUtils;
 import fr.voltariuss.diagonia.controller.MessageController;
 import fr.voltariuss.diagonia.model.dto.mapper.LocationMapper;
-import fr.voltariuss.diagonia.model.config.PluginConfig;
+import fr.voltariuss.diagonia.model.config.data.PluginConfig;
 import fr.voltariuss.diagonia.model.dto.response.EconomyResponse;
 import fr.voltariuss.diagonia.model.entity.PlayerShop;
 import fr.voltariuss.diagonia.model.service.EconomyException;

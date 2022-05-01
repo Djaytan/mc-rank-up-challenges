@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.model.config;
+package fr.voltariuss.diagonia.model.config.data;
 
+import fr.voltariuss.diagonia.model.config.data.rank.RankUpConfig;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,8 +24,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import net.kyori.adventure.text.format.TextColor;
-import org.jetbrains.annotations.Nullable;
+import org.bukkit.enchantments.Enchantment;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
 @ConfigSerializable
@@ -34,16 +34,12 @@ import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public final class Rank {
+// TODO: use fluent getters and setters (Lombok)
+public final class PluginConfig {
 
-  private String id;
-  private String name;
-  private List<String> description;
-  private TextColor color;
-  private List<String> profits;
-  private boolean rankUpActivated;
-  @Nullable private List<RankChallenge> rankUpChallenges;
-  // TODO: separate costs from prerequisites (currently not clear for players)
-  @Nullable private RankUpPrerequisites rankUpPrerequisites;
-  @Nullable private String rankUpTarget; // TODO: deprecated
+  private boolean debug;
+  private DatabaseConfig database;
+  private PlayerShopConfig playerShop;
+  private RankUpConfig rankUp;
+  private List<Enchantment> blacklistedEnchantments;
 }

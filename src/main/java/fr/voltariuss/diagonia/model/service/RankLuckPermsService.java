@@ -18,8 +18,9 @@ package fr.voltariuss.diagonia.model.service;
 
 import com.google.common.base.Preconditions;
 import fr.voltariuss.diagonia.RemakeBukkitLogger;
-import fr.voltariuss.diagonia.model.config.Rank;
-import fr.voltariuss.diagonia.model.config.RankUpPrerequisites;
+import fr.voltariuss.diagonia.model.config.data.rank.Rank;
+import fr.voltariuss.diagonia.model.config.data.rank.RankConfig;
+import fr.voltariuss.diagonia.model.config.data.rank.RankUpPrerequisites;
 import fr.voltariuss.diagonia.model.dto.RankUpProgression;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +52,7 @@ public class RankLuckPermsService implements RankService {
   private final RemakeBukkitLogger logger;
   private final GroupManager groupManager;
   private final RankChallengeProgressionService rankChallengeProgressionService;
-  private final RankConfigService rankConfigService;
+  private final RankConfig rankConfig;
   private final Track track;
   private final UserManager userManager;
 
@@ -61,7 +62,7 @@ public class RankLuckPermsService implements RankService {
    * @param logger The logger.
    * @param groupManager The group manager of LuckPerms API.
    * @param rankChallengeProgressionService The rank challenge progression service.
-   * @param rankConfigService The rank config service.
+   * @param rankConfig The rank config.
    * @param track The LuckPerms' track for ranks.
    * @param userManager The user manager of LuckPerms API.
    */
@@ -70,13 +71,13 @@ public class RankLuckPermsService implements RankService {
       @NotNull RemakeBukkitLogger logger,
       @NotNull GroupManager groupManager,
       @NotNull RankChallengeProgressionService rankChallengeProgressionService,
-      @NotNull RankConfigService rankConfigService,
+      @NotNull RankConfig rankConfig,
       @NotNull Track track,
       @NotNull UserManager userManager) {
     this.logger = logger;
     this.groupManager = groupManager;
     this.rankChallengeProgressionService = rankChallengeProgressionService;
-    this.rankConfigService = rankConfigService;
+    this.rankConfig = rankConfig;
     this.track = track;
     this.userManager = userManager;
   }
@@ -92,7 +93,7 @@ public class RankLuckPermsService implements RankService {
       return null;
     }
 
-    Optional<Rank> currentRank = rankConfigService.findById(currentGroup.getName());
+    Optional<Rank> currentRank = rankConfig.findRankById(currentGroup.getName());
 
     if (currentRank.isEmpty()) {
       throw new IllegalStateException(
@@ -116,13 +117,13 @@ public class RankLuckPermsService implements RankService {
     Group currentGroup = getCurrentGroup(player);
 
     if (currentGroup == null) {
-      unlockableRank = rankConfigService.findById(getFirstGroup().getName()).orElseThrow();
+      unlockableRank = rankConfig.findRankById(getFirstGroup().getName()).orElseThrow();
     } else {
       String unlockableGroupId = track.getNext(currentGroup);
 
       unlockableRank =
           unlockableGroupId != null
-              ? rankConfigService.findById(unlockableGroupId).orElseThrow()
+              ? rankConfig.findRankById(unlockableGroupId).orElseThrow()
               : null;
     }
 
@@ -145,7 +146,7 @@ public class RankLuckPermsService implements RankService {
 
     return ownedGroups.stream()
         .map(Group::getName)
-        .map(rankConfigService::findById)
+        .map(rankConfig::findRankById)
         .map(Optional::orElseThrow)
         .toList();
   }
@@ -211,8 +212,8 @@ public class RankLuckPermsService implements RankService {
         totalJobsLevels >= 0, "The total jobs levels must be higher or equals to 0.");
 
     Rank unlockableRank =
-        rankConfigService
-            .findById(targetedRank.getId())
+        rankConfig
+            .findRankById(targetedRank.getId())
             .orElseThrow(
                 () ->
                     new IllegalStateException(

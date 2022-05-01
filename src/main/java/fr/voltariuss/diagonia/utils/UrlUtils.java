@@ -18,6 +18,7 @@ package fr.voltariuss.diagonia.utils;
 
 import org.jetbrains.annotations.NotNull;
 
+// TODO: remove this class and move method in a dedicated class
 public class UrlUtils {
 
   public static @NotNull String getDatabaseUrl(

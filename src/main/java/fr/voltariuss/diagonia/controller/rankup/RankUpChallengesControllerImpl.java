@@ -20,12 +20,12 @@ import fr.voltariuss.diagonia.RemakeBukkitLogger;
 import fr.voltariuss.diagonia.controller.BukkitUtils;
 import fr.voltariuss.diagonia.controller.MessageController;
 import fr.voltariuss.diagonia.model.GiveActionType;
-import fr.voltariuss.diagonia.model.config.Rank;
-import fr.voltariuss.diagonia.model.config.RankChallenge;
+import fr.voltariuss.diagonia.model.config.data.rank.Rank;
+import fr.voltariuss.diagonia.model.config.data.rank.RankChallenge;
+import fr.voltariuss.diagonia.model.config.data.rank.RankConfig;
 import fr.voltariuss.diagonia.model.dto.RankUpProgression;
 import fr.voltariuss.diagonia.model.entity.RankChallengeProgression;
 import fr.voltariuss.diagonia.model.service.RankChallengeProgressionService;
-import fr.voltariuss.diagonia.model.service.RankConfigService;
 import fr.voltariuss.diagonia.model.service.RankService;
 import fr.voltariuss.diagonia.view.message.CommonMessage;
 import fr.voltariuss.diagonia.view.message.RankUpMessage;
@@ -48,7 +48,7 @@ public class RankUpChallengesControllerImpl implements RankUpChallengesControlle
   private final RemakeBukkitLogger logger;
   private final MessageController messageController;
   private final RankChallengeProgressionService rankChallengeProgressionService;
-  private final RankConfigService rankConfigService;
+  private final RankConfig rankConfig;
   private final RankService rankService;
   private final RankUpController rankUpController;
   private final RankUpMessage rankUpMessage;
@@ -60,7 +60,7 @@ public class RankUpChallengesControllerImpl implements RankUpChallengesControlle
       @NotNull RemakeBukkitLogger logger,
       @NotNull MessageController messageController,
       @NotNull RankChallengeProgressionService rankChallengeProgressionService,
-      @NotNull RankConfigService rankConfigService,
+      @NotNull RankConfig rankConfig,
       @NotNull RankService rankService,
       @NotNull RankUpController rankUpController,
       @NotNull RankUpMessage rankUpMessage) {
@@ -69,7 +69,7 @@ public class RankUpChallengesControllerImpl implements RankUpChallengesControlle
     this.logger = logger;
     this.messageController = messageController;
     this.rankChallengeProgressionService = rankChallengeProgressionService;
-    this.rankConfigService = rankConfigService;
+    this.rankConfig = rankConfig;
     this.rankService = rankService;
     this.rankUpController = rankUpController;
     this.rankUpMessage = rankUpMessage;
@@ -83,7 +83,7 @@ public class RankUpChallengesControllerImpl implements RankUpChallengesControlle
       @NotNull GiveActionType giveActionType,
       int nbItemsInInventory) {
     if (rankChallengeProgressionService.isChallengeCompleted(
-      targetPlayer.getUniqueId(), rank.getId(), rankChallenge)) {
+        targetPlayer.getUniqueId(), rank.getId(), rankChallenge)) {
       messageController.sendFailureMessage(targetPlayer, rankUpMessage.challengeAlreadyCompleted());
       return;
     }
@@ -159,7 +159,7 @@ public class RankUpChallengesControllerImpl implements RankUpChallengesControlle
     }
 
     Rank newRank =
-        rankConfigService.findById(promotionResult.getGroupTo().orElseThrow()).orElseThrow();
+        rankConfig.findRankById(promotionResult.getGroupTo().orElseThrow()).orElseThrow();
 
     player.closeInventory(Reason.PLUGIN);
     messageController.broadcastMessage(rankUpMessage.rankUpSuccess(player, newRank));

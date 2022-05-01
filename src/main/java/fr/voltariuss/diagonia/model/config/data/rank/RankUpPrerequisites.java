@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.model.config;
+package fr.voltariuss.diagonia.model.config.data.rank;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,11 +31,9 @@ import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public final class PlayerShopConfig {
+public final class RankUpPrerequisites {
 
-  private double buyCost;
-  private int inactivityDelay;
-  private int premiumSlotDuration;
-  private double premiumSlotBuyCost;
-  private String tpCreationAllowedWorld;
+  private double moneyCost;
+  private int enchantingLevelsCost;
+  private int jobsLevels;
 }

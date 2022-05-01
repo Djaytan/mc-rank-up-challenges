@@ -18,7 +18,7 @@ package fr.voltariuss.diagonia.controller;
 
 import com.google.common.base.Preconditions;
 import fr.voltariuss.diagonia.RemakeBukkitLogger;
-import fr.voltariuss.diagonia.model.config.PluginConfig;
+import fr.voltariuss.diagonia.model.config.data.PluginConfig;
 import fr.voltariuss.diagonia.view.message.EnchantsMessage;
 import java.util.Collections;
 import java.util.HashSet;

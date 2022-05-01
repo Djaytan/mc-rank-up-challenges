@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2022 - Loïc DUBOIS-TERMOZ
  *
- * Licensed under the Apache License, Version 2.0 (the "License"),
+ * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.model.config;
+package fr.voltariuss.diagonia.model.config.data.rank;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,6 +22,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.bukkit.Material;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
 @ConfigSerializable
@@ -31,12 +32,8 @@ import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public final class DatabaseConfig {
+public final class RankChallenge {
 
-  private boolean isEnabled;
-  private String host;
-  private int port;
-  private String database;
-  private String username;
-  private String password;
+  private Material material;
+  private int amount;
 }

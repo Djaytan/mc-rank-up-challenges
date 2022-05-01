@@ -17,8 +17,8 @@
 package fr.voltariuss.diagonia.controller.rankup;
 
 import fr.voltariuss.diagonia.model.GiveActionType;
-import fr.voltariuss.diagonia.model.config.Rank;
-import fr.voltariuss.diagonia.model.config.RankChallenge;
+import fr.voltariuss.diagonia.model.config.data.rank.Rank;
+import fr.voltariuss.diagonia.model.config.data.rank.RankChallenge;
 import fr.voltariuss.diagonia.model.dto.RankUpProgression;
 import fr.voltariuss.diagonia.model.entity.RankChallengeProgression;
 import java.util.Optional;

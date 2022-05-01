@@ -18,8 +18,8 @@ package fr.voltariuss.diagonia.guice;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import fr.voltariuss.diagonia.model.config.PluginConfig;
-import fr.voltariuss.diagonia.model.config.RankConfig;
+import fr.voltariuss.diagonia.model.config.data.PluginConfig;
+import fr.voltariuss.diagonia.model.config.data.rank.RankConfig;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
 import org.bukkit.plugin.java.JavaPlugin;

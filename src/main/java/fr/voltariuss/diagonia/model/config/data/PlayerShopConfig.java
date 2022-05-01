@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.model.config;
+package fr.voltariuss.diagonia.model.config.data;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,7 +22,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.bukkit.Material;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
 @ConfigSerializable
@@ -32,8 +31,11 @@ import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public final class RankChallenge {
+public final class PlayerShopConfig {
 
-  private Material material;
-  private int amount;
+  private double buyCost;
+  private int inactivityDelay;
+  private int premiumSlotDuration;
+  private double premiumSlotBuyCost;
+  private String tpCreationAllowedWorld;
 }

@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2022 - Loïc DUBOIS-TERMOZ
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
+ * Licensed under the Apache License, Version 2.0 (the "License"),
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.model.config;
+package fr.voltariuss.diagonia.model.config.data;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,9 +31,12 @@ import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public final class RankUpPrerequisites {
+public final class DatabaseConfig {
 
-  private double moneyCost;
-  private int enchantingLevelsCost;
-  private int jobsLevels;
+  private boolean isEnabled;
+  private String host;
+  private int port;
+  private String database;
+  private String username;
+  private String password;
 }
