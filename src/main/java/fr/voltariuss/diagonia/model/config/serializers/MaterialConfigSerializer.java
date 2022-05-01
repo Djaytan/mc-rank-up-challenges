@@ -36,7 +36,7 @@ public class MaterialConfigSerializer implements TypeSerializer<Material> {
       throw new SerializationException(
           node, Material.class, "Required field of type Material not present.");
     }
-    return Material.getMaterial(materialName);
+    return Material.matchMaterial(materialName);
   }
 
   @Override
