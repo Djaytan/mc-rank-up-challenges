@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2022 - Loïc DUBOIS-TERMOZ
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
+ * Licensed under the Apache License, Version 2.0 (the "License"),
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -14,16 +14,21 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.model.config.rank;
+package fr.voltariuss.diagonia.model.config;
 
 import lombok.Builder;
 import lombok.Data;
-import org.bukkit.Material;
+import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
+@ConfigSerializable
 @Data
 @Builder
-public class RankChallenge {
+public final class DatabaseConfig {
 
-  private final Material material;
-  private final int amount;
+  private final boolean isEnabled;
+  private final String host;
+  private final int port;
+  private final String database;
+  private final String username;
+  private final String password;
 }

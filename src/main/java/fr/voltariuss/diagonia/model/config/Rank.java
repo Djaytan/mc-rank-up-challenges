@@ -19,19 +19,23 @@ package fr.voltariuss.diagonia.model.config;
 import java.util.List;
 import lombok.Builder;
 import lombok.Data;
-import lombok.experimental.Accessors;
-import org.bukkit.enchantments.Enchantment;
+import net.kyori.adventure.text.format.TextColor;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
 @ConfigSerializable
 @Data
 @Builder
-// TODO: use fluent getters and setters (Lombok)
-public final class PluginConfig {
+public final class Rank {
 
-  private final boolean debug;
-  private final DatabaseConfig database;
-  private final PlayerShopConfig playerShop;
-  private final RankUpConfig rankUp;
-  private List<Enchantment> blacklistedEnchantments;
+  private final String id;
+  private final String name;
+  private final List<String> description;
+  private final TextColor color;
+  private final List<String> profits;
+  private final boolean rankUpActivated;
+  @Nullable private final List<RankChallenge> rankUpChallenges;
+  // TODO: separate costs from prerequisites (currently not clear for players)
+  @Nullable private final RankUpPrerequisites rankUpPrerequisites;
+  @Nullable private final String rankUpTarget; // TODO: deprecated
 }

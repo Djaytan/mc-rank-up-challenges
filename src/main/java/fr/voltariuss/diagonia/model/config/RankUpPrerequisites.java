@@ -14,15 +14,18 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.model.config.rank;
+package fr.voltariuss.diagonia.model.config;
 
-import java.util.List;
 import lombok.Builder;
 import lombok.Data;
+import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
+@ConfigSerializable
 @Data
 @Builder
-public class RankConfig {
+public final class RankUpPrerequisites {
 
-  private final List<Rank> ranks;
+  private final double moneyCost;
+  private final int enchantingLevelsCost;
+  private final int jobsLevels;
 }

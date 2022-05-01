@@ -16,7 +16,7 @@
 
 package fr.voltariuss.diagonia.view.message;
 
-import fr.voltariuss.diagonia.model.config.rank.Rank;
+import fr.voltariuss.diagonia.model.config.Rank;
 import java.util.ResourceBundle;
 import javax.inject.Inject;
 import javax.inject.Singleton;

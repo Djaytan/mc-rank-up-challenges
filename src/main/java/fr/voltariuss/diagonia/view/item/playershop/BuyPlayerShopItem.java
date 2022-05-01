@@ -89,7 +89,7 @@ public class BuyPlayerShopItem {
                 TagResolver.resolver(
                     Placeholder.unparsed(
                         "diag_buy_price",
-                        economyFormatter.format(pluginConfig.getPlayerShopConfig().getBuyCost()))))
+                        economyFormatter.format(pluginConfig.getPlayerShop().getBuyCost()))))
             .decoration(TextDecoration.ITALIC, false),
         Component.empty(),
         miniMessage

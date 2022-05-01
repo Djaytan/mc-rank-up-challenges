@@ -18,7 +18,7 @@ package fr.voltariuss.diagonia;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
-import fr.voltariuss.diagonia.model.config.rank.RankConfig;
+import fr.voltariuss.diagonia.model.config.RankConfig;
 import fr.voltariuss.diagonia.model.dao.PlayerShopDao;
 import fr.voltariuss.diagonia.model.dao.PlayerShopDaoImpl;
 import javax.inject.Named;

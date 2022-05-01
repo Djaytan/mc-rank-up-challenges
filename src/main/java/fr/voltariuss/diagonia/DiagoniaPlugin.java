@@ -20,11 +20,10 @@ import fr.voltariuss.diagonia.controller.ConfigController;
 import fr.voltariuss.diagonia.controller.ConfigControllerImpl;
 import fr.voltariuss.diagonia.controller.PluginController;
 import fr.voltariuss.diagonia.guice.GuiceInjector;
-import fr.voltariuss.diagonia.model.RankConfigDeserializer;
-import fr.voltariuss.diagonia.model.RankConfigInitializer;
 import fr.voltariuss.diagonia.model.config.PluginConfig;
-import fr.voltariuss.diagonia.model.config.rank.RankConfig;
-import fr.voltariuss.diagonia.model.service.PluginConfigService;
+import fr.voltariuss.diagonia.model.config.RankConfig;
+import fr.voltariuss.diagonia.model.config.serializers.DiagoniaConfigSerializersFactory;
+import java.util.Arrays;
 import javax.inject.Inject;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -36,27 +35,33 @@ public class DiagoniaPlugin extends JavaPlugin {
 
   @Override
   public void onEnable() {
-    // This is tricky at startup, but don't found better way than that...
-    // Perfect startup would inject Guice immediately, but some injections need config values
-    ConfigController configController = createConfigController();
-    PluginConfig pluginConfig = configController.loadPluginConfig();
-    RankConfig rankConfig = configController.loadRankConfig();
+    try {
+      // This is tricky at startup, but don't found better way than that...
+      // Perfect startup would inject Guice immediately, but some injections need config values
+      ConfigController configController = createConfigController();
 
-    GuiceInjector.inject(this, pluginConfig, rankConfig);
+      configController.saveDefaultConfigs(Arrays.asList("plugin.conf", "ranks.conf"));
+      PluginConfig pluginConfig = configController.loadPluginConfig();
+      RankConfig rankConfig = configController.loadRankConfig();
 
-    // The core start of the plugin happens here
-    pluginController.enablePlugin();
+      GuiceInjector.inject(this, pluginConfig, rankConfig);
+
+      // The core start of the plugin happens here
+      pluginController.enablePlugin();
+    } catch (Exception e) {
+      getSLF4JLogger().error("An exception occurs preventing Diagonia plugin to be enabled.", e);
+      setEnabled(false);
+    }
   }
 
   @Override
   public void onDisable() {
-    pluginController.disablePlugin();
+    if (pluginController != null) {
+      pluginController.disablePlugin();
+    }
   }
 
   private @NotNull ConfigController createConfigController() {
-    return new ConfigControllerImpl(
-        this,
-        new PluginConfigService(),
-        new RankConfigInitializer(getSLF4JLogger(), this, new RankConfigDeserializer()));
+    return new ConfigControllerImpl(new DiagoniaConfigSerializersFactory().factory(), this);
   }
 }

@@ -20,8 +20,8 @@ import fr.voltariuss.diagonia.CommandRegister;
 import fr.voltariuss.diagonia.ListenerRegister;
 import fr.voltariuss.diagonia.PrerequisitesValidation;
 import fr.voltariuss.diagonia.model.config.PluginConfig;
-import fr.voltariuss.diagonia.model.config.rank.Rank;
-import fr.voltariuss.diagonia.model.config.rank.RankConfig;
+import fr.voltariuss.diagonia.model.config.Rank;
+import fr.voltariuss.diagonia.model.config.RankConfig;
 import fr.voltariuss.diagonia.utils.UrlUtils;
 import fr.voltariuss.diagonia.view.message.CommonMessage;
 import java.util.List;
@@ -90,20 +90,20 @@ public class PluginControllerImpl implements PluginController {
           commonMessage.startupBannerProgressionLine("General config file loading"));
       messageController.sendConsoleMessage(
           commonMessage.startupBannerStateLine(
-              "Debug Mode", Boolean.toString(pluginConfig.isDebugMode())));
+              "Debug Mode", Boolean.toString(pluginConfig.isDebug())));
       messageController.sendConsoleMessage(
           commonMessage.startupBannerStateLine(
               "Database connection URL",
               UrlUtils.getDatabaseUrl(
-                  pluginConfig.getDatabaseConfig().getHost(),
-                  pluginConfig.getDatabaseConfig().getPort(),
-                  pluginConfig.getDatabaseConfig().getDatabase())));
+                  pluginConfig.getDatabase().getHost(),
+                  pluginConfig.getDatabase().getPort(),
+                  pluginConfig.getDatabase().getDatabase())));
       messageController.sendConsoleMessage(
           commonMessage.startupBannerStateLine(
-              "Database username", pluginConfig.getDatabaseConfig().getUsername()));
+              "Database username", pluginConfig.getDatabase().getUsername()));
       messageController.sendConsoleMessage(
           commonMessage.startupBannerStateLine(
-              "LuckPerms rank track name", pluginConfig.getRankUpConfig().getLuckPermsTrackName()));
+              "LuckPerms rank track name", pluginConfig.getRankUp().getLuckPermsTrackName()));
 
       messageController.sendConsoleMessage(
           commonMessage.startupBannerProgressionLine("Rank config file loading"));

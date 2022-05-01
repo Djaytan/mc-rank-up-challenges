@@ -18,7 +18,7 @@ package fr.voltariuss.diagonia.controller.rankup;
 
 import fr.voltariuss.diagonia.RemakeBukkitLogger;
 import fr.voltariuss.diagonia.controller.MessageController;
-import fr.voltariuss.diagonia.model.config.rank.Rank;
+import fr.voltariuss.diagonia.model.config.Rank;
 import fr.voltariuss.diagonia.model.dto.RankUpProgression;
 import fr.voltariuss.diagonia.model.service.EconomyService;
 import fr.voltariuss.diagonia.model.service.JobsService;

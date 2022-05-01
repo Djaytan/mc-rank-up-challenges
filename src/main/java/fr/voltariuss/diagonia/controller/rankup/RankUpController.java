@@ -16,7 +16,7 @@
 
 package fr.voltariuss.diagonia.controller.rankup;
 
-import fr.voltariuss.diagonia.model.config.rank.Rank;
+import fr.voltariuss.diagonia.model.config.Rank;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 

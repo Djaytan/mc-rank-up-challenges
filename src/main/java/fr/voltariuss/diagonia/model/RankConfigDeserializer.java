@@ -22,10 +22,10 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import fr.voltariuss.diagonia.model.config.rank.Rank;
-import fr.voltariuss.diagonia.model.config.rank.RankChallenge;
-import fr.voltariuss.diagonia.model.config.rank.RankConfig;
-import fr.voltariuss.diagonia.model.config.rank.RankUpPrerequisites;
+import fr.voltariuss.diagonia.model.config.Rank;
+import fr.voltariuss.diagonia.model.config.RankChallenge;
+import fr.voltariuss.diagonia.model.config.RankConfig;
+import fr.voltariuss.diagonia.model.config.RankUpPrerequisites;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -78,17 +78,16 @@ public class RankConfigDeserializer implements JsonDeserializer<RankConfig> {
                               .material(
                                   Material.matchMaterial(
                                       challengeObject.get("challengeItemMaterial").getAsString()))
-                              .amount(
-                                  challengeObject.get("challengeItemAmount").getAsInt())
+                              .amount(challengeObject.get("challengeItemAmount").getAsInt())
                               .build());
                     });
 
             JsonObject prerequisiteJson = rankJson.get("rankUpPrerequisites").getAsJsonObject();
             RankUpPrerequisites rankUpPrerequisites =
                 RankUpPrerequisites.builder()
-                    .moneyPrice(prerequisiteJson.get("moneyPrice").getAsDouble())
-                    .totalMcExpLevels(prerequisiteJson.get("totalMcExpLevels").getAsInt())
-                    .totalJobsLevel(prerequisiteJson.get("totalJobLevel").getAsInt())
+                    .moneyCost(prerequisiteJson.get("moneyPrice").getAsDouble())
+                    .enchantingLevelsCost(prerequisiteJson.get("totalMcExpLevels").getAsInt())
+                    .jobsLevels(prerequisiteJson.get("totalJobLevel").getAsInt())
                     .build();
 
             String rankUpTarget = rankJson.get("rankUpTarget").getAsString();
@@ -100,7 +99,7 @@ public class RankConfigDeserializer implements JsonDeserializer<RankConfig> {
                     .description(description)
                     .color(rankColor)
                     .profits(profits)
-                    .isRankUpActivated(true)
+                    .rankUpActivated(true)
                     .rankUpPrerequisites(rankUpPrerequisites)
                     .rankUpChallenges(challenges)
                     .rankUpTarget(rankUpTarget)
@@ -114,7 +113,7 @@ public class RankConfigDeserializer implements JsonDeserializer<RankConfig> {
                   .description(description)
                   .color(rankColor)
                   .profits(profits)
-                  .isRankUpActivated(false)
+                  .rankUpActivated(false)
                   .build());
         });
 

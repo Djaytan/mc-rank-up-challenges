@@ -14,29 +14,27 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.model.service;
+package fr.voltariuss.diagonia.model.config.serializers;
 
-import com.google.common.base.Preconditions;
-import fr.voltariuss.diagonia.model.config.Rank;
-import fr.voltariuss.diagonia.model.config.RankConfig;
-import java.util.Optional;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import net.kyori.adventure.text.format.TextColor;
 import org.jetbrains.annotations.NotNull;
+import org.spongepowered.configurate.serialize.TypeSerializerCollection;
 
 @Singleton
-public class RankConfigService {
+public class AdventureConfigSerializers {
 
-  private final RankConfig rankConfig;
+  private final TextColorConfigSerializer textColorConfigSerializer;
 
   @Inject
-  public RankConfigService(@NotNull RankConfig rankConfig) {
-    this.rankConfig = rankConfig;
+  public AdventureConfigSerializers(@NotNull TextColorConfigSerializer textColorConfigSerializer) {
+    this.textColorConfigSerializer = textColorConfigSerializer;
   }
 
-  public @NotNull Optional<Rank> findById(@NotNull String id) {
-    Preconditions.checkNotNull(id);
-
-    return rankConfig.getRanks().stream().filter(rank -> rank.getId().equals(id)).findFirst();
+  public @NotNull TypeSerializerCollection collection() {
+    return TypeSerializerCollection.builder()
+        .registerExact(TextColor.class, textColorConfigSerializer)
+        .build();
   }
 }

@@ -19,7 +19,7 @@ package fr.voltariuss.diagonia.model;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import fr.voltariuss.diagonia.DiagoniaException;
-import fr.voltariuss.diagonia.model.config.rank.RankConfig;
+import fr.voltariuss.diagonia.model.config.RankConfig;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;

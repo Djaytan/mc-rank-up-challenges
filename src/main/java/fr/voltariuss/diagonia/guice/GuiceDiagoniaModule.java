@@ -22,7 +22,7 @@ import com.google.inject.Singleton;
 import fr.voltariuss.diagonia.CriticalErrorHandler;
 import fr.voltariuss.diagonia.DiagoniaException;
 import fr.voltariuss.diagonia.model.config.PluginConfig;
-import fr.voltariuss.diagonia.model.config.rank.RankConfig;
+import fr.voltariuss.diagonia.model.config.RankConfig;
 import fr.voltariuss.diagonia.model.entity.PlayerShop;
 import fr.voltariuss.diagonia.model.entity.RankChallengeProgression;
 import fr.voltariuss.diagonia.utils.UrlUtils;
@@ -62,8 +62,8 @@ public class GuiceDiagoniaModule extends AbstractModule {
   @Provides
   @Named("debugMode")
   public Boolean provideDebugMode() {
-    logger.info("Debug mode: {}", pluginConfig.isDebugMode());
-    return pluginConfig.isDebugMode();
+    logger.info("Debug mode: {}", pluginConfig.isDebug());
+    return pluginConfig.isDebug();
   }
 
   @Provides
@@ -84,18 +84,16 @@ public class GuiceDiagoniaModule extends AbstractModule {
     SessionFactory sessionFactory = null;
     String connectionUrl =
         UrlUtils.getDatabaseUrl(
-            pluginConfig.getDatabaseConfig().getHost(),
-            pluginConfig.getDatabaseConfig().getPort(),
-            pluginConfig.getDatabaseConfig().getDatabase());
+            pluginConfig.getDatabase().getHost(),
+            pluginConfig.getDatabase().getPort(),
+            pluginConfig.getDatabase().getDatabase());
     try {
       // The SessionFactory must be built only once for application lifecycle
       Configuration configuration = new Configuration();
 
       configuration.setProperty(AvailableSettings.URL, connectionUrl);
-      configuration.setProperty(
-          AvailableSettings.USER, pluginConfig.getDatabaseConfig().getUsername());
-      configuration.setProperty(
-          AvailableSettings.PASS, pluginConfig.getDatabaseConfig().getPassword());
+      configuration.setProperty(AvailableSettings.USER, pluginConfig.getDatabase().getUsername());
+      configuration.setProperty(AvailableSettings.PASS, pluginConfig.getDatabase().getPassword());
       configuration.setProperty(
           AvailableSettings.CONNECTION_PROVIDER,
           "org.hibernate.hikaricp.internal.HikariCPConnectionProvider");
@@ -134,7 +132,7 @@ public class GuiceDiagoniaModule extends AbstractModule {
   @Provides
   @Singleton
   public @NotNull Track provideTrack() throws DiagoniaException {
-    String trackName = pluginConfig.getRankUpConfig().getLuckPermsTrackName();
+    String trackName = pluginConfig.getRankUp().getLuckPermsTrackName();
     Track track = luckPerms.getTrackManager().getTrack(trackName);
 
     if (track == null) {

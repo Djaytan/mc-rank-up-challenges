@@ -18,8 +18,8 @@ package fr.voltariuss.diagonia.model.service;
 
 import com.google.common.base.Preconditions;
 import fr.voltariuss.diagonia.RemakeBukkitLogger;
-import fr.voltariuss.diagonia.model.config.rank.Rank;
-import fr.voltariuss.diagonia.model.config.rank.RankUpPrerequisites;
+import fr.voltariuss.diagonia.model.config.Rank;
+import fr.voltariuss.diagonia.model.config.RankUpPrerequisites;
 import fr.voltariuss.diagonia.model.dto.RankUpProgression;
 import java.util.ArrayList;
 import java.util.List;
@@ -229,15 +229,16 @@ public class RankLuckPermsService implements RankService {
           new NullPointerException("Prerequisites list of unlockable rank is null."));
     }
 
-    int currentXpLevel = player.getLevel();
-    int requiredXpLevel = prerequisites.getTotalMcExpLevels();
-    boolean isXpLevelPrerequisiteDone = currentXpLevel >= requiredXpLevel;
+    int currentEnchantingLevels = player.getLevel();
+    int requiredEnchantingLevels = prerequisites.getEnchantingLevelsCost();
+    boolean isEnchantingLevelsPrerequisiteDone =
+        currentEnchantingLevels >= requiredEnchantingLevels;
 
-    int requiredTotalJobsLevel = prerequisites.getTotalJobsLevel();
-    boolean isTotalJobsLevelsPrerequisiteDone = totalJobsLevels >= requiredTotalJobsLevel;
+    int requiredJobsLevels = prerequisites.getJobsLevels();
+    boolean isJobsLevelsPrerequisiteDone = totalJobsLevels >= requiredJobsLevels;
 
-    double price = prerequisites.getMoneyPrice();
-    boolean isMoneyPrerequisiteDone = currentBalance >= price;
+    double moneyCost = prerequisites.getMoneyCost();
+    boolean isMoneyPrerequisiteDone = currentBalance >= moneyCost;
 
     boolean isChallengesPrerequisiteDone =
         rankChallengeProgressionService.areChallengesCompleted(player, unlockableRank);
@@ -245,10 +246,10 @@ public class RankLuckPermsService implements RankService {
     boolean isRankOwned = isRankOwned(player, unlockableRank.getId());
 
     return RankUpProgression.builder()
-        .currentXpLevel(currentXpLevel)
-        .isXpLevelPrerequisiteDone(isXpLevelPrerequisiteDone)
+        .currentXpLevel(currentEnchantingLevels)
+        .isXpLevelPrerequisiteDone(isEnchantingLevelsPrerequisiteDone)
         .totalJobsLevels(totalJobsLevels)
-        .isTotalJobsLevelsPrerequisiteDone(isTotalJobsLevelsPrerequisiteDone)
+        .isTotalJobsLevelsPrerequisiteDone(isJobsLevelsPrerequisiteDone)
         .currentBalance(currentBalance)
         .isMoneyPrerequisiteDone(isMoneyPrerequisiteDone)
         .isChallengesPrerequisiteDone(isChallengesPrerequisiteDone)

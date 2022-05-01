@@ -21,8 +21,8 @@ import dev.triumphteam.gui.builder.item.ItemBuilder;
 import dev.triumphteam.gui.components.GuiAction;
 import dev.triumphteam.gui.guis.GuiItem;
 import fr.voltariuss.diagonia.controller.rankup.RankUpChallengesController;
-import fr.voltariuss.diagonia.model.config.rank.Rank;
-import fr.voltariuss.diagonia.model.config.rank.RankUpPrerequisites;
+import fr.voltariuss.diagonia.model.config.Rank;
+import fr.voltariuss.diagonia.model.config.RankUpPrerequisites;
 import fr.voltariuss.diagonia.model.dto.RankUpProgression;
 import fr.voltariuss.diagonia.view.EconomyFormatter;
 import java.util.ArrayList;
@@ -130,7 +130,7 @@ public class RankUpItem {
                             String.valueOf(rankUpProgression.getCurrentXpLevel()))),
                     Placeholder.unparsed(
                         "diag_required_level",
-                        String.valueOf(rankUpPrerequisites.getTotalMcExpLevels()))))
+                        String.valueOf(rankUpPrerequisites.getEnchantingLevelsCost()))))
             .decoration(TextDecoration.ITALIC, false),
         miniMessage
             .deserialize(
@@ -144,7 +144,7 @@ public class RankUpItem {
                             String.valueOf(rankUpProgression.getTotalJobsLevels()))),
                     Placeholder.unparsed(
                         "diag_required_level",
-                        String.valueOf(rankUpPrerequisites.getTotalJobsLevel()))))
+                        String.valueOf(rankUpPrerequisites.getJobsLevels()))))
             .decoration(TextDecoration.ITALIC, false),
         miniMessage
             .deserialize(
@@ -158,7 +158,7 @@ public class RankUpItem {
                             economyFormatter.format(rankUpProgression.getCurrentBalance()))),
                     Placeholder.unparsed(
                         "diag_rankup_price",
-                        economyFormatter.format(rankUpPrerequisites.getMoneyPrice()))))
+                        economyFormatter.format(rankUpPrerequisites.getMoneyCost()))))
             .decoration(TextDecoration.ITALIC, false));
   }
 

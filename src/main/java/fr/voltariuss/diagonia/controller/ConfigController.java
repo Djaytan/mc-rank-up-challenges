@@ -17,14 +17,19 @@
 package fr.voltariuss.diagonia.controller;
 
 import fr.voltariuss.diagonia.model.config.PluginConfig;
-import fr.voltariuss.diagonia.model.config.rank.RankConfig;
+import fr.voltariuss.diagonia.model.config.RankConfig;
+import java.util.List;
 import org.jetbrains.annotations.NotNull;
 
 public interface ConfigController {
+
+  <T> @NotNull T loadConfig(@NotNull String configFileName, Class<T> clazz);
 
   @NotNull
   PluginConfig loadPluginConfig();
 
   @NotNull
   RankConfig loadRankConfig();
+
+  void saveDefaultConfigs(@NotNull List<String> configFilesNames);
 }

@@ -145,7 +145,7 @@ public class PlayerShopListControllerImpl implements PlayerShopListController {
     // TODO: 2PC with JTA
     logger.debug("Start buying a playershop for player {}", player.getName());
 
-    double playerShopPrice = pluginConfig.getPlayerShopConfig().getBuyCost();
+    double playerShopPrice = pluginConfig.getPlayerShop().getBuyCost();
 
     if (!economyService.isAffordable(player, playerShopPrice)) {
       messageController.sendFailureMessage(player, playerShopMessage.insufficientFunds());

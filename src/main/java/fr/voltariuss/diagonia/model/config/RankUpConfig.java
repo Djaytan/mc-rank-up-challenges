@@ -16,22 +16,14 @@
 
 package fr.voltariuss.diagonia.model.config;
 
-import java.util.List;
 import lombok.Builder;
 import lombok.Data;
-import lombok.experimental.Accessors;
-import org.bukkit.enchantments.Enchantment;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
 @ConfigSerializable
 @Data
 @Builder
-// TODO: use fluent getters and setters (Lombok)
-public final class PluginConfig {
+public final class RankUpConfig {
 
-  private final boolean debug;
-  private final DatabaseConfig database;
-  private final PlayerShopConfig playerShop;
-  private final RankUpConfig rankUp;
-  private List<Enchantment> blacklistedEnchantments;
+  private final String luckPermsTrackName;
 }

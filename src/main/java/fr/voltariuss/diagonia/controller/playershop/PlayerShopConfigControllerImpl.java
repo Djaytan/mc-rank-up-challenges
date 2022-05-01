@@ -76,7 +76,7 @@ public class PlayerShopConfigControllerImpl implements PlayerShopConfigControlle
     if (!newLocation
         .getWorld()
         .getName()
-        .equals(pluginConfig.getPlayerShopConfig().getTpCreationAllowedWorld())) {
+        .equals(pluginConfig.getPlayerShop().getTpCreationAllowedWorld())) {
       messageController.sendFailureMessage(
           sender, playerShopMessage.tpCreationImpossibleInThisWorld());
       return;

@@ -14,16 +14,18 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.model.config.rank;
+package fr.voltariuss.diagonia.model.config.serializers;
 
-import lombok.Builder;
-import lombok.Data;
+import javax.inject.Singleton;
+import org.jetbrains.annotations.NotNull;
 
-@Data
-@Builder
-public class RankUpPrerequisites {
+@Singleton
+public class DiagoniaConfigSerializersFactory {
 
-  private final double moneyPrice;
-  private final int totalMcExpLevels;
-  private final int totalJobsLevel;
+  public @NotNull DiagoniaConfigSerializers factory() {
+    return new DiagoniaConfigSerializers(
+        new AdventureConfigSerializers(new TextColorConfigSerializer()),
+        new BukkitConfigSerializers(
+            new EnchantmentConfigSerializer(), new MaterialConfigSerializer()));
+  }
 }
