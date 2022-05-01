@@ -24,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
 
 public interface ConfigController {
 
-  <T> @NotNull T loadConfig(@NotNull DiagoniaConfig diagoniaConfig, Class<T> clazz);
+  <T> @NotNull T loadConfig(@NotNull DiagoniaConfig diagoniaConfig, @NotNull Class<T> clazz);
 
   @NotNull
   PluginConfig loadPluginConfig();

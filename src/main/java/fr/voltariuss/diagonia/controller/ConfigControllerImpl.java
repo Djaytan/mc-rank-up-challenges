@@ -16,6 +16,7 @@
 
 package fr.voltariuss.diagonia.controller;
 
+import com.google.common.base.Preconditions;
 import fr.voltariuss.diagonia.DiagoniaRuntimeException;
 import fr.voltariuss.diagonia.model.config.DiagoniaConfig;
 import fr.voltariuss.diagonia.model.config.PluginConfig;
@@ -51,7 +52,10 @@ public class ConfigControllerImpl implements ConfigController {
   }
 
   @Override
-  public <T> @NotNull T loadConfig(@NotNull DiagoniaConfig diagoniaConfig, Class<T> clazz) {
+  public <T> @NotNull T loadConfig(@NotNull DiagoniaConfig diagoniaConfig, @NotNull Class<T> clazz) {
+    Preconditions.checkNotNull(diagoniaConfig);
+    Preconditions.checkNotNull(clazz);
+
     String configFileName = diagoniaConfig.getConfigFileName();
 
     HoconConfigurationLoader loader =
