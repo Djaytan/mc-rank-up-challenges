@@ -14,23 +14,19 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.controller;
+package fr.voltariuss.diagonia.model.config;
 
-import fr.voltariuss.diagonia.model.config.DiagoniaConfig;
-import fr.voltariuss.diagonia.model.config.PluginConfig;
-import fr.voltariuss.diagonia.model.config.RankConfig;
-import java.util.List;
+import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
-public interface ConfigController {
+@Getter
+public enum DiagoniaConfig {
+  PLUGIN("plugin.conf"),
+  RANKS("ranks.conf");
 
-  <T> @NotNull T loadConfig(@NotNull DiagoniaConfig diagoniaConfig, Class<T> clazz);
+  private final String configFileName;
 
-  @NotNull
-  PluginConfig loadPluginConfig();
-
-  @NotNull
-  RankConfig loadRankConfig();
-
-  void saveDefaultConfigs();
+  DiagoniaConfig(@NotNull String configFileName) {
+    this.configFileName = configFileName;
+  }
 }

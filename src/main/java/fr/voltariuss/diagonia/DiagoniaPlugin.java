@@ -20,6 +20,7 @@ import fr.voltariuss.diagonia.controller.ConfigController;
 import fr.voltariuss.diagonia.controller.ConfigControllerImpl;
 import fr.voltariuss.diagonia.controller.PluginController;
 import fr.voltariuss.diagonia.guice.GuiceInjector;
+import fr.voltariuss.diagonia.model.config.DiagoniaConfig;
 import fr.voltariuss.diagonia.model.config.PluginConfig;
 import fr.voltariuss.diagonia.model.config.RankConfig;
 import fr.voltariuss.diagonia.model.config.serializers.DiagoniaConfigSerializersFactory;
@@ -40,7 +41,7 @@ public class DiagoniaPlugin extends JavaPlugin {
       // Perfect startup would inject Guice immediately, but some injections need config values
       ConfigController configController = createConfigController();
 
-      configController.saveDefaultConfigs("plugin.conf", "ranks.conf");
+      configController.saveDefaultConfigs();
       PluginConfig pluginConfig = configController.loadPluginConfig();
       RankConfig rankConfig = configController.loadRankConfig();
 

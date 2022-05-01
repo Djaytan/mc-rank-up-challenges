@@ -17,6 +17,7 @@
 package fr.voltariuss.diagonia.controller;
 
 import fr.voltariuss.diagonia.DiagoniaRuntimeException;
+import fr.voltariuss.diagonia.model.config.DiagoniaConfig;
 import fr.voltariuss.diagonia.model.config.PluginConfig;
 import fr.voltariuss.diagonia.model.config.RankConfig;
 import fr.voltariuss.diagonia.model.config.serializers.DiagoniaConfigSerializers;
@@ -24,7 +25,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.bukkit.plugin.Plugin;
@@ -37,9 +37,6 @@ import org.spongepowered.configurate.serialize.TypeSerializerCollection;
 
 @Singleton
 public class ConfigControllerImpl implements ConfigController {
-
-  private static final String PLUGIN_CONF_FILE_NAME = "plugin.conf";
-  private static final String RANK_CONF_FILE_NAME = "rank.conf";
 
   private final Path dataFolder;
   private final DiagoniaConfigSerializers diagoniaConfigSerializers;
@@ -54,7 +51,9 @@ public class ConfigControllerImpl implements ConfigController {
   }
 
   @Override
-  public <T> @NotNull T loadConfig(@NotNull String configFileName, Class<T> clazz) {
+  public <T> @NotNull T loadConfig(@NotNull DiagoniaConfig diagoniaConfig, Class<T> clazz) {
+    String configFileName = diagoniaConfig.getConfigFileName();
+
     HoconConfigurationLoader loader =
         HoconConfigurationLoader.builder()
             .defaultOptions(
@@ -89,7 +88,7 @@ public class ConfigControllerImpl implements ConfigController {
 
   @Override
   public @NotNull PluginConfig loadPluginConfig() {
-    PluginConfig pluginConfig = loadConfig(PLUGIN_CONF_FILE_NAME, PluginConfig.class);
+    PluginConfig pluginConfig = loadConfig(DiagoniaConfig.PLUGIN, PluginConfig.class);
 
     if (!pluginConfig.getDatabase().isEnabled()) {
       throw new DiagoniaRuntimeException(
@@ -101,11 +100,11 @@ public class ConfigControllerImpl implements ConfigController {
 
   @Override
   public @NotNull RankConfig loadRankConfig() {
-    return loadConfig(RANK_CONF_FILE_NAME, RankConfig.class);
+    return loadConfig(DiagoniaConfig.RANKS, RankConfig.class);
   }
 
   @Override
-  public void saveDefaultConfigs(@NotNull String... configFilesNames) {
+  public void saveDefaultConfigs() {
     if (Files.notExists(dataFolder)) {
       try {
         Files.createDirectory(dataFolder);
@@ -114,7 +113,8 @@ public class ConfigControllerImpl implements ConfigController {
       }
     }
 
-    for (String configFileName : configFilesNames) {
+    for (DiagoniaConfig diagoniaConfig : DiagoniaConfig.values()) {
+      String configFileName = diagoniaConfig.getConfigFileName();
       Path configFilePath = dataFolder.resolve(configFileName);
 
       if (Files.exists(configFilePath)) {
