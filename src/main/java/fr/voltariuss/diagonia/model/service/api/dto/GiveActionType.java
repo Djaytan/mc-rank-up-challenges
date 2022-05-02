@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.model;
+package fr.voltariuss.diagonia.model.service.api.dto;
 
 public enum GiveActionType {
   SINGLE(1),

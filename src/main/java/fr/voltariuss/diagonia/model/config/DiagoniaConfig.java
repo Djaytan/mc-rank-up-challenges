@@ -19,6 +19,7 @@ package fr.voltariuss.diagonia.model.config;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
+// TODO: create ConfigService and reorganize config part
 @Getter
 public enum DiagoniaConfig {
   PLUGIN("plugin.conf"),

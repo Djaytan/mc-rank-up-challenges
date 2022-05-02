@@ -16,7 +16,7 @@
 
 package fr.voltariuss.diagonia.view;
 
-import fr.voltariuss.diagonia.model.GiveActionType;
+import fr.voltariuss.diagonia.model.service.api.dto.GiveActionType;
 import javax.inject.Singleton;
 import org.bukkit.event.inventory.ClickType;
 import org.jetbrains.annotations.NotNull;

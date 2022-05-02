@@ -16,7 +16,7 @@
 
 package fr.voltariuss.diagonia.controller.api;
 
-import fr.voltariuss.diagonia.model.GiveActionType;
+import fr.voltariuss.diagonia.model.service.api.dto.GiveActionType;
 import fr.voltariuss.diagonia.model.config.data.rank.Rank;
 import fr.voltariuss.diagonia.model.config.data.rank.RankChallenge;
 import fr.voltariuss.diagonia.model.service.api.dto.RankUpProgression;
