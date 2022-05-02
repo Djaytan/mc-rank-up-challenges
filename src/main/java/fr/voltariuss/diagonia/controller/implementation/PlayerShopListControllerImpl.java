@@ -17,17 +17,17 @@
 package fr.voltariuss.diagonia.controller.implementation;
 
 import fr.voltariuss.diagonia.RemakeBukkitLogger;
-import fr.voltariuss.diagonia.utils.BukkitUtils;
 import fr.voltariuss.diagonia.controller.api.MessageController;
+import fr.voltariuss.diagonia.controller.api.PlayerController;
 import fr.voltariuss.diagonia.controller.api.PlayerShopController;
 import fr.voltariuss.diagonia.controller.api.PlayerShopListController;
-import fr.voltariuss.diagonia.model.service.api.dto.mapper.LocationMapper;
 import fr.voltariuss.diagonia.model.config.data.PluginConfig;
-import fr.voltariuss.diagonia.model.service.api.dto.response.EconomyResponse;
 import fr.voltariuss.diagonia.model.entity.PlayerShop;
-import fr.voltariuss.diagonia.model.service.api.exception.EconomyException;
 import fr.voltariuss.diagonia.model.service.api.EconomyService;
 import fr.voltariuss.diagonia.model.service.api.PlayerShopService;
+import fr.voltariuss.diagonia.model.service.api.dto.mapper.LocationMapper;
+import fr.voltariuss.diagonia.model.service.api.dto.response.EconomyResponse;
+import fr.voltariuss.diagonia.model.service.api.exception.EconomyException;
 import fr.voltariuss.diagonia.view.message.CommonMessage;
 import fr.voltariuss.diagonia.view.message.PlayerShopMessage;
 import java.util.Optional;
@@ -43,12 +43,12 @@ import org.jetbrains.annotations.NotNull;
 @Singleton
 public class PlayerShopListControllerImpl implements PlayerShopListController {
 
-  private final BukkitUtils bukkitUtils;
   private final CommonMessage commonMessage;
   private final EconomyService economyService;
   private final LocationMapper locationMapper;
   private final RemakeBukkitLogger logger;
   private final MessageController messageController;
+  private final PlayerController playerController;
   private final PlayerShopController playerShopController;
   private final PlayerShopMessage playerShopMessage;
   private final PlayerShopService playerShopService;
@@ -57,23 +57,23 @@ public class PlayerShopListControllerImpl implements PlayerShopListController {
 
   @Inject
   public PlayerShopListControllerImpl(
-      @NotNull BukkitUtils bukkitUtils,
       @NotNull CommonMessage commonMessage,
       @NotNull EconomyService economyService,
       @NotNull LocationMapper locationMapper,
       @NotNull RemakeBukkitLogger logger,
       @NotNull MessageController messageController,
+      @NotNull PlayerController playerController,
       @NotNull PlayerShopController playerShopController,
       @NotNull PlayerShopMessage playerShopMessage,
       @NotNull PlayerShopService playerShopService,
       @NotNull PluginConfig pluginConfig,
       @NotNull Server server) {
-    this.bukkitUtils = bukkitUtils;
     this.commonMessage = commonMessage;
     this.economyService = economyService;
     this.locationMapper = locationMapper;
     this.logger = logger;
     this.messageController = messageController;
+    this.playerController = playerController;
     this.playerShopController = playerShopController;
     this.playerShopMessage = playerShopMessage;
     this.playerShopService = playerShopService;
@@ -106,7 +106,7 @@ public class PlayerShopListControllerImpl implements PlayerShopListController {
     playerToTp.teleport(tpLocation, PlayerTeleportEvent.TeleportCause.PLUGIN);
 
     OfflinePlayer psOwner = server.getOfflinePlayer(playerShopDestination.getOwnerUuid());
-    String psOwnerName = bukkitUtils.getOfflinePlayerName(psOwner);
+    String psOwnerName = playerController.getOfflinePlayerName(psOwner);
     messageController.sendInfoMessage(playerToTp, playerShopMessage.successTeleport(psOwnerName));
 
     logger.debug(

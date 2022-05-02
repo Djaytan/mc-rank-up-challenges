@@ -16,19 +16,19 @@
 
 package fr.voltariuss.diagonia.controller.implementation;
 
+import com.google.common.base.Preconditions;
 import fr.voltariuss.diagonia.RemakeBukkitLogger;
-import fr.voltariuss.diagonia.utils.BukkitUtils;
 import fr.voltariuss.diagonia.controller.api.MessageController;
 import fr.voltariuss.diagonia.controller.api.RankUpChallengesController;
 import fr.voltariuss.diagonia.controller.api.RankUpController;
-import fr.voltariuss.diagonia.model.service.api.dto.GiveActionType;
 import fr.voltariuss.diagonia.model.config.data.rank.Rank;
 import fr.voltariuss.diagonia.model.config.data.rank.RankChallenge;
 import fr.voltariuss.diagonia.model.config.data.rank.RankConfig;
-import fr.voltariuss.diagonia.model.service.api.dto.RankUpProgression;
 import fr.voltariuss.diagonia.model.entity.RankChallengeProgression;
 import fr.voltariuss.diagonia.model.service.api.RankService;
 import fr.voltariuss.diagonia.model.service.api.RankUpService;
+import fr.voltariuss.diagonia.model.service.api.dto.GiveActionType;
+import fr.voltariuss.diagonia.model.service.api.dto.RankUpProgression;
 import fr.voltariuss.diagonia.view.message.CommonMessage;
 import fr.voltariuss.diagonia.view.message.RankUpMessage;
 import java.util.Optional;
@@ -40,12 +40,14 @@ import net.luckperms.api.track.PromotionResult;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryCloseEvent.Reason;
+import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 @Singleton
 public class RankUpChallengesControllerImpl implements RankUpChallengesController {
 
-  private final BukkitUtils bukkitUtils;
   private final CommonMessage commonMessage;
   private final RemakeBukkitLogger logger;
   private final MessageController messageController;
@@ -57,7 +59,6 @@ public class RankUpChallengesControllerImpl implements RankUpChallengesControlle
 
   @Inject
   public RankUpChallengesControllerImpl(
-      @NotNull BukkitUtils bukkitUtils,
       @NotNull CommonMessage commonMessage,
       @NotNull RemakeBukkitLogger logger,
       @NotNull MessageController messageController,
@@ -66,7 +67,6 @@ public class RankUpChallengesControllerImpl implements RankUpChallengesControlle
       @NotNull RankService rankService,
       @NotNull RankUpController rankUpController,
       @NotNull RankUpMessage rankUpMessage) {
-    this.bukkitUtils = bukkitUtils;
     this.commonMessage = commonMessage;
     this.logger = logger;
     this.messageController = messageController;
@@ -101,7 +101,7 @@ public class RankUpChallengesControllerImpl implements RankUpChallengesControlle
             targetPlayer.getUniqueId(), rank, rankChallenge, giveActionType, nbItemsInInventory);
 
     int nbItemsNotRemoved =
-        bukkitUtils.removeItemsInInventory(
+        removeItemsInInventory(
             targetPlayer.getInventory(), rankChallenge.getMaterial(), nbItemsEffectivelyGiven);
 
     if (nbItemsNotRemoved > 0) {
@@ -165,5 +165,59 @@ public class RankUpChallengesControllerImpl implements RankUpChallengesControlle
 
     player.closeInventory(Reason.PLUGIN);
     messageController.broadcastMessage(rankUpMessage.rankUpSuccess(player, newRank));
+  }
+
+  /**
+   * Removes N items in the specified inventory which match with the given material.
+   *
+   * <p>Unfortunately, no method works like expected in {@link Inventory} interface.
+   *
+   * @param inventory The inventory targeted by the remove of items.
+   * @param material The material of targeted items to remove in the inventory.
+   * @param n The number of items to remove in the inventory.
+   * @return The number of items not removed from the inventory (>= 0).
+   */
+  private int removeItemsInInventory(
+      @NotNull Inventory inventory, @NotNull Material material, int n) {
+    Preconditions.checkNotNull(inventory);
+    Preconditions.checkNotNull(material);
+    Preconditions.checkArgument(
+        n >= 0, "The number of items to remove in inventory must be higher or equals to zero.");
+
+    if (inventory.getType() != InventoryType.PLAYER) {
+      logger.warn(
+          "Trying to remove items to another inventory than those of type PLAYER: cancelled.");
+      return 0;
+    }
+
+    if (inventory.isEmpty()) {
+      return 0;
+    }
+
+    int remainingItemsToRemove = n;
+    int storageContentsSize = inventory.getStorageContents().length;
+    ItemStack[] newStorageContent = new ItemStack[storageContentsSize];
+
+    for (int i = 0; i < storageContentsSize; i++) {
+      ItemStack itemStack = inventory.getStorageContents()[i];
+
+      if (itemStack == null || !itemStack.getType().equals(material)) {
+        newStorageContent[i] = itemStack;
+        continue;
+      }
+
+      int amountToRemove = Math.min(remainingItemsToRemove, itemStack.getAmount());
+      int newAmount = itemStack.getAmount() - amountToRemove;
+
+      remainingItemsToRemove -= amountToRemove;
+
+      if (newAmount > 0) {
+        itemStack.setAmount(newAmount);
+        newStorageContent[i] = itemStack;
+      }
+    }
+
+    inventory.setStorageContents(newStorageContent);
+    return remainingItemsToRemove;
   }
 }

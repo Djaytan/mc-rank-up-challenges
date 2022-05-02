@@ -20,7 +20,7 @@ import com.google.common.base.Preconditions;
 import dev.triumphteam.gui.builder.item.ItemBuilder;
 import dev.triumphteam.gui.components.GuiAction;
 import dev.triumphteam.gui.guis.GuiItem;
-import fr.voltariuss.diagonia.utils.BukkitUtils;
+import fr.voltariuss.diagonia.controller.api.PlayerController;
 import fr.voltariuss.diagonia.controller.api.PlayerShopListController;
 import fr.voltariuss.diagonia.model.entity.PlayerShop;
 import java.util.ResourceBundle;
@@ -40,19 +40,19 @@ import org.jetbrains.annotations.Nullable;
 @Singleton
 public class ConsultPlayerShopItem {
 
-  private final BukkitUtils bukkitUtils;
   private final MiniMessage miniMessage;
+  private final PlayerController playerController;
   private final PlayerShopListController playerShopListController;
   private final ResourceBundle resourceBundle;
 
   @Inject
   public ConsultPlayerShopItem(
-      @NotNull BukkitUtils bukkitUtils,
       @NotNull MiniMessage miniMessage,
+      @NotNull PlayerController playerController,
       @NotNull PlayerShopListController playerShopListController,
       @NotNull ResourceBundle resourceBundle) {
-    this.bukkitUtils = bukkitUtils;
     this.miniMessage = miniMessage;
+    this.playerController = playerController;
     this.playerShopListController = playerShopListController;
     this.resourceBundle = resourceBundle;
   }
@@ -67,7 +67,7 @@ public class ConsultPlayerShopItem {
       return null;
     }
 
-    String ownerName = bukkitUtils.getOfflinePlayerName(ownerPlayer);
+    String ownerName = playerController.getOfflinePlayerName(ownerPlayer);
 
     Component itemName = getName(ownerName);
 
