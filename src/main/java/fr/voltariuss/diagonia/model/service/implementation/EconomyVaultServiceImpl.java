@@ -29,13 +29,13 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 @Singleton
-public class EconomyVaultService implements EconomyService {
+public class EconomyVaultServiceImpl implements EconomyService {
 
   private final RemakeBukkitLogger logger;
   private final Economy economy;
 
   @Inject
-  public EconomyVaultService(@NotNull RemakeBukkitLogger logger, @NotNull Economy economy) {
+  public EconomyVaultServiceImpl(@NotNull RemakeBukkitLogger logger, @NotNull Economy economy) {
     this.logger = logger;
     this.economy = economy;
   }

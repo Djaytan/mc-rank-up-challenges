@@ -42,12 +42,12 @@ import fr.voltariuss.diagonia.controller.rankup.RankUpControllerImpl;
 import fr.voltariuss.diagonia.model.dao.PlayerShopDao;
 import fr.voltariuss.diagonia.model.dao.PlayerShopDaoImpl;
 import fr.voltariuss.diagonia.model.service.api.EconomyService;
-import fr.voltariuss.diagonia.model.service.implementation.EconomyVaultService;
-import fr.voltariuss.diagonia.model.service.implementation.JobsRebornService;
+import fr.voltariuss.diagonia.model.service.implementation.EconomyVaultServiceImpl;
+import fr.voltariuss.diagonia.model.service.implementation.JobsRebornServiceImpl;
 import fr.voltariuss.diagonia.model.service.api.JobsService;
 import fr.voltariuss.diagonia.model.service.api.PlayerShopService;
 import fr.voltariuss.diagonia.model.service.implementation.PlayerShopServiceImpl;
-import fr.voltariuss.diagonia.model.service.implementation.RankLuckPermsService;
+import fr.voltariuss.diagonia.model.service.implementation.RankLuckPermsServiceImpl;
 import fr.voltariuss.diagonia.model.service.api.RankService;
 import fr.voltariuss.diagonia.model.service.api.RankUpService;
 import fr.voltariuss.diagonia.model.service.implementation.RankUpServiceImpl;
@@ -61,10 +61,10 @@ public class GuiceGeneralModule extends AbstractModule {
   @Override
   public void configure() {
     bind(ConfigController.class).to(ConfigControllerImpl.class);
-    bind(EconomyService.class).to(EconomyVaultService.class);
+    bind(EconomyService.class).to(EconomyVaultServiceImpl.class);
     bind(EnchantmentController.class).to(EnchantmentControllerImpl.class);
     bind(JobsController.class).to(JobsControllerImpl.class);
-    bind(JobsService.class).to(JobsRebornService.class);
+    bind(JobsService.class).to(JobsRebornServiceImpl.class);
     bind(MessageController.class).to(MessageControllerImpl.class);
     bind(PlayerShopController.class).to(PlayerShopControllerImpl.class);
     bind(PlayerShopConfigController.class).to(PlayerShopConfigControllerImpl.class);
@@ -72,7 +72,7 @@ public class GuiceGeneralModule extends AbstractModule {
     bind(PlayerShopListController.class).to(PlayerShopListControllerImpl.class);
     bind(PlayerShopService.class).to(PlayerShopServiceImpl.class);
     bind(PluginController.class).to(PluginControllerImpl.class);
-    bind(RankService.class).to(RankLuckPermsService.class);
+    bind(RankService.class).to(RankLuckPermsServiceImpl.class);
     bind(RankUpController.class).to(RankUpControllerImpl.class);
     bind(RankUpChallengesController.class).to(RankUpChallengesControllerImpl.class);
     bind(RankUpService.class).to(RankUpServiceImpl.class);

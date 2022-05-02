@@ -46,7 +46,7 @@ import org.jetbrains.annotations.Nullable;
  * @since 1.1.0
  */
 @Singleton
-public class RankLuckPermsService implements RankService {
+public class RankLuckPermsServiceImpl implements RankService {
 
   private final RemakeBukkitLogger logger;
   private final GroupManager groupManager;
@@ -64,7 +64,7 @@ public class RankLuckPermsService implements RankService {
    * @param userManager The user manager of LuckPerms API.
    */
   @Inject
-  public RankLuckPermsService(
+  public RankLuckPermsServiceImpl(
       @NotNull RemakeBukkitLogger logger,
       @NotNull GroupManager groupManager,
       @NotNull RankConfig rankConfig,

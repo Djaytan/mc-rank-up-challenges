@@ -24,7 +24,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 @Singleton
-public class JobsRebornService implements JobsService {
+public class JobsRebornServiceImpl implements JobsService {
 
   @Override
   public int getTotalLevels(@NotNull Player player) {
