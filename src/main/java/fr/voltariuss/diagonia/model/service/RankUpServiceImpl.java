@@ -21,8 +21,11 @@ import fr.voltariuss.diagonia.RemakeBukkitLogger;
 import fr.voltariuss.diagonia.model.GiveActionType;
 import fr.voltariuss.diagonia.model.config.data.rank.Rank;
 import fr.voltariuss.diagonia.model.config.data.rank.RankChallenge;
+import fr.voltariuss.diagonia.model.config.data.rank.RankConfig;
+import fr.voltariuss.diagonia.model.config.data.rank.RankUpPrerequisites;
 import fr.voltariuss.diagonia.model.dao.JpaDaoException;
 import fr.voltariuss.diagonia.model.dao.RankChallengeProgressionDao;
+import fr.voltariuss.diagonia.model.dto.RankUpProgression;
 import fr.voltariuss.diagonia.model.entity.RankChallengeProgression;
 import java.util.List;
 import java.util.Optional;
@@ -42,13 +45,19 @@ public class RankUpServiceImpl implements RankUpService {
 
   private final RemakeBukkitLogger logger;
   private final RankChallengeProgressionDao rankChallengeProgressionDao;
+  private final RankConfig rankConfig;
+  private final RankService rankService;
 
   @Inject
   public RankUpServiceImpl(
       @NotNull RemakeBukkitLogger logger,
-      @NotNull RankChallengeProgressionDao rankChallengeProgressionDao) {
+      @NotNull RankChallengeProgressionDao rankChallengeProgressionDao,
+      @NotNull RankConfig rankConfig,
+      @NotNull RankService rankService) {
     this.logger = logger;
     this.rankChallengeProgressionDao = rankChallengeProgressionDao;
+    this.rankConfig = rankConfig;
+    this.rankService = rankService;
   }
 
   @Override
@@ -121,6 +130,61 @@ public class RankUpServiceImpl implements RankUpService {
     } finally {
       rankChallengeProgressionDao.destroySession();
     }
+  }
+
+  @Override
+  public @NotNull RankUpProgression getRankUpProgression(
+      @NotNull Player player,
+      @NotNull Rank targetedRank,
+      int totalJobsLevels,
+      double currentBalance) {
+    Preconditions.checkArgument(
+        totalJobsLevels >= 0, "The total jobs levels must be higher or equals to 0.");
+
+    Rank unlockableRank =
+        rankConfig
+            .findRankById(targetedRank.getId())
+            .orElseThrow(
+                () ->
+                    new IllegalStateException(
+                        "The specified rank ID isn't associated with any registered rank in"
+                            + " configuration."));
+
+    RankUpPrerequisites prerequisites = unlockableRank.getRankUpPrerequisites();
+
+    if (prerequisites == null) {
+      throw new IllegalStateException(
+          String.format(
+              "Unlockable rank '%s' don't have any challenge to accomplish which is not allowed.",
+              unlockableRank.getId()),
+          new NullPointerException("Prerequisites list of unlockable rank is null."));
+    }
+
+    int currentEnchantingLevels = player.getLevel();
+    int requiredEnchantingLevels = prerequisites.getEnchantingLevelsCost();
+    boolean isEnchantingLevelsPrerequisiteDone =
+        currentEnchantingLevels >= requiredEnchantingLevels;
+
+    int requiredJobsLevels = prerequisites.getJobsLevels();
+    boolean isJobsLevelsPrerequisiteDone = totalJobsLevels >= requiredJobsLevels;
+
+    double moneyCost = prerequisites.getMoneyCost();
+    boolean isMoneyPrerequisiteDone = currentBalance >= moneyCost;
+
+    boolean isChallengesPrerequisiteDone = areChallengesCompleted(player, unlockableRank);
+
+    boolean isRankOwned = rankService.isRankOwned(player, unlockableRank.getId());
+
+    return RankUpProgression.builder()
+        .currentXpLevel(currentEnchantingLevels)
+        .isXpLevelPrerequisiteDone(isEnchantingLevelsPrerequisiteDone)
+        .totalJobsLevels(totalJobsLevels)
+        .isTotalJobsLevelsPrerequisiteDone(isJobsLevelsPrerequisiteDone)
+        .currentBalance(currentBalance)
+        .isMoneyPrerequisiteDone(isMoneyPrerequisiteDone)
+        .isChallengesPrerequisiteDone(isChallengesPrerequisiteDone)
+        .isRankOwned(isRankOwned)
+        .build();
   }
 
   @Override

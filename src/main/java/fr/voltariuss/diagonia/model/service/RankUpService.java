@@ -19,6 +19,7 @@ package fr.voltariuss.diagonia.model.service;
 import fr.voltariuss.diagonia.model.GiveActionType;
 import fr.voltariuss.diagonia.model.config.data.rank.Rank;
 import fr.voltariuss.diagonia.model.config.data.rank.RankChallenge;
+import fr.voltariuss.diagonia.model.dto.RankUpProgression;
 import fr.voltariuss.diagonia.model.entity.RankChallengeProgression;
 import java.util.List;
 import java.util.Optional;
@@ -41,6 +42,22 @@ public interface RankUpService {
   @NotNull
   List<RankChallengeProgression> findChallengesProgressions(
       @NotNull UUID playerUuid, @NotNull String rankId);
+
+  /**
+   * Provides the rank up progression of a given player for a specified rank.
+   *
+   * @param player The player.
+   * @param targetedRank The targeted rank for rank up.
+   * @param totalJobsLevels Total jobs levels for the specified player.
+   * @param currentBalance The current economy balance of the player.
+   * @return The rank up progression of the given player for the specified rank.
+   */
+  @NotNull
+  RankUpProgression getRankUpProgression(
+    @NotNull Player player,
+    @NotNull Rank targetedRank,
+    int totalJobsLevels,
+    double currentBalance);
 
   int giveItemChallenge(
       @NotNull UUID playerUuid,

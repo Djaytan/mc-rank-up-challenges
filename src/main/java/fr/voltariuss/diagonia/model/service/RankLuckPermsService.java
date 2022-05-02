@@ -20,8 +20,6 @@ import com.google.common.base.Preconditions;
 import fr.voltariuss.diagonia.RemakeBukkitLogger;
 import fr.voltariuss.diagonia.model.config.data.rank.Rank;
 import fr.voltariuss.diagonia.model.config.data.rank.RankConfig;
-import fr.voltariuss.diagonia.model.config.data.rank.RankUpPrerequisites;
-import fr.voltariuss.diagonia.model.dto.RankUpProgression;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -51,7 +49,6 @@ public class RankLuckPermsService implements RankService {
 
   private final RemakeBukkitLogger logger;
   private final GroupManager groupManager;
-  private final RankUpService rankUpService;
   private final RankConfig rankConfig;
   private final Track track;
   private final UserManager userManager;
@@ -61,7 +58,6 @@ public class RankLuckPermsService implements RankService {
    *
    * @param logger The logger.
    * @param groupManager The group manager of LuckPerms API.
-   * @param rankUpService The rank up service.
    * @param rankConfig The rank config.
    * @param track The LuckPerms' track for ranks.
    * @param userManager The user manager of LuckPerms API.
@@ -70,13 +66,11 @@ public class RankLuckPermsService implements RankService {
   public RankLuckPermsService(
       @NotNull RemakeBukkitLogger logger,
       @NotNull GroupManager groupManager,
-      @NotNull RankUpService rankUpService,
       @NotNull RankConfig rankConfig,
       @NotNull Track track,
       @NotNull UserManager userManager) {
     this.logger = logger;
     this.groupManager = groupManager;
-    this.rankUpService = rankUpService;
     this.rankConfig = rankConfig;
     this.track = track;
     this.userManager = userManager;
@@ -200,62 +194,6 @@ public class RankLuckPermsService implements RankService {
     PromotionResult promotionResult = track.promote(user, ImmutableContextSet.empty());
     userManager.saveUser(user);
     return promotionResult;
-  }
-
-  @Override
-  public @NotNull RankUpProgression getRankUpProgression(
-      @NotNull Player player,
-      @NotNull Rank targetedRank,
-      int totalJobsLevels,
-      double currentBalance) {
-    Preconditions.checkArgument(
-        totalJobsLevels >= 0, "The total jobs levels must be higher or equals to 0.");
-
-    Rank unlockableRank =
-        rankConfig
-            .findRankById(targetedRank.getId())
-            .orElseThrow(
-                () ->
-                    new IllegalStateException(
-                        "The specified rank ID isn't associated with any registered rank in"
-                            + " configuration."));
-
-    RankUpPrerequisites prerequisites = unlockableRank.getRankUpPrerequisites();
-
-    if (prerequisites == null) {
-      throw new IllegalStateException(
-          String.format(
-              "Unlockable rank '%s' don't have any challenge to accomplish which is not allowed.",
-              unlockableRank.getId()),
-          new NullPointerException("Prerequisites list of unlockable rank is null."));
-    }
-
-    int currentEnchantingLevels = player.getLevel();
-    int requiredEnchantingLevels = prerequisites.getEnchantingLevelsCost();
-    boolean isEnchantingLevelsPrerequisiteDone =
-        currentEnchantingLevels >= requiredEnchantingLevels;
-
-    int requiredJobsLevels = prerequisites.getJobsLevels();
-    boolean isJobsLevelsPrerequisiteDone = totalJobsLevels >= requiredJobsLevels;
-
-    double moneyCost = prerequisites.getMoneyCost();
-    boolean isMoneyPrerequisiteDone = currentBalance >= moneyCost;
-
-    boolean isChallengesPrerequisiteDone =
-        rankUpService.areChallengesCompleted(player, unlockableRank);
-
-    boolean isRankOwned = isRankOwned(player, unlockableRank.getId());
-
-    return RankUpProgression.builder()
-        .currentXpLevel(currentEnchantingLevels)
-        .isXpLevelPrerequisiteDone(isEnchantingLevelsPrerequisiteDone)
-        .totalJobsLevels(totalJobsLevels)
-        .isTotalJobsLevelsPrerequisiteDone(isJobsLevelsPrerequisiteDone)
-        .currentBalance(currentBalance)
-        .isMoneyPrerequisiteDone(isMoneyPrerequisiteDone)
-        .isChallengesPrerequisiteDone(isChallengesPrerequisiteDone)
-        .isRankOwned(isRankOwned)
-        .build();
   }
 
   private @NotNull User getUser(@NotNull Player player) {

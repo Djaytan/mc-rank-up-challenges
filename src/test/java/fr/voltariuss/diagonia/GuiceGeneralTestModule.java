@@ -23,6 +23,7 @@ import fr.voltariuss.diagonia.model.dao.PlayerShopDao;
 import fr.voltariuss.diagonia.model.dao.PlayerShopDaoImpl;
 import fr.voltariuss.diagonia.model.service.PlayerShopService;
 import fr.voltariuss.diagonia.model.service.PlayerShopServiceImpl;
+import fr.voltariuss.diagonia.model.service.RankService;
 import fr.voltariuss.diagonia.model.service.RankUpService;
 import fr.voltariuss.diagonia.model.service.RankUpServiceImpl;
 import javax.inject.Named;
@@ -39,6 +40,7 @@ public class GuiceGeneralTestModule extends AbstractModule {
   public void configure() {
     bind(PlayerShopDao.class).to(PlayerShopDaoImpl.class);
     bind(PlayerShopService.class).to(PlayerShopServiceImpl.class);
+    bind(RankService.class).to(RankServiceMock.class);
     bind(RankUpService.class).to(RankUpServiceImpl.class);
   }
 

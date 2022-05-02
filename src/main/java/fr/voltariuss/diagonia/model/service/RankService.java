@@ -101,20 +101,4 @@ public interface RankService {
    */
   @NotNull
   PromotionResult promote(@NotNull Player player);
-
-  /**
-   * Provides the rank up progression of a given player for a specified rank.
-   *
-   * @param player The player.
-   * @param targetedRank The targeted rank for rank up.
-   * @param totalJobsLevels Total jobs levels for the specified player.
-   * @param currentBalance The current economy balance of the player.
-   * @return The rank up progression of the given player for the specified rank.
-   */
-  @NotNull
-  RankUpProgression getRankUpProgression(
-      @NotNull Player player,
-      @NotNull Rank targetedRank,
-      int totalJobsLevels,
-      double currentBalance);
 }

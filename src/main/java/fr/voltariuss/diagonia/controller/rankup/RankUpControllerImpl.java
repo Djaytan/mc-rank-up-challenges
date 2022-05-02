@@ -23,6 +23,7 @@ import fr.voltariuss.diagonia.model.dto.RankUpProgression;
 import fr.voltariuss.diagonia.model.service.EconomyService;
 import fr.voltariuss.diagonia.model.service.JobsService;
 import fr.voltariuss.diagonia.model.service.RankService;
+import fr.voltariuss.diagonia.model.service.RankUpService;
 import fr.voltariuss.diagonia.view.gui.RankUpChallengesGui;
 import fr.voltariuss.diagonia.view.gui.RankUpListGui;
 import fr.voltariuss.diagonia.view.message.CommonMessage;
@@ -43,6 +44,7 @@ public class RankUpControllerImpl implements RankUpController {
   private final MessageController messageController;
   private final RankService rankService;
   private final RankUpMessage rankUpMessage;
+  private final RankUpService rankUpService;
 
   private final Provider<RankUpListGui> rankUpListGui;
   private final Provider<RankUpChallengesGui> rankUpChallengesGui;
@@ -56,6 +58,7 @@ public class RankUpControllerImpl implements RankUpController {
       @NotNull MessageController messageController,
       @NotNull RankService rankService,
       @NotNull RankUpMessage rankUpMessage,
+      @NotNull RankUpService rankUpService,
       @NotNull Provider<RankUpListGui> rankUpListGui,
       @NotNull Provider<RankUpChallengesGui> rankUpChallengesGui) {
     this.commonMessage = commonMessage;
@@ -65,6 +68,7 @@ public class RankUpControllerImpl implements RankUpController {
     this.messageController = messageController;
     this.rankService = rankService;
     this.rankUpMessage = rankUpMessage;
+    this.rankUpService = rankUpService;
     this.rankUpListGui = rankUpListGui;
     this.rankUpChallengesGui = rankUpChallengesGui;
   }
@@ -90,7 +94,7 @@ public class RankUpControllerImpl implements RankUpController {
     double currentBalance = economyService.getBalance(whoOpen);
 
     RankUpProgression rankUpProgression =
-        rankService.getRankUpProgression(whoOpen, rank, totalJobsLevels, currentBalance);
+        rankUpService.getRankUpProgression(whoOpen, rank, totalJobsLevels, currentBalance);
 
     rankUpChallengesGui.get().open(whoOpen, rank, rankUpProgression);
   }
