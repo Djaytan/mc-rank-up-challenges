@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.listeners.bukkit;
+package fr.voltariuss.diagonia.controller.listener.bukkit;
 
 import fr.voltariuss.diagonia.controller.api.EnchantmentController;
 import javax.inject.Inject;
@@ -22,24 +22,24 @@ import javax.inject.Singleton;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.PiglinBarterEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 @Singleton
-public class PiglinBarterListener implements Listener {
+public class EntityDeathListener implements Listener {
 
   private final EnchantmentController enchantmentController;
 
   @Inject
-  public PiglinBarterListener(@NotNull EnchantmentController enchantmentController) {
+  public EntityDeathListener(@NotNull EnchantmentController enchantmentController) {
     this.enchantmentController = enchantmentController;
   }
 
   @EventHandler(priority = EventPriority.LOWEST)
-  public void onPiglinBarter(@NotNull PiglinBarterEvent event) {
-    for (ItemStack outcomeItem : event.getOutcome()) {
-      enchantmentController.adjustEnchantments(outcomeItem);
+  public void onEntityDeath(@NotNull EntityDeathEvent event) {
+    for (ItemStack dropItem : event.getDrops()) {
+      enchantmentController.adjustEnchantments(dropItem);
     }
   }
 }

@@ -14,46 +14,40 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.listeners.bukkit;
+package fr.voltariuss.diagonia.controller.listener.bukkit;
 
 import fr.voltariuss.diagonia.controller.api.EnchantmentController;
-import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityShootBowEvent;
+import org.bukkit.event.player.PlayerFishEvent;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 @Singleton
-public class EntityShootBowListener implements Listener {
+public class PlayerFishListener implements Listener {
 
   private final EnchantmentController enchantmentController;
 
   @Inject
-  public EntityShootBowListener(@NotNull EnchantmentController enchantmentController) {
+  public PlayerFishListener(@NotNull EnchantmentController enchantmentController) {
     this.enchantmentController = enchantmentController;
   }
 
-  @EventHandler(priority = EventPriority.LOWEST)
-  public void onEntityShootBow(@NotNull EntityShootBowEvent event) {
-    if (!(event.getEntity() instanceof Player player)) {
+  @EventHandler(priority = EventPriority.HIGHEST)
+  public void onPlayerFish(@NotNull PlayerFishEvent event) {
+    Entity caughtEntity = event.getCaught();
+
+    if (!(caughtEntity instanceof Item caughtItem)) {
       return;
     }
 
-    event.setConsumeItem(true);
+    ItemStack caughtItemStack = caughtItem.getItemStack();
 
-    Set<Enchantment> removedBlacklistedEnchantments =
-        enchantmentController.removeBlacklistedEnchantments(event.getBow());
-
-    if (removedBlacklistedEnchantments.isEmpty()) {
-      return;
-    }
-
-    enchantmentController.sendRemovedBlacklistedEnchantmentsMessage(
-        player, removedBlacklistedEnchantments);
+    enchantmentController.adjustEnchantments(caughtItemStack);
   }
 }

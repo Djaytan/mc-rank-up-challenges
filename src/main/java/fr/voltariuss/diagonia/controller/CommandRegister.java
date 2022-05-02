@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia;
+package fr.voltariuss.diagonia.controller;
 
 import co.aikar.commands.PaperCommandManager;
 import fr.voltariuss.diagonia.model.entity.PlayerShop;
 import fr.voltariuss.diagonia.model.service.api.PlayerShopService;
-import fr.voltariuss.diagonia.view.command.PlayerShopCommand;
-import fr.voltariuss.diagonia.view.command.RankUpCommand;
-import fr.voltariuss.diagonia.view.command.RanksCommand;
+import fr.voltariuss.diagonia.controller.command.PlayerShopCommand;
+import fr.voltariuss.diagonia.controller.command.RankUpCommand;
+import fr.voltariuss.diagonia.controller.command.RanksCommand;
 import java.util.Arrays;
 import java.util.Objects;
 import javax.inject.Inject;

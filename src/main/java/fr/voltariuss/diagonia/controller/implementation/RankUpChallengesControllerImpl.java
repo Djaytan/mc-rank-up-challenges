@@ -17,7 +17,7 @@
 package fr.voltariuss.diagonia.controller.implementation;
 
 import fr.voltariuss.diagonia.RemakeBukkitLogger;
-import fr.voltariuss.diagonia.controller.BukkitUtils;
+import fr.voltariuss.diagonia.utils.BukkitUtils;
 import fr.voltariuss.diagonia.controller.api.MessageController;
 import fr.voltariuss.diagonia.controller.api.RankUpChallengesController;
 import fr.voltariuss.diagonia.controller.api.RankUpController;

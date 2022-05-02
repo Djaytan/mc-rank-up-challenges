@@ -14,35 +14,32 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.listeners.jobs;
+package fr.voltariuss.diagonia.controller.listener.bukkit;
 
-import com.gamingmesh.jobs.api.JobsPrePaymentEvent;
-import fr.voltariuss.diagonia.controller.api.JobsController;
+import fr.voltariuss.diagonia.controller.api.EnchantmentController;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.world.LootGenerateEvent;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 @Singleton
-public class JobsPrePaymentListener implements Listener {
+public class LootGenerateListener implements Listener {
 
-  private final JobsController jobsController;
+  private final EnchantmentController enchantmentController;
 
   @Inject
-  public JobsPrePaymentListener(@NotNull JobsController jobsController) {
-    this.jobsController = jobsController;
+  public LootGenerateListener(@NotNull EnchantmentController enchantmentController) {
+    this.enchantmentController = enchantmentController;
   }
 
   @EventHandler(priority = EventPriority.HIGHEST)
-  public void onJobsPayment(@NotNull JobsPrePaymentEvent event) {
-    if (event.getActionInfo() == null || event.getActionInfo().getType() == null) {
-      return;
-    }
-
-    if (jobsController.isPlaceAndBreakAction(event.getActionInfo().getType(), event.getBlock())) {
-      event.setCancelled(true);
+  public void onLootGenerate(@NotNull LootGenerateEvent event) {
+    for (ItemStack lootItem : event.getLoot()) {
+      enchantmentController.adjustEnchantments(lootItem);
     }
   }
 }

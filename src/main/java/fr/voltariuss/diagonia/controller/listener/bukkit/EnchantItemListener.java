@@ -14,32 +14,36 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.listeners.bukkit;
+package fr.voltariuss.diagonia.controller.listener.bukkit;
 
 import fr.voltariuss.diagonia.controller.api.EnchantmentController;
+import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.event.enchantment.EnchantItemEvent;
 import org.jetbrains.annotations.NotNull;
 
 @Singleton
-public class EntityDeathListener implements Listener {
+public class EnchantItemListener implements Listener {
 
   private final EnchantmentController enchantmentController;
 
   @Inject
-  public EntityDeathListener(@NotNull EnchantmentController enchantmentController) {
+  public EnchantItemListener(@NotNull EnchantmentController enchantmentController) {
     this.enchantmentController = enchantmentController;
   }
 
   @EventHandler(priority = EventPriority.LOWEST)
-  public void onEntityDeath(@NotNull EntityDeathEvent event) {
-    for (ItemStack dropItem : event.getDrops()) {
-      enchantmentController.adjustEnchantments(dropItem);
-    }
+  public void onItemEnchant(@NotNull EnchantItemEvent event) {
+    Map<Enchantment, Integer> enchantsToAdd = event.getEnchantsToAdd();
+
+    enchantmentController.removeBlacklistedEnchantments(enchantsToAdd);
+    // The list of enchants to add mustn't be empty, otherwise things will not work properly
+    // TODO: try to re-roll the enchantments with ContainerEnchantTable from NMS instead
+    enchantmentController.addFallbackEnchantmentIfEmpty(enchantsToAdd);
   }
 }

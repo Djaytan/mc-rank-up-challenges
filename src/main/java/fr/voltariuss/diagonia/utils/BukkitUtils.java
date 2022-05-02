@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.controller;
+package fr.voltariuss.diagonia.utils;
 
 import com.google.common.base.Preconditions;
 import fr.voltariuss.diagonia.RemakeBukkitLogger;

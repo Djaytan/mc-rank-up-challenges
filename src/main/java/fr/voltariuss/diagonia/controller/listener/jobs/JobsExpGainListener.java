@@ -14,40 +14,35 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.listeners.bukkit;
+package fr.voltariuss.diagonia.controller.listener.jobs;
 
-import fr.voltariuss.diagonia.controller.api.EnchantmentController;
+import com.gamingmesh.jobs.api.JobsExpGainEvent;
+import fr.voltariuss.diagonia.controller.api.JobsController;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerFishEvent;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 @Singleton
-public class PlayerFishListener implements Listener {
+public class JobsExpGainListener implements Listener {
 
-  private final EnchantmentController enchantmentController;
+  private final JobsController jobsController;
 
   @Inject
-  public PlayerFishListener(@NotNull EnchantmentController enchantmentController) {
-    this.enchantmentController = enchantmentController;
+  public JobsExpGainListener(@NotNull JobsController jobsController) {
+    this.jobsController = jobsController;
   }
 
   @EventHandler(priority = EventPriority.HIGHEST)
-  public void onPlayerFish(@NotNull PlayerFishEvent event) {
-    Entity caughtEntity = event.getCaught();
-
-    if (!(caughtEntity instanceof Item caughtItem)) {
+  public void onJobsExpGain(@NotNull JobsExpGainEvent event) {
+    if (event.getActionInfo() == null || event.getActionInfo().getType() == null) {
       return;
     }
 
-    ItemStack caughtItemStack = caughtItem.getItemStack();
-
-    enchantmentController.adjustEnchantments(caughtItemStack);
+    if (jobsController.isPlaceAndBreakAction(event.getActionInfo().getType(), event.getBlock())) {
+      event.setCancelled(true);
+    }
   }
 }

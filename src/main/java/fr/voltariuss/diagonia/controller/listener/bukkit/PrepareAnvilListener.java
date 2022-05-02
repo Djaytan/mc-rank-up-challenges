@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.listeners.bukkit;
+package fr.voltariuss.diagonia.controller.listener.bukkit;
 
 import fr.voltariuss.diagonia.controller.api.EnchantmentController;
 import javax.inject.Inject;

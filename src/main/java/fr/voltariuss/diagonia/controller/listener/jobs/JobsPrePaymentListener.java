@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.listeners.jobs;
+package fr.voltariuss.diagonia.controller.listener.jobs;
 
-import com.gamingmesh.jobs.api.JobsExpGainEvent;
+import com.gamingmesh.jobs.api.JobsPrePaymentEvent;
 import fr.voltariuss.diagonia.controller.api.JobsController;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -26,17 +26,17 @@ import org.bukkit.event.Listener;
 import org.jetbrains.annotations.NotNull;
 
 @Singleton
-public class JobsExpGainListener implements Listener {
+public class JobsPrePaymentListener implements Listener {
 
   private final JobsController jobsController;
 
   @Inject
-  public JobsExpGainListener(@NotNull JobsController jobsController) {
+  public JobsPrePaymentListener(@NotNull JobsController jobsController) {
     this.jobsController = jobsController;
   }
 
   @EventHandler(priority = EventPriority.HIGHEST)
-  public void onJobsExpGain(@NotNull JobsExpGainEvent event) {
+  public void onJobsPayment(@NotNull JobsPrePaymentEvent event) {
     if (event.getActionInfo() == null || event.getActionInfo().getType() == null) {
       return;
     }

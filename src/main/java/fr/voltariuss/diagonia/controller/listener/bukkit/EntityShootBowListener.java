@@ -14,38 +14,46 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.listeners.bukkit;
+package fr.voltariuss.diagonia.controller.listener.bukkit;
 
 import fr.voltariuss.diagonia.controller.api.EnchantmentController;
+import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import org.bukkit.enchantments.EnchantmentOffer;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.enchantment.PrepareItemEnchantEvent;
+import org.bukkit.event.entity.EntityShootBowEvent;
 import org.jetbrains.annotations.NotNull;
 
 @Singleton
-public class PrepareItemEnchantListener implements Listener {
+public class EntityShootBowListener implements Listener {
 
   private final EnchantmentController enchantmentController;
 
   @Inject
-  public PrepareItemEnchantListener(@NotNull EnchantmentController enchantmentController) {
+  public EntityShootBowListener(@NotNull EnchantmentController enchantmentController) {
     this.enchantmentController = enchantmentController;
   }
 
   @EventHandler(priority = EventPriority.LOWEST)
-  public void onPrepareItemEnchant(@NotNull PrepareItemEnchantEvent event) {
-    for (EnchantmentOffer enchantmentOffer : event.getOffers()) {
-      if (enchantmentOffer == null) {
-        continue;
-      }
-
-      if (enchantmentController.isBlacklistedEnchantment(enchantmentOffer.getEnchantment())) {
-        enchantmentController.applyFallbackEnchantmentOffer(enchantmentOffer);
-      }
+  public void onEntityShootBow(@NotNull EntityShootBowEvent event) {
+    if (!(event.getEntity() instanceof Player player)) {
+      return;
     }
+
+    event.setConsumeItem(true);
+
+    Set<Enchantment> removedBlacklistedEnchantments =
+        enchantmentController.removeBlacklistedEnchantments(event.getBow());
+
+    if (removedBlacklistedEnchantments.isEmpty()) {
+      return;
+    }
+
+    enchantmentController.sendRemovedBlacklistedEnchantmentsMessage(
+        player, removedBlacklistedEnchantments);
   }
 }

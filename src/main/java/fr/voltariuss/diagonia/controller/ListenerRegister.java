@@ -14,21 +14,21 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia;
+package fr.voltariuss.diagonia.controller;
 
-import fr.voltariuss.diagonia.listeners.bukkit.BlockPlaceListener;
-import fr.voltariuss.diagonia.listeners.bukkit.EnchantItemListener;
-import fr.voltariuss.diagonia.listeners.bukkit.EntityDeathListener;
-import fr.voltariuss.diagonia.listeners.bukkit.EntityShootBowListener;
-import fr.voltariuss.diagonia.listeners.bukkit.LootGenerateListener;
-import fr.voltariuss.diagonia.listeners.bukkit.PiglinBarterListener;
-import fr.voltariuss.diagonia.listeners.bukkit.PlayerFishListener;
-import fr.voltariuss.diagonia.listeners.bukkit.PlayerItemMendListener;
-import fr.voltariuss.diagonia.listeners.bukkit.PrepareAnvilListener;
-import fr.voltariuss.diagonia.listeners.bukkit.PrepareItemEnchantListener;
-import fr.voltariuss.diagonia.listeners.bukkit.VillagerAcquireTradeListener;
-import fr.voltariuss.diagonia.listeners.jobs.JobsExpGainListener;
-import fr.voltariuss.diagonia.listeners.jobs.JobsPrePaymentListener;
+import fr.voltariuss.diagonia.controller.listener.bukkit.BlockPlaceListener;
+import fr.voltariuss.diagonia.controller.listener.bukkit.EnchantItemListener;
+import fr.voltariuss.diagonia.controller.listener.bukkit.EntityDeathListener;
+import fr.voltariuss.diagonia.controller.listener.bukkit.EntityShootBowListener;
+import fr.voltariuss.diagonia.controller.listener.bukkit.LootGenerateListener;
+import fr.voltariuss.diagonia.controller.listener.bukkit.PiglinBarterListener;
+import fr.voltariuss.diagonia.controller.listener.bukkit.PlayerFishListener;
+import fr.voltariuss.diagonia.controller.listener.bukkit.PlayerItemMendListener;
+import fr.voltariuss.diagonia.controller.listener.bukkit.PrepareAnvilListener;
+import fr.voltariuss.diagonia.controller.listener.bukkit.PrepareItemEnchantListener;
+import fr.voltariuss.diagonia.controller.listener.bukkit.VillagerAcquireTradeListener;
+import fr.voltariuss.diagonia.controller.listener.jobs.JobsExpGainListener;
+import fr.voltariuss.diagonia.controller.listener.jobs.JobsPrePaymentListener;
 import javax.inject.Inject;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
