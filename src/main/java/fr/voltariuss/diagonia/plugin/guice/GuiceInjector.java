@@ -40,8 +40,7 @@ public final class GuiceInjector {
             new GuiceBukkitModule(plugin),
             new GuiceBukkitLibsModule(luckPerms, plugin),
             new GuiceGeneralModule(),
-            new GuiceDiagoniaModule(
-                plugin.getSLF4JLogger(), luckPerms, plugin, pluginConfig, rankConfig));
+            new GuiceDiagoniaModule(plugin.getSLF4JLogger(), luckPerms, pluginConfig, rankConfig));
     injector.injectMembers(plugin);
   }
 }

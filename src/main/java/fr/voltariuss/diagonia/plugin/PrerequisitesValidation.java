@@ -16,7 +16,7 @@
 
 package fr.voltariuss.diagonia.plugin;
 
-import fr.voltariuss.diagonia.CriticalErrorHandler;
+import fr.voltariuss.diagonia.DiagoniaRuntimeException;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.bukkit.Server;
@@ -25,20 +25,17 @@ import org.jetbrains.annotations.NotNull;
 @Singleton
 public class PrerequisitesValidation {
 
-  private final CriticalErrorHandler criticalErrorHandler;
   private final Server server;
 
   @Inject
-  public PrerequisitesValidation(
-      @NotNull CriticalErrorHandler criticalErrorHandler, @NotNull Server server) {
-    this.criticalErrorHandler = criticalErrorHandler;
+  public PrerequisitesValidation(@NotNull Server server) {
     this.server = server;
   }
 
   public void validate() {
     // TODO: add other validations (LuckPerms, Jobs, ...)
     if (!server.getPluginManager().isPluginEnabled("Vault")) {
-      criticalErrorHandler.raiseCriticalError("Required Vault dependency not found.");
+      throw new DiagoniaRuntimeException("Required Vault dependency not found.");
     }
   }
 }

@@ -19,18 +19,17 @@ package fr.voltariuss.diagonia.plugin.guice;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
-import fr.voltariuss.diagonia.CriticalErrorHandler;
 import fr.voltariuss.diagonia.DiagoniaException;
+import fr.voltariuss.diagonia.DiagoniaRuntimeException;
+import fr.voltariuss.diagonia.JdbcUrl;
 import fr.voltariuss.diagonia.model.config.data.PluginConfig;
 import fr.voltariuss.diagonia.model.config.data.rank.RankConfig;
 import fr.voltariuss.diagonia.model.entity.PlayerShop;
 import fr.voltariuss.diagonia.model.entity.RankChallengeProgression;
-import fr.voltariuss.diagonia.JdbcUrl;
 import java.util.Objects;
 import javax.inject.Named;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.track.Track;
-import org.bukkit.plugin.Plugin;
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AvailableSettings;
@@ -43,14 +42,12 @@ public class GuiceDiagoniaModule extends AbstractModule {
   private final JdbcUrl jdbcUrl;
   private final Logger logger;
   private final LuckPerms luckPerms;
-  private final Plugin plugin;
   private final PluginConfig pluginConfig;
   private final RankConfig rankConfig;
 
   public GuiceDiagoniaModule(
       @NotNull Logger logger,
       @NotNull LuckPerms luckPerms,
-      @NotNull Plugin plugin,
       @NotNull PluginConfig pluginConfig,
       @NotNull RankConfig rankConfig) {
     this.jdbcUrl =
@@ -60,7 +57,6 @@ public class GuiceDiagoniaModule extends AbstractModule {
             pluginConfig.getDatabase().getDatabase());
     this.logger = logger;
     this.luckPerms = luckPerms;
-    this.plugin = plugin;
     this.pluginConfig = pluginConfig;
     this.rankConfig = rankConfig;
   }
@@ -93,7 +89,7 @@ public class GuiceDiagoniaModule extends AbstractModule {
   @Provides
   @Singleton
   public @NotNull SessionFactory provideSessionFactory() {
-    SessionFactory sessionFactory = null;
+    SessionFactory sessionFactory;
     String connectionUrl = jdbcUrl.asStringUrl();
     try {
       // The SessionFactory must be built only once for application lifecycle
@@ -129,9 +125,7 @@ public class GuiceDiagoniaModule extends AbstractModule {
       sessionFactory = configuration.buildSessionFactory();
       logger.info("Database connexion established.");
     } catch (HibernateException e) {
-      CriticalErrorHandler criticalErrorHandler =
-          new CriticalErrorHandler(logger, plugin.getServer().getPluginManager(), plugin);
-      criticalErrorHandler.raiseCriticalError(
+      throw new DiagoniaRuntimeException(
           String.format("Database connection failed: %s", connectionUrl), e);
     }
     return Objects.requireNonNull(sessionFactory);
