@@ -25,20 +25,20 @@ import org.bukkit.Material;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-@DisplayName("RankChallengeProgression service")
-class RankChallengeProgressionServiceTest extends AbstractBaseTest {
+@DisplayName("Rank up service")
+class RankUpServiceTest extends AbstractBaseTest {
 
-  @Inject RankChallengeProgressionService rankChallengeProgressionService;
+  @Inject RankUpService rankUpService;
 
   @Test
   void givenNewRankChallengeProgression_WhenPersisted_ThenShouldBeRegisteredIntoDatabase() {
     RankChallengeProgression rcp =
         new RankChallengeProgression(UUID.randomUUID(), "test-rank", Material.OAK_LOG);
 
-    rankChallengeProgressionService.persist(rcp);
+    rankUpService.persistProgression(rcp);
 
     RankChallengeProgression retrievedRcp =
-        rankChallengeProgressionService.findById(rcp.getId()).orElse(null);
+        rankUpService.findProgressionById(rcp.getId()).orElse(null);
     Assert.assertNotNull(retrievedRcp);
     Assert.assertEquals(rcp, retrievedRcp);
   }

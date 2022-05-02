@@ -51,7 +51,7 @@ public class RankLuckPermsService implements RankService {
 
   private final RemakeBukkitLogger logger;
   private final GroupManager groupManager;
-  private final RankChallengeProgressionService rankChallengeProgressionService;
+  private final RankUpService rankUpService;
   private final RankConfig rankConfig;
   private final Track track;
   private final UserManager userManager;
@@ -61,7 +61,7 @@ public class RankLuckPermsService implements RankService {
    *
    * @param logger The logger.
    * @param groupManager The group manager of LuckPerms API.
-   * @param rankChallengeProgressionService The rank challenge progression service.
+   * @param rankUpService The rank up service.
    * @param rankConfig The rank config.
    * @param track The LuckPerms' track for ranks.
    * @param userManager The user manager of LuckPerms API.
@@ -70,13 +70,13 @@ public class RankLuckPermsService implements RankService {
   public RankLuckPermsService(
       @NotNull RemakeBukkitLogger logger,
       @NotNull GroupManager groupManager,
-      @NotNull RankChallengeProgressionService rankChallengeProgressionService,
+      @NotNull RankUpService rankUpService,
       @NotNull RankConfig rankConfig,
       @NotNull Track track,
       @NotNull UserManager userManager) {
     this.logger = logger;
     this.groupManager = groupManager;
-    this.rankChallengeProgressionService = rankChallengeProgressionService;
+    this.rankUpService = rankUpService;
     this.rankConfig = rankConfig;
     this.track = track;
     this.userManager = userManager;
@@ -242,7 +242,7 @@ public class RankLuckPermsService implements RankService {
     boolean isMoneyPrerequisiteDone = currentBalance >= moneyCost;
 
     boolean isChallengesPrerequisiteDone =
-        rankChallengeProgressionService.areChallengesCompleted(player, unlockableRank);
+        rankUpService.areChallengesCompleted(player, unlockableRank);
 
     boolean isRankOwned = isRankOwned(player, unlockableRank.getId());
 

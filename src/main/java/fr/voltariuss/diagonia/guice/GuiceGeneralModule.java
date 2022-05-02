@@ -49,6 +49,8 @@ import fr.voltariuss.diagonia.model.service.PlayerShopService;
 import fr.voltariuss.diagonia.model.service.PlayerShopServiceImpl;
 import fr.voltariuss.diagonia.model.service.RankLuckPermsService;
 import fr.voltariuss.diagonia.model.service.RankService;
+import fr.voltariuss.diagonia.model.service.RankUpService;
+import fr.voltariuss.diagonia.model.service.RankUpServiceImpl;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import org.jetbrains.annotations.NotNull;
@@ -73,6 +75,7 @@ public class GuiceGeneralModule extends AbstractModule {
     bind(RankService.class).to(RankLuckPermsService.class);
     bind(RankUpController.class).to(RankUpControllerImpl.class);
     bind(RankUpChallengesController.class).to(RankUpChallengesControllerImpl.class);
+    bind(RankUpService.class).to(RankUpServiceImpl.class);
   }
 
   @Provides
