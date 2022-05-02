@@ -18,13 +18,13 @@ package fr.voltariuss.diagonia.controller.implementation;
 
 import fr.voltariuss.diagonia.controller.CommandRegister;
 import fr.voltariuss.diagonia.controller.ListenerRegister;
-import fr.voltariuss.diagonia.plugin.PrerequisitesValidation;
 import fr.voltariuss.diagonia.controller.api.MessageController;
 import fr.voltariuss.diagonia.controller.api.PluginController;
 import fr.voltariuss.diagonia.model.config.data.PluginConfig;
 import fr.voltariuss.diagonia.model.config.data.rank.Rank;
 import fr.voltariuss.diagonia.model.config.data.rank.RankConfig;
-import fr.voltariuss.diagonia.utils.UrlUtils;
+import fr.voltariuss.diagonia.plugin.PrerequisitesValidation;
+import fr.voltariuss.diagonia.utils.JdbcUrl;
 import fr.voltariuss.diagonia.view.message.CommonMessage;
 import java.util.List;
 import java.util.Objects;
@@ -40,6 +40,7 @@ public class PluginControllerImpl implements PluginController {
 
   private final CommandRegister commandRegister;
   private final CommonMessage commonMessage;
+  private final JdbcUrl jdbcUrl;
   private final ListenerRegister listenerRegister;
   private final Logger logger;
   private final MessageController messageController;
@@ -53,6 +54,7 @@ public class PluginControllerImpl implements PluginController {
   public PluginControllerImpl(
       @NotNull CommandRegister commandRegister,
       @NotNull CommonMessage commonMessage,
+      @NotNull JdbcUrl jdbcUrl,
       @NotNull ListenerRegister listenerRegister,
       @NotNull Logger logger,
       @NotNull MessageController messageController,
@@ -63,6 +65,7 @@ public class PluginControllerImpl implements PluginController {
       @NotNull SessionFactory sessionFactory) {
     this.commandRegister = commandRegister;
     this.commonMessage = commonMessage;
+    this.jdbcUrl = jdbcUrl;
     this.listenerRegister = listenerRegister;
     this.logger = logger;
     this.messageController = messageController;
@@ -94,12 +97,7 @@ public class PluginControllerImpl implements PluginController {
           commonMessage.startupBannerStateLine(
               "Debug Mode", Boolean.toString(pluginConfig.isDebug())));
       messageController.sendConsoleMessage(
-          commonMessage.startupBannerStateLine(
-              "Database connection URL",
-              UrlUtils.getDatabaseUrl(
-                  pluginConfig.getDatabase().getHost(),
-                  pluginConfig.getDatabase().getPort(),
-                  pluginConfig.getDatabase().getDatabase())));
+          commonMessage.startupBannerStateLine("Database connection URL", jdbcUrl.asStringUrl()));
       messageController.sendConsoleMessage(
           commonMessage.startupBannerStateLine(
               "Database username", pluginConfig.getDatabase().getUsername()));

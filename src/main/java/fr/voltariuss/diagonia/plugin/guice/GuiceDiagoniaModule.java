@@ -25,7 +25,7 @@ import fr.voltariuss.diagonia.model.config.data.PluginConfig;
 import fr.voltariuss.diagonia.model.config.data.rank.RankConfig;
 import fr.voltariuss.diagonia.model.entity.PlayerShop;
 import fr.voltariuss.diagonia.model.entity.RankChallengeProgression;
-import fr.voltariuss.diagonia.utils.UrlUtils;
+import fr.voltariuss.diagonia.utils.JdbcUrl;
 import java.util.Objects;
 import javax.inject.Named;
 import net.luckperms.api.LuckPerms;
@@ -40,6 +40,7 @@ import org.slf4j.Logger;
 
 public class GuiceDiagoniaModule extends AbstractModule {
 
+  private final JdbcUrl jdbcUrl;
   private final Logger logger;
   private final LuckPerms luckPerms;
   private final Plugin plugin;
@@ -52,6 +53,11 @@ public class GuiceDiagoniaModule extends AbstractModule {
       @NotNull Plugin plugin,
       @NotNull PluginConfig pluginConfig,
       @NotNull RankConfig rankConfig) {
+    this.jdbcUrl =
+        new JdbcUrl(
+            pluginConfig.getDatabase().getHost(),
+            pluginConfig.getDatabase().getPort(),
+            pluginConfig.getDatabase().getDatabase());
     this.logger = logger;
     this.luckPerms = luckPerms;
     this.plugin = plugin;
@@ -80,13 +86,15 @@ public class GuiceDiagoniaModule extends AbstractModule {
 
   @Provides
   @Singleton
+  public @NotNull JdbcUrl provideJdbcUrl() {
+    return jdbcUrl;
+  }
+
+  @Provides
+  @Singleton
   public @NotNull SessionFactory provideSessionFactory() {
     SessionFactory sessionFactory = null;
-    String connectionUrl =
-        UrlUtils.getDatabaseUrl(
-            pluginConfig.getDatabase().getHost(),
-            pluginConfig.getDatabase().getPort(),
-            pluginConfig.getDatabase().getDatabase());
+    String connectionUrl = jdbcUrl.asStringUrl();
     try {
       // The SessionFactory must be built only once for application lifecycle
       Configuration configuration = new Configuration();
