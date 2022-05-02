@@ -14,28 +14,16 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.model.dto;
+package fr.voltariuss.diagonia.model.service.api.dto.response;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.NonNull;
 
 @Data
 @Builder
-public class RankUpProgression {
+public class EconomyResponse {
 
-  private final int currentXpLevel;
-  private final boolean isXpLevelPrerequisiteDone;
-  private final int totalJobsLevels;
-  private final boolean isTotalJobsLevelsPrerequisiteDone;
-  private final double currentBalance;
-  private final boolean isMoneyPrerequisiteDone;
-  private final boolean isChallengesPrerequisiteDone;
-  private final boolean isRankOwned;
-
-  public boolean canRankUp() {
-    return isXpLevelPrerequisiteDone
-        && isTotalJobsLevelsPrerequisiteDone
-        && isMoneyPrerequisiteDone
-        && isChallengesPrerequisiteDone;
-  }
+  @NonNull private final Double modifiedAmount;
+  @NonNull private final Double newBalance;
 }

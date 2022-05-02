@@ -17,7 +17,7 @@
 package fr.voltariuss.diagonia.model.dao;
 
 import fr.voltariuss.diagonia.AbstractBaseTest;
-import fr.voltariuss.diagonia.model.dto.LocationDto;
+import fr.voltariuss.diagonia.model.service.api.dto.LocationDto;
 import fr.voltariuss.diagonia.model.entity.PlayerShop;
 import java.util.List;
 import java.util.UUID;

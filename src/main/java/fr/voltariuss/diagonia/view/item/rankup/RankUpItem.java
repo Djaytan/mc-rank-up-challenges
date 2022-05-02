@@ -23,7 +23,7 @@ import dev.triumphteam.gui.guis.GuiItem;
 import fr.voltariuss.diagonia.controller.rankup.RankUpChallengesController;
 import fr.voltariuss.diagonia.model.config.data.rank.Rank;
 import fr.voltariuss.diagonia.model.config.data.rank.RankUpPrerequisites;
-import fr.voltariuss.diagonia.model.dto.RankUpProgression;
+import fr.voltariuss.diagonia.model.service.api.dto.RankUpProgression;
 import fr.voltariuss.diagonia.view.EconomyFormatter;
 import java.util.ArrayList;
 import java.util.Collections;

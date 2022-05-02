@@ -23,7 +23,7 @@ import fr.voltariuss.diagonia.model.GiveActionType;
 import fr.voltariuss.diagonia.model.config.data.rank.Rank;
 import fr.voltariuss.diagonia.model.config.data.rank.RankChallenge;
 import fr.voltariuss.diagonia.model.config.data.rank.RankConfig;
-import fr.voltariuss.diagonia.model.dto.RankUpProgression;
+import fr.voltariuss.diagonia.model.service.api.dto.RankUpProgression;
 import fr.voltariuss.diagonia.model.entity.RankChallengeProgression;
 import fr.voltariuss.diagonia.model.service.api.RankService;
 import fr.voltariuss.diagonia.model.service.api.RankUpService;

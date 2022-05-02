@@ -16,8 +16,8 @@
 
 package fr.voltariuss.diagonia.view.message;
 
-import fr.voltariuss.diagonia.model.dto.LocationDto;
-import fr.voltariuss.diagonia.model.dto.response.EconomyResponse;
+import fr.voltariuss.diagonia.model.service.api.dto.LocationDto;
+import fr.voltariuss.diagonia.model.service.api.dto.response.EconomyResponse;
 import fr.voltariuss.diagonia.view.EconomyFormatter;
 import java.util.ResourceBundle;
 import javax.inject.Inject;

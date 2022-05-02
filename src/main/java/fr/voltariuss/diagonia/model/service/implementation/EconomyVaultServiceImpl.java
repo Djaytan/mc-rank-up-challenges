@@ -18,7 +18,7 @@ package fr.voltariuss.diagonia.model.service.implementation;
 
 import com.google.common.base.Preconditions;
 import fr.voltariuss.diagonia.RemakeBukkitLogger;
-import fr.voltariuss.diagonia.model.dto.response.EconomyResponse;
+import fr.voltariuss.diagonia.model.service.api.dto.response.EconomyResponse;
 import fr.voltariuss.diagonia.model.service.api.exception.EconomyException;
 import fr.voltariuss.diagonia.model.service.api.EconomyService;
 import javax.inject.Inject;

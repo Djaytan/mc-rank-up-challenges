@@ -14,20 +14,28 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.model.dto;
+package fr.voltariuss.diagonia.model.service.api.dto;
 
 import lombok.Builder;
 import lombok.Data;
-import lombok.NonNull;
 
 @Data
 @Builder
-public class LocationDto {
+public class RankUpProgression {
 
-  @NonNull private String worldName;
-  @NonNull private Double x;
-  @NonNull private Double y;
-  @NonNull private Double z;
-  @NonNull private Float yaw;
-  @NonNull private Float pitch;
+  private final int currentXpLevel;
+  private final boolean isXpLevelPrerequisiteDone;
+  private final int totalJobsLevels;
+  private final boolean isTotalJobsLevelsPrerequisiteDone;
+  private final double currentBalance;
+  private final boolean isMoneyPrerequisiteDone;
+  private final boolean isChallengesPrerequisiteDone;
+  private final boolean isRankOwned;
+
+  public boolean canRankUp() {
+    return isXpLevelPrerequisiteDone
+        && isTotalJobsLevelsPrerequisiteDone
+        && isMoneyPrerequisiteDone
+        && isChallengesPrerequisiteDone;
+  }
 }

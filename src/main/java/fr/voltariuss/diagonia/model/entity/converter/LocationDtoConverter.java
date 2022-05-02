@@ -17,7 +17,7 @@
 package fr.voltariuss.diagonia.model.entity.converter;
 
 import com.google.gson.Gson;
-import fr.voltariuss.diagonia.model.dto.LocationDto;
+import fr.voltariuss.diagonia.model.service.api.dto.LocationDto;
 import javax.annotation.Nullable;
 import javax.persistence.AttributeConverter;
 import org.jetbrains.annotations.NotNull;

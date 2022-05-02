@@ -16,7 +16,7 @@
 
 package fr.voltariuss.diagonia.model.service.api;
 
-import fr.voltariuss.diagonia.model.dto.response.EconomyResponse;
+import fr.voltariuss.diagonia.model.service.api.dto.response.EconomyResponse;
 import fr.voltariuss.diagonia.model.service.api.exception.EconomyException;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;

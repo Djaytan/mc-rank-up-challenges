@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.model.dto.response;
+package fr.voltariuss.diagonia.model.service.api.dto;
 
 import lombok.Builder;
 import lombok.Data;
@@ -22,8 +22,12 @@ import lombok.NonNull;
 
 @Data
 @Builder
-public class EconomyResponse {
+public class LocationDto {
 
-  @NonNull private final Double modifiedAmount;
-  @NonNull private final Double newBalance;
+  @NonNull private String worldName;
+  @NonNull private Double x;
+  @NonNull private Double y;
+  @NonNull private Double z;
+  @NonNull private Float yaw;
+  @NonNull private Float pitch;
 }

@@ -24,7 +24,7 @@ import dev.triumphteam.gui.guis.PaginatedGui;
 import fr.voltariuss.diagonia.controller.rankup.RankUpChallengesController;
 import fr.voltariuss.diagonia.controller.rankup.RankUpController;
 import fr.voltariuss.diagonia.model.config.data.rank.Rank;
-import fr.voltariuss.diagonia.model.dto.RankUpProgression;
+import fr.voltariuss.diagonia.model.service.api.dto.RankUpProgression;
 import fr.voltariuss.diagonia.model.entity.RankChallengeProgression;
 import fr.voltariuss.diagonia.view.item.PaginatedItem;
 import fr.voltariuss.diagonia.view.item.rankup.RankChallengeItem;

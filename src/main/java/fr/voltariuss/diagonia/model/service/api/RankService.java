@@ -17,7 +17,6 @@
 package fr.voltariuss.diagonia.model.service.api;
 
 import fr.voltariuss.diagonia.model.config.data.rank.Rank;
-import fr.voltariuss.diagonia.model.dto.RankUpProgression;
 import java.util.List;
 import net.luckperms.api.track.PromotionResult;
 import org.bukkit.entity.Player;
