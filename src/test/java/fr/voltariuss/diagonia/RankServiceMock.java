@@ -17,7 +17,7 @@
 package fr.voltariuss.diagonia;
 
 import fr.voltariuss.diagonia.model.config.data.rank.Rank;
-import fr.voltariuss.diagonia.model.service.RankService;
+import fr.voltariuss.diagonia.model.service.api.RankService;
 import java.util.Collections;
 import java.util.List;
 import net.luckperms.api.track.PromotionResult;

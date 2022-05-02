@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.model.service;
+package fr.voltariuss.diagonia.model.service.implementation;
 
 import com.google.common.base.Preconditions;
 import fr.voltariuss.diagonia.RemakeBukkitLogger;
 import fr.voltariuss.diagonia.model.config.data.rank.Rank;
 import fr.voltariuss.diagonia.model.config.data.rank.RankConfig;
+import fr.voltariuss.diagonia.model.service.api.RankService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;

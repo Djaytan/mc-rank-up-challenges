@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.model.service;
+package fr.voltariuss.diagonia.model.service.implementation;
 
 import com.google.common.base.Preconditions;
 import fr.voltariuss.diagonia.RemakeBukkitLogger;
@@ -27,6 +27,8 @@ import fr.voltariuss.diagonia.model.dao.JpaDaoException;
 import fr.voltariuss.diagonia.model.dao.RankChallengeProgressionDao;
 import fr.voltariuss.diagonia.model.dto.RankUpProgression;
 import fr.voltariuss.diagonia.model.entity.RankChallengeProgression;
+import fr.voltariuss.diagonia.model.service.api.RankService;
+import fr.voltariuss.diagonia.model.service.api.RankUpService;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;

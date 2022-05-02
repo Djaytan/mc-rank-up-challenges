@@ -18,6 +18,7 @@ package fr.voltariuss.diagonia.model.service;
 
 import fr.voltariuss.diagonia.AbstractBaseTest;
 import fr.voltariuss.diagonia.model.entity.PlayerShop;
+import fr.voltariuss.diagonia.model.service.api.PlayerShopService;
 import java.util.UUID;
 import javax.inject.Inject;
 import junit.framework.Assert;

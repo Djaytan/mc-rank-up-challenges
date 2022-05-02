@@ -20,7 +20,7 @@ import dev.triumphteam.gui.guis.Gui;
 import dev.triumphteam.gui.guis.GuiItem;
 import fr.voltariuss.diagonia.model.config.data.rank.Rank;
 import fr.voltariuss.diagonia.model.config.data.rank.RankConfig;
-import fr.voltariuss.diagonia.model.service.RankService;
+import fr.voltariuss.diagonia.model.service.api.RankService;
 import fr.voltariuss.diagonia.view.item.GoToMainMenuItem;
 import fr.voltariuss.diagonia.view.item.rankup.RankItem;
 import java.util.ResourceBundle;

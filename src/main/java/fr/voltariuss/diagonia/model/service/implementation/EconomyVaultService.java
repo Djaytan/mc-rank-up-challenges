@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.model.service;
+package fr.voltariuss.diagonia.model.service.implementation;
 
 import com.google.common.base.Preconditions;
 import fr.voltariuss.diagonia.RemakeBukkitLogger;
 import fr.voltariuss.diagonia.model.dto.response.EconomyResponse;
+import fr.voltariuss.diagonia.model.service.api.exception.EconomyException;
+import fr.voltariuss.diagonia.model.service.api.EconomyService;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.milkbowl.vault.economy.Economy;

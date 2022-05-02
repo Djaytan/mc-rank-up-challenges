@@ -18,6 +18,7 @@ package fr.voltariuss.diagonia.model.service;
 
 import fr.voltariuss.diagonia.AbstractBaseTest;
 import fr.voltariuss.diagonia.model.entity.RankChallengeProgression;
+import fr.voltariuss.diagonia.model.service.api.RankUpService;
 import java.util.UUID;
 import javax.inject.Inject;
 import junit.framework.Assert;
@@ -28,7 +29,8 @@ import org.junit.jupiter.api.Test;
 @DisplayName("Rank up service")
 class RankUpServiceTest extends AbstractBaseTest {
 
-  @Inject RankUpService rankUpService;
+  @Inject
+  RankUpService rankUpService;
 
   @Test
   void givenNewRankChallengeProgression_WhenPersisted_ThenShouldBeRegisteredIntoDatabase() {

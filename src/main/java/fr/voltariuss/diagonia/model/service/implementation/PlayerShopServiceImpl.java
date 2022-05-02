@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.model.service;
+package fr.voltariuss.diagonia.model.service.implementation;
 
 import fr.voltariuss.diagonia.RemakeBukkitLogger;
 import fr.voltariuss.diagonia.model.dao.JpaDaoException;
 import fr.voltariuss.diagonia.model.dao.PlayerShopDao;
 import fr.voltariuss.diagonia.model.entity.PlayerShop;
+import fr.voltariuss.diagonia.model.service.api.PlayerShopService;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;

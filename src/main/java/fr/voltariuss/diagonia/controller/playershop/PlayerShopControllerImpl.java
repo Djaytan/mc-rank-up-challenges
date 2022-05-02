@@ -18,7 +18,7 @@ package fr.voltariuss.diagonia.controller.playershop;
 
 import fr.voltariuss.diagonia.RemakeBukkitLogger;
 import fr.voltariuss.diagonia.model.entity.PlayerShop;
-import fr.voltariuss.diagonia.model.service.PlayerShopService;
+import fr.voltariuss.diagonia.model.service.api.PlayerShopService;
 import fr.voltariuss.diagonia.view.gui.PlayerShopConfigGui;
 import fr.voltariuss.diagonia.view.gui.PlayerShopListGui;
 import java.util.Collections;

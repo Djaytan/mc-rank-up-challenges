@@ -22,7 +22,7 @@ import fr.voltariuss.diagonia.model.dto.mapper.LocationMapper;
 import fr.voltariuss.diagonia.model.config.data.PluginConfig;
 import fr.voltariuss.diagonia.model.dto.LocationDto;
 import fr.voltariuss.diagonia.model.entity.PlayerShop;
-import fr.voltariuss.diagonia.model.service.PlayerShopService;
+import fr.voltariuss.diagonia.model.service.api.PlayerShopService;
 import fr.voltariuss.diagonia.view.message.PlayerShopMessage;
 import javax.inject.Inject;
 import javax.inject.Singleton;

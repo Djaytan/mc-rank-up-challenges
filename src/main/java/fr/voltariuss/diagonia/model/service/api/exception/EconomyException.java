@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.model.service;
+package fr.voltariuss.diagonia.model.service.api.exception;
 
 import fr.voltariuss.diagonia.DiagoniaException;
 import org.jetbrains.annotations.NotNull;

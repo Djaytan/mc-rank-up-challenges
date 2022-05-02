@@ -14,20 +14,23 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.model.service;
+package fr.voltariuss.diagonia.model.service.api;
 
-import com.gamingmesh.jobs.Jobs;
-import com.gamingmesh.jobs.container.JobsPlayer;
-import javax.inject.Singleton;
-import org.bukkit.entity.Player;
+import fr.voltariuss.diagonia.model.entity.PlayerShop;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import org.jetbrains.annotations.NotNull;
 
-@Singleton
-public class JobsRebornService implements JobsService {
+public interface PlayerShopService {
 
-  @Override
-  public int getTotalLevels(@NotNull Player player) {
-    JobsPlayer jobsPlayer = Jobs.getPlayerManager().getJobsPlayer(player);
-    return jobsPlayer.getTotalLevels();
-  }
+  void persist(@NotNull PlayerShop playerShop);
+
+  void update(@NotNull PlayerShop playerShop);
+
+  @NotNull Optional<PlayerShop> findById(long id);
+
+  @NotNull Optional<PlayerShop> findByUuid(@NotNull UUID uuid);
+
+  @NotNull List<PlayerShop> findAll();
 }

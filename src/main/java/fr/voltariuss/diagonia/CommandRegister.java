@@ -18,7 +18,7 @@ package fr.voltariuss.diagonia;
 
 import co.aikar.commands.PaperCommandManager;
 import fr.voltariuss.diagonia.model.entity.PlayerShop;
-import fr.voltariuss.diagonia.model.service.PlayerShopService;
+import fr.voltariuss.diagonia.model.service.api.PlayerShopService;
 import fr.voltariuss.diagonia.view.command.PlayerShopCommand;
 import fr.voltariuss.diagonia.view.command.RankUpCommand;
 import fr.voltariuss.diagonia.view.command.RanksCommand;
