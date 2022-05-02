@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.utils;
+package fr.voltariuss.diagonia;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

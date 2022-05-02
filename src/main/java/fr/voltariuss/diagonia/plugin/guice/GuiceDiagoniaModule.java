@@ -25,7 +25,7 @@ import fr.voltariuss.diagonia.model.config.data.PluginConfig;
 import fr.voltariuss.diagonia.model.config.data.rank.RankConfig;
 import fr.voltariuss.diagonia.model.entity.PlayerShop;
 import fr.voltariuss.diagonia.model.entity.RankChallengeProgression;
-import fr.voltariuss.diagonia.utils.JdbcUrl;
+import fr.voltariuss.diagonia.JdbcUrl;
 import java.util.Objects;
 import javax.inject.Named;
 import net.luckperms.api.LuckPerms;

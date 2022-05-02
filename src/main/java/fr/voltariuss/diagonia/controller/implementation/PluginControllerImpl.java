@@ -24,7 +24,7 @@ import fr.voltariuss.diagonia.model.config.data.PluginConfig;
 import fr.voltariuss.diagonia.model.config.data.rank.Rank;
 import fr.voltariuss.diagonia.model.config.data.rank.RankConfig;
 import fr.voltariuss.diagonia.plugin.PrerequisitesValidation;
-import fr.voltariuss.diagonia.utils.JdbcUrl;
+import fr.voltariuss.diagonia.JdbcUrl;
 import fr.voltariuss.diagonia.view.message.CommonMessage;
 import java.util.List;
 import java.util.Objects;
