@@ -32,24 +32,25 @@ public interface RankUpService {
   boolean areChallengesCompleted(@NotNull Player player, @NotNull Rank rank);
 
   @NotNull
-  Optional<RankChallengeProgression> findProgression(
+  Optional<RankChallengeProgression> findChallengeProgression(
       @NotNull UUID playerUuid, @NotNull String rankId, @NotNull Material material);
 
   @NotNull
-  Optional<RankChallengeProgression> findProgressionById(long id);
+  Optional<RankChallengeProgression> findChallengeProgressionById(long id);
 
   @NotNull
-  List<RankChallengeProgression> findProgressions(@NotNull UUID playerUuid, @NotNull String rankId);
+  List<RankChallengeProgression> findChallengesProgressions(
+      @NotNull UUID playerUuid, @NotNull String rankId);
 
   int giveItemChallenge(
-    @NotNull UUID playerUuid,
-    @NotNull Rank rank,
-    @NotNull RankChallenge rankChallenge,
-    @NotNull GiveActionType giveActionType,
-    int nbItemsInInventory);
+      @NotNull UUID playerUuid,
+      @NotNull Rank rank,
+      @NotNull RankChallenge rankChallenge,
+      @NotNull GiveActionType giveActionType,
+      int nbItemsInInventory);
 
   boolean isChallengeCompleted(
-    @NotNull UUID uuid, @NotNull String rankId, @NotNull RankChallenge rankChallenge);
+      @NotNull UUID uuid, @NotNull String rankId, @NotNull RankChallenge rankChallenge);
 
-  void persistProgression(@NotNull RankChallengeProgression rankChallengeProgression);
+  void persistChallengeProgression(@NotNull RankChallengeProgression rankChallengeProgression);
 }

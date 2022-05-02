@@ -52,74 +52,13 @@ public class RankUpServiceImpl implements RankUpService {
   }
 
   @Override
-  public void persistProgression(@NotNull RankChallengeProgression rankChallengeProgression) {
-    rankChallengeProgressionDao.openSession();
-    Transaction tx = rankChallengeProgressionDao.beginTransaction();
-    try {
-      rankChallengeProgressionDao.persist(rankChallengeProgression);
-      tx.commit();
-      logger.debug("RankChallengeProgression persisted: {}", rankChallengeProgression);
-    } catch (HibernateException e) {
-      try {
-        tx.rollback();
-      } catch (RuntimeException re) {
-        throw new JpaDaoException(TRANSACTION_ROLLBACK_FAIL_MESSAGE, re);
-      }
-      throw e;
-    } finally {
-      rankChallengeProgressionDao.destroySession();
-    }
-  }
-
-  @Override
-  public @NotNull Optional<RankChallengeProgression> findProgressionById(long id) {
-    rankChallengeProgressionDao.openSession();
-    try {
-      Optional<RankChallengeProgression> rankChallengeProgression =
-          rankChallengeProgressionDao.findById(id);
-      logger.debug("RankChallengeProgression found for ID {}: {}", id, rankChallengeProgression);
-      return rankChallengeProgression;
-    } finally {
-      rankChallengeProgressionDao.destroySession();
-    }
-  }
-
-  @Override
-  public @NotNull Optional<RankChallengeProgression> findProgression(
-      @NotNull UUID playerUuid, @NotNull String rankId, @NotNull Material material) {
-    rankChallengeProgressionDao.openSession();
-    try {
-      Optional<RankChallengeProgression> rankChallengeProgression =
-          rankChallengeProgressionDao.find(playerUuid, rankId, material);
-      logger.debug("RankChallengeProgression found: {}", rankChallengeProgression);
-      return rankChallengeProgression;
-    } finally {
-      rankChallengeProgressionDao.destroySession();
-    }
-  }
-
-  @Override
-  public @NotNull List<RankChallengeProgression> findProgressions(
-      @NotNull UUID playerUuid, @NotNull String rankId) {
-    rankChallengeProgressionDao.openSession();
-    try {
-      List<RankChallengeProgression> rankChallengeProgressions =
-          rankChallengeProgressionDao.find(playerUuid, rankId);
-      logger.debug("RankChallengeProgressions found: {}", rankChallengeProgressions);
-      return rankChallengeProgressions;
-    } finally {
-      rankChallengeProgressionDao.destroySession();
-    }
-  }
-
-  @Override
   public boolean areChallengesCompleted(@NotNull Player player, @NotNull Rank rank) {
     Preconditions.checkNotNull(rank.getRankUpChallenges());
 
     boolean areChallengesCompleted = true;
 
     List<RankChallengeProgression> playerProgression =
-        findProgressions(player.getUniqueId(), rank.getId()).stream()
+        findChallengesProgressions(player.getUniqueId(), rank.getId()).stream()
             .filter(
                 rcp ->
                     rank.getRankUpChallenges().stream()
@@ -141,6 +80,47 @@ public class RankUpServiceImpl implements RankUpService {
     }
 
     return areChallengesCompleted;
+  }
+
+  @Override
+  public @NotNull Optional<RankChallengeProgression> findChallengeProgression(
+      @NotNull UUID playerUuid, @NotNull String rankId, @NotNull Material material) {
+    rankChallengeProgressionDao.openSession();
+    try {
+      Optional<RankChallengeProgression> rankChallengeProgression =
+          rankChallengeProgressionDao.find(playerUuid, rankId, material);
+      logger.debug("RankChallengeProgression found: {}", rankChallengeProgression);
+      return rankChallengeProgression;
+    } finally {
+      rankChallengeProgressionDao.destroySession();
+    }
+  }
+
+  @Override
+  public @NotNull Optional<RankChallengeProgression> findChallengeProgressionById(long id) {
+    rankChallengeProgressionDao.openSession();
+    try {
+      Optional<RankChallengeProgression> rankChallengeProgression =
+          rankChallengeProgressionDao.findById(id);
+      logger.debug("RankChallengeProgression found for ID {}: {}", id, rankChallengeProgression);
+      return rankChallengeProgression;
+    } finally {
+      rankChallengeProgressionDao.destroySession();
+    }
+  }
+
+  @Override
+  public @NotNull List<RankChallengeProgression> findChallengesProgressions(
+      @NotNull UUID playerUuid, @NotNull String rankId) {
+    rankChallengeProgressionDao.openSession();
+    try {
+      List<RankChallengeProgression> rankChallengeProgressions =
+          rankChallengeProgressionDao.find(playerUuid, rankId);
+      logger.debug("RankChallengeProgressions found: {}", rankChallengeProgressions);
+      return rankChallengeProgressions;
+    } finally {
+      rankChallengeProgressionDao.destroySession();
+    }
   }
 
   @Override
@@ -215,5 +195,26 @@ public class RankUpServiceImpl implements RankUpService {
     }
 
     return rankChallengeProgression.get().getChallengeAmountGiven() >= rankChallenge.getAmount();
+  }
+
+  @Override
+  public void persistChallengeProgression(
+      @NotNull RankChallengeProgression rankChallengeProgression) {
+    rankChallengeProgressionDao.openSession();
+    Transaction tx = rankChallengeProgressionDao.beginTransaction();
+    try {
+      rankChallengeProgressionDao.persist(rankChallengeProgression);
+      tx.commit();
+      logger.debug("RankChallengeProgression persisted: {}", rankChallengeProgression);
+    } catch (HibernateException e) {
+      try {
+        tx.rollback();
+      } catch (RuntimeException re) {
+        throw new JpaDaoException(TRANSACTION_ROLLBACK_FAIL_MESSAGE, re);
+      }
+      throw e;
+    } finally {
+      rankChallengeProgressionDao.destroySession();
+    }
   }
 }

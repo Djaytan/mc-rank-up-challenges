@@ -131,7 +131,7 @@ public class RankUpChallengesControllerImpl implements RankUpChallengesControlle
   @Override
   public @NotNull Optional<RankChallengeProgression> findChallenge(
       @NotNull UUID playerUuid, @NotNull String rankId, @NotNull Material material) {
-    return rankUpService.findProgression(playerUuid, rankId, material);
+    return rankUpService.findChallengeProgression(playerUuid, rankId, material);
   }
 
   @Override

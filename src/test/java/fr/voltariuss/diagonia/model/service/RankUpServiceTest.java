@@ -35,10 +35,10 @@ class RankUpServiceTest extends AbstractBaseTest {
     RankChallengeProgression rcp =
         new RankChallengeProgression(UUID.randomUUID(), "test-rank", Material.OAK_LOG);
 
-    rankUpService.persistProgression(rcp);
+    rankUpService.persistChallengeProgression(rcp);
 
     RankChallengeProgression retrievedRcp =
-        rankUpService.findProgressionById(rcp.getId()).orElse(null);
+        rankUpService.findChallengeProgressionById(rcp.getId()).orElse(null);
     Assert.assertNotNull(retrievedRcp);
     Assert.assertEquals(rcp, retrievedRcp);
   }
