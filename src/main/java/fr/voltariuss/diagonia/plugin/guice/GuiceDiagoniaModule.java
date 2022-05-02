@@ -119,10 +119,8 @@ public class GuiceDiagoniaModule extends AbstractModule {
       configuration.addAnnotatedClass(PlayerShop.class);
       configuration.addAnnotatedClass(RankChallengeProgression.class);
 
-      try (SessionFactory sessionFactory = configuration.buildSessionFactory()) {
-        logger.info("Database connexion established.");
-        return sessionFactory;
-      }
+      logger.info("Database connexion established.");
+      return configuration.buildSessionFactory();
     } catch (HibernateException e) {
       throw new DiagoniaRuntimeException(
           String.format("Database connection failed: %s", jdbcUrl.asStringUrl()), e);
