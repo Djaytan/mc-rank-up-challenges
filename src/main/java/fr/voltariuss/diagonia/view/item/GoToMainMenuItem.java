@@ -19,7 +19,7 @@ package fr.voltariuss.diagonia.view.item;
 import dev.triumphteam.gui.builder.item.ItemBuilder;
 import dev.triumphteam.gui.components.GuiAction;
 import dev.triumphteam.gui.guis.GuiItem;
-import fr.voltariuss.diagonia.controller.MainController;
+import fr.voltariuss.diagonia.controller.implementation.MenuControllerImpl;
 import java.util.ResourceBundle;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -36,13 +36,13 @@ public class GoToMainMenuItem {
 
   private static final Material GO_TO_MAIN_MENU_MATERIAL = Material.ARROW;
 
-  private final MainController mainController;
+  private final MenuControllerImpl mainController;
   private final MiniMessage miniMessage;
   private final ResourceBundle resourceBundle;
 
   @Inject
   public GoToMainMenuItem(
-      @NotNull MainController mainController,
+      @NotNull MenuControllerImpl mainController,
       @NotNull MiniMessage miniMessage,
       @NotNull ResourceBundle resourceBundle) {
     this.mainController = mainController;

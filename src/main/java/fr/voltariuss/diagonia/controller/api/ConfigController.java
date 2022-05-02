@@ -14,14 +14,22 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.controller;
+package fr.voltariuss.diagonia.controller.api;
 
-public enum MessageType {
-  INFO,
-  SUCCESS,
-  FAILURE,
-  WARNING,
-  ERROR,
-  BROADCAST,
-  DEBUG
+import fr.voltariuss.diagonia.model.config.DiagoniaConfig;
+import fr.voltariuss.diagonia.model.config.data.PluginConfig;
+import fr.voltariuss.diagonia.model.config.data.rank.RankConfig;
+import org.jetbrains.annotations.NotNull;
+
+public interface ConfigController {
+
+  <T> @NotNull T loadConfig(@NotNull DiagoniaConfig diagoniaConfig, @NotNull Class<T> clazz);
+
+  @NotNull
+  PluginConfig loadPluginConfig();
+
+  @NotNull
+  RankConfig loadRankConfig();
+
+  void saveDefaultConfigs();
 }

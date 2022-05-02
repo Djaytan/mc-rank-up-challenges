@@ -19,7 +19,7 @@ package fr.voltariuss.diagonia.view.item.playershop;
 import dev.triumphteam.gui.builder.item.ItemBuilder;
 import dev.triumphteam.gui.components.GuiAction;
 import dev.triumphteam.gui.guis.GuiItem;
-import fr.voltariuss.diagonia.controller.playershop.PlayerShopController;
+import fr.voltariuss.diagonia.controller.api.PlayerShopController;
 import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;

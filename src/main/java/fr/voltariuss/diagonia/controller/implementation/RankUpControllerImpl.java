@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.controller.rankup;
+package fr.voltariuss.diagonia.controller.implementation;
 
 import fr.voltariuss.diagonia.RemakeBukkitLogger;
-import fr.voltariuss.diagonia.controller.MessageController;
+import fr.voltariuss.diagonia.controller.api.MessageController;
+import fr.voltariuss.diagonia.controller.api.RankUpController;
 import fr.voltariuss.diagonia.model.config.data.rank.Rank;
 import fr.voltariuss.diagonia.model.service.api.dto.RankUpProgression;
 import fr.voltariuss.diagonia.model.service.api.EconomyService;

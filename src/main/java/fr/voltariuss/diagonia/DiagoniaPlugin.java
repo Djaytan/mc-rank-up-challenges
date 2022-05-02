@@ -16,9 +16,9 @@
 
 package fr.voltariuss.diagonia;
 
-import fr.voltariuss.diagonia.controller.ConfigController;
-import fr.voltariuss.diagonia.controller.ConfigControllerImpl;
-import fr.voltariuss.diagonia.controller.PluginController;
+import fr.voltariuss.diagonia.controller.api.ConfigController;
+import fr.voltariuss.diagonia.controller.implementation.ConfigControllerImpl;
+import fr.voltariuss.diagonia.controller.api.PluginController;
 import fr.voltariuss.diagonia.guice.GuiceInjector;
 import fr.voltariuss.diagonia.model.config.data.PluginConfig;
 import fr.voltariuss.diagonia.model.config.data.rank.RankConfig;

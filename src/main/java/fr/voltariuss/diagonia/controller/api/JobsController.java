@@ -14,22 +14,18 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.controller;
+package fr.voltariuss.diagonia.controller.api;
 
-import fr.voltariuss.diagonia.model.config.DiagoniaConfig;
-import fr.voltariuss.diagonia.model.config.data.PluginConfig;
-import fr.voltariuss.diagonia.model.config.data.rank.RankConfig;
+import com.gamingmesh.jobs.container.ActionType;
+import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public interface ConfigController {
+public interface JobsController {
 
-  <T> @NotNull T loadConfig(@NotNull DiagoniaConfig diagoniaConfig, @NotNull Class<T> clazz);
+  String PLAYER_BLOCK_PLACED_METADATA_KEY = "diagonia.jobs.is_block_placed_by_player";
 
-  @NotNull
-  PluginConfig loadPluginConfig();
+  boolean isPlaceAndBreakAction(@NotNull ActionType actionType, @Nullable Block block);
 
-  @NotNull
-  RankConfig loadRankConfig();
-
-  void saveDefaultConfigs();
+  void setPlayerBlockPlacedMetadata(@NotNull Block block);
 }

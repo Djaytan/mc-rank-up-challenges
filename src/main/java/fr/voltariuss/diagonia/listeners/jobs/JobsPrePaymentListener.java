@@ -17,7 +17,7 @@
 package fr.voltariuss.diagonia.listeners.jobs;
 
 import com.gamingmesh.jobs.api.JobsPrePaymentEvent;
-import fr.voltariuss.diagonia.controller.JobsController;
+import fr.voltariuss.diagonia.controller.api.JobsController;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.bukkit.event.EventHandler;

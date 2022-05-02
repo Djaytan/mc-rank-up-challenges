@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.controller;
+package fr.voltariuss.diagonia.controller.implementation;
 
+import fr.voltariuss.diagonia.controller.api.dto.MessageType;
+import fr.voltariuss.diagonia.controller.api.MessageController;
 import java.util.ResourceBundle;
 import javax.inject.Inject;
 import javax.inject.Singleton;

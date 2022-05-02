@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.controller;
+package fr.voltariuss.diagonia.controller.implementation;
 
 import com.gamingmesh.jobs.container.ActionType;
 import com.google.common.base.Preconditions;
+import fr.voltariuss.diagonia.controller.api.JobsController;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.bukkit.block.Block;

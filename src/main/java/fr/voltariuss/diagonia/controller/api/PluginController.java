@@ -14,18 +14,11 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.controller;
+package fr.voltariuss.diagonia.controller.api;
 
-import com.gamingmesh.jobs.container.ActionType;
-import org.bukkit.block.Block;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+public interface PluginController {
 
-public interface JobsController {
+  void disablePlugin();
 
-  String PLAYER_BLOCK_PLACED_METADATA_KEY = "diagonia.jobs.is_block_placed_by_player";
-
-  boolean isPlaceAndBreakAction(@NotNull ActionType actionType, @Nullable Block block);
-
-  void setPlayerBlockPlacedMetadata(@NotNull Block block);
+  void enablePlugin();
 }

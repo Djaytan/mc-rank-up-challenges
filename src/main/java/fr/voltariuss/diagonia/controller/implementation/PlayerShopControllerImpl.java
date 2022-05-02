@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.controller.playershop;
+package fr.voltariuss.diagonia.controller.implementation;
 
 import fr.voltariuss.diagonia.RemakeBukkitLogger;
+import fr.voltariuss.diagonia.controller.api.PlayerShopController;
 import fr.voltariuss.diagonia.model.entity.PlayerShop;
 import fr.voltariuss.diagonia.model.service.api.PlayerShopService;
 import fr.voltariuss.diagonia.view.gui.PlayerShopConfigGui;

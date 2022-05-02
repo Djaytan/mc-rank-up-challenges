@@ -16,7 +16,7 @@
 
 package fr.voltariuss.diagonia.listeners.bukkit;
 
-import fr.voltariuss.diagonia.controller.EnchantmentController;
+import fr.voltariuss.diagonia.controller.api.EnchantmentController;
 import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Singleton;

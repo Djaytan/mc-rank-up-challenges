@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.controller.rankup;
+package fr.voltariuss.diagonia.controller.api;
 
 import fr.voltariuss.diagonia.model.GiveActionType;
 import fr.voltariuss.diagonia.model.config.data.rank.Rank;

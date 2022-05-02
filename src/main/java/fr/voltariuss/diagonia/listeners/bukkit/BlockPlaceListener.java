@@ -16,7 +16,7 @@
 
 package fr.voltariuss.diagonia.listeners.bukkit;
 
-import fr.voltariuss.diagonia.controller.JobsController;
+import fr.voltariuss.diagonia.controller.api.JobsController;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.bukkit.event.EventHandler;

@@ -18,7 +18,7 @@ package fr.voltariuss.diagonia.view.gui;
 
 import dev.triumphteam.gui.builder.item.ItemBuilder;
 import dev.triumphteam.gui.guis.Gui;
-import fr.voltariuss.diagonia.controller.playershop.PlayerShopController;
+import fr.voltariuss.diagonia.controller.api.PlayerShopController;
 import fr.voltariuss.diagonia.model.entity.PlayerShop;
 import fr.voltariuss.diagonia.view.item.playershop.ActivationPlayerShopItem;
 import fr.voltariuss.diagonia.view.item.playershop.DefineTpPlayerShopItem;

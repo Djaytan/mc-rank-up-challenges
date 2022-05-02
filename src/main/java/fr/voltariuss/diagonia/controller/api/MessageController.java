@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.controller;
+package fr.voltariuss.diagonia.controller.api;
 
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;

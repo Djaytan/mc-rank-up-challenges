@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.controller;
+package fr.voltariuss.diagonia.controller.api;
 
 import java.util.Map;
 import java.util.Set;

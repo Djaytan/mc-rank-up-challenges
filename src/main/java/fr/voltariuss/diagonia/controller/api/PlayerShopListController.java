@@ -14,14 +14,17 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.controller.playershop;
+package fr.voltariuss.diagonia.controller.api;
 
+import fr.voltariuss.diagonia.model.entity.PlayerShop;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public interface PlayerShopController {
+public interface PlayerShopListController {
 
-  void openPlayerShopListGui(@NotNull Player whoOpen);
+  void teleportToPlayerShop(@NotNull Player playerToTp, @NotNull PlayerShop playerShopDestination);
 
-  void openPlayerShopConfigGui(@NotNull Player whoOpen);
+  void teleportToPlayerShop(@NotNull Player playerToTp, @NotNull String targetedPlayerName);
+
+  void buyPlayerShop(@NotNull Player player);
 }

@@ -21,7 +21,7 @@ import dev.triumphteam.gui.builder.item.ItemBuilder;
 import dev.triumphteam.gui.components.GuiAction;
 import dev.triumphteam.gui.guis.GuiItem;
 import fr.voltariuss.diagonia.controller.BukkitUtils;
-import fr.voltariuss.diagonia.controller.playershop.PlayerShopListController;
+import fr.voltariuss.diagonia.controller.api.PlayerShopListController;
 import fr.voltariuss.diagonia.model.entity.PlayerShop;
 import java.util.ResourceBundle;
 import javax.inject.Inject;

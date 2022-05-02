@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.controller;
+package fr.voltariuss.diagonia.controller.implementation;
 
 import fr.voltariuss.diagonia.CommandRegister;
 import fr.voltariuss.diagonia.ListenerRegister;
 import fr.voltariuss.diagonia.PrerequisitesValidation;
+import fr.voltariuss.diagonia.controller.api.MessageController;
+import fr.voltariuss.diagonia.controller.api.PluginController;
 import fr.voltariuss.diagonia.model.config.data.PluginConfig;
 import fr.voltariuss.diagonia.model.config.data.rank.Rank;
 import fr.voltariuss.diagonia.model.config.data.rank.RankConfig;

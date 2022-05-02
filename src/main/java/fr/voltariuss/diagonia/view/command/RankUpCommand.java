@@ -19,7 +19,7 @@ package fr.voltariuss.diagonia.view.command;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.Default;
-import fr.voltariuss.diagonia.controller.rankup.RankUpController;
+import fr.voltariuss.diagonia.controller.api.RankUpController;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.bukkit.entity.Player;

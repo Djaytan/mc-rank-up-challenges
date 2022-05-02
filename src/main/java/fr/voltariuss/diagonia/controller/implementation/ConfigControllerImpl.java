@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.controller;
+package fr.voltariuss.diagonia.controller.implementation;
 
 import com.google.common.base.Preconditions;
 import fr.voltariuss.diagonia.DiagoniaRuntimeException;
+import fr.voltariuss.diagonia.controller.api.ConfigController;
 import fr.voltariuss.diagonia.model.config.DiagoniaConfig;
 import fr.voltariuss.diagonia.model.config.data.PluginConfig;
 import fr.voltariuss.diagonia.model.config.data.rank.RankConfig;

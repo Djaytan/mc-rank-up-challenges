@@ -14,11 +14,18 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.controller;
+package fr.voltariuss.diagonia.controller.api;
 
-public interface PluginController {
+import fr.voltariuss.diagonia.model.entity.PlayerShop;
+import org.bukkit.Location;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
-  void disablePlugin();
+public interface PlayerShopConfigController {
 
-  void enablePlugin();
+  void defineTeleportPoint(
+      @NotNull CommandSender sender, @NotNull PlayerShop playerShop, @NotNull Location newLocation);
+
+  void togglePlayerShop(@NotNull Player sender, @NotNull PlayerShop playerShop);
 }

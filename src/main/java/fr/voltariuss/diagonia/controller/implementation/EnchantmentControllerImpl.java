@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.controller;
+package fr.voltariuss.diagonia.controller.implementation;
 
 import com.google.common.base.Preconditions;
 import fr.voltariuss.diagonia.RemakeBukkitLogger;
+import fr.voltariuss.diagonia.controller.api.EnchantmentController;
+import fr.voltariuss.diagonia.controller.api.MessageController;
 import fr.voltariuss.diagonia.model.config.data.PluginConfig;
 import fr.voltariuss.diagonia.view.message.EnchantsMessage;
 import java.util.Collections;
