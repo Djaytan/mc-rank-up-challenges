@@ -26,7 +26,6 @@ import fr.voltariuss.diagonia.model.config.data.PluginConfig;
 import fr.voltariuss.diagonia.model.config.data.rank.RankConfig;
 import fr.voltariuss.diagonia.model.entity.PlayerShop;
 import fr.voltariuss.diagonia.model.entity.RankChallengeProgression;
-import java.util.Objects;
 import javax.inject.Named;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.track.Track;
@@ -89,13 +88,11 @@ public class GuiceDiagoniaModule extends AbstractModule {
   @Provides
   @Singleton
   public @NotNull SessionFactory provideSessionFactory() {
-    SessionFactory sessionFactory;
-    String connectionUrl = jdbcUrl.asStringUrl();
     try {
       // The SessionFactory must be built only once for application lifecycle
       Configuration configuration = new Configuration();
 
-      configuration.setProperty(AvailableSettings.URL, connectionUrl);
+      configuration.setProperty(AvailableSettings.URL, jdbcUrl.asStringUrl());
       configuration.setProperty(AvailableSettings.USER, pluginConfig.getDatabase().getUsername());
       configuration.setProperty(AvailableSettings.PASS, pluginConfig.getDatabase().getPassword());
       configuration.setProperty(
@@ -122,13 +119,14 @@ public class GuiceDiagoniaModule extends AbstractModule {
       configuration.addAnnotatedClass(PlayerShop.class);
       configuration.addAnnotatedClass(RankChallengeProgression.class);
 
-      sessionFactory = configuration.buildSessionFactory();
-      logger.info("Database connexion established.");
+      try (SessionFactory sessionFactory = configuration.buildSessionFactory()) {
+        logger.info("Database connexion established.");
+        return sessionFactory;
+      }
     } catch (HibernateException e) {
       throw new DiagoniaRuntimeException(
-          String.format("Database connection failed: %s", connectionUrl), e);
+          String.format("Database connection failed: %s", jdbcUrl.asStringUrl()), e);
     }
-    return Objects.requireNonNull(sessionFactory);
   }
 
   @Provides
