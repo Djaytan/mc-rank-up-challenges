@@ -24,6 +24,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
+// TODO: get rid of this if possible
 @Singleton
 public class CriticalErrorHandler {
 

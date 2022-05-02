@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.guice;
+package fr.voltariuss.diagonia.plugin.guice;
 
 import co.aikar.commands.PaperCommandManager;
 import com.google.inject.AbstractModule;

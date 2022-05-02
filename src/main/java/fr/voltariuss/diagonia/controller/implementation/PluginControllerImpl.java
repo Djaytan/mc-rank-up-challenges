@@ -18,7 +18,7 @@ package fr.voltariuss.diagonia.controller.implementation;
 
 import fr.voltariuss.diagonia.controller.CommandRegister;
 import fr.voltariuss.diagonia.controller.ListenerRegister;
-import fr.voltariuss.diagonia.PrerequisitesValidation;
+import fr.voltariuss.diagonia.plugin.PrerequisitesValidation;
 import fr.voltariuss.diagonia.controller.api.MessageController;
 import fr.voltariuss.diagonia.controller.api.PluginController;
 import fr.voltariuss.diagonia.model.config.data.PluginConfig;

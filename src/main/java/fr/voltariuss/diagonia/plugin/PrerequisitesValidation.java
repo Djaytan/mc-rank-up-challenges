@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia;
+package fr.voltariuss.diagonia.plugin;
 
+import fr.voltariuss.diagonia.CriticalErrorHandler;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.bukkit.Server;
@@ -35,6 +36,7 @@ public class PrerequisitesValidation {
   }
 
   public void validate() {
+    // TODO: add other validations (LuckPerms, Jobs, ...)
     if (!server.getPluginManager().isPluginEnabled("Vault")) {
       criticalErrorHandler.raiseCriticalError("Required Vault dependency not found.");
     }

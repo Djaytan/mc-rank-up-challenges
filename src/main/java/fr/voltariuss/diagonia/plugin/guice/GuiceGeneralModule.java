@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.guice;
+package fr.voltariuss.diagonia.plugin.guice;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;

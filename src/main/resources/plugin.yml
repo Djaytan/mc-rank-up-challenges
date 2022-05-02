@@ -2,7 +2,7 @@ name: ${name}
 version: ${version}
 author: Voltariuss
 api-version: ${minecraft.api.version}
-main: fr.voltariuss.diagonia.DiagoniaPlugin
+main: fr.voltariuss.diagonia.main.DiagoniaPlugin
 depend:
   - Jobs
   - LuckPerms

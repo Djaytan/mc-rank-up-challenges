@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia;
+package fr.voltariuss.diagonia.plugin;
 
 import fr.voltariuss.diagonia.controller.api.ConfigController;
 import fr.voltariuss.diagonia.controller.implementation.ConfigControllerImpl;
 import fr.voltariuss.diagonia.controller.api.PluginController;
-import fr.voltariuss.diagonia.guice.GuiceInjector;
+import fr.voltariuss.diagonia.plugin.guice.GuiceInjector;
 import fr.voltariuss.diagonia.model.config.data.PluginConfig;
 import fr.voltariuss.diagonia.model.config.data.rank.RankConfig;
 import fr.voltariuss.diagonia.model.config.serializers.DiagoniaConfigSerializersFactory;
