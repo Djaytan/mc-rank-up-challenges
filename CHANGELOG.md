@@ -1,5 +1,29 @@
 # Changelog
 
+## Version 1.1.2 (05/02/2022)
+
+### Features
+* MessageController now expose a sendRawMessage method
+* MessageController methods now accept Audience objects
+* Startup banner display during plugin enabling
+* Block blacklisted enchantments (by default Infinity and Mending) for usage and drops
+  * Usage in enchantment table
+  * Usage in anvil
+  * Drop from piglin barters, loot chests, entity drops or in fishing treasures
+  * Trade with villagers
+* Remove blacklisted enchantments at usage (at bow shoot or at mend item)
+* Fallback enchantment added when there isn't enchantments anymore is Durability 3
+* Remove descriptions in player shops
+
+### Fixes
+* Patch break-and-place actions with Jobs Reborn plugin by adding a tag in placed blocks by player
+  and cancelling events when tag is detected
+
+### Refactoring/Design
+* Homogenize config files with HOCON format from Configurate lib
+* Split interfaces and implementations and reorganize the whole project by defining APIs at service
+  and controller levels
+
 ## Version 1.1.1 (04/15/2022)
 
 ### Fixes
@@ -21,9 +45,9 @@
 ### Fixes
 * Critical fix about the possibility unlimited amount of a given item (renamed item was counted but not removed from inventory)
 
-### Refactoring/Design:
+### Refactoring/Design
 * Restructuration of the whole code in order to be in accord with MVC principles
 * Abstraction of LuckPerms, JobsReborn and Vault libraries to permit a switch of them easily
 
-### Other:
+### Other
 * Repair CI
