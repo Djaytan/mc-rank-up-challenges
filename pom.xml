@@ -60,11 +60,12 @@
         <mariadb.version>3.0.4</mariadb.version>
         <slf4j.version>1.7.36</slf4j.version>
         <log4j.version>2.17.2</log4j.version>
-        <jetbrains.annotations.version>22.0.0</jetbrains.annotations.version>
+        <jetbrains.annotations.version>23.0.0</jetbrains.annotations.version>
         <junit.version>5.8.2</junit.version>
-        <mockito.version>4.3.1</mockito.version>
-        <jacoco.version>0.8.7</jacoco.version>
-        <h2.version>2.1.210</h2.version>
+        <mockito.version>4.5.1</mockito.version>
+        <jacoco.version>0.8.8</jacoco.version>
+        <h2.version>2.1.212</h2.version>
+        <equalsverifier.version>3.10</equalsverifier.version>
     </properties>
 
     <repositories>
@@ -339,7 +340,7 @@
         <dependency>
             <groupId>nl.jqno.equalsverifier</groupId>
             <artifactId>equalsverifier</artifactId>
-            <version>3.9</version>
+            <version>${equalsverifier.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
