@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.controller;
+package fr.voltariuss.diagonia.plugin;
 
 import co.aikar.commands.PaperCommandManager;
 import fr.voltariuss.diagonia.model.entity.PlayerShop;

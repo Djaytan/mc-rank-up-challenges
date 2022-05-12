@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.controller;
+package fr.voltariuss.diagonia.plugin;
 
 import fr.voltariuss.diagonia.controller.listener.bukkit.BlockPlaceListener;
 import fr.voltariuss.diagonia.controller.listener.bukkit.EnchantItemListener;
