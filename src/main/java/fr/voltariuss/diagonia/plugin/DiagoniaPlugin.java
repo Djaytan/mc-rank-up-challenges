@@ -17,12 +17,13 @@
 package fr.voltariuss.diagonia.plugin;
 
 import fr.voltariuss.diagonia.controller.api.ConfigController;
-import fr.voltariuss.diagonia.controller.implementation.ConfigControllerImpl;
 import fr.voltariuss.diagonia.controller.api.PluginController;
-import fr.voltariuss.diagonia.plugin.guice.GuiceInjector;
+import fr.voltariuss.diagonia.controller.implementation.ConfigControllerImpl;
 import fr.voltariuss.diagonia.model.config.data.PluginConfig;
+import fr.voltariuss.diagonia.model.config.data.challenge.ChallengeConfig;
 import fr.voltariuss.diagonia.model.config.data.rank.RankConfig;
 import fr.voltariuss.diagonia.model.config.serializers.DiagoniaConfigSerializersFactory;
+import fr.voltariuss.diagonia.plugin.guice.GuiceInjector;
 import javax.inject.Inject;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -40,10 +41,11 @@ public class DiagoniaPlugin extends JavaPlugin {
       ConfigController configController = createConfigController();
 
       configController.saveDefaultConfigs();
+      ChallengeConfig challengeConfig = configController.loadChallengeConfig();
       PluginConfig pluginConfig = configController.loadPluginConfig();
       RankConfig rankConfig = configController.loadRankConfig();
 
-      GuiceInjector.inject(this, pluginConfig, rankConfig);
+      GuiceInjector.inject(this, challengeConfig, pluginConfig, rankConfig);
 
       // The core start of the plugin happens here
       pluginController.enablePlugin();

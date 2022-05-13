@@ -18,12 +18,17 @@ package fr.voltariuss.diagonia.controller.api;
 
 import fr.voltariuss.diagonia.model.config.DiagoniaConfig;
 import fr.voltariuss.diagonia.model.config.data.PluginConfig;
+import fr.voltariuss.diagonia.model.config.data.challenge.ChallengeConfig;
 import fr.voltariuss.diagonia.model.config.data.rank.RankConfig;
 import org.jetbrains.annotations.NotNull;
 
+// TODO: violation of open-closed principle
 public interface ConfigController {
 
   <T> @NotNull T loadConfig(@NotNull DiagoniaConfig diagoniaConfig, @NotNull Class<T> clazz);
+
+  @NotNull
+  ChallengeConfig loadChallengeConfig();
 
   @NotNull
   PluginConfig loadPluginConfig();

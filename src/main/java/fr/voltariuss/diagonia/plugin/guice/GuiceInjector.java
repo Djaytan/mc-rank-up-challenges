@@ -19,6 +19,7 @@ package fr.voltariuss.diagonia.plugin.guice;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import fr.voltariuss.diagonia.model.config.data.PluginConfig;
+import fr.voltariuss.diagonia.model.config.data.challenge.ChallengeConfig;
 import fr.voltariuss.diagonia.model.config.data.rank.RankConfig;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
@@ -32,6 +33,7 @@ public final class GuiceInjector {
 
   public static void inject(
       @NotNull JavaPlugin plugin,
+      @NotNull ChallengeConfig challengeConfig,
       @NotNull PluginConfig pluginConfig,
       @NotNull RankConfig rankConfig) {
     LuckPerms luckPerms = LuckPermsProvider.get();
@@ -40,7 +42,8 @@ public final class GuiceInjector {
             new GuiceBukkitModule(plugin),
             new GuiceBukkitLibsModule(luckPerms, plugin),
             new GuiceGeneralModule(),
-            new GuiceDiagoniaModule(plugin.getSLF4JLogger(), luckPerms, pluginConfig, rankConfig));
+            new GuiceDiagoniaModule(
+                challengeConfig, plugin.getSLF4JLogger(), luckPerms, pluginConfig, rankConfig));
     injector.injectMembers(plugin);
   }
 }
