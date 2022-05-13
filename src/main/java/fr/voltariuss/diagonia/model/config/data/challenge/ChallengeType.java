@@ -14,31 +14,24 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.model.config.data;
+package fr.voltariuss.diagonia.model.config.data.challenge;
 
-import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
-import org.bukkit.enchantments.Enchantment;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
 @ConfigSerializable
-@Getter
-@ToString
-@EqualsAndHashCode
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-// TODO: use fluent getters and setters (Lombok)
-public final class PluginConfig {
-
-  private boolean debug;
-  private DatabaseConfig database;
-  private PlayerShopConfig playerShop;
-  private RankUpConfig rankUp;
-  private List<Enchantment> blacklistedEnchantments;
+public enum ChallengeType {
+  ALCHEMIST,
+  BLACKSMITH,
+  COOK,
+  CRAFTER,
+  DIGGER,
+  DUNGEON,
+  ENCHANTER,
+  FARMER,
+  FISHER,
+  FOUNDER,
+  GLOBAL,
+  HUNTER,
+  MINER,
+  WOODCUTTER
 }

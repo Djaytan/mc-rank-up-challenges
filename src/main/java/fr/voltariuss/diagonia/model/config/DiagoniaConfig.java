@@ -22,6 +22,7 @@ import org.jetbrains.annotations.NotNull;
 // TODO: create ConfigService and reorganize config part
 @Getter
 public enum DiagoniaConfig {
+  CHALLENGES("challenges.conf"),
   PLUGIN("plugin.conf"),
   RANKS("ranks.conf");
 
