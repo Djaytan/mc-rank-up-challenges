@@ -20,6 +20,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.bukkit.Material;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
@@ -29,10 +30,11 @@ import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 @ToString
 @EqualsAndHashCode
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor
 public final class ChallengeItem {
 
-  private final Material material;
-  private final int amount;
-  private final ChallengeType challengeType;
+  private Material material;
+  private int amount;
+  private ChallengeType challengeType;
 }

@@ -16,11 +16,12 @@
 
 package fr.voltariuss.diagonia.model.config.data.challenge;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NonNull;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
@@ -29,12 +30,15 @@ import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 @ToString
 @EqualsAndHashCode
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor
 public final class ChallengeConfig {
 
-  @NonNull private final ChallengeTier challengeTier1;
-  @NonNull private final ChallengeTier challengeTier2;
-  @NonNull private final ChallengeTier challengeTier3;
-  @NonNull private final ChallengeTier challengeTier4;
-  @NonNull private final ChallengeTier challengeTier5;
+  private List<ChallengeTier> challengesTiers;
+
+  public int countNbChallenges() {
+    return challengesTiers.stream()
+        .mapToInt(challengeTier -> challengeTier.getChallengesItems().size())
+        .sum();
+  }
 }

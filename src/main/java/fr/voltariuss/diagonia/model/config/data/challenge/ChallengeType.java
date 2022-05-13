@@ -16,9 +16,7 @@
 
 package fr.voltariuss.diagonia.model.config.data.challenge;
 
-import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
-@ConfigSerializable
 public enum ChallengeType {
   ALCHEMIST,
   BLACKSMITH,

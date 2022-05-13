@@ -16,15 +16,16 @@
 
 package fr.voltariuss.diagonia.controller.implementation;
 
-import fr.voltariuss.diagonia.plugin.CommandRegister;
-import fr.voltariuss.diagonia.plugin.ListenerRegister;
+import fr.voltariuss.diagonia.JdbcUrl;
 import fr.voltariuss.diagonia.controller.api.MessageController;
 import fr.voltariuss.diagonia.controller.api.PluginController;
 import fr.voltariuss.diagonia.model.config.data.PluginConfig;
+import fr.voltariuss.diagonia.model.config.data.challenge.ChallengeConfig;
 import fr.voltariuss.diagonia.model.config.data.rank.Rank;
 import fr.voltariuss.diagonia.model.config.data.rank.RankConfig;
+import fr.voltariuss.diagonia.plugin.CommandRegister;
+import fr.voltariuss.diagonia.plugin.ListenerRegister;
 import fr.voltariuss.diagonia.plugin.PrerequisitesValidation;
-import fr.voltariuss.diagonia.JdbcUrl;
 import fr.voltariuss.diagonia.view.message.CommonMessage;
 import java.util.List;
 import java.util.Objects;
@@ -38,6 +39,7 @@ import org.slf4j.Logger;
 @Singleton
 public class PluginControllerImpl implements PluginController {
 
+  private final ChallengeConfig challengeConfig;
   private final CommandRegister commandRegister;
   private final CommonMessage commonMessage;
   private final JdbcUrl jdbcUrl;
@@ -52,6 +54,7 @@ public class PluginControllerImpl implements PluginController {
 
   @Inject
   public PluginControllerImpl(
+      @NotNull ChallengeConfig challengeConfig,
       @NotNull CommandRegister commandRegister,
       @NotNull CommonMessage commonMessage,
       @NotNull JdbcUrl jdbcUrl,
@@ -63,6 +66,7 @@ public class PluginControllerImpl implements PluginController {
       @NotNull PrerequisitesValidation prerequisitesValidation,
       @NotNull RankConfig rankConfig,
       @NotNull SessionFactory sessionFactory) {
+    this.challengeConfig = challengeConfig;
     this.commandRegister = commandRegister;
     this.commonMessage = commonMessage;
     this.jdbcUrl = jdbcUrl;
@@ -119,6 +123,13 @@ public class PluginControllerImpl implements PluginController {
                       .map(Objects::requireNonNull)
                       .mapToInt(List::size)
                       .sum())));
+
+      messageController.sendConsoleMessage(
+          commonMessage.startupBannerProgressionLine("Challenge config file loading"));
+      messageController.sendConsoleMessage(
+          commonMessage.startupBannerStateLine(
+              "Number of challenges loaded",
+              Integer.toString(challengeConfig.countNbChallenges())));
 
       messageController.sendConsoleMessage(
           commonMessage.startupBannerProgressionLine("Guice full injection"));
