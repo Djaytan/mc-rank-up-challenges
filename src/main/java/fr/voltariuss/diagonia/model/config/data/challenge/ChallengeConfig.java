@@ -38,7 +38,7 @@ public final class ChallengeConfig {
 
   public int countNbChallenges() {
     return challengesTiers.stream()
-        .mapToInt(challengeTier -> challengeTier.getChallengesItems().size())
+        .mapToInt(challengeTier -> challengeTier.getChallenges().size())
         .sum();
   }
 }

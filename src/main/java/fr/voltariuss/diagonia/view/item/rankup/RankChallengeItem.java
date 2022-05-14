@@ -21,10 +21,9 @@ import dev.triumphteam.gui.builder.item.ItemBuilder;
 import dev.triumphteam.gui.components.GuiAction;
 import dev.triumphteam.gui.guis.GuiItem;
 import fr.voltariuss.diagonia.controller.api.RankUpChallengesController;
-import fr.voltariuss.diagonia.model.service.api.dto.GiveActionType;
 import fr.voltariuss.diagonia.model.config.data.rank.Rank;
-import fr.voltariuss.diagonia.model.config.data.rank.RankUpChallenges;
 import fr.voltariuss.diagonia.model.entity.RankChallengeProgression;
+import fr.voltariuss.diagonia.model.service.api.dto.GiveActionType;
 import fr.voltariuss.diagonia.view.GiveActionTypeConverter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,7 +43,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
 @Singleton
@@ -68,28 +66,23 @@ public class RankChallengeItem {
   }
 
   public @NotNull GuiItem createItem(
-      @NotNull Rank rank,
-      @NotNull RankUpChallenges rankUpChallenges,
-      @Nullable RankChallengeProgression rankChallengeProgression) {
-    Preconditions.checkState(
-        rankChallengeProgression == null
-            || rankUpChallenges.getMaterial() == rankChallengeProgression.getChallengeMaterial(),
-        "The challenge and the associated progression must both concern a same item.");
+      @NotNull Rank rank, @NotNull RankChallengeProgression rankChallengeProgression) {
+    Preconditions.checkNotNull(rank);
+    Preconditions.checkNotNull(rankChallengeProgression);
 
-    boolean isChallengeCompleted = isChallengeCompleted(rankUpChallenges, rankChallengeProgression);
+    boolean isChallengeCompleted = isChallengeCompleted(rankChallengeProgression);
 
-    Component itemName = getName(rankUpChallenges);
-    List<Component> itemLore =
-        getLore(rankUpChallenges, rankChallengeProgression, isChallengeCompleted);
+    Component itemName = getName(rankChallengeProgression.getChallengeMaterial());
+    List<Component> itemLore = getLore(rankChallengeProgression, isChallengeCompleted);
 
-    return ItemBuilder.from(rankUpChallenges.getMaterial())
+    return ItemBuilder.from(rankChallengeProgression.getChallengeMaterial())
         .name(itemName)
         .lore(itemLore)
-        .asGuiItem(onClick(rank, rankUpChallenges));
+        .asGuiItem(onClick(rank, rankChallengeProgression.getChallengeMaterial()));
   }
 
   private @NotNull GuiAction<InventoryClickEvent> onClick(
-      @NotNull Rank rank, @NotNull RankUpChallenges rankUpChallenges) {
+      @NotNull Rank rank, @NotNull Material challengeMaterial) {
     return event -> {
       Player whoClicked = (Player) event.getWhoClicked();
       ItemStack clickedItem = event.getCurrentItem();
@@ -107,18 +100,13 @@ public class RankChallengeItem {
       int nbItemsInInventory = countItem(whoClicked.getInventory(), clickedItem.getType());
 
       rankUpChallengesController.giveItemChallenge(
-          whoClicked, rank, rankUpChallenges, giveActionType, nbItemsInInventory);
+          whoClicked, rank, challengeMaterial, giveActionType, nbItemsInInventory);
     };
   }
 
-  private boolean isChallengeCompleted(
-      @NotNull RankUpChallenges rankUpChallenges,
-      @Nullable RankChallengeProgression rankChallengeProgression) {
-    if (rankChallengeProgression == null) {
-      return false;
-    }
-
-    return rankChallengeProgression.getChallengeAmountGiven() >= rankUpChallenges.getAmount();
+  private boolean isChallengeCompleted(@NotNull RankChallengeProgression rankChallengeProgression) {
+    return rankChallengeProgression.getChallengeAmountGiven()
+        >= rankChallengeProgression.getChallengeAmountRequired();
   }
 
   private int countItem(Inventory inventory, Material material) {
@@ -128,35 +116,28 @@ public class RankChallengeItem {
         .sum();
   }
 
-  private @NotNull Component getName(@NotNull RankUpChallenges rankUpChallenges) {
+  private @NotNull Component getName(@NotNull Material challengeMaterial) {
     return miniMessage
         .deserialize(
             resourceBundle.getString("diagonia.rankup.challenges.item.name"),
             TagResolver.resolver(
                 Placeholder.component(
                     "diag_challenge_name",
-                    Component.translatable(rankUpChallenges.getMaterial().translationKey()))))
+                    Component.translatable(challengeMaterial.translationKey()))))
         .decoration(TextDecoration.ITALIC, false);
   }
 
   private @NotNull @UnmodifiableView List<Component> getLore(
-      @NotNull RankUpChallenges rankUpChallenges,
-      @Nullable RankChallengeProgression rankChallengeProgression,
-      boolean isChallengeCompleted) {
+      @NotNull RankChallengeProgression rankChallengeProgression, boolean isChallengeCompleted) {
     List<Component> lore = new ArrayList<>();
-    lore.addAll(getProgressLorePart(rankUpChallenges, rankChallengeProgression, isChallengeCompleted));
+    lore.addAll(getProgressLorePart(rankChallengeProgression, isChallengeCompleted));
     lore.add(Component.empty());
     lore.addAll(isChallengeCompleted ? getCompletedLorePart() : getActionLorePart());
     return Collections.unmodifiableList(lore);
   }
 
   private @NotNull @UnmodifiableView List<Component> getProgressLorePart(
-      @NotNull RankUpChallenges rankUpChallenges,
-      @Nullable RankChallengeProgression rankChallengeProgression,
-      boolean isChallengeCompleted) {
-    int amountGiven =
-        rankChallengeProgression != null ? rankChallengeProgression.getChallengeAmountGiven() : 0;
-
+      @NotNull RankChallengeProgression rankChallengeProgression, boolean isChallengeCompleted) {
     return List.of(
         miniMessage
             .deserialize(
@@ -164,9 +145,12 @@ public class RankChallengeItem {
                 TagResolver.resolver(
                     Placeholder.component(
                         "diag_amount_given",
-                        getCurrentProgression(isChallengeCompleted, String.valueOf(amountGiven))),
+                        getCurrentProgression(
+                            isChallengeCompleted,
+                            String.valueOf(rankChallengeProgression.getChallengeAmountGiven()))),
                     Placeholder.unparsed(
-                        "diag_amount_required", String.valueOf(rankUpChallenges.getAmount()))))
+                        "diag_amount_required",
+                        String.valueOf(rankChallengeProgression.getChallengeAmountRequired()))))
             .decoration(TextDecoration.ITALIC, false));
   }
 
