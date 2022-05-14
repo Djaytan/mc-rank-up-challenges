@@ -16,6 +16,7 @@
 
 package fr.voltariuss.diagonia.model.config.data.challenge;
 
+import com.google.common.base.Preconditions;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,6 +24,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
 @ConfigSerializable
@@ -40,5 +42,10 @@ public final class ChallengeConfig {
     return challengesTiers.stream()
         .mapToInt(challengeTier -> challengeTier.getChallenges().size())
         .sum();
+  }
+
+  public @NotNull ChallengeTier getChallengeTier(int tier) {
+    Preconditions.checkArgument(tier >= 1 && tier <= challengesTiers.size());
+    return challengesTiers.get(tier - 1);
   }
 }

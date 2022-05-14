@@ -23,6 +23,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import net.kyori.adventure.text.format.TextColor;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
 @ConfigSerializable
@@ -35,5 +36,6 @@ import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 public final class ChallengeTier {
 
   private float multiplier;
+  private TextColor color;
   private List<Challenge> challenges;
 }
