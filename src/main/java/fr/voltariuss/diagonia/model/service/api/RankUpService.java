@@ -18,7 +18,7 @@ package fr.voltariuss.diagonia.model.service.api;
 
 import fr.voltariuss.diagonia.model.service.api.dto.GiveActionType;
 import fr.voltariuss.diagonia.model.config.data.rank.Rank;
-import fr.voltariuss.diagonia.model.config.data.rank.RankChallenge;
+import fr.voltariuss.diagonia.model.config.data.rank.RankUpChallenges;
 import fr.voltariuss.diagonia.model.service.api.dto.RankUpProgression;
 import fr.voltariuss.diagonia.model.entity.RankChallengeProgression;
 import java.util.List;
@@ -62,12 +62,12 @@ public interface RankUpService {
   int giveItemChallenge(
       @NotNull UUID playerUuid,
       @NotNull Rank rank,
-      @NotNull RankChallenge rankChallenge,
+      @NotNull Material challengeMaterial,
       @NotNull GiveActionType giveActionType,
       int nbItemsInInventory);
 
   boolean isChallengeCompleted(
-      @NotNull UUID uuid, @NotNull String rankId, @NotNull RankChallenge rankChallenge);
+      @NotNull UUID uuid, @NotNull String rankId, @NotNull Material challengeMaterial);
 
   void persistChallengeProgression(@NotNull RankChallengeProgression rankChallengeProgression);
 }

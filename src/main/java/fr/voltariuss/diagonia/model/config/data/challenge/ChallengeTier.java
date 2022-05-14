@@ -35,5 +35,5 @@ import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 public final class ChallengeTier {
 
   private float multiplier;
-  private List<ChallengeItem> challengesItems;
+  private List<Challenge> challenges;
 }

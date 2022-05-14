@@ -38,7 +38,7 @@ public class PlayerShopDaoImpl extends AbstractJpaDao<PlayerShop, Long> implemen
   public @NotNull Optional<PlayerShop> findByUuid(@NotNull UUID uuid) {
     Preconditions.checkNotNull(uuid);
     return getCurrentSession()
-        .createQuery("FROM PlayerShop WHERE ownerUuid = :uuid", PlayerShop.class)
+        .createQuery("SELECT ps FROM PlayerShop ps WHERE ps.ownerUuid = :uuid", PlayerShop.class)
         .setParameter("uuid", uuid)
         .uniqueResultOptional();
   }

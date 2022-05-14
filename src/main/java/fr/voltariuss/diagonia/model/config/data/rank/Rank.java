@@ -42,7 +42,7 @@ public final class Rank {
   private TextColor color;
   private List<String> profits;
   private boolean rankUpActivated;
-  @Nullable private List<RankChallenge> rankUpChallenges;
+  @Nullable private List<RankUpChallenges> rankUpChallenges;
   // TODO: separate costs from prerequisites (currently not clear for players)
   @Nullable private RankUpPrerequisites rankUpPrerequisites;
   @Nullable private String rankUpTarget; // TODO: deprecated

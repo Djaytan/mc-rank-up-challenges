@@ -18,7 +18,7 @@ package fr.voltariuss.diagonia.controller.api;
 
 import fr.voltariuss.diagonia.model.service.api.dto.GiveActionType;
 import fr.voltariuss.diagonia.model.config.data.rank.Rank;
-import fr.voltariuss.diagonia.model.config.data.rank.RankChallenge;
+import fr.voltariuss.diagonia.model.config.data.rank.RankUpChallenges;
 import fr.voltariuss.diagonia.model.service.api.dto.RankUpProgression;
 import fr.voltariuss.diagonia.model.entity.RankChallengeProgression;
 import java.util.Optional;
@@ -32,7 +32,7 @@ public interface RankUpChallengesController {
   void giveItemChallenge(
       @NotNull Player targetPlayer,
       @NotNull Rank rank,
-      @NotNull RankChallenge rankChallenge,
+      @NotNull RankUpChallenges rankUpChallenges,
       @NotNull GiveActionType giveActionType,
       int nbItemsInInventory);
 

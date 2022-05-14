@@ -21,8 +21,8 @@ import fr.voltariuss.diagonia.RemakeBukkitLogger;
 import fr.voltariuss.diagonia.controller.api.MessageController;
 import fr.voltariuss.diagonia.controller.api.RankUpChallengesController;
 import fr.voltariuss.diagonia.controller.api.RankUpController;
+import fr.voltariuss.diagonia.model.config.data.challenge.Challenge;
 import fr.voltariuss.diagonia.model.config.data.rank.Rank;
-import fr.voltariuss.diagonia.model.config.data.rank.RankChallenge;
 import fr.voltariuss.diagonia.model.config.data.rank.RankConfig;
 import fr.voltariuss.diagonia.model.entity.RankChallengeProgression;
 import fr.voltariuss.diagonia.model.service.api.RankService;
@@ -81,11 +81,11 @@ public class RankUpChallengesControllerImpl implements RankUpChallengesControlle
   public void giveItemChallenge(
       @NotNull Player targetPlayer,
       @NotNull Rank rank,
-      @NotNull RankChallenge rankChallenge,
+      @NotNull Challenge challenge,
       @NotNull GiveActionType giveActionType,
       int nbItemsInInventory) {
     if (rankUpService.isChallengeCompleted(
-        targetPlayer.getUniqueId(), rank.getId(), rankChallenge)) {
+        targetPlayer.getUniqueId(), rank.getId(), rankUpChallenge)) {
       messageController.sendFailureMessage(targetPlayer, rankUpMessage.challengeAlreadyCompleted());
       return;
     }
@@ -98,31 +98,31 @@ public class RankUpChallengesControllerImpl implements RankUpChallengesControlle
     // TODO: again... Transaction!
     int nbItemsEffectivelyGiven =
         rankUpService.giveItemChallenge(
-            targetPlayer.getUniqueId(), rank, rankChallenge, giveActionType, nbItemsInInventory);
+            targetPlayer.getUniqueId(), rank, rankUpChallenge, giveActionType, nbItemsInInventory);
 
     int nbItemsNotRemoved =
         removeItemsInInventory(
-            targetPlayer.getInventory(), rankChallenge.getMaterial(), nbItemsEffectivelyGiven);
+            targetPlayer.getInventory(), rankUpChallenge.getMaterial(), nbItemsEffectivelyGiven);
 
     if (nbItemsNotRemoved > 0) {
       logger.error(
           "Something went wrong during the removing of items in the targeted player's inventory:"
               + " playerName={}, challengeMaterialName={}, nbItemsNotRemoved={}",
           targetPlayer.getName(),
-          rankChallenge.getMaterial(),
+          rankUpChallenge.getMaterial(),
           nbItemsNotRemoved);
       messageController.sendErrorMessage(targetPlayer, commonMessage.unexpectedError());
       return;
     }
 
     Component challengeNameCpnt =
-        Component.translatable(rankChallenge.getMaterial().translationKey());
+        Component.translatable(rankUpChallenge.getMaterial().translationKey());
 
     messageController.sendInfoMessage(
         targetPlayer, rankUpMessage.successAmountGiven(nbItemsEffectivelyGiven, challengeNameCpnt));
 
     if (rankUpService.isChallengeCompleted(
-        targetPlayer.getUniqueId(), rank.getId(), rankChallenge)) {
+        targetPlayer.getUniqueId(), rank.getId(), rankUpChallenge)) {
       messageController.sendSuccessMessage(
           targetPlayer, rankUpMessage.challengeCompleted(challengeNameCpnt));
     }

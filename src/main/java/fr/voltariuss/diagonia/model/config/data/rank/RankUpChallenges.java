@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.model.config.data.challenge;
+package fr.voltariuss.diagonia.model.config.data.rank;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.ToString;
-import org.bukkit.Material;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
 @ConfigSerializable
@@ -30,11 +29,9 @@ import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 @ToString
 @EqualsAndHashCode
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public final class ChallengeItem {
+public final class RankUpChallenges {
 
-  private Material material;
-  private int amount;
-  private ChallengeType challengeType;
+  private final int tier;
+  @NonNull private final RankUpChallengeDistribution distribution;
 }
