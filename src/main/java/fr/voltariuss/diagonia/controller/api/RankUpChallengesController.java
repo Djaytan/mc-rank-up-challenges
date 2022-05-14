@@ -16,11 +16,10 @@
 
 package fr.voltariuss.diagonia.controller.api;
 
-import fr.voltariuss.diagonia.model.service.api.dto.GiveActionType;
 import fr.voltariuss.diagonia.model.config.data.rank.Rank;
-import fr.voltariuss.diagonia.model.config.data.rank.RankUpChallenges;
-import fr.voltariuss.diagonia.model.service.api.dto.RankUpProgression;
 import fr.voltariuss.diagonia.model.entity.RankChallengeProgression;
+import fr.voltariuss.diagonia.model.service.api.dto.GiveActionType;
+import fr.voltariuss.diagonia.model.service.api.dto.RankUpProgression;
 import java.util.Optional;
 import java.util.UUID;
 import org.bukkit.Material;
@@ -40,6 +39,9 @@ public interface RankUpChallengesController {
   Optional<RankChallengeProgression> findChallenge(
       @NotNull UUID playerUuid, @NotNull String rankId, @NotNull Material material);
 
-  void onRankUpRequested(
-    @NotNull Player player, @NotNull RankUpProgression rankUpProgression);
+  void onRankUpRequested(@NotNull Player player, @NotNull RankUpProgression rankUpProgression);
+
+  void prepareFirstRankChallenges(@NotNull Player player);
+
+  void prepareRankChallenges(@NotNull Player player, @NotNull Rank rank);
 }

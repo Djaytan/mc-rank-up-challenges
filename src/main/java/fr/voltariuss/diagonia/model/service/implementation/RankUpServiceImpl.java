@@ -19,8 +19,14 @@ package fr.voltariuss.diagonia.model.service.implementation;
 import com.google.common.base.Preconditions;
 import fr.voltariuss.diagonia.DiagoniaRuntimeException;
 import fr.voltariuss.diagonia.RemakeBukkitLogger;
+import fr.voltariuss.diagonia.model.config.data.challenge.Challenge;
+import fr.voltariuss.diagonia.model.config.data.challenge.ChallengeConfig;
+import fr.voltariuss.diagonia.model.config.data.challenge.ChallengeTier;
+import fr.voltariuss.diagonia.model.config.data.challenge.ChallengeType;
 import fr.voltariuss.diagonia.model.config.data.rank.Rank;
 import fr.voltariuss.diagonia.model.config.data.rank.RankConfig;
+import fr.voltariuss.diagonia.model.config.data.rank.RankUpChallengeDistribution;
+import fr.voltariuss.diagonia.model.config.data.rank.RankUpChallenges;
 import fr.voltariuss.diagonia.model.config.data.rank.RankUpPrerequisites;
 import fr.voltariuss.diagonia.model.dao.JpaDaoException;
 import fr.voltariuss.diagonia.model.dao.RankChallengeProgressionDao;
@@ -29,8 +35,10 @@ import fr.voltariuss.diagonia.model.service.api.RankService;
 import fr.voltariuss.diagonia.model.service.api.RankUpService;
 import fr.voltariuss.diagonia.model.service.api.dto.GiveActionType;
 import fr.voltariuss.diagonia.model.service.api.dto.RankUpProgression;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import java.util.UUID;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -45,6 +53,7 @@ public class RankUpServiceImpl implements RankUpService {
 
   private static final String TRANSACTION_ROLLBACK_FAIL_MESSAGE = "Failed to rollback transaction";
 
+  private final ChallengeConfig challengeConfig;
   private final RemakeBukkitLogger logger;
   private final RankChallengeProgressionDao rankChallengeProgressionDao;
   private final RankConfig rankConfig;
@@ -52,10 +61,12 @@ public class RankUpServiceImpl implements RankUpService {
 
   @Inject
   public RankUpServiceImpl(
+      @NotNull ChallengeConfig challengeConfig,
       @NotNull RemakeBukkitLogger logger,
       @NotNull RankChallengeProgressionDao rankChallengeProgressionDao,
       @NotNull RankConfig rankConfig,
       @NotNull RankService rankService) {
+    this.challengeConfig = challengeConfig;
     this.logger = logger;
     this.rankChallengeProgressionDao = rankChallengeProgressionDao;
     this.rankConfig = rankConfig;
@@ -267,6 +278,92 @@ public class RankUpServiceImpl implements RankUpService {
       throw e;
     } finally {
       rankChallengeProgressionDao.destroySession();
+    }
+  }
+
+  @Override
+  public boolean hasRankChallenges(@NotNull UUID playerUuid, @NotNull Rank rank) {
+    return !findChallengesProgressions(playerUuid, rank.getId()).isEmpty();
+  }
+
+  @Override
+  public void rollRankChallenges(@NotNull UUID playerUuid, @NotNull Rank rank) {
+    List<RankUpChallenges> rankUpChallengesList = rank.getRankUpChallenges();
+    List<RankChallengeProgression> rankChallengeProgressions = new ArrayList<>();
+    Random random = new Random();
+
+    // Algorithm which determine challenges of the given rank
+    for (RankUpChallenges rankUpChallenges : rankUpChallengesList) {
+      int tier = rankUpChallenges.getTier();
+      float[] tierMultipliers = new float[tier];
+
+      List<ChallengeTier> eligibleChallengesTiers =
+          challengeConfig.getChallengesTiers().subList(0, tier);
+
+      // Determine gradually multipliers for each tier
+      for (int i = 0; i < tier; i++) {
+        ChallengeTier challengeTier = eligibleChallengesTiers.get(i);
+        tierMultipliers[i] = 1;
+
+        for (int j = i - 1; j >= 0; j--) {
+          tierMultipliers[j] = tierMultipliers[j] * challengeTier.getMultiplier();
+        }
+      }
+
+      // Create challenges
+      for (RankUpChallengeDistribution distribution : rankUpChallenges.getDistributions()) {
+        ChallengeType challengeType = distribution.getChallengeType();
+        int numberOfChallenges = distribution.getNumberOfChallenges();
+
+        for (int i = 0; i < numberOfChallenges; i++) {
+          int randomTierIndex = random.nextInt(0, tier);
+
+          ChallengeTier randomChallengeTier = eligibleChallengesTiers.get(randomTierIndex);
+          float multiplierToApply = tierMultipliers[randomTierIndex];
+
+          List<Challenge> eligibleChallenges =
+              randomChallengeTier.getChallenges().stream()
+                  .filter(challenge -> challenge.getChallengeType() == challengeType)
+                  .toList();
+
+          int randomChallengeIndex = random.nextInt(0, eligibleChallenges.size());
+          Challenge challenge = eligibleChallenges.get(randomChallengeIndex);
+          int calculatedAmountRequired =
+              (int) Math.round(Math.ceil(challenge.getAmount() * multiplierToApply));
+
+          RankChallengeProgression rankChallengeProgression =
+              RankChallengeProgression.builder()
+                  .playerUuid(playerUuid)
+                  .rankId(rank.getId())
+                  .difficultyTier(tier)
+                  .challengeType(challengeType)
+                  .challengeMaterial(challenge.getMaterial())
+                  .challengeAmountGiven(0)
+                  .challengeAmountRequired(calculatedAmountRequired)
+                  .build();
+
+          rankChallengeProgressions.add(rankChallengeProgression);
+        }
+      }
+    }
+
+    for (RankChallengeProgression rankChallengeProgression : rankChallengeProgressions) {
+      rankChallengeProgressionDao.openSession();
+      Transaction tx = rankChallengeProgressionDao.beginTransaction();
+      try {
+        rankChallengeProgressionDao.persist(rankChallengeProgression);
+        tx.commit();
+        logger.debug("RankChallengeProgression persisted: {}", rankChallengeProgression);
+      } catch (HibernateException e) {
+        try {
+          tx.rollback();
+        } catch (RuntimeException re) {
+          throw new JpaDaoException(TRANSACTION_ROLLBACK_FAIL_MESSAGE, re);
+        }
+        throw e;
+      } finally {
+        rankChallengeProgressionDao.destroySession();
+      }
     }
   }
 }
