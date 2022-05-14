@@ -17,7 +17,6 @@
 package fr.voltariuss.diagonia.controller.implementation;
 
 import com.google.common.base.Preconditions;
-import fr.voltariuss.diagonia.DiagoniaRuntimeException;
 import fr.voltariuss.diagonia.RemakeBukkitLogger;
 import fr.voltariuss.diagonia.controller.api.MessageController;
 import fr.voltariuss.diagonia.controller.api.RankUpChallengesController;
@@ -164,6 +163,8 @@ public class RankUpChallengesControllerImpl implements RankUpChallengesControlle
       return;
     }
 
+    prepareRankChallenges(player);
+
     Rank newRank =
         rankConfig.findRankById(promotionResult.getGroupTo().orElseThrow()).orElseThrow();
 
@@ -172,26 +173,17 @@ public class RankUpChallengesControllerImpl implements RankUpChallengesControlle
   }
 
   @Override
-  public void prepareFirstRankChallenges(@NotNull Player player) {
+  public void prepareRankChallenges(@NotNull Player player) {
     Rank rank = rankService.getUnlockableRank(player);
-    logger.info("Rank={}", rank);
 
+    // The player already have the latest rank
     if (rank == null) {
-      throw new DiagoniaRuntimeException(
-          "This isn't supposed to ever happen that a new player don't have unlockable rank");
+      return;
     }
 
-    prepareRankChallenges(player, rank);
-  }
-
-  @Override
-  public void prepareRankChallenges(@NotNull Player player, @NotNull Rank rank) {
     if (!rankUpService.hasRankChallenges(player.getUniqueId(), rank)) {
-      logger.info("rollRankChallenges");
       rankUpService.rollRankChallenges(player.getUniqueId(), rank);
-      logger.info("rollRankChallenges - Done");
-    } else {
-      logger.info("rank challenges already defined");
+      logger.info("Rolling challenges of rank {} for player {}", rank.getName(), player.getName());
     }
   }
 

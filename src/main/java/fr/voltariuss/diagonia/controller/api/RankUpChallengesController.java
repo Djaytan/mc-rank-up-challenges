@@ -41,7 +41,5 @@ public interface RankUpChallengesController {
 
   void onRankUpRequested(@NotNull Player player, @NotNull RankUpProgression rankUpProgression);
 
-  void prepareFirstRankChallenges(@NotNull Player player);
-
-  void prepareRankChallenges(@NotNull Player player, @NotNull Rank rank);
+  void prepareRankChallenges(@NotNull Player player);
 }

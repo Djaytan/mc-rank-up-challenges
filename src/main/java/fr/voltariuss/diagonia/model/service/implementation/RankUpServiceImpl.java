@@ -84,7 +84,7 @@ public class RankUpServiceImpl implements RankUpService {
 
     long numberUnaccomplishedChallenges =
         playerProgression.stream()
-            .filter(rcp -> rcp.getChallengeAmountGiven() >= rcp.getChallengeAmountRequired())
+            .filter(rcp -> rcp.getChallengeAmountGiven() < rcp.getChallengeAmountRequired())
             .count();
 
     return numberUnaccomplishedChallenges == 0;

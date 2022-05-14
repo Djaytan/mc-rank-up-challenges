@@ -38,6 +38,6 @@ public class PlayerJoinListener implements Listener {
   @EventHandler
   public void onPlayerJoin(@NotNull PlayerJoinEvent event) {
     Player player = event.getPlayer();
-    rankUpChallengesController.prepareFirstRankChallenges(player);
+    rankUpChallengesController.prepareRankChallenges(player);
   }
 }
