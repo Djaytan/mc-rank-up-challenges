@@ -32,7 +32,7 @@ public interface RankUpChallengesController {
   void giveItemChallenge(
       @NotNull Player targetPlayer,
       @NotNull Rank rank,
-      @NotNull RankUpChallenges rankUpChallenges,
+      @NotNull Material challengeMaterial,
       @NotNull GiveActionType giveActionType,
       int nbItemsInInventory);
 
