@@ -21,7 +21,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NonNull;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
@@ -30,9 +30,10 @@ import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 @ToString
 @EqualsAndHashCode
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor
 public final class RankUpChallengeDistribution {
 
-  @NonNull private final ChallengeType challengeType;
-  private final int numberOfChallenges;
+  private ChallengeType challengeType;
+  private int numberOfChallenges;
 }

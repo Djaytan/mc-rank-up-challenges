@@ -21,14 +21,11 @@ import fr.voltariuss.diagonia.controller.api.MessageController;
 import fr.voltariuss.diagonia.controller.api.PluginController;
 import fr.voltariuss.diagonia.model.config.data.PluginConfig;
 import fr.voltariuss.diagonia.model.config.data.challenge.ChallengeConfig;
-import fr.voltariuss.diagonia.model.config.data.rank.Rank;
 import fr.voltariuss.diagonia.model.config.data.rank.RankConfig;
 import fr.voltariuss.diagonia.plugin.CommandRegister;
 import fr.voltariuss.diagonia.plugin.ListenerRegister;
 import fr.voltariuss.diagonia.plugin.PrerequisitesValidation;
 import fr.voltariuss.diagonia.view.message.CommonMessage;
-import java.util.List;
-import java.util.Objects;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.bukkit.plugin.Plugin;
@@ -114,15 +111,6 @@ public class PluginControllerImpl implements PluginController {
       messageController.sendConsoleMessage(
           commonMessage.startupBannerStateLine(
               "Number of ranks loaded", Integer.toString(rankConfig.getRanks().size())));
-      messageController.sendConsoleMessage(
-          commonMessage.startupBannerStateLine(
-              "Number of challenges loaded",
-              Integer.toString(
-                  rankConfig.getRanks().stream()
-                      .map(Rank::getRankUpChallenges)
-                      .map(Objects::requireNonNull)
-                      .mapToInt(List::size)
-                      .sum())));
 
       messageController.sendConsoleMessage(
           commonMessage.startupBannerProgressionLine("Challenge config file loading"));

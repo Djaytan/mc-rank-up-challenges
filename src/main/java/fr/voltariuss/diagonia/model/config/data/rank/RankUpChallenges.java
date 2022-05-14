@@ -16,10 +16,12 @@
 
 package fr.voltariuss.diagonia.model.config.data.rank;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.ToString;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
@@ -29,9 +31,10 @@ import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 @ToString
 @EqualsAndHashCode
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor
 public final class RankUpChallenges {
 
-  private final int tier;
-  @NonNull private final RankUpChallengeDistribution distribution;
+  private int tier;
+  private List<RankUpChallengeDistribution> distributions;
 }
