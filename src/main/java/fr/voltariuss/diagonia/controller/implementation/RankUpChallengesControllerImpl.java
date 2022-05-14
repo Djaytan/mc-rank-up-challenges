@@ -182,8 +182,8 @@ public class RankUpChallengesControllerImpl implements RankUpChallengesControlle
     }
 
     if (!rankUpService.hasRankChallenges(player.getUniqueId(), rank)) {
-      rankUpService.rollRankChallenges(player.getUniqueId(), rank);
       logger.info("Rolling challenges of rank {} for player {}", rank.getName(), player.getName());
+      rankUpService.rollRankChallenges(player.getUniqueId(), rank);
     }
   }
 
