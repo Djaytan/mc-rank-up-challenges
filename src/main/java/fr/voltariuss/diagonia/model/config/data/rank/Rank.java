@@ -45,5 +45,4 @@ public final class Rank {
   private List<RankUpChallenges> rankUpChallenges;
   // TODO: separate costs from prerequisites (currently not clear for players)
   private RankUpPrerequisites rankUpPrerequisites;
-  @Nullable private String rankUpTarget; // TODO: deprecated
 }

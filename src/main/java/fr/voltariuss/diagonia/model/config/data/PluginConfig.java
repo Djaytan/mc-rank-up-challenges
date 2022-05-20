@@ -33,7 +33,6 @@ import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-// TODO: use fluent getters and setters (Lombok)
 public final class PluginConfig {
 
   private boolean debug;
