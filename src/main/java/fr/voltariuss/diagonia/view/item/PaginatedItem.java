@@ -56,6 +56,6 @@ public class PaginatedItem {
             miniMessage
                 .deserialize(resourceBundle.getString("diagonia.gui.page.next"))
                 .decoration(TextDecoration.ITALIC, false))
-        .asGuiItem(inventoryClickEvent -> guiHolder.previous());
+        .asGuiItem(inventoryClickEvent -> guiHolder.next());
   }
 }
