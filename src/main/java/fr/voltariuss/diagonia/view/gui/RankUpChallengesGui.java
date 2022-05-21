@@ -101,7 +101,7 @@ public class RankUpChallengesGui {
 
     gui.setItem(6, 5, rankUpItem.createItem(rank, rankUpProgression));
 
-    if (rank.getRankUpChallenges().size() > PAGE_SIZE) {
+    if (rankChallengeProgressions.size() > PAGE_SIZE) {
       gui.setItem(5, 3, paginatedItem.createPreviousPageItem(gui));
       gui.setItem(5, 7, paginatedItem.createNextPageItem(gui));
     }
