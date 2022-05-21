@@ -324,7 +324,20 @@ public class RankUpServiceImpl implements RankUpService {
           List<Challenge> eligibleChallenges =
               randomChallengeTier.getChallenges().stream()
                   .filter(challenge -> challenge.getChallengeType() == challengeType)
+                  .filter(
+                      challenge ->
+                          rankChallengeProgressions.stream()
+                              .map(RankChallengeProgression::getChallengeMaterial)
+                              .noneMatch(material -> material == challenge.getMaterial()))
                   .toList();
+
+          // TODO: sorry for that... Not motivated to do a cleaner thing
+          if (eligibleChallenges.isEmpty()) {
+            eligibleChallenges =
+                randomChallengeTier.getChallenges().stream()
+                    .filter(challenge -> challenge.getChallengeType() == challengeType)
+                    .toList();
+          }
 
           int randomChallengeIndex = random.nextInt(0, eligibleChallenges.size());
           Challenge challenge = eligibleChallenges.get(randomChallengeIndex);
