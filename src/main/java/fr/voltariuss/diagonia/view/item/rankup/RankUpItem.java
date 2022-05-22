@@ -76,7 +76,7 @@ public class RankUpItem {
 
     ItemBuilder itemBuilder = ItemBuilder.from(RANK_UP_MATERIAL).name(itemName).lore(itemLore);
 
-    return itemBuilder.asGuiItem(onClick(rankUpProgression));
+    return itemBuilder.asGuiItem(onClick(rank, rankUpProgression));
   }
 
   private @NotNull GuiAction<InventoryClickEvent> onClick(
