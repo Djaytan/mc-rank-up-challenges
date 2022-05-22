@@ -34,7 +34,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -42,7 +41,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.bukkit.Material;
 
 @Entity
-@Table(name = "diagonia_rankup_challenge_progression")
+@Table(name = "diagonia_rankup_challenge_progression_v2")
 @ToString
 @Getter
 @Builder
@@ -66,11 +65,11 @@ public class RankChallengeProgression {
   @NonNull
   private String rankId;
 
-  @Column(name = "rankup_difficulty_tier", nullable = false)
+  @Column(name = "rankup_difficulty_tier", nullable = true)
   @Setter
   private int difficultyTier;
 
-  @Column(name = "rankup_challenge_type", nullable = false)
+  @Column(name = "rankup_challenge_type", nullable = true)
   @Enumerated(EnumType.STRING)
   @Setter
   @NonNull
@@ -82,7 +81,7 @@ public class RankChallengeProgression {
   @NonNull
   private Material challengeMaterial;
 
-  @Column(name = "rankup_challenge_amount_required", nullable = false)
+  @Column(name = "rankup_challenge_amount_required", nullable = true)
   @Setter
   private int challengeAmountRequired;
 
