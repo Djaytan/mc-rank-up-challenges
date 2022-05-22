@@ -19,10 +19,9 @@ package fr.voltariuss.diagonia.model.service.implementation;
 import com.google.common.base.Preconditions;
 import fr.voltariuss.diagonia.DiagoniaRuntimeException;
 import fr.voltariuss.diagonia.RemakeBukkitLogger;
-import fr.voltariuss.diagonia.model.config.data.challenge.Challenge;
 import fr.voltariuss.diagonia.model.config.data.challenge.ChallengeConfig;
-import fr.voltariuss.diagonia.model.config.data.challenge.ChallengeTier;
 import fr.voltariuss.diagonia.model.config.data.challenge.ChallengeType;
+import fr.voltariuss.diagonia.model.config.data.challenge.ComputedChallenge;
 import fr.voltariuss.diagonia.model.config.data.rank.Rank;
 import fr.voltariuss.diagonia.model.config.data.rank.RankConfig;
 import fr.voltariuss.diagonia.model.config.data.rank.RankUpChallengeDistribution;
@@ -295,20 +294,7 @@ public class RankUpServiceImpl implements RankUpService {
     // Algorithm which determine challenges of the given rank
     for (RankUpChallenges rankUpChallenges : rankUpChallengesList) {
       int tier = rankUpChallenges.getTier();
-      float[] tierMultipliers = new float[tier];
-
-      List<ChallengeTier> eligibleChallengesTiers =
-          challengeConfig.getChallengesTiers().subList(0, tier);
-
-      // Determine gradually multipliers for each tier
-      for (int i = 0; i < tier; i++) {
-        ChallengeTier challengeTier = eligibleChallengesTiers.get(i);
-        tierMultipliers[i] = 1;
-
-        for (int j = i - 1; j >= 0; j--) {
-          tierMultipliers[j] = tierMultipliers[j] * challengeTier.getMultiplier();
-        }
-      }
+      List<ComputedChallenge> computedChallenges = challengeConfig.getComputedChallenges(tier);
 
       // Create challenges
       for (RankUpChallengeDistribution distribution : rankUpChallenges.getDistributions()) {
@@ -316,33 +302,23 @@ public class RankUpServiceImpl implements RankUpService {
         int numberOfChallenges = distribution.getNumberOfChallenges();
 
         for (int i = 0; i < numberOfChallenges; i++) {
-          int randomTierIndex = random.nextInt(0, tier);
-
-          ChallengeTier randomChallengeTier = eligibleChallengesTiers.get(randomTierIndex);
-          float multiplierToApply = tierMultipliers[randomTierIndex];
-
-          List<Challenge> eligibleChallenges =
-              randomChallengeTier.getChallenges().stream()
-                  .filter(challenge -> challenge.getChallengeType() == challengeType)
+          List<ComputedChallenge> eligibleComputedChallenges =
+              computedChallenges.stream()
                   .filter(
-                      challenge ->
+                      computedChallenge ->
+                          computedChallenge.getChallenge().getChallengeType() == challengeType)
+                  .filter(
+                      computedChallenge ->
                           rankChallengeProgressions.stream()
                               .map(RankChallengeProgression::getChallengeMaterial)
-                              .noneMatch(material -> material == challenge.getMaterial()))
+                              .noneMatch(
+                                  material ->
+                                      material == computedChallenge.getChallenge().getMaterial()))
                   .toList();
 
-          // TODO: sorry for that... Not motivated to do a cleaner thing
-          if (eligibleChallenges.isEmpty()) {
-            eligibleChallenges =
-                randomChallengeTier.getChallenges().stream()
-                    .filter(challenge -> challenge.getChallengeType() == challengeType)
-                    .toList();
-          }
-
-          int randomChallengeIndex = random.nextInt(0, eligibleChallenges.size());
-          Challenge challenge = eligibleChallenges.get(randomChallengeIndex);
-          int calculatedAmountRequired =
-              (int) Math.round(Math.ceil(challenge.getAmount() * multiplierToApply));
+          int randomComputedChallengeIndex = random.nextInt(0, eligibleComputedChallenges.size());
+          ComputedChallenge computedChallenge =
+              eligibleComputedChallenges.get(randomComputedChallengeIndex);
 
           RankChallengeProgression rankChallengeProgression =
               RankChallengeProgression.builder()
@@ -350,9 +326,9 @@ public class RankUpServiceImpl implements RankUpService {
                   .rankId(rank.getId())
                   .difficultyTier(tier)
                   .challengeType(challengeType)
-                  .challengeMaterial(challenge.getMaterial())
+                  .challengeMaterial(computedChallenge.getChallenge().getMaterial())
                   .challengeAmountGiven(0)
-                  .challengeAmountRequired(calculatedAmountRequired)
+                  .challengeAmountRequired(computedChallenge.getComputedAmount())
                   .build();
 
           rankChallengeProgressions.add(rankChallengeProgression);
