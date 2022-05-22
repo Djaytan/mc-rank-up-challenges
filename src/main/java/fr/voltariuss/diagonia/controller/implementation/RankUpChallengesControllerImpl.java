@@ -17,18 +17,20 @@
 package fr.voltariuss.diagonia.controller.implementation;
 
 import com.google.common.base.Preconditions;
+import fr.voltariuss.diagonia.DiagoniaRuntimeException;
 import fr.voltariuss.diagonia.RemakeBukkitLogger;
 import fr.voltariuss.diagonia.controller.api.MessageController;
 import fr.voltariuss.diagonia.controller.api.RankUpChallengesController;
 import fr.voltariuss.diagonia.controller.api.RankUpController;
 import fr.voltariuss.diagonia.model.config.data.rank.Rank;
-import fr.voltariuss.diagonia.model.config.data.rank.RankChallenge;
 import fr.voltariuss.diagonia.model.config.data.rank.RankConfig;
 import fr.voltariuss.diagonia.model.entity.RankChallengeProgression;
+import fr.voltariuss.diagonia.model.service.api.EconomyService;
 import fr.voltariuss.diagonia.model.service.api.RankService;
 import fr.voltariuss.diagonia.model.service.api.RankUpService;
 import fr.voltariuss.diagonia.model.service.api.dto.GiveActionType;
 import fr.voltariuss.diagonia.model.service.api.dto.RankUpProgression;
+import fr.voltariuss.diagonia.model.service.api.exception.EconomyException;
 import fr.voltariuss.diagonia.view.message.CommonMessage;
 import fr.voltariuss.diagonia.view.message.RankUpMessage;
 import java.util.Optional;
@@ -49,6 +51,7 @@ import org.jetbrains.annotations.NotNull;
 public class RankUpChallengesControllerImpl implements RankUpChallengesController {
 
   private final CommonMessage commonMessage;
+  private final EconomyService economyService;
   private final RemakeBukkitLogger logger;
   private final MessageController messageController;
   private final RankUpService rankUpService;
@@ -60,6 +63,7 @@ public class RankUpChallengesControllerImpl implements RankUpChallengesControlle
   @Inject
   public RankUpChallengesControllerImpl(
       @NotNull CommonMessage commonMessage,
+      @NotNull EconomyService economyService,
       @NotNull RemakeBukkitLogger logger,
       @NotNull MessageController messageController,
       @NotNull RankUpService rankUpService,
@@ -68,6 +72,7 @@ public class RankUpChallengesControllerImpl implements RankUpChallengesControlle
       @NotNull RankUpController rankUpController,
       @NotNull RankUpMessage rankUpMessage) {
     this.commonMessage = commonMessage;
+    this.economyService = economyService;
     this.logger = logger;
     this.messageController = messageController;
     this.rankUpService = rankUpService;
@@ -81,11 +86,11 @@ public class RankUpChallengesControllerImpl implements RankUpChallengesControlle
   public void giveItemChallenge(
       @NotNull Player targetPlayer,
       @NotNull Rank rank,
-      @NotNull RankChallenge rankChallenge,
+      @NotNull Material challengeMaterial,
       @NotNull GiveActionType giveActionType,
       int nbItemsInInventory) {
     if (rankUpService.isChallengeCompleted(
-        targetPlayer.getUniqueId(), rank.getId(), rankChallenge)) {
+        targetPlayer.getUniqueId(), rank.getId(), challengeMaterial)) {
       messageController.sendFailureMessage(targetPlayer, rankUpMessage.challengeAlreadyCompleted());
       return;
     }
@@ -98,33 +103,37 @@ public class RankUpChallengesControllerImpl implements RankUpChallengesControlle
     // TODO: again... Transaction!
     int nbItemsEffectivelyGiven =
         rankUpService.giveItemChallenge(
-            targetPlayer.getUniqueId(), rank, rankChallenge, giveActionType, nbItemsInInventory);
+            targetPlayer.getUniqueId(),
+            rank,
+            challengeMaterial,
+            giveActionType,
+            nbItemsInInventory);
 
     int nbItemsNotRemoved =
         removeItemsInInventory(
-            targetPlayer.getInventory(), rankChallenge.getMaterial(), nbItemsEffectivelyGiven);
+            targetPlayer.getInventory(), challengeMaterial, nbItemsEffectivelyGiven);
 
     if (nbItemsNotRemoved > 0) {
       logger.error(
           "Something went wrong during the removing of items in the targeted player's inventory:"
               + " playerName={}, challengeMaterialName={}, nbItemsNotRemoved={}",
           targetPlayer.getName(),
-          rankChallenge.getMaterial(),
+          challengeMaterial,
           nbItemsNotRemoved);
       messageController.sendErrorMessage(targetPlayer, commonMessage.unexpectedError());
       return;
     }
 
-    Component challengeNameCpnt =
-        Component.translatable(rankChallenge.getMaterial().translationKey());
+    Component challengeNameComponent = Component.translatable(challengeMaterial.translationKey());
 
     messageController.sendInfoMessage(
-        targetPlayer, rankUpMessage.successAmountGiven(nbItemsEffectivelyGiven, challengeNameCpnt));
+        targetPlayer,
+        rankUpMessage.successAmountGiven(nbItemsEffectivelyGiven, challengeNameComponent));
 
     if (rankUpService.isChallengeCompleted(
-        targetPlayer.getUniqueId(), rank.getId(), rankChallenge)) {
+        targetPlayer.getUniqueId(), rank.getId(), challengeMaterial)) {
       messageController.sendSuccessMessage(
-          targetPlayer, rankUpMessage.challengeCompleted(challengeNameCpnt));
+          targetPlayer, rankUpMessage.challengeCompleted(challengeNameComponent));
     }
 
     rankUpController.openRankUpChallengesGui(targetPlayer, rank);
@@ -138,7 +147,7 @@ public class RankUpChallengesControllerImpl implements RankUpChallengesControlle
 
   @Override
   public void onRankUpRequested(
-      @NotNull Player player, @NotNull RankUpProgression rankUpProgression) {
+      @NotNull Player player, @NotNull Rank rank, @NotNull RankUpProgression rankUpProgression) {
     if (rankUpProgression.isRankOwned()) {
       messageController.sendFailureMessage(player, rankUpMessage.rankAlreadyOwned());
       return;
@@ -160,11 +169,36 @@ public class RankUpChallengesControllerImpl implements RankUpChallengesControlle
       return;
     }
 
+    try {
+      economyService.withdraw(player, rank.getRankUpPrerequisites().getMoneyCost());
+    } catch (EconomyException e) {
+      throw new DiagoniaRuntimeException("Failed to withdraw money to player.", e);
+    }
+
+    player.giveExpLevels(-rank.getRankUpPrerequisites().getEnchantingLevelsCost());
+
+    prepareRankChallenges(player);
+
     Rank newRank =
         rankConfig.findRankById(promotionResult.getGroupTo().orElseThrow()).orElseThrow();
 
     player.closeInventory(Reason.PLUGIN);
     messageController.broadcastMessage(rankUpMessage.rankUpSuccess(player, newRank));
+  }
+
+  @Override
+  public void prepareRankChallenges(@NotNull Player player) {
+    Rank rank = rankService.getUnlockableRank(player);
+
+    // The player already have the latest rank
+    if (rank == null) {
+      return;
+    }
+
+    if (!rankUpService.hasRankChallenges(player.getUniqueId(), rank)) {
+      logger.info("Rolling challenges of rank {} for player {}", rank.getName(), player.getName());
+      rankUpService.rollRankChallenges(player.getUniqueId(), rank);
+    }
   }
 
   /**

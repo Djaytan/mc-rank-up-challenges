@@ -43,8 +43,8 @@ public class RankChallengeProgressionDao extends AbstractJpaDao<RankChallengePro
 
     return getCurrentSession()
         .createQuery(
-            "FROM RankChallengeProgression rcp WHERE rcp.playerUuid = :playerUuid AND rcp.rankId ="
-                + " :rankId AND rcp.challengeMaterial = :challengeMaterial",
+            "SELECT rcp FROM RankChallengeProgression rcp WHERE rcp.playerUuid = :playerUuid AND"
+                + " rcp.rankId = :rankId AND rcp.challengeMaterial = :challengeMaterial",
             RankChallengeProgression.class)
         .setParameter("playerUuid", playerUuid)
         .setParameter("rankId", rankId)
@@ -59,8 +59,8 @@ public class RankChallengeProgressionDao extends AbstractJpaDao<RankChallengePro
 
     return getCurrentSession()
         .createQuery(
-            "FROM RankChallengeProgression rcp WHERE rcp.playerUuid = :playerUuid AND rcp.rankId ="
-                + " :rankId",
+            "SELECT rcp FROM RankChallengeProgression rcp WHERE rcp.playerUuid = :playerUuid AND"
+                + " rcp.rankId = :rankId",
             RankChallengeProgression.class)
         .setParameter("playerUuid", playerUuid)
         .setParameter("rankId", rankId)

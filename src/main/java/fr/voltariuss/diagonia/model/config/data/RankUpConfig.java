@@ -14,8 +14,24 @@
  * limitations under the License.
  */
 
-INSERT INTO diagonia_ps_playershop (ps_id, ps_description, ps_is_active, ps_item_icon, ps_owner_uuid, ps_tp_location)
-VALUES (1, NULL, FALSE, NULL, '2defdbfc-1548-4f55-baae-0346482a087c', NULL),
-       (2,
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas tempus mollis ipsum, eget ultrices velit egestas id. Donec ultrices ut nisl in.',
-        TRUE, NULL, 'c06a4238-6268-44be-adee-ad53bcb0b198', NULL)
+package fr.voltariuss.diagonia.model.config.data;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+import org.spongepowered.configurate.objectmapping.ConfigSerializable;
+
+@ConfigSerializable
+@Getter
+@ToString
+@EqualsAndHashCode
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public final class RankUpConfig {
+
+  private String luckPermsTrackName;
+}

@@ -14,21 +14,27 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.model.config;
+package fr.voltariuss.diagonia.model.config.data.rank;
 
+import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import org.jetbrains.annotations.NotNull;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.ToString;
+import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
-// TODO: create ConfigService and reorganize config part
+@ConfigSerializable
 @Getter
-public enum DiagoniaConfig {
-  CHALLENGES("challenges.conf"),
-  PLUGIN("plugin.conf"),
-  RANKS("ranks.conf");
+@ToString
+@EqualsAndHashCode
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public final class RankUpChallenges {
 
-  private final String configFileName;
-
-  DiagoniaConfig(@NotNull String configFileName) {
-    this.configFileName = configFileName;
-  }
+  private int tier;
+  private List<RankUpChallengeDistribution> distributions;
 }

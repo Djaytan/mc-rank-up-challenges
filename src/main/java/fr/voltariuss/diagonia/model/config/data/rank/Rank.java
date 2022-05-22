@@ -24,7 +24,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import net.kyori.adventure.text.format.TextColor;
-import org.jetbrains.annotations.Nullable;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
 @ConfigSerializable
@@ -42,8 +41,7 @@ public final class Rank {
   private TextColor color;
   private List<String> profits;
   private boolean rankUpActivated;
-  @Nullable private List<RankChallenge> rankUpChallenges;
+  private List<RankUpChallenges> rankUpChallenges;
   // TODO: separate costs from prerequisites (currently not clear for players)
-  @Nullable private RankUpPrerequisites rankUpPrerequisites;
-  @Nullable private String rankUpTarget; // TODO: deprecated
+  private RankUpPrerequisites rankUpPrerequisites;
 }

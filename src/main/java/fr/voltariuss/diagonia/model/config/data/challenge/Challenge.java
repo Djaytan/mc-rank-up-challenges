@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.model.config.data.rank;
+package fr.voltariuss.diagonia.model.config.data.challenge;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,8 +32,9 @@ import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public final class RankChallenge {
+public final class Challenge {
 
   private Material material;
   private int amount;
+  private ChallengeType challengeType;
 }

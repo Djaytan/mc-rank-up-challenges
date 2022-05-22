@@ -20,15 +20,17 @@ import fr.voltariuss.diagonia.RemakeBukkitLogger;
 import fr.voltariuss.diagonia.controller.api.MessageController;
 import fr.voltariuss.diagonia.controller.api.RankUpController;
 import fr.voltariuss.diagonia.model.config.data.rank.Rank;
-import fr.voltariuss.diagonia.model.service.api.dto.RankUpProgression;
+import fr.voltariuss.diagonia.model.entity.RankChallengeProgression;
 import fr.voltariuss.diagonia.model.service.api.EconomyService;
 import fr.voltariuss.diagonia.model.service.api.JobsService;
 import fr.voltariuss.diagonia.model.service.api.RankService;
 import fr.voltariuss.diagonia.model.service.api.RankUpService;
+import fr.voltariuss.diagonia.model.service.api.dto.RankUpProgression;
 import fr.voltariuss.diagonia.view.gui.RankUpChallengesGui;
 import fr.voltariuss.diagonia.view.gui.RankUpListGui;
 import fr.voltariuss.diagonia.view.message.CommonMessage;
 import fr.voltariuss.diagonia.view.message.RankUpMessage;
+import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.inject.Singleton;
@@ -97,7 +99,10 @@ public class RankUpControllerImpl implements RankUpController {
     RankUpProgression rankUpProgression =
         rankUpService.getRankUpProgression(whoOpen, rank, totalJobsLevels, currentBalance);
 
-    rankUpChallengesGui.get().open(whoOpen, rank, rankUpProgression);
+    List<RankChallengeProgression> rankChallengesProgressions =
+        rankUpService.findChallengesProgressions(whoOpen.getUniqueId(), rank.getId());
+
+    rankUpChallengesGui.get().open(whoOpen, rank, rankUpProgression, rankChallengesProgressions);
   }
 
   @Override

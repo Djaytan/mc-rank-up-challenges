@@ -24,6 +24,7 @@ import fr.voltariuss.diagonia.controller.listener.bukkit.LootGenerateListener;
 import fr.voltariuss.diagonia.controller.listener.bukkit.PiglinBarterListener;
 import fr.voltariuss.diagonia.controller.listener.bukkit.PlayerFishListener;
 import fr.voltariuss.diagonia.controller.listener.bukkit.PlayerItemMendListener;
+import fr.voltariuss.diagonia.controller.listener.bukkit.PlayerJoinListener;
 import fr.voltariuss.diagonia.controller.listener.bukkit.PrepareAnvilListener;
 import fr.voltariuss.diagonia.controller.listener.bukkit.PrepareItemEnchantListener;
 import fr.voltariuss.diagonia.controller.listener.bukkit.VillagerAcquireTradeListener;
@@ -48,6 +49,7 @@ public class ListenerRegister {
   private final LootGenerateListener lootGenerateListener;
   private final PiglinBarterListener piglinBarterListener;
   private final PlayerFishListener playerFishListener;
+  private final PlayerJoinListener playerJoinListener;
   private final PlayerItemMendListener playerItemMendListener;
   private final PrepareAnvilListener prepareAnvilListener;
   private final PrepareItemEnchantListener prepareItemEnchantListener;
@@ -66,6 +68,7 @@ public class ListenerRegister {
       @NotNull LootGenerateListener lootGenerateListener,
       @NotNull PiglinBarterListener piglinBarterListener,
       @NotNull PlayerFishListener playerFishListener,
+      @NotNull PlayerJoinListener playerJoinListener,
       @NotNull PlayerItemMendListener playerItemMendListener,
       @NotNull PrepareAnvilListener prepareAnvilListener,
       @NotNull PrepareItemEnchantListener prepareItemEnchantListener,
@@ -82,6 +85,7 @@ public class ListenerRegister {
     this.lootGenerateListener = lootGenerateListener;
     this.piglinBarterListener = piglinBarterListener;
     this.playerFishListener = playerFishListener;
+    this.playerJoinListener = playerJoinListener;
     this.playerItemMendListener = playerItemMendListener;
     this.prepareAnvilListener = prepareAnvilListener;
     this.prepareItemEnchantListener = prepareItemEnchantListener;
@@ -98,6 +102,7 @@ public class ListenerRegister {
     pluginManager.registerEvents(lootGenerateListener, plugin);
     pluginManager.registerEvents(piglinBarterListener, plugin);
     pluginManager.registerEvents(playerFishListener, plugin);
+    pluginManager.registerEvents(playerJoinListener, plugin);
     pluginManager.registerEvents(playerItemMendListener, plugin);
     pluginManager.registerEvents(prepareAnvilListener, plugin);
     pluginManager.registerEvents(prepareItemEnchantListener, plugin);

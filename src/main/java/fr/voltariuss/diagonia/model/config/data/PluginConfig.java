@@ -16,7 +16,6 @@
 
 package fr.voltariuss.diagonia.model.config.data;
 
-import fr.voltariuss.diagonia.model.config.data.rank.RankUpConfig;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -34,7 +33,6 @@ import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-// TODO: use fluent getters and setters (Lombok)
 public final class PluginConfig {
 
   private boolean debug;

@@ -23,6 +23,7 @@ import fr.voltariuss.diagonia.DiagoniaException;
 import fr.voltariuss.diagonia.DiagoniaRuntimeException;
 import fr.voltariuss.diagonia.JdbcUrl;
 import fr.voltariuss.diagonia.model.config.data.PluginConfig;
+import fr.voltariuss.diagonia.model.config.data.challenge.ChallengeConfig;
 import fr.voltariuss.diagonia.model.config.data.rank.RankConfig;
 import fr.voltariuss.diagonia.model.entity.PlayerShop;
 import fr.voltariuss.diagonia.model.entity.RankChallengeProgression;
@@ -38,6 +39,7 @@ import org.slf4j.Logger;
 
 public class GuiceDiagoniaModule extends AbstractModule {
 
+  private final ChallengeConfig challengeConfig;
   private final JdbcUrl jdbcUrl;
   private final Logger logger;
   private final LuckPerms luckPerms;
@@ -45,10 +47,12 @@ public class GuiceDiagoniaModule extends AbstractModule {
   private final RankConfig rankConfig;
 
   public GuiceDiagoniaModule(
+      @NotNull ChallengeConfig challengeConfig,
       @NotNull Logger logger,
       @NotNull LuckPerms luckPerms,
       @NotNull PluginConfig pluginConfig,
       @NotNull RankConfig rankConfig) {
+    this.challengeConfig = challengeConfig;
     this.jdbcUrl =
         new JdbcUrl(
             pluginConfig.getDatabase().getHost(),
@@ -65,6 +69,12 @@ public class GuiceDiagoniaModule extends AbstractModule {
   public Boolean provideDebugMode() {
     logger.info("Debug mode: {}", pluginConfig.isDebug());
     return pluginConfig.isDebug();
+  }
+
+  @Provides
+  @Singleton
+  public @NotNull ChallengeConfig provideChallengeConfig() {
+    return challengeConfig;
   }
 
   @Provides

@@ -14,24 +14,20 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.model.config.data.rank;
+package fr.voltariuss.diagonia.model.config.data.challenge;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.ToString;
-import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
-@ConfigSerializable
 @Getter
 @ToString
 @EqualsAndHashCode
-@Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public final class RankUpConfig {
+public class ComputedChallenge {
 
-  private String luckPermsTrackName;
+  @NonNull private final Challenge challenge;
+  private final int computedAmount;
 }

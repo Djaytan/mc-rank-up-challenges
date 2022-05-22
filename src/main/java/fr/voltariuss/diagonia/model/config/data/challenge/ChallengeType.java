@@ -14,21 +14,22 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.model.config;
+package fr.voltariuss.diagonia.model.config.data.challenge;
 
-import lombok.Getter;
-import org.jetbrains.annotations.NotNull;
 
-// TODO: create ConfigService and reorganize config part
-@Getter
-public enum DiagoniaConfig {
-  CHALLENGES("challenges.conf"),
-  PLUGIN("plugin.conf"),
-  RANKS("ranks.conf");
-
-  private final String configFileName;
-
-  DiagoniaConfig(@NotNull String configFileName) {
-    this.configFileName = configFileName;
-  }
+public enum ChallengeType {
+  ALCHEMIST,
+  BLACKSMITH,
+  COOK,
+  CRAFTER,
+  DIGGER,
+  DUNGEON,
+  ENCHANTER,
+  FARMER,
+  FISHER,
+  FOUNDER,
+  GLOBAL,
+  HUNTER,
+  MINER,
+  WOODCUTTER
 }

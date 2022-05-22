@@ -17,20 +17,27 @@
 package fr.voltariuss.diagonia.model.service.implementation;
 
 import com.google.common.base.Preconditions;
+import fr.voltariuss.diagonia.DiagoniaRuntimeException;
 import fr.voltariuss.diagonia.RemakeBukkitLogger;
-import fr.voltariuss.diagonia.model.service.api.dto.GiveActionType;
+import fr.voltariuss.diagonia.model.config.data.challenge.ChallengeConfig;
+import fr.voltariuss.diagonia.model.config.data.challenge.ChallengeType;
+import fr.voltariuss.diagonia.model.config.data.challenge.ComputedChallenge;
 import fr.voltariuss.diagonia.model.config.data.rank.Rank;
-import fr.voltariuss.diagonia.model.config.data.rank.RankChallenge;
 import fr.voltariuss.diagonia.model.config.data.rank.RankConfig;
+import fr.voltariuss.diagonia.model.config.data.rank.RankUpChallengeDistribution;
+import fr.voltariuss.diagonia.model.config.data.rank.RankUpChallenges;
 import fr.voltariuss.diagonia.model.config.data.rank.RankUpPrerequisites;
 import fr.voltariuss.diagonia.model.dao.JpaDaoException;
 import fr.voltariuss.diagonia.model.dao.RankChallengeProgressionDao;
-import fr.voltariuss.diagonia.model.service.api.dto.RankUpProgression;
 import fr.voltariuss.diagonia.model.entity.RankChallengeProgression;
 import fr.voltariuss.diagonia.model.service.api.RankService;
 import fr.voltariuss.diagonia.model.service.api.RankUpService;
+import fr.voltariuss.diagonia.model.service.api.dto.GiveActionType;
+import fr.voltariuss.diagonia.model.service.api.dto.RankUpProgression;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import java.util.UUID;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -45,6 +52,7 @@ public class RankUpServiceImpl implements RankUpService {
 
   private static final String TRANSACTION_ROLLBACK_FAIL_MESSAGE = "Failed to rollback transaction";
 
+  private final ChallengeConfig challengeConfig;
   private final RemakeBukkitLogger logger;
   private final RankChallengeProgressionDao rankChallengeProgressionDao;
   private final RankConfig rankConfig;
@@ -52,10 +60,12 @@ public class RankUpServiceImpl implements RankUpService {
 
   @Inject
   public RankUpServiceImpl(
+      @NotNull ChallengeConfig challengeConfig,
       @NotNull RemakeBukkitLogger logger,
       @NotNull RankChallengeProgressionDao rankChallengeProgressionDao,
       @NotNull RankConfig rankConfig,
       @NotNull RankService rankService) {
+    this.challengeConfig = challengeConfig;
     this.logger = logger;
     this.rankChallengeProgressionDao = rankChallengeProgressionDao;
     this.rankConfig = rankConfig;
@@ -64,33 +74,19 @@ public class RankUpServiceImpl implements RankUpService {
 
   @Override
   public boolean areChallengesCompleted(@NotNull Player player, @NotNull Rank rank) {
+    Preconditions.checkNotNull(player);
+    Preconditions.checkNotNull(rank);
     Preconditions.checkNotNull(rank.getRankUpChallenges());
 
-    boolean areChallengesCompleted = true;
-
     List<RankChallengeProgression> playerProgression =
-        findChallengesProgressions(player.getUniqueId(), rank.getId()).stream()
-            .filter(
-                rcp ->
-                    rank.getRankUpChallenges().stream()
-                        .map(RankChallenge::getMaterial)
-                        .toList()
-                        .contains(rcp.getChallengeMaterial()))
-            .toList();
+        findChallengesProgressions(player.getUniqueId(), rank.getId());
 
-    for (RankChallenge rankChallenge : rank.getRankUpChallenges()) {
-      int amount =
-          playerProgression.stream()
-              .filter(pp -> rankChallenge.getMaterial().equals(pp.getChallengeMaterial()))
-              .mapToInt(RankChallengeProgression::getChallengeAmountGiven)
-              .sum();
-      if (amount < rankChallenge.getAmount()) {
-        areChallengesCompleted = false;
-        break;
-      }
-    }
+    long numberUnaccomplishedChallenges =
+        playerProgression.stream()
+            .filter(rcp -> rcp.getChallengeAmountGiven() < rcp.getChallengeAmountRequired())
+            .count();
 
-    return areChallengesCompleted;
+    return numberUnaccomplishedChallenges == 0;
   }
 
   @Override
@@ -193,7 +189,7 @@ public class RankUpServiceImpl implements RankUpService {
   public int giveItemChallenge(
       @NotNull UUID playerUuid,
       @NotNull Rank rank,
-      @NotNull RankChallenge rankChallenge,
+      @NotNull Material challengeMaterial,
       @NotNull GiveActionType giveActionType,
       int nbItemsInInventory) {
     int effectiveGivenAmount;
@@ -202,19 +198,19 @@ public class RankUpServiceImpl implements RankUpService {
     try {
       RankChallengeProgression rankChallengeProgression =
           rankChallengeProgressionDao
-              .find(playerUuid, rank.getId(), rankChallenge.getMaterial())
+              .find(playerUuid, rank.getId(), challengeMaterial)
               .orElse(null);
 
+      // This is never supposed to happen
       if (rankChallengeProgression == null) {
-        logger.debug("RankChallengeProgression not found.");
-        rankChallengeProgression =
-            new RankChallengeProgression(playerUuid, rank.getId(), rankChallenge.getMaterial());
-        rankChallengeProgressionDao.persist(rankChallengeProgression);
-        logger.debug("RankChallengeProgression persisted.");
+        throw new DiagoniaRuntimeException(
+            "RankChallengeProgression can't be null: wrong material specified? missing to create"
+                + " RankChallengeProgression instance before calling this method?");
       }
 
       int remainingItemsToGive =
-          rankChallenge.getAmount() - rankChallengeProgression.getChallengeAmountGiven();
+          rankChallengeProgression.getChallengeAmountRequired()
+              - rankChallengeProgression.getChallengeAmountGiven();
 
       int maxItemsToGiveAsked = giveActionType.getNbItemsToGive();
       int maxItemsToGive =
@@ -244,14 +240,13 @@ public class RankUpServiceImpl implements RankUpService {
 
   @Override
   public boolean isChallengeCompleted(
-      @NotNull UUID uuid, @NotNull String rankId, @NotNull RankChallenge rankChallenge) {
+      @NotNull UUID uuid, @NotNull String rankId, @NotNull Material challengeMaterial) {
     rankChallengeProgressionDao.openSession();
 
     Optional<RankChallengeProgression> rankChallengeProgression;
 
     try {
-      rankChallengeProgression =
-          rankChallengeProgressionDao.find(uuid, rankId, rankChallenge.getMaterial());
+      rankChallengeProgression = rankChallengeProgressionDao.find(uuid, rankId, challengeMaterial);
     } finally {
       rankChallengeProgressionDao.destroySession();
     }
@@ -260,7 +255,8 @@ public class RankUpServiceImpl implements RankUpService {
       return false;
     }
 
-    return rankChallengeProgression.get().getChallengeAmountGiven() >= rankChallenge.getAmount();
+    return rankChallengeProgression.get().getChallengeAmountGiven()
+        >= rankChallengeProgression.get().getChallengeAmountRequired();
   }
 
   @Override
@@ -281,6 +277,82 @@ public class RankUpServiceImpl implements RankUpService {
       throw e;
     } finally {
       rankChallengeProgressionDao.destroySession();
+    }
+  }
+
+  @Override
+  public boolean hasRankChallenges(@NotNull UUID playerUuid, @NotNull Rank rank) {
+    return !findChallengesProgressions(playerUuid, rank.getId()).isEmpty();
+  }
+
+  @Override
+  public void rollRankChallenges(@NotNull UUID playerUuid, @NotNull Rank rank) {
+    List<RankUpChallenges> rankUpChallengesList = rank.getRankUpChallenges();
+    List<RankChallengeProgression> rankChallengeProgressions = new ArrayList<>();
+    Random random = new Random();
+
+    // Algorithm which determine challenges of the given rank
+    for (RankUpChallenges rankUpChallenges : rankUpChallengesList) {
+      int tier = rankUpChallenges.getTier();
+      List<ComputedChallenge> computedChallenges = challengeConfig.getComputedChallenges(tier);
+
+      // Create challenges
+      for (RankUpChallengeDistribution distribution : rankUpChallenges.getDistributions()) {
+        ChallengeType challengeType = distribution.getChallengeType();
+        int numberOfChallenges = distribution.getNumberOfChallenges();
+
+        for (int i = 0; i < numberOfChallenges; i++) {
+          List<ComputedChallenge> eligibleComputedChallenges =
+              computedChallenges.stream()
+                  .filter(
+                      computedChallenge ->
+                          computedChallenge.getChallenge().getChallengeType() == challengeType)
+                  .filter(
+                      computedChallenge ->
+                          rankChallengeProgressions.stream()
+                              .map(RankChallengeProgression::getChallengeMaterial)
+                              .noneMatch(
+                                  material ->
+                                      material == computedChallenge.getChallenge().getMaterial()))
+                  .toList();
+
+          int randomComputedChallengeIndex = random.nextInt(0, eligibleComputedChallenges.size());
+          ComputedChallenge computedChallenge =
+              eligibleComputedChallenges.get(randomComputedChallengeIndex);
+
+          RankChallengeProgression rankChallengeProgression =
+              RankChallengeProgression.builder()
+                  .playerUuid(playerUuid)
+                  .rankId(rank.getId())
+                  .difficultyTier(tier)
+                  .challengeType(challengeType)
+                  .challengeMaterial(computedChallenge.getChallenge().getMaterial())
+                  .challengeAmountGiven(0)
+                  .challengeAmountRequired(computedChallenge.getComputedAmount())
+                  .build();
+
+          rankChallengeProgressions.add(rankChallengeProgression);
+        }
+      }
+    }
+
+    for (RankChallengeProgression rankChallengeProgression : rankChallengeProgressions) {
+      rankChallengeProgressionDao.openSession();
+      Transaction tx = rankChallengeProgressionDao.beginTransaction();
+      try {
+        rankChallengeProgressionDao.persist(rankChallengeProgression);
+        tx.commit();
+        logger.debug("RankChallengeProgression persisted: {}", rankChallengeProgression);
+      } catch (HibernateException e) {
+        try {
+          tx.rollback();
+        } catch (RuntimeException re) {
+          throw new JpaDaoException(TRANSACTION_ROLLBACK_FAIL_MESSAGE, re);
+        }
+        throw e;
+      } finally {
+        rankChallengeProgressionDao.destroySession();
+      }
     }
   }
 }

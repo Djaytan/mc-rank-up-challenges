@@ -21,15 +21,14 @@ import dev.triumphteam.gui.builder.item.ItemBuilder;
 import dev.triumphteam.gui.guis.Gui;
 import dev.triumphteam.gui.guis.GuiItem;
 import dev.triumphteam.gui.guis.PaginatedGui;
-import fr.voltariuss.diagonia.controller.api.RankUpChallengesController;
 import fr.voltariuss.diagonia.controller.api.RankUpController;
 import fr.voltariuss.diagonia.model.config.data.rank.Rank;
-import fr.voltariuss.diagonia.model.service.api.dto.RankUpProgression;
 import fr.voltariuss.diagonia.model.entity.RankChallengeProgression;
+import fr.voltariuss.diagonia.model.service.api.dto.RankUpProgression;
 import fr.voltariuss.diagonia.view.item.PaginatedItem;
 import fr.voltariuss.diagonia.view.item.rankup.RankChallengeItem;
 import fr.voltariuss.diagonia.view.item.rankup.RankUpItem;
-import java.util.Optional;
+import java.util.List;
 import java.util.ResourceBundle;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -52,7 +51,6 @@ public class RankUpChallengesGui {
   private final MiniMessage miniMessage;
   private final PaginatedItem paginatedItem;
   private final RankChallengeItem rankChallengeItem;
-  private final RankUpChallengesController rankUpChallengesController;
   private final RankUpController rankUpController;
   private final RankUpItem rankUpItem;
   private final ResourceBundle resourceBundle;
@@ -62,21 +60,22 @@ public class RankUpChallengesGui {
       @NotNull MiniMessage miniMessage,
       @NotNull PaginatedItem paginatedItem,
       @NotNull RankChallengeItem rankChallengeItem,
-      @NotNull RankUpChallengesController rankUpChallengesController,
       @NotNull RankUpController rankUpController,
       @NotNull RankUpItem rankUpItem,
       @NotNull ResourceBundle resourceBundle) {
     this.miniMessage = miniMessage;
     this.paginatedItem = paginatedItem;
     this.rankChallengeItem = rankChallengeItem;
-    this.rankUpChallengesController = rankUpChallengesController;
     this.rankUpController = rankUpController;
     this.rankUpItem = rankUpItem;
     this.resourceBundle = resourceBundle;
   }
 
   public void open(
-      @NotNull Player whoOpen, @NotNull Rank rank, @NotNull RankUpProgression rankUpProgression) {
+      @NotNull Player whoOpen,
+      @NotNull Rank rank,
+      @NotNull RankUpProgression rankUpProgression,
+      @NotNull List<RankChallengeProgression> rankChallengeProgressions) {
     Preconditions.checkNotNull(rank.getRankUpChallenges());
 
     PaginatedGui gui =
@@ -96,21 +95,13 @@ public class RankUpChallengesGui {
       gui.setItem(5, i, decorationItem);
     }
 
-    rank.getRankUpChallenges()
-        .forEach(
-            rankChallenge -> {
-              Optional<RankChallengeProgression> rankChallengeProgression =
-                  rankUpChallengesController.findChallenge(
-                      whoOpen.getUniqueId(), rank.getId(), rankChallenge.getMaterial());
-
-              gui.addItem(
-                  rankChallengeItem.createItem(
-                      rank, rankChallenge, rankChallengeProgression.orElse(null)));
-            });
+    for (RankChallengeProgression rankChallengeProgression : rankChallengeProgressions) {
+      gui.addItem(rankChallengeItem.createItem(rank, rankChallengeProgression));
+    }
 
     gui.setItem(6, 5, rankUpItem.createItem(rank, rankUpProgression));
 
-    if (rank.getRankUpChallenges().size() > PAGE_SIZE) {
+    if (rankChallengeProgressions.size() > PAGE_SIZE) {
       gui.setItem(5, 3, paginatedItem.createPreviousPageItem(gui));
       gui.setItem(5, 7, paginatedItem.createNextPageItem(gui));
     }

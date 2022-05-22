@@ -16,6 +16,7 @@
 
 package fr.voltariuss.diagonia.model.entity;
 
+import fr.voltariuss.diagonia.model.config.data.challenge.ChallengeType;
 import fr.voltariuss.diagonia.model.entity.converter.UUIDConverter;
 import java.util.UUID;
 import javax.persistence.Column;
@@ -28,10 +29,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -39,11 +41,12 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.bukkit.Material;
 
 @Entity
-@Table(name = "diagonia_rankup_challenge_progression")
+@Table(name = "diagonia_rankup_challenge_progression_v2")
 @ToString
 @Getter
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class RankChallengeProgression {
 
   @Id
@@ -62,11 +65,25 @@ public class RankChallengeProgression {
   @NonNull
   private String rankId;
 
+  @Column(name = "rankup_difficulty_tier", nullable = true)
+  @Setter
+  private int difficultyTier;
+
+  @Column(name = "rankup_challenge_type", nullable = true)
+  @Enumerated(EnumType.STRING)
+  @Setter
+  @NonNull
+  private ChallengeType challengeType;
+
   @Column(name = "rankup_challenge_material", nullable = false, updatable = false)
   @Enumerated(EnumType.STRING)
   @Setter
   @NonNull
   private Material challengeMaterial;
+
+  @Column(name = "rankup_challenge_amount_required", nullable = true)
+  @Setter
+  private int challengeAmountRequired;
 
   @Column(name = "rankup_challenge_amount_given", nullable = false)
   @Setter
@@ -83,7 +100,10 @@ public class RankChallengeProgression {
     return new EqualsBuilder()
         .append(playerUuid, that.playerUuid)
         .append(rankId, that.rankId)
+        .append(difficultyTier, that.difficultyTier)
+        .append(challengeType, that.challengeType)
         .append(challengeMaterial, that.challengeMaterial)
+        .append(challengeAmountRequired, that.challengeAmountRequired)
         .append(challengeAmountGiven, that.challengeAmountGiven)
         .isEquals();
   }
@@ -93,7 +113,10 @@ public class RankChallengeProgression {
     return new HashCodeBuilder(17, 37)
         .append(playerUuid)
         .append(rankId)
+        .append(difficultyTier)
+        .append(challengeType)
         .append(challengeMaterial)
+        .append(challengeAmountRequired)
         .append(challengeAmountGiven)
         .toHashCode();
   }

@@ -21,6 +21,7 @@ import fr.voltariuss.diagonia.DiagoniaRuntimeException;
 import fr.voltariuss.diagonia.controller.api.ConfigController;
 import fr.voltariuss.diagonia.model.config.DiagoniaConfig;
 import fr.voltariuss.diagonia.model.config.data.PluginConfig;
+import fr.voltariuss.diagonia.model.config.data.challenge.ChallengeConfig;
 import fr.voltariuss.diagonia.model.config.data.rank.RankConfig;
 import fr.voltariuss.diagonia.model.config.serializers.DiagoniaConfigSerializers;
 import java.io.IOException;
@@ -84,6 +85,11 @@ public class ConfigControllerImpl implements ConfigController {
           String.format("Failed to load plugin config '%s'.", configFileName), e);
       // TODO: centralized error management (e.g. ExceptionHandler class)
     }
+  }
+
+  @Override
+  public @NotNull ChallengeConfig loadChallengeConfig() {
+    return loadConfig(DiagoniaConfig.CHALLENGES, ChallengeConfig.class);
   }
 
   @Override

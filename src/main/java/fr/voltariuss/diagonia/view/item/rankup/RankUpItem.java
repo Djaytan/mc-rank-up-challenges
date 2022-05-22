@@ -76,14 +76,14 @@ public class RankUpItem {
 
     ItemBuilder itemBuilder = ItemBuilder.from(RANK_UP_MATERIAL).name(itemName).lore(itemLore);
 
-    return itemBuilder.asGuiItem(onClick(rankUpProgression));
+    return itemBuilder.asGuiItem(onClick(rank, rankUpProgression));
   }
 
   private @NotNull GuiAction<InventoryClickEvent> onClick(
-      @NotNull RankUpProgression rankUpProgression) {
+      @NotNull Rank rank, @NotNull RankUpProgression rankUpProgression) {
     return event -> {
       Player player = (Player) event.getWhoClicked();
-      rankUpChallengesController.onRankUpRequested(player, rankUpProgression);
+      rankUpChallengesController.onRankUpRequested(player, rank, rankUpProgression);
     };
   }
 

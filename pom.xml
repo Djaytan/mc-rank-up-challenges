@@ -135,6 +135,10 @@
                             <pattern>co.aikar.locales</pattern>
                             <shadedPattern>${package.root}.libs.acf.locales</shadedPattern>
                         </relocation>
+                        <relocation>
+                            <pattern>dev.triumphteam.gui</pattern>
+                            <shadedPattern>${package.root}.libs.gui</shadedPattern>
+                        </relocation>
                     </relocations>
                 </configuration>
                 <executions>

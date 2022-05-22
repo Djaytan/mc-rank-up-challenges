@@ -17,6 +17,7 @@
 package fr.voltariuss.diagonia.model.service;
 
 import fr.voltariuss.diagonia.AbstractBaseTest;
+import fr.voltariuss.diagonia.model.config.data.challenge.ChallengeType;
 import fr.voltariuss.diagonia.model.entity.RankChallengeProgression;
 import fr.voltariuss.diagonia.model.service.api.RankUpService;
 import java.util.UUID;
@@ -29,13 +30,20 @@ import org.junit.jupiter.api.Test;
 @DisplayName("Rank up service")
 class RankUpServiceTest extends AbstractBaseTest {
 
-  @Inject
-  RankUpService rankUpService;
+  @Inject RankUpService rankUpService;
 
   @Test
   void givenNewRankChallengeProgression_WhenPersisted_ThenShouldBeRegisteredIntoDatabase() {
     RankChallengeProgression rcp =
-        new RankChallengeProgression(UUID.randomUUID(), "test-rank", Material.OAK_LOG);
+        RankChallengeProgression.builder()
+            .playerUuid(UUID.randomUUID())
+            .rankId("test-rank")
+            .difficultyTier(1)
+            .challengeType(ChallengeType.COOK)
+            .challengeMaterial(Material.OAK_LOG)
+            .challengeAmountRequired(100)
+            .challengeAmountGiven(10)
+            .build();
 
     rankUpService.persistChallengeProgression(rcp);
 
