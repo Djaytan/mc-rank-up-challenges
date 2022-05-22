@@ -80,10 +80,10 @@ public class RankUpItem {
   }
 
   private @NotNull GuiAction<InventoryClickEvent> onClick(
-      @NotNull RankUpProgression rankUpProgression) {
+      @NotNull Rank rank, @NotNull RankUpProgression rankUpProgression) {
     return event -> {
       Player player = (Player) event.getWhoClicked();
-      rankUpChallengesController.onRankUpRequested(player, rankUpProgression);
+      rankUpChallengesController.onRankUpRequested(player, rank, rankUpProgression);
     };
   }
 

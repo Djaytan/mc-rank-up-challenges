@@ -39,7 +39,8 @@ public interface RankUpChallengesController {
   Optional<RankChallengeProgression> findChallenge(
       @NotNull UUID playerUuid, @NotNull String rankId, @NotNull Material material);
 
-  void onRankUpRequested(@NotNull Player player, @NotNull RankUpProgression rankUpProgression);
+  void onRankUpRequested(
+      @NotNull Player player, @NotNull Rank rank, @NotNull RankUpProgression rankUpProgression);
 
   void prepareRankChallenges(@NotNull Player player);
 }
