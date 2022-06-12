@@ -19,10 +19,6 @@ package fr.voltariuss.diagonia;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import fr.voltariuss.diagonia.model.config.data.rank.RankConfig;
-import fr.voltariuss.diagonia.model.dao.PlayerShopDao;
-import fr.voltariuss.diagonia.model.dao.PlayerShopDaoImpl;
-import fr.voltariuss.diagonia.model.service.api.PlayerShopService;
-import fr.voltariuss.diagonia.model.service.implementation.PlayerShopServiceImpl;
 import fr.voltariuss.diagonia.model.service.api.RankService;
 import fr.voltariuss.diagonia.model.service.api.RankUpService;
 import fr.voltariuss.diagonia.model.service.implementation.RankUpServiceImpl;
@@ -38,8 +34,6 @@ public class GuiceGeneralTestModule extends AbstractModule {
 
   @Override
   public void configure() {
-    bind(PlayerShopDao.class).to(PlayerShopDaoImpl.class);
-    bind(PlayerShopService.class).to(PlayerShopServiceImpl.class);
     bind(RankService.class).to(RankServiceMock.class);
     bind(RankUpService.class).to(RankUpServiceImpl.class);
   }

@@ -25,7 +25,6 @@ import fr.voltariuss.diagonia.JdbcUrl;
 import fr.voltariuss.diagonia.model.config.data.PluginConfig;
 import fr.voltariuss.diagonia.model.config.data.challenge.ChallengeConfig;
 import fr.voltariuss.diagonia.model.config.data.rank.RankConfig;
-import fr.voltariuss.diagonia.model.entity.PlayerShop;
 import fr.voltariuss.diagonia.model.entity.RankChallengeProgression;
 import javax.inject.Named;
 import net.luckperms.api.LuckPerms;
@@ -126,7 +125,6 @@ public class GuiceDiagoniaModule extends AbstractModule {
       configuration.setProperty(
           "hibernate.hikari.transactionIsolation", "TRANSACTION_SERIALIZABLE");
 
-      configuration.addAnnotatedClass(PlayerShop.class);
       configuration.addAnnotatedClass(RankChallengeProgression.class);
 
       logger.info("Database connexion established.");

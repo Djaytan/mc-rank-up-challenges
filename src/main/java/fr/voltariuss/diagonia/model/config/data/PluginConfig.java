@@ -37,7 +37,6 @@ public final class PluginConfig {
 
   private boolean debug;
   private DatabaseConfig database;
-  private PlayerShopConfig playerShop;
   private RankUpConfig rankUp;
   private List<Enchantment> blacklistedEnchantments;
 }
