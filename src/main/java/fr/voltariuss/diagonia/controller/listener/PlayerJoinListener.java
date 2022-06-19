@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package fr.voltariuss.diagonia.controller.listener.bukkit;
+package fr.voltariuss.diagonia.controller.listener;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;

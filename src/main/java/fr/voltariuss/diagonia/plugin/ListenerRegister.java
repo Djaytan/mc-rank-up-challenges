@@ -16,10 +16,7 @@
 
 package fr.voltariuss.diagonia.plugin;
 
-import fr.voltariuss.diagonia.controller.listener.bukkit.BlockPlaceListener;
-import fr.voltariuss.diagonia.controller.listener.bukkit.PlayerJoinListener;
-import fr.voltariuss.diagonia.controller.listener.jobs.JobsExpGainListener;
-import fr.voltariuss.diagonia.controller.listener.jobs.JobsPrePaymentListener;
+import fr.voltariuss.diagonia.controller.listener.PlayerJoinListener;
 import javax.inject.Inject;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
@@ -30,32 +27,20 @@ public class ListenerRegister {
   private final Plugin plugin;
   private final PluginManager pluginManager;
 
-  private final BlockPlaceListener blockPlaceListener;
-  private final JobsExpGainListener jobsExpGainListener;
-  private final JobsPrePaymentListener jobsPrePaymentListener;
   private final PlayerJoinListener playerJoinListener;
 
   @Inject
   public ListenerRegister(
       @NotNull Plugin plugin,
       @NotNull PluginManager pluginManager,
-      @NotNull BlockPlaceListener blockPlaceListener,
-      @NotNull JobsExpGainListener jobsExpGainListener,
-      @NotNull JobsPrePaymentListener jobsPrePaymentListener,
       @NotNull PlayerJoinListener playerJoinListener) {
     this.plugin = plugin;
     this.pluginManager = pluginManager;
 
-    this.blockPlaceListener = blockPlaceListener;
-    this.jobsExpGainListener = jobsExpGainListener;
-    this.jobsPrePaymentListener = jobsPrePaymentListener;
     this.playerJoinListener = playerJoinListener;
   }
 
   public void registerListeners() {
-    pluginManager.registerEvents(blockPlaceListener, plugin);
-    pluginManager.registerEvents(jobsExpGainListener, plugin);
-    pluginManager.registerEvents(jobsPrePaymentListener, plugin);
     pluginManager.registerEvents(playerJoinListener, plugin);
   }
 }
