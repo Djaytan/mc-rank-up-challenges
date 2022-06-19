@@ -20,7 +20,6 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import fr.voltariuss.diagonia.controller.api.ConfigController;
-import fr.voltariuss.diagonia.controller.api.EnchantmentController;
 import fr.voltariuss.diagonia.controller.api.JobsController;
 import fr.voltariuss.diagonia.controller.api.MessageController;
 import fr.voltariuss.diagonia.controller.api.PlayerController;
@@ -28,7 +27,6 @@ import fr.voltariuss.diagonia.controller.api.PluginController;
 import fr.voltariuss.diagonia.controller.api.RankUpChallengesController;
 import fr.voltariuss.diagonia.controller.api.RankUpController;
 import fr.voltariuss.diagonia.controller.implementation.ConfigControllerImpl;
-import fr.voltariuss.diagonia.controller.implementation.EnchantmentControllerImpl;
 import fr.voltariuss.diagonia.controller.implementation.JobsControllerImpl;
 import fr.voltariuss.diagonia.controller.implementation.MessageControllerImpl;
 import fr.voltariuss.diagonia.controller.implementation.PlayerControllerImpl;
@@ -54,7 +52,6 @@ public class GuiceGeneralModule extends AbstractModule {
   public void configure() {
     bind(ConfigController.class).to(ConfigControllerImpl.class);
     bind(EconomyService.class).to(EconomyVaultServiceImpl.class);
-    bind(EnchantmentController.class).to(EnchantmentControllerImpl.class);
     bind(JobsController.class).to(JobsControllerImpl.class);
     bind(JobsService.class).to(JobsRebornServiceImpl.class);
     bind(MessageController.class).to(MessageControllerImpl.class);
