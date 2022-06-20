@@ -43,7 +43,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.bukkit.Material;
 
 @Entity
-@Table(name = "diagonia_rankup_challenge_progression_v2")
+@Table(name = "rank_up_challenges_rankup_challenge_progression_v2")
 @ToString
 @Getter
 @Builder

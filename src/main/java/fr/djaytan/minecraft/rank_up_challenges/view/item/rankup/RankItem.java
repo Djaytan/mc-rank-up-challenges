@@ -108,23 +108,23 @@ public class RankItem {
 
   private @NotNull Component getName(
       @NotNull Rank rank, boolean isUnlockableRank, boolean isRankOwned) {
-    String rankStatusKey = "diagonia.rankup.ranks.item.name.locked";
+    String rankStatusKey = "rank_up_challenges.rankup.ranks.item.name.locked";
 
     if (isUnlockableRank) {
-      rankStatusKey = "diagonia.rankup.ranks.item.name.unlocked";
+      rankStatusKey = "rank_up_challenges.rankup.ranks.item.name.unlocked";
     }
     if (isRankOwned) {
-      rankStatusKey = "diagonia.rankup.ranks.item.name.owned";
+      rankStatusKey = "rank_up_challenges.rankup.ranks.item.name.owned";
     }
 
     // Override previous assignment by having the final word
     if (!rank.isRankUpActivated()) {
-      rankStatusKey = "diagonia.rankup.ranks.item.name.deactivated";
+      rankStatusKey = "rank_up_challenges.rankup.ranks.item.name.deactivated";
     }
 
     return miniMessage
         .deserialize(
-            resourceBundle.getString("diagonia.rankup.ranks.item.name"),
+            resourceBundle.getString("rank_up_challenges.rankup.ranks.item.name"),
             TagResolver.resolver(
                 Placeholder.component(
                     "diag_rank_name", Component.text(rank.getName()).color(rank.getColor())),
@@ -158,7 +158,7 @@ public class RankItem {
     List<Component> profitsLore = new ArrayList<>();
     profitsLore.add(
         miniMessage
-            .deserialize(resourceBundle.getString("diagonia.rankup.ranks.item.lore.profits"))
+            .deserialize(resourceBundle.getString("rank_up_challenges.rankup.ranks.item.lore.profits"))
             .decoration(TextDecoration.ITALIC, false));
 
     rank.getProfits()
@@ -167,7 +167,7 @@ public class RankItem {
                 profitsLore.add(
                     miniMessage
                         .deserialize(
-                            resourceBundle.getString("diagonia.rankup.ranks.item.lore.profit"),
+                            resourceBundle.getString("rank_up_challenges.rankup.ranks.item.lore.profit"),
                             TagResolver.resolver(
                                 Placeholder.unparsed("diag_profit", profitDescLine)))
                         .decoration(TextDecoration.ITALIC, false)));
@@ -177,15 +177,15 @@ public class RankItem {
 
   private @NotNull @Unmodifiable List<Component> getEndLorePart(
       boolean isRankActivated, boolean isUnlockableRank, boolean isRankOwned) {
-    String endLoreKey = "diagonia.rankup.ranks.item.lore.locked";
+    String endLoreKey = "rank_up_challenges.rankup.ranks.item.lore.locked";
 
     if (isUnlockableRank || isRankOwned) {
-      endLoreKey = "diagonia.rankup.ranks.item.lore.unlocked";
+      endLoreKey = "rank_up_challenges.rankup.ranks.item.lore.unlocked";
     }
 
     // Override previous assignment by having the final word
     if (!isRankActivated) {
-      endLoreKey = "diagonia.rankup.ranks.item.lore.deactivated";
+      endLoreKey = "rank_up_challenges.rankup.ranks.item.lore.deactivated";
     }
 
     return List.of(

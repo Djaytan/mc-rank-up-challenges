@@ -86,7 +86,7 @@ public class RankUpChallengesGui {
             .rows(6)
             .title(
                 miniMessage.deserialize(
-                    resourceBundle.getString("diagonia.rankup.challenges.gui.title"),
+                    resourceBundle.getString("rank_up_challenges.rankup.challenges.gui.title"),
                     TagResolver.resolver(Placeholder.unparsed("diag_rank", rank.getName()))))
             .create();
 
@@ -114,7 +114,7 @@ public class RankUpChallengesGui {
         ItemBuilder.from(PREVIOUS_GUI_MATERIAL)
             .name(
                 miniMessage
-                    .deserialize(resourceBundle.getString("diagonia.gui.go_to_previous_menu"))
+                    .deserialize(resourceBundle.getString("rank_up_challenges.gui.go_to_previous_menu"))
                     .decoration(TextDecoration.ITALIC, false))
             .asGuiItem(
                 event -> rankUpController.openRankUpListGui((Player) event.getWhoClicked())));

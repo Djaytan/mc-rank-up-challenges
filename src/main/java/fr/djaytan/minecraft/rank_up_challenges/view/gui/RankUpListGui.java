@@ -65,7 +65,7 @@ public class RankUpListGui {
         Gui.gui()
             .title(
                 miniMessage.deserialize(
-                    resourceBundle.getString("diagonia.rankup.ranks.gui.title")))
+                    resourceBundle.getString("rank_up_challenges.rankup.ranks.gui.title")))
             .rows(nbRows)
             .create();
 

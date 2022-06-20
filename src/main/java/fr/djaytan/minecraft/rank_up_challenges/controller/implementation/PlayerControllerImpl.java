@@ -48,7 +48,7 @@ public class PlayerControllerImpl implements PlayerController {
 
     if (offlinePlayerName == null) {
       logger.warn("The UUID {} isn't associated to any player name.", offlinePlayer.getUniqueId());
-      offlinePlayerName = resourceBundle.getString("diagonia.common.default_player_name");
+      offlinePlayerName = resourceBundle.getString("rank_up_challenges.common.default_player_name");
     }
 
     return offlinePlayerName;

@@ -65,6 +65,6 @@ public class GuiceGeneralModule extends AbstractModule {
   @Provides
   @Singleton
   public @NotNull ResourceBundle provideResourceBundle() {
-    return ResourceBundle.getBundle("diagonia", Locale.FRANCE);
+    return ResourceBundle.getBundle("rank_up_challenges", Locale.FRANCE);
   }
 }

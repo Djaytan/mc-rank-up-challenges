@@ -48,7 +48,7 @@
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
 
         <minecraft.api.version>1.18</minecraft.api.version>
-        <package.root>fr.djaytan.minecraft</package.root>
+        <package.root>fr.djaytan.minecraft.rank_up_challenges</package.root>
 
         <papermc.version>1.18.2-R0.1-SNAPSHOT</papermc.version>
         <acf.version>0.5.1-SNAPSHOT</acf.version>

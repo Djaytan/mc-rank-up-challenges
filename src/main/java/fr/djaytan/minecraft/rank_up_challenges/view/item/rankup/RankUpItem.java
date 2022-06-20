@@ -90,10 +90,10 @@ public class RankUpItem {
   }
 
   private @NotNull Component getName(boolean isRankOwned) {
-    String nameKey = "diagonia.rankup.rankup.item.name.unlockable";
+    String nameKey = "rank_up_challenges.rankup.rankup.item.name.unlockable";
 
     if (isRankOwned) {
-      nameKey = "diagonia.rankup.rankup.item.name.already_unlocked";
+      nameKey = "rank_up_challenges.rankup.rankup.item.name.already_unlocked";
     }
 
     return miniMessage
@@ -123,7 +123,7 @@ public class RankUpItem {
         miniMessage
             .deserialize(
                 resourceBundle.getString(
-                    "diagonia.rankup.rankup.item.lore.prerequisite.required.minecraft_xp"),
+                    "rank_up_challenges.rankup.rankup.item.lore.prerequisite.required.minecraft_xp"),
                 TagResolver.resolver(
                     Placeholder.component(
                         "diag_current_level",
@@ -137,7 +137,7 @@ public class RankUpItem {
         miniMessage
             .deserialize(
                 resourceBundle.getString(
-                    "diagonia.rankup.rankup.item.lore.prerequisite.required.jobs_levels"),
+                    "rank_up_challenges.rankup.rankup.item.lore.prerequisite.required.jobs_levels"),
                 TagResolver.resolver(
                     Placeholder.component(
                         "diag_current_level",
@@ -151,7 +151,7 @@ public class RankUpItem {
         miniMessage
             .deserialize(
                 resourceBundle.getString(
-                    "diagonia.rankup.rankup.item.lore.prerequisite.required.money"),
+                    "rank_up_challenges.rankup.rankup.item.lore.prerequisite.required.money"),
                 TagResolver.resolver(
                     Placeholder.component(
                         "diag_current_balance",
@@ -165,10 +165,10 @@ public class RankUpItem {
   }
 
   private @NotNull @UnmodifiableView List<Component> getEndLorePart(boolean canRankUp) {
-    String canRankUpKey = "diagonia.rankup.rankup.item.lore.prerequisites_not_respected";
+    String canRankUpKey = "rank_up_challenges.rankup.rankup.item.lore.prerequisites_not_respected";
 
     if (canRankUp) {
-      canRankUpKey = "diagonia.rankup.rankup.item.lore.unlock_rank";
+      canRankUpKey = "rank_up_challenges.rankup.rankup.item.lore.unlock_rank";
     }
 
     return List.of(
@@ -180,10 +180,10 @@ public class RankUpItem {
   private @NotNull Component getCurrentProgression(
       boolean isPrerequisiteValidated, @NotNull String value) {
     String templateMessageKey =
-        "diagonia.rankup.rankup.item.lore.prerequisite.progression.insufficient";
+        "rank_up_challenges.rankup.rankup.item.lore.prerequisite.progression.insufficient";
 
     if (isPrerequisiteValidated) {
-      templateMessageKey = "diagonia.rankup.rankup.item.lore.prerequisite.progression.sufficient";
+      templateMessageKey = "rank_up_challenges.rankup.rankup.item.lore.prerequisite.progression.sufficient";
     }
 
     return miniMessage.deserialize(

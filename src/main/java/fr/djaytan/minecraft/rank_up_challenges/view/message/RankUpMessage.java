@@ -44,14 +44,14 @@ public class RankUpMessage {
 
   public @NotNull Component rankUpFailure() {
     return miniMessage
-        .deserialize(resourceBundle.getString("diagonia.common.fail.unknown_error"))
+        .deserialize(resourceBundle.getString("rank_up_challenges.common.fail.unknown_error"))
         .decoration(TextDecoration.ITALIC, false);
   }
 
   public @NotNull Component rankUpSuccess(@NotNull Player whoRankUp, @NotNull Rank newRank) {
     return miniMessage
         .deserialize(
-            resourceBundle.getString("diagonia.rankup.rankup.success"),
+            resourceBundle.getString("rank_up_challenges.rankup.rankup.success"),
             TagResolver.resolver(
                 Placeholder.unparsed("player_name", whoRankUp.getName()),
                 Placeholder.component(
@@ -62,21 +62,21 @@ public class RankUpMessage {
   public @NotNull Component prerequisitesNotRespected() {
     return miniMessage
         .deserialize(
-            resourceBundle.getString("diagonia.rankup.rankup.fail.prerequisites_not_respected"))
+            resourceBundle.getString("rank_up_challenges.rankup.rankup.fail.prerequisites_not_respected"))
         .decoration(TextDecoration.ITALIC, false);
   }
 
   public @NotNull Component alreadyHasHighestRank() {
     return miniMessage
         .deserialize(
-            resourceBundle.getString("diagonia.rankup.ranks.failure.already_has_highest_rank"))
+            resourceBundle.getString("rank_up_challenges.rankup.ranks.failure.already_has_highest_rank"))
         .decoration(TextDecoration.ITALIC, false);
   }
 
   public @NotNull Component noItemInInventory() {
     return miniMessage
         .deserialize(
-            resourceBundle.getString("diagonia.rankup.challenges.give.fail.no_item_in_inventory"))
+            resourceBundle.getString("rank_up_challenges.rankup.challenges.give.fail.no_item_in_inventory"))
         .decoration(TextDecoration.ITALIC, false);
   }
 
@@ -84,21 +84,21 @@ public class RankUpMessage {
     return miniMessage
         .deserialize(
             resourceBundle.getString(
-                "diagonia.rankup.challenges.give.fail.challenge_already_completed"))
+                "rank_up_challenges.rankup.challenges.give.fail.challenge_already_completed"))
         .decoration(TextDecoration.ITALIC, false);
   }
 
   public @NotNull Component rankAlreadyOwned() {
     return miniMessage
         .deserialize(
-            resourceBundle.getString("diagonia.rankup.challenges.give.failure.rank_already_owned"))
+            resourceBundle.getString("rank_up_challenges.rankup.challenges.give.failure.rank_already_owned"))
         .decoration(TextDecoration.ITALIC, false);
   }
 
   public @NotNull Component successAmountGiven(int amountGiven, Component itemsGivenNameCpnt) {
     return miniMessage
         .deserialize(
-            resourceBundle.getString("diagonia.rankup.challenges.give.success.amount_given"),
+            resourceBundle.getString("rank_up_challenges.rankup.challenges.give.success.amount_given"),
             TagResolver.resolver(
                 Placeholder.unparsed("diag_amount_given", String.valueOf(amountGiven)),
                 Placeholder.component("diag_item_name", itemsGivenNameCpnt)))
@@ -108,7 +108,7 @@ public class RankUpMessage {
   public @NotNull Component challengeCompleted(@NotNull Component challengeNameCpnt) {
     return miniMessage
         .deserialize(
-            resourceBundle.getString("diagonia.rankup.challenges.give.success.now_completed"),
+            resourceBundle.getString("rank_up_challenges.rankup.challenges.give.success.now_completed"),
             TagResolver.resolver(Placeholder.component("diag_challenge_name", challengeNameCpnt)))
         .decoration(TextDecoration.ITALIC, false);
   }
