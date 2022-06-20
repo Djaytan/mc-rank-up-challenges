@@ -132,7 +132,7 @@ public class RankChallengeItem {
             resourceBundle.getString("rank_up_challenges.rankup.challenges.item.name"),
             TagResolver.resolver(
                 Placeholder.component(
-                    "diag_challenge_name",
+                    "ruc_challenge_name",
                     Component.translatable(
                         rankChallengeProgression.getChallengeMaterial().translationKey()))))
         .color(challengeTier.getColor())
@@ -154,7 +154,7 @@ public class RankChallengeItem {
     return miniMessage
         .deserialize(
             resourceBundle.getString("rank_up_challenges.rankup.challenges.item.lore.tier"),
-            TagResolver.resolver(Placeholder.unparsed("diag_tier_value", toRomanNumber(tier))))
+            TagResolver.resolver(Placeholder.unparsed("ruc_tier_value", toRomanNumber(tier))))
         .decoration(TextDecoration.ITALIC, false);
   }
 
@@ -166,12 +166,12 @@ public class RankChallengeItem {
                 resourceBundle.getString("rank_up_challenges.rankup.challenges.item.lore.progress"),
                 TagResolver.resolver(
                     Placeholder.component(
-                        "diag_amount_given",
+                        "ruc_amount_given",
                         getCurrentProgression(
                             isChallengeCompleted,
                             String.valueOf(rankChallengeProgression.getChallengeAmountGiven()))),
                     Placeholder.unparsed(
-                        "diag_amount_required",
+                        "ruc_amount_required",
                         String.valueOf(rankChallengeProgression.getChallengeAmountRequired()))))
             .decoration(TextDecoration.ITALIC, false));
   }
@@ -186,7 +186,7 @@ public class RankChallengeItem {
 
     return miniMessage.deserialize(
         resourceBundle.getString(templateMessageKey),
-        TagResolver.resolver(Placeholder.unparsed("diag_current_progression", value)));
+        TagResolver.resolver(Placeholder.unparsed("ruc_current_progression", value)));
   }
 
   private @NotNull @UnmodifiableView List<Component> getActionLorePart() {

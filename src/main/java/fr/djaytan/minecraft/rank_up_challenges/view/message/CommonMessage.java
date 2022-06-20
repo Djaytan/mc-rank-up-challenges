@@ -46,7 +46,7 @@ public class CommonMessage {
   public @NotNull Component startupBanner() {
     return miniMessage.deserialize(
         resourceBundle.getString("rank_up_challenges.common.message.startup.banner"),
-        TagResolver.resolver(Placeholder.component("diag_indentation", STARTUP_BANNER_INDENT)));
+        TagResolver.resolver(Placeholder.component("ruc_indentation", STARTUP_BANNER_INDENT)));
   }
 
   public @NotNull Component startupBannerVersionLine(
@@ -55,14 +55,14 @@ public class CommonMessage {
         miniMessage.deserialize(
             resourceBundle.getString("rank_up_challenges.common.message.startup.current_version"),
             TagResolver.resolver(
-                Placeholder.unparsed("diag_plugin_version", pluginDescriptionFile.getVersion()))));
+                Placeholder.unparsed("ruc_plugin_version", pluginDescriptionFile.getVersion()))));
   }
 
   public @NotNull Component startupBannerProgressionLine(@NotNull String text) {
     return STARTUP_BANNER_INDENT.append(
         miniMessage.deserialize(
             resourceBundle.getString("rank_up_challenges.common.message.startup.progression_line.format"),
-            TagResolver.resolver(Placeholder.unparsed("diag_progression_message", text))));
+            TagResolver.resolver(Placeholder.unparsed("ruc_progression_message", text))));
   }
 
   public @NotNull Component startupBannerStateLine(
@@ -71,7 +71,7 @@ public class CommonMessage {
         miniMessage.deserialize(
             resourceBundle.getString("rank_up_challenges.common.message.startup.state.format"),
             TagResolver.resolver(
-                Placeholder.unparsed("diag_key", key), Placeholder.unparsed("diag_value", value))));
+                Placeholder.unparsed("ruc_key", key), Placeholder.unparsed("ruc_value", value))));
   }
 
   public @NotNull Component startupBannerEnablingSuccessLine() {
@@ -96,7 +96,7 @@ public class CommonMessage {
     return miniMessage
         .deserialize(
             resourceBundle.getString("rank_up_challenges.common.fail.player_not_found"),
-            TagResolver.resolver(Placeholder.unparsed("diag_player_name", playerName)))
+            TagResolver.resolver(Placeholder.unparsed("ruc_player_name", playerName)))
         .decoration(TextDecoration.ITALIC, false);
   }
 }

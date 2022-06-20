@@ -114,7 +114,7 @@ public class MessageControllerImpl implements MessageController {
     return miniMessage
         .deserialize(
             resourceBundle.getString(messageFormatKey),
-            TagResolver.resolver(Placeholder.component("diag_message_content", message)))
+            TagResolver.resolver(Placeholder.component("ruc_message_content", message)))
         .decoration(TextDecoration.ITALIC, false);
   }
 }

@@ -100,8 +100,8 @@ public class RankUpMessage {
         .deserialize(
             resourceBundle.getString("rank_up_challenges.rankup.challenges.give.success.amount_given"),
             TagResolver.resolver(
-                Placeholder.unparsed("diag_amount_given", String.valueOf(amountGiven)),
-                Placeholder.component("diag_item_name", itemsGivenNameCpnt)))
+                Placeholder.unparsed("ruc_amount_given", String.valueOf(amountGiven)),
+                Placeholder.component("ruc_item_name", itemsGivenNameCpnt)))
         .decoration(TextDecoration.ITALIC, false);
   }
 
@@ -109,7 +109,7 @@ public class RankUpMessage {
     return miniMessage
         .deserialize(
             resourceBundle.getString("rank_up_challenges.rankup.challenges.give.success.now_completed"),
-            TagResolver.resolver(Placeholder.component("diag_challenge_name", challengeNameCpnt)))
+            TagResolver.resolver(Placeholder.component("ruc_challenge_name", challengeNameCpnt)))
         .decoration(TextDecoration.ITALIC, false);
   }
 }

@@ -127,8 +127,8 @@ public class RankItem {
             resourceBundle.getString("rank_up_challenges.rankup.ranks.item.name"),
             TagResolver.resolver(
                 Placeholder.component(
-                    "diag_rank_name", Component.text(rank.getName()).color(rank.getColor())),
-                Placeholder.parsed("diag_rank_status", resourceBundle.getString(rankStatusKey))))
+                    "ruc_rank_name", Component.text(rank.getName()).color(rank.getColor())),
+                Placeholder.parsed("ruc_rank_status", resourceBundle.getString(rankStatusKey))))
         .decoration(TextDecoration.ITALIC, false);
   }
 
@@ -169,7 +169,7 @@ public class RankItem {
                         .deserialize(
                             resourceBundle.getString("rank_up_challenges.rankup.ranks.item.lore.profit"),
                             TagResolver.resolver(
-                                Placeholder.unparsed("diag_profit", profitDescLine)))
+                                Placeholder.unparsed("ruc_profit", profitDescLine)))
                         .decoration(TextDecoration.ITALIC, false)));
 
     return Collections.unmodifiableList(profitsLore);

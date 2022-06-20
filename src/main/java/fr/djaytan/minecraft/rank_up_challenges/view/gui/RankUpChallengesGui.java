@@ -87,7 +87,7 @@ public class RankUpChallengesGui {
             .title(
                 miniMessage.deserialize(
                     resourceBundle.getString("rank_up_challenges.rankup.challenges.gui.title"),
-                    TagResolver.resolver(Placeholder.unparsed("diag_rank", rank.getName()))))
+                    TagResolver.resolver(Placeholder.unparsed("ruc_rank", rank.getName()))))
             .create();
 
     GuiItem decorationItem =

@@ -126,12 +126,12 @@ public class RankUpItem {
                     "rank_up_challenges.rankup.rankup.item.lore.prerequisite.required.minecraft_xp"),
                 TagResolver.resolver(
                     Placeholder.component(
-                        "diag_current_level",
+                        "ruc_current_level",
                         getCurrentProgression(
                             rankUpProgression.isXpLevelPrerequisiteDone(),
                             String.valueOf(rankUpProgression.getCurrentXpLevel()))),
                     Placeholder.unparsed(
-                        "diag_required_level",
+                        "ruc_required_level",
                         String.valueOf(rankUpPrerequisites.getEnchantingLevelsCost()))))
             .decoration(TextDecoration.ITALIC, false),
         miniMessage
@@ -140,12 +140,12 @@ public class RankUpItem {
                     "rank_up_challenges.rankup.rankup.item.lore.prerequisite.required.jobs_levels"),
                 TagResolver.resolver(
                     Placeholder.component(
-                        "diag_current_level",
+                        "ruc_current_level",
                         getCurrentProgression(
                             rankUpProgression.isTotalJobsLevelsPrerequisiteDone(),
                             String.valueOf(rankUpProgression.getTotalJobsLevels()))),
                     Placeholder.unparsed(
-                        "diag_required_level",
+                        "ruc_required_level",
                         String.valueOf(rankUpPrerequisites.getJobsLevels()))))
             .decoration(TextDecoration.ITALIC, false),
         miniMessage
@@ -154,12 +154,12 @@ public class RankUpItem {
                     "rank_up_challenges.rankup.rankup.item.lore.prerequisite.required.money"),
                 TagResolver.resolver(
                     Placeholder.component(
-                        "diag_current_balance",
+                        "ruc_current_balance",
                         getCurrentProgression(
                             rankUpProgression.isMoneyPrerequisiteDone(),
                             economyFormatter.format(rankUpProgression.getCurrentBalance()))),
                     Placeholder.unparsed(
-                        "diag_rankup_price",
+                        "ruc_rankup_price",
                         economyFormatter.format(rankUpPrerequisites.getMoneyCost()))))
             .decoration(TextDecoration.ITALIC, false));
   }
@@ -188,6 +188,6 @@ public class RankUpItem {
 
     return miniMessage.deserialize(
         resourceBundle.getString(templateMessageKey),
-        TagResolver.resolver(Placeholder.unparsed("diag_current_progression", value)));
+        TagResolver.resolver(Placeholder.unparsed("ruc_current_progression", value)));
   }
 }
