@@ -36,6 +36,6 @@
         <property name="hibernate.hbm2ddl.auto">create-drop</property>
         <property name="hibernate.hbm2ddl.charset_name">UTF-8</property>
 
-        <mapping class="fr.voltariuss.diagonia.model.entity.RankChallengeProgression" />
+        <mapping class="fr.djaytan.minecraft.rank_up_challenges.model.entity.RankChallengeProgression" />
     </session-factory>
 </hibernate-configuration>
